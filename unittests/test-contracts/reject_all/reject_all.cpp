@@ -1,0 +1,27 @@
+#include <upcxio/upcxio.hpp>
+
+using namespace upcxio;
+
+extern "C" {
+   void apply( uint64_t receiver, uint64_t first_receiver, uint64_t action ) {
+      check( receiver == first_receiver, "rejecting all notifications" );
+
+      // reject all actions with only the following exceptions:
+      //   * do not reject an upcxio::setcode that sets code on the upcxio account unless the rejectall account exists;
+      //   * do not reject an upcxio::newaccount that creates the rejectall account.
+
+      if( first_receiver == "upcxio"_n.value ) {
+         if( action == "setcode"_n.value ) {
+            auto accnt = unpack_action_data<name>();
+            if( accnt == "upcxio"_n && !is_account("rejectall"_n) )
+               return;
+         } else if( action == "newaccount"_n.value ) {
+            auto accnts = unpack_action_data< std::pair<name, name> >();
+            if( accnts.second == "rejectall"_n )
+               return;
+         }
+      }
+
+      check( false , "rejecting all actions" );
+   }
+}

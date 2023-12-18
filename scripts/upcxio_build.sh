@@ -162,6 +162,8 @@ if [[ ! -z $CMAKE_CURRENT_VERSION ]] && [[ $((10#$( echo $CMAKE_CURRENT_VERSION 
    fi
 fi
 
+echo $ARCH
+echo $NAME
 # Use existing cmake on system (either global or specific to upcxio)
 # Setup based on architecture
 if [[ $ARCH == "Linux" ]]; then

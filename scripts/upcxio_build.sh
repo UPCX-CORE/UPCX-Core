@@ -113,7 +113,7 @@ cd $( dirname "${BASH_SOURCE[0]}" )/..
 . ./scripts/helpers/upcxio.sh
 
 $VERBOSE && echo "Build Script Version: ${SCRIPT_VERSION}"
-echo "UPCXIO Version: ${EOSIO_VERSION_FULL}"
+echo "UPCXIO Version: ${UPCXIO_VERSION_FULL}"
 echo "$( date -u )"
 echo "User: ${CURRENT_USER}"
 # echo "git head id: %s" "$( cat .git/refs/heads/master )"
@@ -126,7 +126,7 @@ ensure-sudo
 ensure-which
 # Prevent a non-git clone from running
 ensure-git-clone
-# Prompt user for installation path (Set EOSIO_INSTALL_DIR)
+# Prompt user for installation path (Set UPCXIO_INSTALL_DIR)
 install-directory-prompt
 # If the same version has already been installed...
 previous-install-prompt
@@ -167,7 +167,7 @@ echo $NAME
 # Use existing cmake on system (either global or specific to upcxio)
 # Setup based on architecture
 if [[ $ARCH == "Linux" ]]; then
-   export CMAKE=${CMAKE:-${EOSIO_INSTALL_DIR}/bin/cmake}
+   export CMAKE=${CMAKE:-${UPCXIO_INSTALL_DIR}/bin/cmake}
    [[ ! -e /etc/os-release ]] && print_supported_linux_distros_and_exit
    case $NAME in
       "Amazon Linux AMI" | "Amazon Linux")
@@ -182,7 +182,7 @@ if [[ $ARCH == "Linux" ]]; then
       ;;
       *) print_supported_linux_distros_and_exit;;
    esac
-   CMAKE_PREFIX_PATHS="${EOSIO_INSTALL_DIR}"
+   CMAKE_PREFIX_PATHS="${UPCXIO_INSTALL_DIR}"
 fi
 
 if [ "$ARCH" == "Darwin" ]; then
@@ -219,7 +219,7 @@ fi
 $ENABLE_DOXYGEN && LOCAL_CMAKE_FLAGS="-DBUILD_DOXYGEN='${DOXYGEN}' ${LOCAL_CMAKE_FLAGS}"
 $ENABLE_COVERAGE_TESTING && LOCAL_CMAKE_FLAGS="-DENABLE_COVERAGE_TESTING='${ENABLE_COVERAGE_TESTING}' ${LOCAL_CMAKE_FLAGS}"
 
-execute bash -c "$CMAKE -DCMAKE_BUILD_TYPE='${CMAKE_BUILD_TYPE}' -DCORE_SYMBOL_NAME='${CORE_SYMBOL_NAME}' -DCMAKE_INSTALL_PREFIX='${EOSIO_INSTALL_DIR}' ${LOCAL_CMAKE_FLAGS} '${REPO_ROOT}'"
+execute bash -c "$CMAKE -DCMAKE_BUILD_TYPE='${CMAKE_BUILD_TYPE}' -DCORE_SYMBOL_NAME='${CORE_SYMBOL_NAME}' -DCMAKE_INSTALL_PREFIX='${UPCXIO_INSTALL_DIR}' ${LOCAL_CMAKE_FLAGS} '${REPO_ROOT}'"
 execute make -j$JOBS
 execute cd $REPO_ROOT 1>/dev/null
 

@@ -7,7 +7,7 @@ Third parties are encouraged to make pull requests to this file (`develop` branc
 | Description                                             | URL                                                              |
 | ------------------------------------------------------- | ---------------------------------------------------------------- |
 | BP Heartbeat                                            | https://github.com/bancorprotocol/upcx-producer-heartbeat-plugin |
-| ElasticSearch                                           | https://github.com/EOSLaoMao/elasticsearch_plugin                |
+| ElasticSearch                                           | https://github.com/UPCXLaoMao/elasticsearch_plugin               |
 | Kafka                                                   | https://github.com/TP-Lab/kafka_plugin                           |
 | MySQL                                                   | https://github.com/eosBLACK/upcxio_mysqldb_plugin                |
 | SQL                                                     | https://github.com/asiniscalchi/upcxio_sql_plugin                |
@@ -18,7 +18,7 @@ Third parties are encouraged to make pull requests to this file (`develop` branc
 | Mongo History API                                       | https://github.com/CryptoLions/UPCX-mongo-history-API            |
 | State History API                                       | https://github.com/acoutts/UPCX-state-history-API                |
 | Hyperion History API                                    | https://github.com/eosrio/Hyperion-History-API                   |
-| Chronicle                                               | https://github.com/EOSChronicleProject/upcx-chronicle            |
+| Chronicle                                               | https://github.com/UPCXChronicleProject/upcx-chronicle           |
 
 ## DISCLAIMER:
 

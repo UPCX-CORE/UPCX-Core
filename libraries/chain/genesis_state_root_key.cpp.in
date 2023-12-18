@@ -2,6 +2,6 @@
 
 namespace upcxio { namespace chain {
 
-const string genesis_state::upcxio_root_key = "${EOSIO_ROOT_KEY}";
+const string genesis_state::upcxio_root_key = "${UPCXIO_ROOT_KEY}";
 
 } } // namespace upcxio::chain

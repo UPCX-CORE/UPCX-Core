@@ -10,7 +10,7 @@
 
 namespace b1::rodeos::config {
   constexpr uint64_t version                = 0x${rodeos_BUILD_VERSION};
-  const std::string  rodeos_executable_name = "${RODEOS_EXECUTABLE_NAME}";
+  const std::string  rodeos_executable_name = "${RODUPCX_EXECUTABLE_NAME}";
 }
 
 #endif // CONFIG_HPP_IN

@@ -16,7 +16,7 @@ void report_error(const char* assertion, const char* file, int line) {
 struct fn {
    int test(int i) { return i * 2; }
 };
-EOSIO_REFLECT(fn, test);
+UPCXIO_REFLECT(fn, test);
 
 int main() {
    int counter = 0;

@@ -17,8 +17,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
-option(ABIEOS_NO_INT128 "disable use of __int128" OFF)
-option(ABIEOS_ONLY_LIBRARY "define and build the ABIEOS library" OFF)
+option(ABIUPCX_NO_INT128 "disable use of __int128" OFF)
+option(ABIUPCX_ONLY_LIBRARY "define and build the ABIUPCX library" OFF)
 
 if(NOT DEFINED SKIP_SUBMODULE_CHECK)
   execute_process(COMMAND git submodule status --recursive
@@ -41,8 +41,8 @@ target_include_directories(abieos PUBLIC
                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/external/rapidjson/include"
                           "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
-if(ABIEOS_NO_INT128)
-target_compile_definitions(abieos PUBLIC ABIEOS_NO_INT128)
+if(ABIUPCX_NO_INT128)
+target_compile_definitions(abieos PUBLIC ABIUPCX_NO_INT128)
 endif()
 
 add_library(abieos_module MODULE src/abieos.cpp src/abi.cpp src/crypto.cpp include/upcxio/fpconv.c)
@@ -60,7 +60,7 @@ add_executable(test_abieos src/test.cpp src/abieos.cpp src/ship.abi.cpp)
 target_link_libraries(test_abieos abieos ${CMAKE_THREAD_LIBS_INIT})
 add_test(NAME test_abieos COMMAND test_abieos)
 
-if(NOT ABIEOS_NO_INT128)
+if(NOT ABIUPCX_NO_INT128)
     add_executable(test_abieos_template src/template_test.cpp src/abieos.cpp)
     target_link_libraries(test_abieos_template abieos ${CMAKE_THREAD_LIBS_INIT})
     add_test(NAME test_abieos_template COMMAND test_abieos_template)
@@ -91,7 +91,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES Clang|AppleClang)
     target_compile_options(test_abieos PRIVATE -Wall -Wextra -Wno-unused-parameter -fcolor-diagnostics)
 endif()
 
-if (NOT ABIEOS_ONLY_LIBRARY)
+if (NOT ABIUPCX_ONLY_LIBRARY)
 add_subdirectory(tools)
 endif()
 

@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <exception>
 
-#define EOS_VM_ASSERT( expr, exc_type, msg ) \
+#define UPCX_VM_ASSERT( expr, exc_type, msg ) \
    if (!UNLIKELY(expr)) {                    \
       throw exc_type{msg};                   \
    }

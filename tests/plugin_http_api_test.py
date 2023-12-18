@@ -515,7 +515,7 @@ class PluginHttpTest(unittest.TestCase):
                                              self.http_post_str,
                                              "\"code\":\"upcxio.token\"",
                                              "\"action\":\"issue\"",
-                                             "\"args\":{\"to\":\"upcxio.token\", \"quantity\":\"1.0000\%20EOS\",\"memo\":\"m\"}")
+                                             "\"args\":{\"to\":\"upcxio.token\", \"quantity\":\"1.0000\%20UPCX\",\"memo\":\"m\"}")
         ret_json = Utils.runCmdReturnJson(valid_cmd)
         self.assertEqual(ret_json["code"], 500)
 
@@ -569,9 +569,9 @@ class PluginHttpTest(unittest.TestCase):
                      "\"actions\": [{\"code\": \"currency\",\"type\":\"transfer\",\"recipients\": [\"initb\", \"initc\"],\"authorization\": [{\"account\": \"initb\", \"permission\": \"active\"}],\"data\":\"000000000041934b000000008041934be803000000000000\"}]",
                      "\"signatures\": []",
                      "\"authorizations\": []",
-                     "\"EOS4toFS3YXEQCkuuw1aqDLrtHim86Gz9u3hBdcBw5KNPZcursVHq\"",
-                     "\"EOS7d9A3uLe6As66jzN8j44TXJUqJSK3bFjjEEqR4oTvNAB3iM9SA\"",
-                     "\"EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV\"")
+                     "\"UPCX4toFS3YXEQCkuuw1aqDLrtHim86Gz9u3hBdcBw5KNPZcursVHq\"",
+                     "\"UPCX7d9A3uLe6As66jzN8j44TXJUqJSK3bFjjEEqR4oTvNAB3iM9SA\"",
+                     "\"UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV\"")
         ret_json = Utils.runCmdReturnJson(valid_cmd)
         self.assertEqual(ret_json["code"], 500)
 
@@ -765,7 +765,7 @@ class PluginHttpTest(unittest.TestCase):
         self.assertEqual(ret_json["code"], 400)
         self.assertEqual(ret_json["error"]["code"], 3200006)
         # get_key_accounts with valid parameter
-        valid_cmd = default_cmd + self.http_post_str + ("'{\"public_key\":\"EOS6FxXbikY5ZUN9qEdeLbEYLKZzJwRYRr2PuC3rqfSu67LvhPARi\"}'")
+        valid_cmd = default_cmd + self.http_post_str + ("'{\"public_key\":\"UPCX6FxXbikY5ZUN9qEdeLbEYLKZzJwRYRr2PuC3rqfSu67LvhPARi\"}'")
         ret_json = Utils.runCmdReturnJson(valid_cmd)
         self.assertIn("account_names", ret_json)
 
@@ -1216,7 +1216,7 @@ class PluginHttpTest(unittest.TestCase):
                                                                         "\"signatures\": [\"SIG_K1_KeqfqiZu1GwUxQb7jzK9Fdks6HFaVBQ9AJtCZZj56eG9qGgvVMVtx8EerBdnzrhFoX437sgwtojf2gfz6S516Ty7c22oEp\"]",
                                                                         "\"context_free_data\": []")
         valid_cmd = default_cmd + self.http_post_str + ("'[%s, %s, %s]'") % (signed_transaction,
-                                                                             "[\"EOS696giL6VxeJhtEgKtWPK8aQeT8YXNjw2a7vE5wHunffhfa5QSQ\"]",
+                                                                             "[\"UPCX696giL6VxeJhtEgKtWPK8aQeT8YXNjw2a7vE5wHunffhfa5QSQ\"]",
                                                                              "\"cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f\"")
         ret_json = Utils.runCmdReturnJson(valid_cmd)
         self.assertEqual(ret_json["code"], 500)

@@ -15,7 +15,7 @@ public:
 
       uint64_t primary_key()const { return key; }
 
-      EOSLIB_SERIALIZE( payload, (key)(data) )
+      UPCXLIB_SERIALIZE( payload, (key)(data) )
    };
 
    using payloads_table = upcxio::multi_index< "payloads"_n,  payload >;

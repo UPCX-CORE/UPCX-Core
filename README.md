@@ -164,7 +164,7 @@ To uninstall the UPCXIO built/installed binaries and dependencies, run:
 1. [Blog](https://medium.com/upcxio)
 1. [Developer Portal](https://developers.upcx.io)
 1. [StackExchange for Q&A](https://upcxio.stackexchange.com/)
-1. [Community Telegram Group](https://t.me/EOSProject)
+1. [Community Telegram Group](https://t.me/UPCXProject)
 1. [Developer Telegram Group](https://t.me/joinchat/EaEnSUPktgfoI-XPfMYtcQ)
 1. [White Paper](https://github.com/UPCXIO/Documentation/blob/master/TechnicalWhitePaper.md)
 1. [Roadmap](https://github.com/UPCXIO/Documentation/blob/master/Roadmap.md)

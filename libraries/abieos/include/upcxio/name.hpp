@@ -147,8 +147,8 @@ inline constexpr uint64_t hash_name( std::string_view str ) {
    return  murmur64( str.data(), str.size() );
 }
 
-EOSIO_REFLECT(name, value);
-EOSIO_COMPARE(name);
+UPCXIO_REFLECT(name, value);
+UPCXIO_COMPARE(name);
 
 template <typename S>
 void from_json(name& obj, S& stream) {

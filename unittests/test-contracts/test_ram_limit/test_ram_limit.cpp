@@ -68,7 +68,7 @@ CONTRACT test_ram_limit : public contract {
 
          uint64_t primary_key()const { return key; }
 
-         EOSLIB_SERIALIZE( test, (key)(data) )
+         UPCXLIB_SERIALIZE( test, (key)(data) )
       };
       typedef upcxio::multi_index< "test.table"_n, test> test_table;
 };
@@ -77,4 +77,4 @@ CONTRACT test_ram_limit : public contract {
 # pragma clang diagnostic pop
 #endif
 
-EOSIO_DISPATCH( test_ram_limit, (setentry)(rmentry)(printentry) )
+UPCXIO_DISPATCH( test_ram_limit, (setentry)(rmentry)(printentry) )

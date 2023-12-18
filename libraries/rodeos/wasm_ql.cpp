@@ -342,7 +342,7 @@ struct get_block_params {
    std::string block_num_or_id = {};
 };
 
-EOSIO_REFLECT(get_block_params, block_num_or_id)
+UPCXIO_REFLECT(get_block_params, block_num_or_id)
 
 const std::vector<char>& query_get_block(wasm_ql::thread_state&   thread_state,
                                          const std::vector<char>& contract_kv_prefix, std::string_view body) {
@@ -413,14 +413,14 @@ struct get_abi_params {
    upcxio::name account_name = {};
 };
 
-EOSIO_REFLECT(get_abi_params, account_name)
+UPCXIO_REFLECT(get_abi_params, account_name)
 
 struct get_abi_result {
    upcxio::name                   account_name;
    std::optional<upcxio::abi_def> abi;
 };
 
-EOSIO_REFLECT(get_abi_result, account_name, abi)
+UPCXIO_REFLECT(get_abi_result, account_name, abi)
 
 const std::vector<char>& query_get_abi(wasm_ql::thread_state& thread_state, const std::vector<char>& contract_kv_prefix,
                                        std::string_view body) {
@@ -469,9 +469,9 @@ struct extension_hex_data {
    upcxio::bytes data = {};
 };
 
-EOSIO_REFLECT(extension_hex_data, type, data)
+UPCXIO_REFLECT(extension_hex_data, type, data)
 
-EOSIO_REFLECT(action_no_data, account, name, authorization)
+UPCXIO_REFLECT(action_no_data, account, name, authorization)
 
 struct transaction_for_get_keys : ship_protocol::transaction_header {
    std::vector<action_no_data>     context_free_actions   = {};
@@ -479,7 +479,7 @@ struct transaction_for_get_keys : ship_protocol::transaction_header {
    std::vector<extension_hex_data> transaction_extensions = {};
 };
 
-EOSIO_REFLECT(transaction_for_get_keys, base ship_protocol::transaction_header, context_free_actions, actions,
+UPCXIO_REFLECT(transaction_for_get_keys, base ship_protocol::transaction_header, context_free_actions, actions,
               transaction_extensions)
 
 struct get_required_keys_params {
@@ -487,13 +487,13 @@ struct get_required_keys_params {
    std::vector<upcxio::public_key> available_keys = {};
 };
 
-EOSIO_REFLECT(get_required_keys_params, transaction, available_keys)
+UPCXIO_REFLECT(get_required_keys_params, transaction, available_keys)
 
 struct get_required_keys_result {
    std::vector<upcxio::public_key> required_keys = {};
 };
 
-EOSIO_REFLECT(get_required_keys_result, required_keys)
+UPCXIO_REFLECT(get_required_keys_result, required_keys)
 
 const std::vector<char>& query_get_required_keys(wasm_ql::thread_state& thread_state, std::string_view body) {
    get_required_keys_params params;
@@ -526,14 +526,14 @@ struct send_transaction_params {
    upcxio::bytes                  packed_trx               = {};
 };
 
-EOSIO_REFLECT(send_transaction_params, signatures, compression, packed_context_free_data, packed_trx)
+UPCXIO_REFLECT(send_transaction_params, signatures, compression, packed_context_free_data, packed_trx)
 
 struct send_transaction_results {
    upcxio::checksum256   transaction_id; // todo: redundant with processed.id
    transaction_trace_v0 processed;
 };
 
-EOSIO_REFLECT(send_transaction_results, transaction_id, processed)
+UPCXIO_REFLECT(send_transaction_results, transaction_id, processed)
 
 const std::vector<char>& query_send_transaction(wasm_ql::thread_state&   thread_state,
                                                 const std::vector<char>& contract_kv_prefix, std::string_view body,

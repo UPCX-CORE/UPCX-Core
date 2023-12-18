@@ -141,7 +141,7 @@ protocol_feature_set make_protocol_feature_set() {
          [&pfs, &visited_builtins, &add_builtins](builtin_protocol_feature_t codename) -> digest_type {
       auto res = visited_builtins.emplace(codename, std::optional<digest_type>());
       if (!res.second) {
-         EOS_ASSERT(res.first->second, protocol_feature_exception,
+         UPCX_ASSERT(res.first->second, protocol_feature_exception,
                     "invariant failure: cycle found in builtin protocol feature dependencies");
          return *res.first->second;
       }
@@ -443,7 +443,7 @@ struct contract_row {
    upcxio::input_stream value       = {};
 };
 
-EOSIO_REFLECT(contract_row, block_num, present, code, scope, table, primary_key, payer, value);
+UPCXIO_REFLECT(contract_row, block_num, present, code, scope, table, primary_key, payer, value);
 
 struct file {
    FILE* f    = nullptr;
@@ -525,7 +525,7 @@ FC_REFLECT(push_trx_args, (transaction)(context_free_data)(signatures)(keys))
    int db_##IDX##_find_secondary(uint64_t code, uint64_t scope, uint64_t table,                                        \
                                  upcxio::chain::array_ptr<const ARR_ELEMENT_TYPE> data, uint32_t data_len,              \
                                  uint64_t& primary) {                                                                  \
-      EOS_ASSERT(data_len == ARR_SIZE, upcxio::chain::db_api_exception,                                                 \
+      UPCX_ASSERT(data_len == ARR_SIZE, upcxio::chain::db_api_exception,                                                 \
                  "invalid size of secondary key array for " #IDX                                                       \
                  ": given ${given} bytes but expected ${expected} bytes",                                              \
                  ("given", data_len)("expected", ARR_SIZE));                                                           \
@@ -533,7 +533,7 @@ FC_REFLECT(push_trx_args, (transaction)(context_free_data)(signatures)(keys))
    }                                                                                                                   \
    int db_##IDX##_find_primary(uint64_t code, uint64_t scope, uint64_t table,                                          \
                                upcxio::chain::array_ptr<ARR_ELEMENT_TYPE> data, uint32_t data_len, uint64_t primary) {  \
-      EOS_ASSERT(data_len == ARR_SIZE, upcxio::chain::db_api_exception,                                                 \
+      UPCX_ASSERT(data_len == ARR_SIZE, upcxio::chain::db_api_exception,                                                 \
                  "invalid size of secondary key array for " #IDX                                                       \
                  ": given ${given} bytes but expected ${expected} bytes",                                              \
                  ("given", data_len)("expected", ARR_SIZE));                                                           \
@@ -541,7 +541,7 @@ FC_REFLECT(push_trx_args, (transaction)(context_free_data)(signatures)(keys))
    }                                                                                                                   \
    int db_##IDX##_lowerbound(uint64_t code, uint64_t scope, uint64_t table,                                            \
                              upcxio::chain::array_ptr<ARR_ELEMENT_TYPE> data, uint32_t data_len, uint64_t& primary) {   \
-      EOS_ASSERT(data_len == ARR_SIZE, upcxio::chain::db_api_exception,                                                 \
+      UPCX_ASSERT(data_len == ARR_SIZE, upcxio::chain::db_api_exception,                                                 \
                  "invalid size of secondary key array for " #IDX                                                       \
                  ": given ${given} bytes but expected ${expected} bytes",                                              \
                  ("given", data_len)("expected", ARR_SIZE));                                                           \
@@ -549,7 +549,7 @@ FC_REFLECT(push_trx_args, (transaction)(context_free_data)(signatures)(keys))
    }                                                                                                                   \
    int db_##IDX##_upperbound(uint64_t code, uint64_t scope, uint64_t table,                                            \
                              upcxio::chain::array_ptr<ARR_ELEMENT_TYPE> data, uint32_t data_len, uint64_t& primary) {   \
-      EOS_ASSERT(data_len == ARR_SIZE, upcxio::chain::db_api_exception,                                                 \
+      UPCX_ASSERT(data_len == ARR_SIZE, upcxio::chain::db_api_exception,                                                 \
                  "invalid size of secondary key array for " #IDX                                                       \
                  ": given ${given} bytes but expected ${expected} bytes",                                              \
                  ("given", data_len)("expected", ARR_SIZE));                                                           \
@@ -566,7 +566,7 @@ FC_REFLECT(push_trx_args, (transaction)(context_free_data)(signatures)(keys))
 #define DB_WRAPPERS_FLOAT_SECONDARY(IDX, TYPE)                                                                           \
    int db_##IDX##_find_secondary(uint64_t code, uint64_t scope, uint64_t table, const TYPE& secondary,                   \
                                  uint64_t& primary) {                                                                    \
-      /* EOS_ASSERT(!softfloat_api::is_nan(secondary), transaction_exception, "NaN is not an allowed value for a       \
+      /* UPCX_ASSERT(!softfloat_api::is_nan(secondary), transaction_exception, "NaN is not an allowed value for a       \
        * secondary key"); */ \
       return selected().IDX.find_secondary(code, scope, table, secondary, primary);                                      \
    }                                                                                                                     \
@@ -574,12 +574,12 @@ FC_REFLECT(push_trx_args, (transaction)(context_free_data)(signatures)(keys))
       return selected().IDX.find_primary(code, scope, table, secondary, primary);                                        \
    }                                                                                                                     \
    int db_##IDX##_lowerbound(uint64_t code, uint64_t scope, uint64_t table, TYPE& secondary, uint64_t& primary) {        \
-      /* EOS_ASSERT(!softfloat_api::is_nan(secondary), transaction_exception, "NaN is not an allowed value for a       \
+      /* UPCX_ASSERT(!softfloat_api::is_nan(secondary), transaction_exception, "NaN is not an allowed value for a       \
        * secondary key"); */ \
       return selected().IDX.lowerbound_secondary(code, scope, table, secondary, primary);                                \
    }                                                                                                                     \
    int db_##IDX##_upperbound(uint64_t code, uint64_t scope, uint64_t table, TYPE& secondary, uint64_t& primary) {        \
-      /* EOS_ASSERT(!softfloat_api::is_nan(secondary), transaction_exception, "NaN is not an allowed value for a       \
+      /* UPCX_ASSERT(!softfloat_api::is_nan(secondary), transaction_exception, "NaN is not an allowed value for a       \
        * secondary key"); */ \
       return selected().IDX.upperbound_secondary(code, scope, table, secondary, primary);                                \
    }                                                                                                                     \
@@ -1043,7 +1043,7 @@ struct callbacks {
          selected().kv_destroyed_iterators.pop_back();
       } else {
          // Sanity check in case the per-database limits are set poorly
-         EOS_ASSERT(selected().kv_iterators.size() <= 0xFFFFFFFFu, kv_bad_iter, "Too many iterators");
+         UPCX_ASSERT(selected().kv_iterators.size() <= 0xFFFFFFFFu, kv_bad_iter, "Too many iterators");
          itr = selected().kv_iterators.size();
          selected().kv_iterators.emplace_back();
       }
@@ -1112,7 +1112,7 @@ struct callbacks {
    }
 
    void kv_check_iterator(uint32_t itr) {
-      EOS_ASSERT(itr < selected().kv_iterators.size() && selected().kv_iterators[itr], kv_bad_iter,
+      UPCX_ASSERT(itr < selected().kv_iterators.size() && selected().kv_iterators[itr], kv_bad_iter,
                  "Bad key-value iterator");
    }
 

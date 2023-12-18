@@ -60,7 +60,7 @@ void streamer_plugin::plugin_initialize(const variables_map& options) {
 
 void streamer_plugin::plugin_startup() {
    cloner_plugin* cloner = app().find_plugin<cloner_plugin>();
-   EOS_ASSERT( cloner, upcxio::chain::plugin_config_exception, "cloner_plugin not found" );
+   UPCX_ASSERT( cloner, upcxio::chain::plugin_config_exception, "cloner_plugin not found" );
    cloner->set_streamer([this](const char* data, uint64_t data_size) { stream_data(data, data_size); });
 }
 

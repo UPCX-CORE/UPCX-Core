@@ -80,14 +80,14 @@ struct type_def {
    std::string type{};
 };
 
-EOSIO_REFLECT(type_def, new_type_name, type);
+UPCXIO_REFLECT(type_def, new_type_name, type);
 
 struct field_def {
    std::string name{};
    std::string type{};
 };
 
-EOSIO_REFLECT(field_def, name, type);
+UPCXIO_REFLECT(field_def, name, type);
 
 struct struct_def {
    std::string            name{};
@@ -95,7 +95,7 @@ struct struct_def {
    std::vector<field_def> fields{};
 };
 
-EOSIO_REFLECT(struct_def, name, base, fields);
+UPCXIO_REFLECT(struct_def, name, base, fields);
 
 struct action_def {
    upcxio::name name{};
@@ -103,7 +103,7 @@ struct action_def {
    std::string ricardian_contract{};
 };
 
-EOSIO_REFLECT(action_def, name, type, ricardian_contract);
+UPCXIO_REFLECT(action_def, name, type, ricardian_contract);
 
 struct table_def {
    upcxio::name              name{};
@@ -113,48 +113,48 @@ struct table_def {
    std::string              type{};
 };
 
-EOSIO_REFLECT(table_def, name, index_type, key_names, key_types, type);
+UPCXIO_REFLECT(table_def, name, index_type, key_names, key_types, type);
 
 struct clause_pair {
    std::string id{};
    std::string body{};
 };
 
-EOSIO_REFLECT(clause_pair, id, body);
+UPCXIO_REFLECT(clause_pair, id, body);
 
 struct error_message {
    uint64_t    error_code{};
    std::string error_msg{};
 };
 
-EOSIO_REFLECT(error_message, error_code, error_msg);
+UPCXIO_REFLECT(error_message, error_code, error_msg);
 
 struct variant_def {
    std::string              name{};
    std::vector<std::string> types{};
 };
 
-EOSIO_REFLECT(variant_def, name, types);
+UPCXIO_REFLECT(variant_def, name, types);
 
 struct action_result_def {
    upcxio::name name{};
    std::string result_type{};
 };
 
-EOSIO_REFLECT(action_result_def, name, result_type);
+UPCXIO_REFLECT(action_result_def, name, result_type);
 
 struct primary_key_index_def {
    upcxio::name name{};
    std::string type;
 };
 
-EOSIO_REFLECT(primary_key_index_def, name, type);
+UPCXIO_REFLECT(primary_key_index_def, name, type);
 
 struct secondary_index_def {
    std::string type;
 };
 
-EOSIO_REFLECT(secondary_index_def, type);
+UPCXIO_REFLECT(secondary_index_def, type);
 
 struct kv_table_entry_def {
    std::string                                type;
@@ -162,7 +162,7 @@ struct kv_table_entry_def {
    std::map<upcxio::name, secondary_index_def> secondary_indices;
 };
 
-EOSIO_REFLECT(kv_table_entry_def, type, primary_index, secondary_indices);
+UPCXIO_REFLECT(kv_table_entry_def, type, primary_index, secondary_indices);
 
 struct abi_def {
    std::string                                                version{};
@@ -178,7 +178,7 @@ struct abi_def {
    might_not_exist<std::map<upcxio::name, kv_table_entry_def>> kv_tables{};
 };
 
-EOSIO_REFLECT(abi_def, version, types, structs, actions, tables, ricardian_clauses, error_messages, abi_extensions,
+UPCXIO_REFLECT(abi_def, version, types, structs, actions, tables, ricardian_clauses, error_messages, abi_extensions,
               variants, action_results, kv_tables);
 
 struct abi_type;

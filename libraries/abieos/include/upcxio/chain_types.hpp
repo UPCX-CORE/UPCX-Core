@@ -10,5 +10,5 @@ struct block_info {
    upcxio::block_timestamp timestamp;
 };
 
-EOSIO_REFLECT(block_info, block_num, block_id, timestamp);
+UPCXIO_REFLECT(block_info, block_num, block_id, timestamp);
 }; // namespace chain_types

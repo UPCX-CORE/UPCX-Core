@@ -12,7 +12,7 @@
 #include <cctype>
 #include <functional>
 
-#define EOSIO_CDT_GET_RETURN_T(value_class, index_name) std::decay_t<decltype(std::invoke(&value_class::index_name, std::declval<const value_class*>()))>
+#define UPCXIO_CDT_GET_RETURN_T(value_class, index_name) std::decay_t<decltype(std::invoke(&value_class::index_name, std::declval<const value_class*>()))>
 
 /**
  * @brief Macro to define an index.
@@ -24,7 +24,7 @@
  * @param member_name   - The name of the member pointer used for the index. This also defines the index's C++ variable name.
  */
 #define KV_NAMED_INDEX(index_name, member_name)                                                                        \
-   index<EOSIO_CDT_GET_RETURN_T(value_type, member_name)> member_name{upcxio::name{index_name}, &value_type::member_name};
+   index<UPCXIO_CDT_GET_RETURN_T(value_type, member_name)> member_name{upcxio::name{index_name}, &value_type::member_name};
 
 namespace upcxio {
    namespace internal_use_do_not_use {
@@ -220,7 +220,7 @@ inline key_type table_key(const key_type& prefix, const key_type& key) {
 /* @endcond */
 
 // This is the "best" way to document a function that does not technically exist using Doxygen.
-#if EOSIO_CDT_DOXYGEN
+#if UPCXIO_CDT_DOXYGEN
 /**
  * @brief A function for converting types to the appropriate binary representation for the UPCXIO Key Value database.
  * @details The CDT provides implementations of this function for many of the common primitives and for structs/tuples.

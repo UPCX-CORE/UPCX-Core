@@ -106,10 +106,10 @@ struct abi_serializer {
          deadline += max_serialization_time;
       }
       return [max_serialization_time, deadline](size_t recursion_depth) {
-         EOS_ASSERT( recursion_depth < max_recursion_depth, abi_recursion_depth_exception,
+         UPCX_ASSERT( recursion_depth < max_recursion_depth, abi_recursion_depth_exception,
                      "recursive definition, max_recursion_depth ${r} ", ("r", max_recursion_depth) );
 
-         EOS_ASSERT( fc::time_point::now() < deadline, abi_serialization_deadline_exception,
+         UPCX_ASSERT( fc::time_point::now() < deadline, abi_serialization_deadline_exception,
                      "serialization time limit ${t}us exceeded", ("t", max_serialization_time) );
       };
    }
@@ -800,8 +800,8 @@ namespace impl {
       {
          auto h = ctx.enter_scope();
          const variant_object& vo = v.get_object();
-         EOS_ASSERT(vo.contains("account"), packed_transaction_type_exception, "Missing account");
-         EOS_ASSERT(vo.contains("name"), packed_transaction_type_exception, "Missing name");
+         UPCX_ASSERT(vo.contains("account"), packed_transaction_type_exception, "Missing account");
+         UPCX_ASSERT(vo.contains("name"), packed_transaction_type_exception, "Missing name");
          from_variant(vo["account"], act.account);
          from_variant(vo["name"], act.name);
 
@@ -838,7 +838,7 @@ namespace impl {
             }
          }
 
-         EOS_ASSERT(valid_empty_data || !act.data.empty(), packed_transaction_type_exception,
+         UPCX_ASSERT(valid_empty_data || !act.data.empty(), packed_transaction_type_exception,
                     "Failed to deserialize data for ${account}:${name}", ("account", act.account)("name", act.name));
       }
 
@@ -886,7 +886,7 @@ namespace impl {
             if (vo.contains("transaction_extensions")) {
                extensions_type trx_extensions;
                from_variant(vo["transaction_extensions"], trx_extensions);
-               EOS_ASSERT(trx.transaction_extensions == trx_extensions, packed_transaction_type_exception,
+               UPCX_ASSERT(trx.transaction_extensions == trx_extensions, packed_transaction_type_exception,
                         "Transaction contained deferred_transaction_generation and transaction_extensions that did not match");
             }
          }
@@ -924,8 +924,8 @@ namespace impl {
       {
          auto h = ctx.enter_scope();
          const variant_object& vo = v.get_object();
-         EOS_ASSERT(vo.contains("signatures"), packed_transaction_type_exception, "Missing signatures");
-         EOS_ASSERT(vo.contains("compression"), packed_transaction_type_exception, "Missing compression");
+         UPCX_ASSERT(vo.contains("signatures"), packed_transaction_type_exception, "Missing signatures");
+         UPCX_ASSERT(vo.contains("compression"), packed_transaction_type_exception, "Missing compression");
          std::vector<signature_type> signatures;
          packed_transaction_v0::compression_type compression;
          from_variant(vo["signatures"], signatures);
@@ -950,7 +950,7 @@ namespace impl {
                ptrx = packed_transaction_v0( std::move( packed_trx ), std::move( signatures ), std::move( cfd ), compression );
             }
          } else {
-            EOS_ASSERT(vo.contains("transaction"), packed_transaction_type_exception, "Missing transaction");
+            UPCX_ASSERT(vo.contains("transaction"), packed_transaction_type_exception, "Missing transaction");
             if( use_packed_cfd ) {
                transaction trx;
                extract( vo["transaction"], trx, resolver, ctx );

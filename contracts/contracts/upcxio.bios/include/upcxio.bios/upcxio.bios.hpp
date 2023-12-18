@@ -22,7 +22,7 @@ namespace upcxiobios {
       uint16_t          weight;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE( permission_level_weight, (permission)(weight) )
+      UPCXLIB_SERIALIZE( permission_level_weight, (permission)(weight) )
    };
 
    struct key_weight {
@@ -30,7 +30,7 @@ namespace upcxiobios {
       uint16_t           weight;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE( key_weight, (key)(weight) )
+      UPCXLIB_SERIALIZE( key_weight, (key)(weight) )
    };
 
    struct wait_weight {
@@ -38,7 +38,7 @@ namespace upcxiobios {
       uint16_t           weight;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE( wait_weight, (wait_sec)(weight) )
+      UPCXLIB_SERIALIZE( wait_weight, (wait_sec)(weight) )
    };
 
    struct authority {
@@ -48,7 +48,7 @@ namespace upcxiobios {
       std::vector<wait_weight>              waits;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE( authority, (threshold)(keys)(accounts)(waits) )
+      UPCXLIB_SERIALIZE( authority, (threshold)(keys)(accounts)(waits) )
    };
 
    struct block_header {
@@ -62,7 +62,7 @@ namespace upcxiobios {
       std::optional<upcxio::producer_schedule>   new_producers;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE(block_header, (timestamp)(producer)(confirmed)(previous)(transaction_mroot)(action_mroot)
+      UPCXLIB_SERIALIZE(block_header, (timestamp)(producer)(confirmed)(previous)(transaction_mroot)(action_mroot)
                                      (schedule_version)(new_producers))
    };
 
@@ -274,7 +274,7 @@ namespace upcxiobios {
             checksum256       hash;
             uint64_t primary_key()const { return owner.value; }
 
-            EOSLIB_SERIALIZE( abi_hash, (owner)(hash) )
+            UPCXLIB_SERIALIZE( abi_hash, (owner)(hash) )
          };
 
          typedef upcxio::multi_index< "abihash"_n, abi_hash > abi_hash_table;

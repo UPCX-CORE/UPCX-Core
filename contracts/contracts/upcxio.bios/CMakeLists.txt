@@ -1,4 +1,4 @@
-if (EOSIO_COMPILE_TEST_CONTRACTS)
+if (UPCXIO_COMPILE_TEST_CONTRACTS)
    add_contract(upcxio.bios upcxio.bios ${CMAKE_CURRENT_SOURCE_DIR}/src/upcxio.bios.cpp)
 
    target_include_directories(upcxio.bios

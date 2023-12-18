@@ -34,7 +34,7 @@ struct action_callbacks {
    void set_action_return_value(upcxio::vm::span<const char> packed_blob) {
       uint32_t max_action_return_value_size = 
          derived().get_state().shared->max_action_return_value_size;
-      EOS_ASSERT(packed_blob.size() <= max_action_return_value_size,
+      UPCX_ASSERT(packed_blob.size() <= max_action_return_value_size,
                  upcxio::chain::action_return_value_exception, 
                  "action return value size must be less than ${s} bytes", 
                  ("s", max_action_return_value_size));

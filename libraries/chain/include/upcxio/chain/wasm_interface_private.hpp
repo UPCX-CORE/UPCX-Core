@@ -1,10 +1,10 @@
 #pragma once
 
 #include <upcxio/chain/wasm_interface.hpp>
-#ifdef EOSIO_EOS_VM_OC_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
 #include <upcxio/chain/webassembly/upcx-vm-oc.hpp>
 #else
-#define _REGISTER_EOSVMOC_INTRINSIC(CLS, MOD, METHOD, WASM_SIG, NAME, SIG)
+#define _REGISTER_UPCXVMOC_INTRINSIC(CLS, MOD, METHOD, WASM_SIG, NAME, SIG)
 #endif
 #include <upcxio/chain/webassembly/runtime_interface.hpp>
 #include <upcxio/chain/wasm_upcxio_injection.hpp>
@@ -47,7 +47,7 @@ namespace upcxio { namespace chain {
       struct by_first_block_num;
       struct by_last_block_num;
 
-#ifdef EOSIO_EOS_VM_OC_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
       struct eosvmoc_tier {
          eosvmoc_tier(const boost::filesystem::path& d, const eosvmoc::config& c, const chainbase::database& db)
           : cc(d, c, db), exec(cc),
@@ -59,24 +59,24 @@ namespace upcxio { namespace chain {
 #endif
 
       wasm_interface_impl(wasm_interface::vm_type vm, bool eosvmoc_tierup, const chainbase::database& d, const boost::filesystem::path data_dir, const eosvmoc::config& eosvmoc_config) : db(d), wasm_runtime_time(vm) {
-#ifdef EOSIO_EOS_VM_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_RUNTIME_ENABLED
          if(vm == wasm_interface::vm_type::eos_vm)
             runtime_interface = std::make_unique<webassembly::eos_vm_runtime::eos_vm_runtime<upcxio::vm::interpreter>>();
 #endif
-#ifdef EOSIO_EOS_VM_JIT_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_JIT_RUNTIME_ENABLED
          if(vm == wasm_interface::vm_type::eos_vm_jit)
             runtime_interface = std::make_unique<webassembly::eos_vm_runtime::eos_vm_runtime<upcxio::vm::jit>>();
 #endif
-#ifdef EOSIO_EOS_VM_OC_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
          if(vm == wasm_interface::vm_type::eos_vm_oc)
             runtime_interface = std::make_unique<webassembly::eosvmoc::eosvmoc_runtime>(data_dir, eosvmoc_config, d);
 #endif
          if(!runtime_interface)
-            EOS_THROW(wasm_exception, "${r} wasm runtime not supported on this platform and/or configuration", ("r", vm));
+            UPCX_THROW(wasm_exception, "${r} wasm runtime not supported on this platform and/or configuration", ("r", vm));
 
-#ifdef EOSIO_EOS_VM_OC_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
          if(eosvmoc_tierup) {
-            EOS_ASSERT(vm != wasm_interface::vm_type::eos_vm_oc, wasm_exception, "You can't use UPCX VM OC as the base runtime when tier up is activated");
+            UPCX_ASSERT(vm != wasm_interface::vm_type::eos_vm_oc, wasm_exception, "You can't use UPCX VM OC as the base runtime when tier up is activated");
             eosvmoc.emplace(data_dir, eosvmoc_config, d);
          }
 #endif
@@ -94,8 +94,8 @@ namespace upcxio { namespace chain {
          std::vector<uint8_t> mem_image;
 
          for(const DataSegment& data_segment : module.dataSegments) {
-            EOS_ASSERT(data_segment.baseOffset.type == InitializerExpression::Type::i32_const, wasm_exception, "");
-            EOS_ASSERT(module.memories.defs.size(), wasm_exception, "");
+            UPCX_ASSERT(data_segment.baseOffset.type == InitializerExpression::Type::i32_const, wasm_exception, "");
+            UPCX_ASSERT(module.memories.defs.size(), wasm_exception, "");
             const U32 base_offset = data_segment.baseOffset.i32;
             const Uptr memory_size = (module.memories.defs[0].type.size.min << IR::numBytesPerPageLog2);
             if(base_offset >= memory_size || base_offset + data_segment.data.size() > memory_size)
@@ -120,7 +120,7 @@ namespace upcxio { namespace chain {
          //anything last used before or on the LIB can be evicted
          const auto first_it = wasm_instantiation_cache.get<by_last_block_num>().begin();
          const auto last_it  = wasm_instantiation_cache.get<by_last_block_num>().upper_bound(lib);
-#ifdef EOSIO_EOS_VM_OC_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
          if(eosvmoc) for(auto it = first_it; it != last_it; it++)
             eosvmoc->cc.free_code(it->code_hash, it->vm_version);
 #endif
@@ -165,9 +165,9 @@ namespace upcxio { namespace chain {
                WASM::serialize(stream, module);
                module.userSections.clear();
             } catch (const Serialization::FatalSerializationException& e) {
-               EOS_ASSERT(false, wasm_serialization_error, e.message.c_str());
+               UPCX_ASSERT(false, wasm_serialization_error, e.message.c_str());
             } catch (const IR::ValidationException& e) {
-               EOS_ASSERT(false, wasm_serialization_error, e.message.c_str());
+               UPCX_ASSERT(false, wasm_serialization_error, e.message.c_str());
             }
             if (runtime_interface->inject_module(module)) {
                try {
@@ -175,10 +175,10 @@ namespace upcxio { namespace chain {
                   WASM::serialize(outstream, module);
                   bytes = outstream.getBytes();
                } catch (const Serialization::FatalSerializationException& e) {
-                  EOS_ASSERT(false, wasm_serialization_error,
+                  UPCX_ASSERT(false, wasm_serialization_error,
                              e.message.c_str());
                } catch (const IR::ValidationException& e) {
-                  EOS_ASSERT(false, wasm_serialization_error,
+                  UPCX_ASSERT(false, wasm_serialization_error,
                              e.message.c_str());
                }
             }
@@ -212,7 +212,7 @@ namespace upcxio { namespace chain {
       const chainbase::database& db;
       const wasm_interface::vm_type wasm_runtime_time;
 
-#ifdef EOSIO_EOS_VM_OC_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
       std::optional<eosvmoc_tier> eosvmoc;
 #endif
    };

@@ -36,7 +36,7 @@ struct fill_status_v0 {
    uint32_t           first           = {};
 };
 
-EOSIO_REFLECT(fill_status_v0, chain_id, head, head_id, irreversible, irreversible_id, first)
+UPCXIO_REFLECT(fill_status_v0, chain_id, head, head_id, irreversible, irreversible_id, first)
 
 using fill_status = std::variant<fill_status_v0>;
 
@@ -63,7 +63,7 @@ struct block_info_v0 {
    upcxio::signature                 producer_signature = {};
 };
 
-EOSIO_REFLECT(block_info_v0, num, id, timestamp, producer, confirmed, previous, transaction_mroot, action_mroot,
+UPCXIO_REFLECT(block_info_v0, num, id, timestamp, producer, confirmed, previous, transaction_mroot, action_mroot,
               schedule_version, new_producers, producer_signature)
 
 using block_info = std::variant<block_info_v0>;

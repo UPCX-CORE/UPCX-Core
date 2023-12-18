@@ -93,7 +93,7 @@ cd ./upcx/contracts/contracts/
 pwd
 ```
 
-Note the path printed at the command prompt, we will refer to it later as `EOSIO_SYSTEM_CONTRACTS_DIRECTORY`.
+Note the path printed at the command prompt, we will refer to it later as `UPCXIO_SYSTEM_CONTRACTS_DIRECTORY`.
 
 Alternatively you can build the system smart contracts from source with the following commands:
 
@@ -110,10 +110,10 @@ pwd
 
 ### 5. Install upcxio.boot System Contract
 
-To install the `upcxio.boot` system contract execute the following command from a terminal. Make sure you replace the `EOSIO_SYSTEM_CONTRACTS_DIRECTORY` with the directory path where the `upcxio.boot.wasm` and `upcxio.boot.abi` files are located.
+To install the `upcxio.boot` system contract execute the following command from a terminal. Make sure you replace the `UPCXIO_SYSTEM_CONTRACTS_DIRECTORY` with the directory path where the `upcxio.boot.wasm` and `upcxio.boot.abi` files are located.
 
 ```sh
-cleos set contract upcxio EOSIO_SYSTEM_CONTRACTS_DIRECTORY/upcxio.boot/bin/ upcxio.boot.wasm upcxio.boot.abi
+cleos set contract upcxio UPCXIO_SYSTEM_CONTRACTS_DIRECTORY/upcxio.boot/bin/ upcxio.boot.wasm upcxio.boot.abi
 ```
 
 You should see something similar to the following output:
@@ -186,16 +186,16 @@ cleos push action upcxio activate '["299dcb6af692324b899b39f16d5a530a33062804e41
 
 ### 7. Install upcxio.bios System Contract
 
-To deploy the `upcxio.bios` system contract execute the following command from a terminal. Make sure you replace the `EOSIO_SYSTEM_CONTRACTS_DIRECTORY` with the directory path where the `upcxio.bios.wasm` and `upcxio.bios.abi` files are located.
+To deploy the `upcxio.bios` system contract execute the following command from a terminal. Make sure you replace the `UPCXIO_SYSTEM_CONTRACTS_DIRECTORY` with the directory path where the `upcxio.bios.wasm` and `upcxio.bios.abi` files are located.
 
 ```sh
-cleos set contract upcxio EOSIO_SYSTEM_CONTRACTS_DIRECTORY/upcxio.bios/bin/ upcxio.bios.wasm upcxio.bios.abi
+cleos set contract upcxio UPCXIO_SYSTEM_CONTRACTS_DIRECTORY/upcxio.bios/bin/ upcxio.bios.wasm upcxio.bios.abi
 ```
 
-If you want instead of `upcxio.bios`, a more elaborate system smart contract like `upcxio.system`, you have to build it first and then execute the following command from a terminal (or from the shell). Make sure you replace the `EOSIO_SYSTEM_CONTRACTS_DIRECTORY` with the directory path where you have built the `upcxio.system` system contract, the directory path where `eoios.system.abi` and `upcxio.system.wasm` are located.
+If you want instead of `upcxio.bios`, a more elaborate system smart contract like `upcxio.system`, you have to build it first and then execute the following command from a terminal (or from the shell). Make sure you replace the `UPCXIO_SYSTEM_CONTRACTS_DIRECTORY` with the directory path where you have built the `upcxio.system` system contract, the directory path where `eoios.system.abi` and `upcxio.system.wasm` are located.
 
 ```sh
-cleos set contract upcxio EOSIO_SYSTEM_CONTRACTS_DIRECTORY/upcxio.system/ upcxio.system.wasm upcxio.system.abi
+cleos set contract upcxio UPCXIO_SYSTEM_CONTRACTS_DIRECTORY/upcxio.system/ upcxio.system.wasm upcxio.system.abi
 ```
 
 [[info | What's next?]]

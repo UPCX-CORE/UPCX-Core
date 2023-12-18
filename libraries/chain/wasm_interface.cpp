@@ -27,7 +27,7 @@
 #include <fstream>
 #include <string.h>
 
-#if defined(EOSIO_EOS_VM_RUNTIME_ENABLED) || defined(EOSIO_EOS_VM_JIT_RUNTIME_ENABLED)
+#if defined(UPCXIO_UPCX_VM_RUNTIME_ENABLED) || defined(UPCXIO_UPCX_VM_JIT_RUNTIME_ENABLED)
 #include <upcxio/vm/allocator.hpp>
 #endif
 
@@ -51,9 +51,9 @@ namespace upcxio { namespace chain {
          Serialization::MemoryInputStream stream((U8*)code.data(), code.size());
          WASM::serialize(stream, module);
       } catch(const Serialization::FatalSerializationException& e) {
-         EOS_ASSERT(false, wasm_serialization_error, e.message.c_str());
+         UPCX_ASSERT(false, wasm_serialization_error, e.message.c_str());
       } catch(const IR::ValidationException& e) {
-         EOS_ASSERT(false, wasm_serialization_error, e.message.c_str());
+         UPCX_ASSERT(false, wasm_serialization_error, e.message.c_str());
       }
 
       wasm_validations::wasm_binary_validation validator(control, module);
@@ -79,7 +79,7 @@ namespace upcxio { namespace chain {
    }
 
    void wasm_interface::apply( const digest_type& code_hash, const uint8_t& vm_type, const uint8_t& vm_version, apply_context& context ) {
-#ifdef EOSIO_EOS_VM_OC_RUNTIME_ENABLED
+#ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
       if(my->eosvmoc) {
          const chain::eosvmoc::code_descriptor* cd = nullptr;
          try {

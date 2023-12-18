@@ -18,16 +18,16 @@ The `bios-boot-tutorial.py` script simulates the UPCXIO bios boot sequence.
 
 3. Compile upcxio.contracts sources repository by following the [compile upcxio.contracts guidelines](https://github.com/UPCXIO/upcxio.contracts/blob/master/docs/02_compile-and-deploy.md) first part, the deploying steps from those guidelines should not be executed.
 
-4. Make note of the full path of the directory where the contracts were compiled, if you followed the [compile upcxio.contracts guidelines](https://github.com/UPCXIO/upcxio.contracts/blob/master/docs/02_compile-and-deploy.md) it should be under the `build` folder, in `build/contracts/`, we'll reference it from now on as `EOSIO_CONTRACTS_DIRECTORY`
+4. Make note of the full path of the directory where the contracts were compiled, if you followed the [compile upcxio.contracts guidelines](https://github.com/UPCXIO/upcxio.contracts/blob/master/docs/02_compile-and-deploy.md) it should be under the `build` folder, in `build/contracts/`, we'll reference it from now on as `UPCXIO_CONTRACTS_DIRECTORY`
 
 5. Launch the `bios-boot-tutorial.py` script
-   Minimal command line to launch the script below, make sure you replace `EOSIO_CONTRACTS_DIRECTORY` with actual directory
+   Minimal command line to launch the script below, make sure you replace `UPCXIO_CONTRACTS_DIRECTORY` with actual directory
 
 ```bash
 $ cd ~
 $ git clone https://github.com/UPCXIO/upcx.git
 $ cd ./upcx/tutorials/bios-boot-tutorial/
-$ python3 bios-boot-tutorial.py --cleos=cleos --nodeos=nodeos --keosd=keosd --contracts-dir="EOSIO_CONTRACTS_DIRECTORY" -w -a
+$ python3 bios-boot-tutorial.py --cleos=cleos --nodeos=nodeos --keosd=keosd --contracts-dir="UPCXIO_CONTRACTS_DIRECTORY" -w -a
 
 ```
 

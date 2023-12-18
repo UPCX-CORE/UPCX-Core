@@ -270,7 +270,7 @@ void to_variant(const upcxio::chain::kv_tables_as_object<T>& o, fc::variant& v) 
 
 template<typename T>
 void from_variant(const fc::variant& v, upcxio::chain::kv_tables_as_object<T>& o) {
-    EOS_ASSERT( v.is_object(), upcxio::chain::invalid_type_inside_abi, "variant is not an variant_object type");
+    UPCX_ASSERT( v.is_object(), upcxio::chain::invalid_type_inside_abi, "variant is not an variant_object type");
 
     auto &kv_tables = o.value;
     const auto& tables = v.get_object();

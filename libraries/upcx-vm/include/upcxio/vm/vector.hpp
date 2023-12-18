@@ -50,17 +50,17 @@ namespace upcxio { namespace vm {
             }
 
             constexpr inline void pop_back() {
-               EOS_VM_ASSERT( _index >= 0, wasm_vector_oob_exception, "vector pop out of bounds" );
+               UPCX_VM_ASSERT( _index >= 0, wasm_vector_oob_exception, "vector pop out of bounds" );
                _index--;
             }
 
             constexpr inline T& at( size_t i ) {
-               EOS_VM_ASSERT( i < _size, wasm_vector_oob_exception, "vector read out of bounds" );
+               UPCX_VM_ASSERT( i < _size, wasm_vector_oob_exception, "vector read out of bounds" );
                return _data[i];
             }
 
             constexpr inline T& at( size_t i )const {
-               EOS_VM_ASSERT( i < _size, wasm_vector_oob_exception, "vector read out of bounds" );
+               UPCX_VM_ASSERT( i < _size, wasm_vector_oob_exception, "vector read out of bounds" );
                return _data[i];
             }
 

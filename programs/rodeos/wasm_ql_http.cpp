@@ -49,7 +49,7 @@ struct error_info {
    std::vector<int> details = {};
 };
 
-EOSIO_REFLECT(error_info, code, name, what, details)
+UPCXIO_REFLECT(error_info, code, name, what, details)
 
 struct error_results {
    uint16_t    code    = {};
@@ -57,7 +57,7 @@ struct error_results {
    error_info  error   = {};
 };
 
-EOSIO_REFLECT(error_results, code, message, error)
+UPCXIO_REFLECT(error_results, code, message, error)
 
 namespace b1::rodeos::wasm_ql {
 

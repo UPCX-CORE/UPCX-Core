@@ -55,8 +55,8 @@ struct webauthn_public_key {
     */
    std::string rpid;
 };
-EOSIO_REFLECT(webauthn_public_key, key, user_presence, rpid);
-EOSIO_COMPARE(webauthn_public_key);
+UPCXIO_REFLECT(webauthn_public_key, key, user_presence, rpid);
+UPCXIO_COMPARE(webauthn_public_key);
 
 /**
  *  UPCXIO Public Key
@@ -101,8 +101,8 @@ struct webauthn_signature {
    std::string client_json;
 };
 
-EOSIO_REFLECT(webauthn_signature, compact_signature, auth_data, client_json);
-EOSIO_COMPARE(webauthn_signature);
+UPCXIO_REFLECT(webauthn_signature, compact_signature, auth_data, client_json);
+UPCXIO_COMPARE(webauthn_signature);
 
 using signature = std::variant<ecc_signature, ecc_signature, webauthn_signature>;
 constexpr const char* get_type_name(public_key*) { return "public_key"; }

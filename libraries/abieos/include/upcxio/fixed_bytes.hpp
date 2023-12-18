@@ -204,15 +204,15 @@ void upcxio_for_each_field(fixed_bytes<Size, Word>*, F&& f) {
 }
 
 template <std::size_t Size, typename Word>
-EOSIO_COMPARE(fixed_bytes<Size, Word>);
+UPCXIO_COMPARE(fixed_bytes<Size, Word>);
 
 using checksum160 = fixed_bytes<20,uint32_t>;
 using checksum256 = fixed_bytes<32>;
 using checksum512 = fixed_bytes<64>;
 
-EOSIO_REFLECT(checksum160, value);
-EOSIO_REFLECT(checksum256, value);
-EOSIO_REFLECT(checksum512, value);
+UPCXIO_REFLECT(checksum160, value);
+UPCXIO_REFLECT(checksum256, value);
+UPCXIO_REFLECT(checksum512, value);
 
 template <typename T, std::size_t Size, typename S>
 void from_bin(fixed_bytes<Size, T>& obj, S& stream) {

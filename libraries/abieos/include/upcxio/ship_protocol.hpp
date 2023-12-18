@@ -38,7 +38,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream data = {};
    };
 
-   EOSIO_REFLECT(extension, type, data)
+   UPCXIO_REFLECT(extension, type, data)
 
    enum class transaction_status : uint8_t {
       executed  = 0, // succeed, no error handler executed
@@ -77,14 +77,14 @@ namespace upcxio { namespace ship_protocol {
 
    struct get_status_request_v0 {};
 
-   EOSIO_REFLECT(get_status_request_v0)
+   UPCXIO_REFLECT(get_status_request_v0)
 
    struct block_position {
       uint32_t           block_num = {};
       upcxio::checksum256 block_id  = {};
    };
 
-   EOSIO_REFLECT(block_position, block_num, block_id)
+   UPCXIO_REFLECT(block_position, block_num, block_id)
 
    struct get_status_result_v0 {
       block_position     head                    = {};
@@ -96,7 +96,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::checksum256 chain_id                = {}; // todo: switch to binary extension
    };
 
-   EOSIO_REFLECT(get_status_result_v0, head, last_irreversible, trace_begin_block, trace_end_block,
+   UPCXIO_REFLECT(get_status_result_v0, head, last_irreversible, trace_begin_block, trace_end_block,
                  chain_state_begin_block, chain_state_end_block, chain_id)
 
    // When using `get_blocks_request_v1`, `get_blocks_result_v0` will be returned for UPCX version 2.0.x and before and
@@ -112,7 +112,7 @@ namespace upcxio { namespace ship_protocol {
       bool                        fetch_deltas           = {};
    };
 
-   EOSIO_REFLECT(get_blocks_request_v0, start_block_num, end_block_num, max_messages_in_flight, have_positions,
+   UPCXIO_REFLECT(get_blocks_request_v0, start_block_num, end_block_num, max_messages_in_flight, have_positions,
                  irreversible_only, fetch_block, fetch_traces, fetch_deltas)
 
    // When using `get_blocks_request_v1`, only `get_blocks_result_v2` will be returned
@@ -120,13 +120,13 @@ namespace upcxio { namespace ship_protocol {
       bool                        fetch_block_header = {};
    };
 
-   EOSIO_REFLECT(get_blocks_request_v1, base get_blocks_request_v0, fetch_block_header)
+   UPCXIO_REFLECT(get_blocks_request_v1, base get_blocks_request_v0, fetch_block_header)
 
    struct get_blocks_ack_request_v0 {
       uint32_t num_messages = {};
    };
 
-   EOSIO_REFLECT(get_blocks_ack_request_v0, num_messages)
+   UPCXIO_REFLECT(get_blocks_ack_request_v0, num_messages)
 
    using request = std::variant<get_status_request_v0, get_blocks_request_v0, get_blocks_ack_request_v0, get_blocks_request_v1>;
 
@@ -137,7 +137,7 @@ namespace upcxio { namespace ship_protocol {
       std::optional<block_position> prev_block        = {};
    };
 
-   EOSIO_REFLECT(get_blocks_result_base, head, last_irreversible, this_block, prev_block)
+   UPCXIO_REFLECT(get_blocks_result_base, head, last_irreversible, this_block, prev_block)
 
    struct get_blocks_result_v0 : get_blocks_result_base {
       std::optional<upcxio::input_stream> block  = {};
@@ -145,35 +145,35 @@ namespace upcxio { namespace ship_protocol {
       std::optional<upcxio::input_stream> deltas = {};
    };
 
-   EOSIO_REFLECT(get_blocks_result_v0, base get_blocks_result_base, block, traces, deltas)
+   UPCXIO_REFLECT(get_blocks_result_v0, base get_blocks_result_base, block, traces, deltas)
 
    struct row_v0 {
       bool                present = {};     // false (not present), true (present, old / new)
       upcxio::input_stream data    = {};
    };
 
-   EOSIO_REFLECT(row_v0, present, data)
+   UPCXIO_REFLECT(row_v0, present, data)
 
    struct table_delta_v0 {
       std::string         name = {};
       std::vector<row_v0> rows = {};
    };
 
-   EOSIO_REFLECT(table_delta_v0, name, rows)
+   UPCXIO_REFLECT(table_delta_v0, name, rows)
 
    struct row_v1 {
       uint8_t             present = {};     // 0 (not present), 1 (present, old), 2 (present, new)
       upcxio::input_stream data    = {};
    };
 
-   EOSIO_REFLECT(row_v1, present, data)
+   UPCXIO_REFLECT(row_v1, present, data)
 
    struct table_delta_v1 {
       std::string         name = {};
       std::vector<row_v1> rows = {};
    };
 
-   EOSIO_REFLECT(table_delta_v1, name, rows)
+   UPCXIO_REFLECT(table_delta_v1, name, rows)
 
    using table_delta = std::variant<table_delta_v0, table_delta_v1>;
 
@@ -182,7 +182,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::name permission = {};
    };
 
-   EOSIO_REFLECT(permission_level, actor, permission)
+   UPCXIO_REFLECT(permission_level, actor, permission)
 
    struct action {
       upcxio::name                   account       = {};
@@ -191,15 +191,15 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream           data          = {};
    };
 
-   EOSIO_REFLECT(action, account, name, authorization, data)
+   UPCXIO_REFLECT(action, account, name, authorization, data)
 
    struct account_auth_sequence {
       upcxio::name account  = {};
       uint64_t    sequence = {};
    };
 
-   EOSIO_REFLECT(account_auth_sequence, account, sequence)
-   EOSIO_COMPARE(account_auth_sequence);
+   UPCXIO_REFLECT(account_auth_sequence, account, sequence)
+   UPCXIO_COMPARE(account_auth_sequence);
 
    struct action_receipt_v0 {
       upcxio::name                        receiver        = {};
@@ -211,7 +211,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::varuint32                   abi_sequence    = {};
    };
 
-   EOSIO_REFLECT(action_receipt_v0, receiver, act_digest, global_sequence, recv_sequence, auth_sequence, code_sequence,
+   UPCXIO_REFLECT(action_receipt_v0, receiver, act_digest, global_sequence, recv_sequence, auth_sequence, code_sequence,
                  abi_sequence)
 
    using action_receipt = std::variant<action_receipt_v0>;
@@ -221,8 +221,8 @@ namespace upcxio { namespace ship_protocol {
       int64_t     delta   = {};
    };
 
-   EOSIO_REFLECT(account_delta, account, delta)
-   EOSIO_COMPARE(account_delta);
+   UPCXIO_REFLECT(account_delta, account, delta)
+   UPCXIO_COMPARE(account_delta);
 
    struct action_trace_v0 {
       upcxio::varuint32              action_ordinal         = {};
@@ -238,7 +238,7 @@ namespace upcxio { namespace ship_protocol {
       std::optional<uint64_t>       error_code             = {};
    };
 
-   EOSIO_REFLECT(action_trace_v0, action_ordinal, creator_action_ordinal, receipt, receiver, act, context_free, elapsed,
+   UPCXIO_REFLECT(action_trace_v0, action_ordinal, creator_action_ordinal, receipt, receiver, act, context_free, elapsed,
                  console, account_ram_deltas, except, error_code)
 
    struct action_trace_v1 {
@@ -257,7 +257,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream           return_value           = {};
    };
 
-   EOSIO_REFLECT(action_trace_v1, action_ordinal, creator_action_ordinal, receipt, receiver, act, context_free, elapsed,
+   UPCXIO_REFLECT(action_trace_v1, action_ordinal, creator_action_ordinal, receipt, receiver, act, context_free, elapsed,
                  console, account_ram_deltas, account_disk_deltas, except, error_code, return_value)
 
    using action_trace = std::variant<action_trace_v0, action_trace_v1>;
@@ -289,11 +289,11 @@ namespace upcxio { namespace ship_protocol {
       prunable_data_t prunable_data;
    };
 
-   EOSIO_REFLECT(prunable_data_type, prunable_data)
-   EOSIO_REFLECT(prunable_data_type::none, prunable_digest)
-   EOSIO_REFLECT(prunable_data_type::partial, signatures, context_free_segments)
-   EOSIO_REFLECT(prunable_data_type::full, signatures, context_free_segments)
-   EOSIO_REFLECT(prunable_data_type::full_legacy, signatures, packed_context_free_data)
+   UPCXIO_REFLECT(prunable_data_type, prunable_data)
+   UPCXIO_REFLECT(prunable_data_type::none, prunable_digest)
+   UPCXIO_REFLECT(prunable_data_type::partial, signatures, context_free_segments)
+   UPCXIO_REFLECT(prunable_data_type::full, signatures, context_free_segments)
+   UPCXIO_REFLECT(prunable_data_type::full_legacy, signatures, packed_context_free_data)
 
    struct partial_transaction_v0 {
       upcxio::time_point_sec            expiration             = {};
@@ -307,7 +307,7 @@ namespace upcxio { namespace ship_protocol {
       std::vector<upcxio::input_stream> context_free_data      = {};
    };
 
-   EOSIO_REFLECT(partial_transaction_v0, expiration, ref_block_num, ref_block_prefix, max_net_usage_words,
+   UPCXIO_REFLECT(partial_transaction_v0, expiration, ref_block_num, ref_block_prefix, max_net_usage_words,
                  max_cpu_usage_ms, delay_sec, transaction_extensions, signatures, context_free_data)
 
    struct partial_transaction_v1 {
@@ -321,7 +321,7 @@ namespace upcxio { namespace ship_protocol {
       std::optional<prunable_data_type> prunable_data          = {};
    };
 
-   EOSIO_REFLECT(partial_transaction_v1, expiration, ref_block_num, ref_block_prefix, max_net_usage_words,
+   UPCXIO_REFLECT(partial_transaction_v1, expiration, ref_block_num, ref_block_prefix, max_net_usage_words,
                  max_cpu_usage_ms, delay_sec, transaction_extensions, prunable_data)
 
    using partial_transaction = std::variant<partial_transaction_v0, partial_transaction_v1>;
@@ -348,7 +348,7 @@ namespace upcxio { namespace ship_protocol {
       std::optional<partial_transaction>     partial           = {};
    };
 
-   EOSIO_REFLECT(transaction_trace_v0, id, status, cpu_usage_us, net_usage_words, elapsed, net_usage, scheduled,
+   UPCXIO_REFLECT(transaction_trace_v0, id, status, cpu_usage_us, net_usage_words, elapsed, net_usage, scheduled,
                  action_traces, account_ram_delta, except, error_code, failed_dtrx_trace, partial)
 
    using transaction_trace = std::variant<transaction_trace_v0>;
@@ -362,14 +362,14 @@ namespace upcxio { namespace ship_protocol {
       upcxio::public_key block_signing_key = {};
    };
 
-   EOSIO_REFLECT(producer_key, producer_name, block_signing_key)
+   UPCXIO_REFLECT(producer_key, producer_name, block_signing_key)
 
    struct producer_schedule {
       uint32_t                  version   = {};
       std::vector<producer_key> producers = {};
    };
 
-   EOSIO_REFLECT(producer_schedule, version, producers)
+   UPCXIO_REFLECT(producer_schedule, version, producers)
 
    struct transaction_receipt_header {
       transaction_status status          = {};
@@ -377,7 +377,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::varuint32   net_usage_words = {};
    };
 
-   EOSIO_REFLECT(transaction_receipt_header, status, cpu_usage_us, net_usage_words)
+   UPCXIO_REFLECT(transaction_receipt_header, status, cpu_usage_us, net_usage_words)
 
    struct packed_transaction_v0 {
       std::vector<upcxio::signature> signatures               = {};
@@ -386,7 +386,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream           packed_trx               = {};
    };
 
-   EOSIO_REFLECT(packed_transaction_v0, signatures, compression, packed_context_free_data, packed_trx)
+   UPCXIO_REFLECT(packed_transaction_v0, signatures, compression, packed_context_free_data, packed_trx)
 
    struct packed_transaction {
       uint8_t             compression   = {};
@@ -394,7 +394,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream packed_trx    = {};
    };
 
-   EOSIO_REFLECT(packed_transaction, compression, prunable_data, packed_trx)
+   UPCXIO_REFLECT(packed_transaction, compression, prunable_data, packed_trx)
 
    using transaction_variant_v0 = std::variant<upcxio::checksum256, packed_transaction_v0>;
 
@@ -402,7 +402,7 @@ namespace upcxio { namespace ship_protocol {
       transaction_variant_v0 trx = {};
    };
 
-   EOSIO_REFLECT(transaction_receipt_v0, base transaction_receipt_header, trx)
+   UPCXIO_REFLECT(transaction_receipt_v0, base transaction_receipt_header, trx)
 
    using transaction_variant = std::variant<upcxio::checksum256, packed_transaction>;
 
@@ -410,7 +410,7 @@ namespace upcxio { namespace ship_protocol {
       transaction_variant trx = {};
    };
 
-   EOSIO_REFLECT(transaction_receipt, base transaction_receipt_header, trx)
+   UPCXIO_REFLECT(transaction_receipt, base transaction_receipt_header, trx)
 
    struct block_header {
       upcxio::block_timestamp           timestamp{};
@@ -424,21 +424,21 @@ namespace upcxio { namespace ship_protocol {
       std::vector<extension>           header_extensions = {};
    };
 
-   EOSIO_REFLECT(block_header, timestamp, producer, confirmed, previous, transaction_mroot, action_mroot,
+   UPCXIO_REFLECT(block_header, timestamp, producer, confirmed, previous, transaction_mroot, action_mroot,
                  schedule_version, new_producers, header_extensions)
 
    struct signed_block_header : block_header {
       upcxio::signature producer_signature = {};
    };
 
-   EOSIO_REFLECT(signed_block_header, base block_header, producer_signature)
+   UPCXIO_REFLECT(signed_block_header, base block_header, producer_signature)
 
    struct signed_block_v0 : signed_block_header {
       std::vector<transaction_receipt_v0> transactions     = {};
       std::vector<extension>              block_extensions = {};
    };
 
-   EOSIO_REFLECT(signed_block_v0, base signed_block_header, transactions, block_extensions)
+   UPCXIO_REFLECT(signed_block_v0, base signed_block_header, transactions, block_extensions)
 
    struct signed_block_v1 : signed_block_header {
       uint8_t                          prune_state      = {};
@@ -446,7 +446,7 @@ namespace upcxio { namespace ship_protocol {
       std::vector<extension>           block_extensions = {};
    };
 
-   EOSIO_REFLECT(signed_block_v1, base signed_block_header, prune_state, transactions, block_extensions)
+   UPCXIO_REFLECT(signed_block_v1, base signed_block_header, prune_state, transactions, block_extensions)
 
    using signed_block_variant = std::variant<signed_block_v0, signed_block_v1>;
 
@@ -456,7 +456,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::opaque<std::vector<table_delta>>       deltas = {};
    };
 
-   EOSIO_REFLECT(get_blocks_result_v1, base get_blocks_result_base, block, traces, deltas)
+   UPCXIO_REFLECT(get_blocks_result_v1, base get_blocks_result_base, block, traces, deltas)
 
    struct get_blocks_result_v2 : get_blocks_result_base { 
       upcxio::opaque<signed_block_variant>           block = {};
@@ -465,7 +465,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::opaque<std::vector<table_delta>>       deltas = {};
    };
 
-   EOSIO_REFLECT(get_blocks_result_v2, base get_blocks_result_base, block, block_header, traces, deltas)
+   UPCXIO_REFLECT(get_blocks_result_v2, base get_blocks_result_base, block, block_header, traces, deltas)
 
    using result = std::variant<get_status_result_v0, get_blocks_result_v0, get_blocks_result_v1, get_blocks_result_v2>;
 
@@ -478,7 +478,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::varuint32      delay_sec           = {};
    };
 
-   EOSIO_REFLECT(transaction_header, expiration, ref_block_num, ref_block_prefix, max_net_usage_words, max_cpu_usage_ms,
+   UPCXIO_REFLECT(transaction_header, expiration, ref_block_num, ref_block_prefix, max_net_usage_words, max_cpu_usage_ms,
                  delay_sec)
 
    struct transaction : transaction_header {
@@ -487,7 +487,7 @@ namespace upcxio { namespace ship_protocol {
       std::vector<extension> transaction_extensions = {};
    };
 
-   EOSIO_REFLECT(transaction, base transaction_header, context_free_actions, actions, transaction_extensions)
+   UPCXIO_REFLECT(transaction, base transaction_header, context_free_actions, actions, transaction_extensions)
 
    struct code_id {
       uint8_t            vm_type    = {};
@@ -495,7 +495,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::checksum256 code_hash  = {};
    };
 
-   EOSIO_REFLECT(code_id, vm_type, vm_version, code_hash)
+   UPCXIO_REFLECT(code_id, vm_type, vm_version, code_hash)
 
    struct account_v0 {
       upcxio::name            name          = {};
@@ -503,7 +503,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream    abi           = {};
    };
 
-   EOSIO_REFLECT(account_v0, name, creation_date, abi)
+   UPCXIO_REFLECT(account_v0, name, creation_date, abi)
 
    using account = std::variant<account_v0>;
 
@@ -514,7 +514,7 @@ namespace upcxio { namespace ship_protocol {
       std::optional<code_id> code             = {};
    };
 
-   EOSIO_REFLECT(account_metadata_v0, name, privileged, last_code_update, code)
+   UPCXIO_REFLECT(account_metadata_v0, name, privileged, last_code_update, code)
 
    using account_metadata = std::variant<account_metadata_v0>;
 
@@ -525,7 +525,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream code       = {};
    };
 
-   EOSIO_REFLECT(code_v0, vm_type, vm_version, code_hash, code)
+   UPCXIO_REFLECT(code_v0, vm_type, vm_version, code_hash, code)
 
    using code = std::variant<code_v0>;
 
@@ -536,7 +536,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::name payer = {};
    };
 
-   EOSIO_REFLECT(contract_table_v0, code, scope, table, payer)
+   UPCXIO_REFLECT(contract_table_v0, code, scope, table, payer)
 
    using contract_table = std::variant<contract_table_v0>;
 
@@ -549,7 +549,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream value       = {};
    };
 
-   EOSIO_REFLECT(contract_row_v0, code, scope, table, primary_key, payer, value)
+   UPCXIO_REFLECT(contract_row_v0, code, scope, table, primary_key, payer, value)
 
    using contract_row = std::variant<contract_row_v0>;
 
@@ -562,7 +562,7 @@ namespace upcxio { namespace ship_protocol {
       uint64_t    secondary_key = {};
    };
 
-   EOSIO_REFLECT(contract_index64_v0, code, scope, table, primary_key, payer, secondary_key)
+   UPCXIO_REFLECT(contract_index64_v0, code, scope, table, primary_key, payer, secondary_key)
 
    using contract_index64 = std::variant<contract_index64_v0>;
 
@@ -575,7 +575,7 @@ namespace upcxio { namespace ship_protocol {
       uint128_t   secondary_key = {};
    };
 
-   EOSIO_REFLECT(contract_index128_v0, code, scope, table, primary_key, payer, secondary_key)
+   UPCXIO_REFLECT(contract_index128_v0, code, scope, table, primary_key, payer, secondary_key)
 
    using contract_index128 = std::variant<contract_index128_v0>;
 
@@ -588,7 +588,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::checksum256 secondary_key = {};
    };
 
-   EOSIO_REFLECT(contract_index256_v0, code, scope, table, primary_key, payer, secondary_key)
+   UPCXIO_REFLECT(contract_index256_v0, code, scope, table, primary_key, payer, secondary_key)
 
    using contract_index256 = std::variant<contract_index256_v0>;
 
@@ -601,7 +601,7 @@ namespace upcxio { namespace ship_protocol {
       double      secondary_key = {};
    };
 
-   EOSIO_REFLECT(contract_index_double_v0, code, scope, table, primary_key, payer, secondary_key)
+   UPCXIO_REFLECT(contract_index_double_v0, code, scope, table, primary_key, payer, secondary_key)
 
    using contract_index_double = std::variant<contract_index_double_v0>;
 
@@ -614,7 +614,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::float128 secondary_key = {};
    };
 
-   EOSIO_REFLECT(contract_index_long_double_v0, code, scope, table, primary_key, payer, secondary_key)
+   UPCXIO_REFLECT(contract_index_long_double_v0, code, scope, table, primary_key, payer, secondary_key)
 
    using contract_index_long_double = std::variant<contract_index_long_double_v0>;
 
@@ -625,7 +625,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::name         payer    = {};
    };
 
-   EOSIO_REFLECT(key_value_v0, contract, key, value, payer)
+   UPCXIO_REFLECT(key_value_v0, contract, key, value, payer)
 
    using key_value = std::variant<key_value_v0>;
 
@@ -634,14 +634,14 @@ namespace upcxio { namespace ship_protocol {
       uint16_t          weight = {};
    };
 
-   EOSIO_REFLECT(key_weight, key, weight)
+   UPCXIO_REFLECT(key_weight, key, weight)
 
    struct block_signing_authority_v0 {
       uint32_t                threshold = {};
       std::vector<key_weight> keys      = {};
    };
 
-   EOSIO_REFLECT(block_signing_authority_v0, threshold, keys)
+   UPCXIO_REFLECT(block_signing_authority_v0, threshold, keys)
 
    using block_signing_authority = std::variant<block_signing_authority_v0>;
 
@@ -650,14 +650,14 @@ namespace upcxio { namespace ship_protocol {
       block_signing_authority authority     = {};
    };
 
-   EOSIO_REFLECT(producer_authority, producer_name, authority)
+   UPCXIO_REFLECT(producer_authority, producer_name, authority)
 
    struct producer_authority_schedule {
       uint32_t                        version   = {};
       std::vector<producer_authority> producers = {};
    };
 
-   EOSIO_REFLECT(producer_authority_schedule, version, producers)
+   UPCXIO_REFLECT(producer_authority_schedule, version, producers)
 
    struct chain_config_v0 {
       uint64_t max_block_net_usage                 = {};
@@ -679,7 +679,7 @@ namespace upcxio { namespace ship_protocol {
       uint16_t max_authority_depth                 = {};
    };
 
-   EOSIO_REFLECT(chain_config_v0, max_block_net_usage, target_block_net_usage_pct, max_transaction_net_usage,
+   UPCXIO_REFLECT(chain_config_v0, max_block_net_usage, target_block_net_usage_pct, max_transaction_net_usage,
                  base_per_transaction_net_usage, net_usage_leeway, context_free_discount_net_usage_num,
                  context_free_discount_net_usage_den, max_block_cpu_usage, target_block_cpu_usage_pct,
                  max_transaction_cpu_usage, min_transaction_cpu_usage, max_transaction_lifetime,
@@ -707,7 +707,7 @@ namespace upcxio { namespace ship_protocol {
       uint32_t max_action_return_value_size        = {};
    };
 
-   EOSIO_REFLECT(chain_config_v1, max_block_net_usage, target_block_net_usage_pct, max_transaction_net_usage,
+   UPCXIO_REFLECT(chain_config_v1, max_block_net_usage, target_block_net_usage_pct, max_transaction_net_usage,
                base_per_transaction_net_usage, net_usage_leeway, context_free_discount_net_usage_num,
                context_free_discount_net_usage_den, max_block_cpu_usage, target_block_cpu_usage_pct,
                max_transaction_cpu_usage, min_transaction_cpu_usage, max_transaction_lifetime,
@@ -722,7 +722,7 @@ namespace upcxio { namespace ship_protocol {
       chain_config            configuration               = {};
    };
 
-   EOSIO_REFLECT(global_property_v0, proposed_schedule_block_num, proposed_schedule, configuration)
+   UPCXIO_REFLECT(global_property_v0, proposed_schedule_block_num, proposed_schedule, configuration)
 
    struct global_property_v1 {
       std::optional<uint32_t>     proposed_schedule_block_num = {};
@@ -731,7 +731,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::checksum256          chain_id                    = {};
    };
 
-   EOSIO_REFLECT(global_property_v1, proposed_schedule_block_num, proposed_schedule, configuration, chain_id)
+   UPCXIO_REFLECT(global_property_v1, proposed_schedule_block_num, proposed_schedule, configuration, chain_id)
 
    struct kv_database_config {
       uint32_t max_key_size   = 0; ///< the maximum size in bytes of a key
@@ -739,7 +739,7 @@ namespace upcxio { namespace ship_protocol {
       uint32_t max_iterators  = 0; ///< the maximum number of iterators that a contract can have simultaneously.
    };
 
-   EOSIO_REFLECT(kv_database_config, max_key_size, max_value_size, max_iterators)
+   UPCXIO_REFLECT(kv_database_config, max_key_size, max_value_size, max_iterators)
 
    struct wasm_config {
       uint32_t max_mutable_global_bytes;
@@ -755,7 +755,7 @@ namespace upcxio { namespace ship_protocol {
       uint32_t max_call_depth;
    };
 
-   EOSIO_REFLECT(wasm_config, max_mutable_global_bytes, max_table_elements, max_section_elements,
+   UPCXIO_REFLECT(wasm_config, max_mutable_global_bytes, max_table_elements, max_section_elements,
                  max_linear_memory_init, max_func_local_bytes, max_nested_structures, max_symbol_bytes,
                  max_module_bytes, max_code_bytes, max_pages, max_call_depth)
 
@@ -769,7 +769,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::input_stream packed_trx = {};
    };
 
-   EOSIO_REFLECT(generated_transaction_v0, sender, sender_id, payer, trx_id, packed_trx)
+   UPCXIO_REFLECT(generated_transaction_v0, sender, sender_id, payer, trx_id, packed_trx)
 
    using generated_transaction = std::variant<generated_transaction_v0>;
 
@@ -778,7 +778,7 @@ namespace upcxio { namespace ship_protocol {
       uint32_t           activation_block_num = {};
    };
 
-   EOSIO_REFLECT(activated_protocol_feature_v0, feature_digest, activation_block_num)
+   UPCXIO_REFLECT(activated_protocol_feature_v0, feature_digest, activation_block_num)
 
    using activated_protocol_feature = std::variant<activated_protocol_feature_v0>;
 
@@ -786,7 +786,7 @@ namespace upcxio { namespace ship_protocol {
       std::vector<activated_protocol_feature> activated_protocol_features = {};
    };
 
-   EOSIO_REFLECT(protocol_state_v0, activated_protocol_features)
+   UPCXIO_REFLECT(protocol_state_v0, activated_protocol_features)
 
    using protocol_state = std::variant<protocol_state_v0>;
 
@@ -795,14 +795,14 @@ namespace upcxio { namespace ship_protocol {
       uint16_t         weight     = {};
    };
 
-   EOSIO_REFLECT(permission_level_weight, permission, weight)
+   UPCXIO_REFLECT(permission_level_weight, permission, weight)
 
    struct wait_weight {
       uint32_t wait_sec = {};
       uint16_t weight   = {};
    };
 
-   EOSIO_REFLECT(wait_weight, wait_sec, weight)
+   UPCXIO_REFLECT(wait_weight, wait_sec, weight)
 
    struct authority {
       uint32_t                             threshold = {};
@@ -811,7 +811,7 @@ namespace upcxio { namespace ship_protocol {
       std::vector<wait_weight>             waits     = {};
    };
 
-   EOSIO_REFLECT(authority, threshold, keys, accounts, waits)
+   UPCXIO_REFLECT(authority, threshold, keys, accounts, waits)
 
    struct permission_v0 {
       upcxio::name       owner        = {};
@@ -821,7 +821,7 @@ namespace upcxio { namespace ship_protocol {
       authority         auth         = {};
    };
 
-   EOSIO_REFLECT(permission_v0, owner, name, parent, last_updated, auth)
+   UPCXIO_REFLECT(permission_v0, owner, name, parent, last_updated, auth)
 
    using permission = std::variant<permission_v0>;
 
@@ -832,7 +832,7 @@ namespace upcxio { namespace ship_protocol {
       upcxio::name required_permission = {};
    };
 
-   EOSIO_REFLECT(permission_link_v0, account, code, message_type, required_permission)
+   UPCXIO_REFLECT(permission_link_v0, account, code, message_type, required_permission)
 
    using permission_link = std::variant<permission_link_v0>;
 
@@ -843,7 +843,7 @@ namespace upcxio { namespace ship_protocol {
       int64_t     ram_bytes  = {};
    };
 
-   EOSIO_REFLECT(resource_limits_v0, owner, net_weight, cpu_weight, ram_bytes)
+   UPCXIO_REFLECT(resource_limits_v0, owner, net_weight, cpu_weight, ram_bytes)
 
    using resource_limits = std::variant<resource_limits_v0>;
 
@@ -853,7 +853,7 @@ namespace upcxio { namespace ship_protocol {
       uint64_t consumed     = {};
    };
 
-   EOSIO_REFLECT(usage_accumulator_v0, last_ordinal, value_ex, consumed)
+   UPCXIO_REFLECT(usage_accumulator_v0, last_ordinal, value_ex, consumed)
 
    using usage_accumulator = std::variant<usage_accumulator_v0>;
 
@@ -864,7 +864,7 @@ namespace upcxio { namespace ship_protocol {
       uint64_t          ram_usage = {};
    };
 
-   EOSIO_REFLECT(resource_usage_v0, owner, net_usage, cpu_usage, ram_usage)
+   UPCXIO_REFLECT(resource_usage_v0, owner, net_usage, cpu_usage, ram_usage)
 
    using resource_usage = std::variant<resource_usage_v0>;
 
@@ -878,7 +878,7 @@ namespace upcxio { namespace ship_protocol {
       uint64_t          virtual_cpu_limit       = {};
    };
 
-   EOSIO_REFLECT(resource_limits_state_v0, average_block_net_usage, average_block_cpu_usage, total_net_weight,
+   UPCXIO_REFLECT(resource_limits_state_v0, average_block_net_usage, average_block_cpu_usage, total_net_weight,
                  total_cpu_weight, total_ram_bytes, virtual_net_limit, virtual_cpu_limit)
 
    using resource_limits_state = std::variant<resource_limits_state_v0>;
@@ -888,7 +888,7 @@ namespace upcxio { namespace ship_protocol {
       uint64_t denominator = {};
    };
 
-   EOSIO_REFLECT(resource_limits_ratio_v0, numerator, denominator)
+   UPCXIO_REFLECT(resource_limits_ratio_v0, numerator, denominator)
 
    using resource_limits_ratio = std::variant<resource_limits_ratio_v0>;
 
@@ -901,7 +901,7 @@ namespace upcxio { namespace ship_protocol {
       resource_limits_ratio expand_rate    = {};
    };
 
-   EOSIO_REFLECT(elastic_limit_parameters_v0, target, max, periods, max_multiplier, contract_rate, expand_rate)
+   UPCXIO_REFLECT(elastic_limit_parameters_v0, target, max, periods, max_multiplier, contract_rate, expand_rate)
 
    using elastic_limit_parameters = std::variant<elastic_limit_parameters_v0>;
 
@@ -912,7 +912,7 @@ namespace upcxio { namespace ship_protocol {
       uint32_t                 account_net_usage_average_window = {};
    };
 
-   EOSIO_REFLECT(resource_limits_config_v0, cpu_limit_parameters, net_limit_parameters,
+   UPCXIO_REFLECT(resource_limits_config_v0, cpu_limit_parameters, net_limit_parameters,
                  account_cpu_usage_average_window, account_net_usage_average_window)
 
    using resource_limits_config = std::variant<resource_limits_config_v0>;

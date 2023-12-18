@@ -27,8 +27,8 @@ class signature_provider_plugin_impl {
 #ifdef __APPLE__
       signature_provider_plugin::signature_provider_type
       make_se_signature_provider(const chain::public_key_type pubkey) const {
-         EOS_ASSERT(secure_enclave::hardware_supports_secure_enclave(), chain::secure_enclave_exception, "Secure Enclave not supported on this hardware");
-         EOS_ASSERT(secure_enclave::application_signed(), chain::secure_enclave_exception, "Application is not signed, Secure Enclave use not supported");
+         UPCX_ASSERT(secure_enclave::hardware_supports_secure_enclave(), chain::secure_enclave_exception, "Secure Enclave not supported on this hardware");
+         UPCX_ASSERT(secure_enclave::application_signed(), chain::secure_enclave_exception, "Application is not signed, Secure Enclave use not supported");
 
          std::set<secure_enclave::secure_enclave_key> allkeys = secure_enclave::get_all_keys();
          for(const auto& se_key : secure_enclave::get_all_keys())
@@ -37,7 +37,7 @@ class signature_provider_plugin_impl {
                   return se_key.sign(digest);
                };
 
-         EOS_THROW(chain::secure_enclave_exception, "${k} not found in Secure Enclave", ("k", pubkey));
+         UPCX_THROW(chain::secure_enclave_exception, "${k} not found in Secure Enclave", ("k", pubkey));
       }
 #endif
 
@@ -75,9 +75,9 @@ const char* const signature_provider_plugin::signature_provider_help_text() cons
           "Where:\n"
           "   <public-key>    \tis a string form of a vaild UPCXIO public key\n\n"
           "   <provider-spec> \tis a string in the form <provider-type>:<data>\n\n"
-          "   <provider-type> \tis KEY, KEOSD, or SE\n\n"
+          "   <provider-type> \tis KEY, KUPCXD, or SE\n\n"
           "   KEY:<data>      \tis a string form of a valid UPCXIO private key which maps to the provided public key\n\n"
-          "   KEOSD:<data>    \tis the URL where keosd is available and the approptiate wallet(s) are unlocked\n\n"
+          "   KUPCXD:<data>    \tis the URL where keosd is available and the approptiate wallet(s) are unlocked\n\n"
 #ifdef __APPLE__
           "   SE:             \tindicates the key resides in Secure Enclave"
 #endif
@@ -92,12 +92,12 @@ void signature_provider_plugin::plugin_initialize(const variables_map& options) 
 std::pair<chain::public_key_type,signature_provider_plugin::signature_provider_type>
 signature_provider_plugin::signature_provider_for_specification(const std::string& spec) const {
    auto delim = spec.find("=");
-   EOS_ASSERT(delim != std::string::npos, chain::plugin_config_exception, "Missing \"=\" in the key spec pair");
+   UPCX_ASSERT(delim != std::string::npos, chain::plugin_config_exception, "Missing \"=\" in the key spec pair");
    auto pub_key_str = spec.substr(0, delim);
    auto spec_str = spec.substr(delim + 1);
 
    auto spec_delim = spec_str.find(":");
-   EOS_ASSERT(spec_delim != std::string::npos, chain::plugin_config_exception, "Missing \":\" in the key spec pair");
+   UPCX_ASSERT(spec_delim != std::string::npos, chain::plugin_config_exception, "Missing \":\" in the key spec pair");
    auto spec_type_str = spec_str.substr(0, spec_delim);
    auto spec_data = spec_str.substr(spec_delim + 1);
 
@@ -105,16 +105,16 @@ signature_provider_plugin::signature_provider_for_specification(const std::strin
 
    if(spec_type_str == "KEY") {
       chain::private_key_type priv(spec_data);
-      EOS_ASSERT(pubkey == priv.get_public_key(), chain::plugin_config_exception, "Private key does not match given public key for ${pub}", ("pub", pubkey));
+      UPCX_ASSERT(pubkey == priv.get_public_key(), chain::plugin_config_exception, "Private key does not match given public key for ${pub}", ("pub", pubkey));
       return std::make_pair(pubkey, my->make_key_signature_provider(priv));
    }
-   else if(spec_type_str == "KEOSD")
+   else if(spec_type_str == "KUPCXD")
       return std::make_pair(pubkey, my->make_keosd_signature_provider(spec_data, pubkey));
 #ifdef __APPLE__
    else if(spec_type_str == "SE")
       return std::make_pair(pubkey, my->make_se_signature_provider(pubkey));
 #endif
-   EOS_THROW(chain::plugin_config_exception, "Unsupported key provider type \"${t}\"", ("t", spec_type_str));
+   UPCX_THROW(chain::plugin_config_exception, "Unsupported key provider type \"${t}\"", ("t", spec_type_str));
 }
 
 signature_provider_plugin::signature_provider_type

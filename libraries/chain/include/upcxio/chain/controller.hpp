@@ -99,7 +99,7 @@ namespace upcxio { namespace chain {
             bool                     allow_ram_billing_in_notify = false;
 
             uint32_t                 maximum_variable_signature_length = chain::config::default_max_variable_signature_length;
-            bool                     disable_all_subjective_mitigations = false; //< for developer & testing purposes, can be configured using `disable-all-subjective-mitigations` when `EOSIO_DEVELOPER` build option is provided
+            bool                     disable_all_subjective_mitigations = false; //< for developer & testing purposes, can be configured using `disable-all-subjective-mitigations` when `UPCXIO_DEVELOPER` build option is provided
             uint32_t                 terminate_at_block     = 0; //< primarily for testing purposes
 
             wasm_interface::vm_type  wasm_runtime = chain::config::default_wasm_runtime;
@@ -326,7 +326,7 @@ namespace upcxio { namespace chain {
          fc::logger* get_deep_mind_logger() const;
          void enable_deep_mind( fc::logger* logger );
 
-#if defined(EOSIO_EOS_VM_RUNTIME_ENABLED) || defined(EOSIO_EOS_VM_JIT_RUNTIME_ENABLED)
+#if defined(UPCXIO_UPCX_VM_RUNTIME_ENABLED) || defined(UPCXIO_UPCX_VM_JIT_RUNTIME_ENABLED)
          vm::wasm_allocator&  get_wasm_allocator();
 #endif
 

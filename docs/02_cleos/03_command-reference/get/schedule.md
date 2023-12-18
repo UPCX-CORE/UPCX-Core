@@ -20,7 +20,7 @@ This command simply returns the current producer schedule.
 active schedule version 0
     Producer      Producer key
     ============= ==================
-    upcxio         EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+    upcxio         UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 
 pending schedule empty
 

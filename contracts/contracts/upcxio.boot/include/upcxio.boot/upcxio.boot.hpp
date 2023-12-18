@@ -26,7 +26,7 @@ namespace upcxioboot {
       uint16_t          weight;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE( permission_level_weight, (permission)(weight) )
+      UPCXLIB_SERIALIZE( permission_level_weight, (permission)(weight) )
    };
 
    /**
@@ -39,7 +39,7 @@ namespace upcxioboot {
       uint16_t           weight;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE( key_weight, (key)(weight) )
+      UPCXLIB_SERIALIZE( key_weight, (key)(weight) )
    };
 
    /**
@@ -52,7 +52,7 @@ namespace upcxioboot {
       uint16_t           weight;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE( wait_weight, (wait_sec)(weight) )
+      UPCXLIB_SERIALIZE( wait_weight, (wait_sec)(weight) )
    };
 
    /**
@@ -71,7 +71,7 @@ namespace upcxioboot {
       std::vector<wait_weight>              waits;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
-      EOSLIB_SERIALIZE( authority, (threshold)(keys)(accounts)(waits) )
+      UPCXLIB_SERIALIZE( authority, (threshold)(keys)(accounts)(waits) )
    };
 
    /**

@@ -11,8 +11,8 @@ struct bytes {
    std::vector<char> data;
 };
 
-EOSIO_REFLECT(bytes, data);
-EOSIO_COMPARE(bytes);
+UPCXIO_REFLECT(bytes, data);
+UPCXIO_COMPARE(bytes);
 
 template <typename S>
 void from_json(bytes& obj, S& stream) {

@@ -12,7 +12,7 @@ struct stream_wrapper_v0 {
    upcxio::name       route;
    std::vector<char> data;
 };
-EOSIO_REFLECT(stream_wrapper_v0, route, data);
+UPCXIO_REFLECT(stream_wrapper_v0, route, data);
 using stream_wrapper = std::variant<stream_wrapper_v0>;
 
 class streamer_plugin : public appbase::plugin<streamer_plugin> {

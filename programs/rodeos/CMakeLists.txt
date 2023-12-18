@@ -1,5 +1,5 @@
 file(GLOB HEADERS *.hpp streams/*.hpp)
-add_executable( ${RODEOS_EXECUTABLE_NAME}
+add_executable( ${RODUPCX_EXECUTABLE_NAME}
   cloner_plugin.cpp
   streamer_plugin.cpp
   main.cpp
@@ -32,17 +32,17 @@ endif()
 
 configure_file(config.hpp.in config.hpp ESCAPE_QUOTES)
 
-target_include_directories(${RODEOS_EXECUTABLE_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
+target_include_directories(${RODUPCX_EXECUTABLE_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/../../libraries/abieos/src
   ${CMAKE_CURRENT_SOURCE_DIR}/../../libraries/amqp-cpp/include)
 
-target_link_libraries( ${RODEOS_EXECUTABLE_NAME}
+target_link_libraries( ${RODUPCX_EXECUTABLE_NAME}
         PRIVATE appbase version
         PRIVATE rodeos_lib fc amqpcpp ${CMAKE_DL_LIBS} ${PLATFORM_SPECIFIC_LIBS})
 
 add_subdirectory(tests)
 
-copy_bin( ${RODEOS_EXECUTABLE_NAME} )
+copy_bin( ${RODUPCX_EXECUTABLE_NAME} )
 install( TARGETS
-   ${RODEOS_EXECUTABLE_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT base
+   ${RODUPCX_EXECUTABLE_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT base
 )

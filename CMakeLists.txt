@@ -33,7 +33,7 @@ endif()
 set( CLI_CLIENT_EXECUTABLE_NAME cleos )
 set( NODE_EXECUTABLE_NAME nodeos )
 set( KEY_STORE_EXECUTABLE_NAME keosd )
-set( RODEOS_EXECUTABLE_NAME rodeos )
+set( RODUPCX_EXECUTABLE_NAME rodeos )
 set( TESTER_EXECUTABLE_NAME upcxio-tester )
 
 # http://stackoverflow.com/a/18369825
@@ -65,12 +65,12 @@ if(APPLE AND UNIX AND "${OPENSSL_ROOT_DIR}" STREQUAL "")
 endif()
 
 # WASM runtimes to enable. Each runtime in this list will have:
-#  * definition EOSIO_<RUNTIME>_RUNTIME_ENABLED defined in public libchain interface
+#  * definition UPCXIO_<RUNTIME>_RUNTIME_ENABLED defined in public libchain interface
 #  * ctest entries with --runtime
 # TODO reenable later
 if(CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT WIN32)
    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" AND "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
-      list(APPEND EOSIO_WASM_RUNTIMES upcx-vm-oc)
+      list(APPEND UPCXIO_WASM_RUNTIMES upcx-vm-oc)
       # UPCX VM OC requires LLVM, but move the check up here to a central location so that the UpcxioTester.cmakes
       # can be created with the exact version found
       find_package(LLVM REQUIRED CONFIG)
@@ -82,7 +82,7 @@ endif()
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT WIN32)
    if(CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
-      list(APPEND EOSIO_WASM_RUNTIMES upcx-vm upcx-vm-jit)
+      list(APPEND UPCXIO_WASM_RUNTIMES upcx-vm upcx-vm-jit)
    endif()
 endif()
 
@@ -126,7 +126,7 @@ else()
     endif()
 endif()
 
-option(EOSIO_ENABLE_DEVELOPER_OPTIONS "enable developer options for UPCXIO" OFF)
+option(UPCXIO_ENABLE_DEVELOPER_OPTIONS "enable developer options for UPCXIO" OFF)
 
 # based on http://www.delorie.com/gnu/docs/gdb/gdb_70.html
 # uncomment this line to tell GDB about macros (slows compile times)
@@ -156,11 +156,11 @@ endif()
 
 message( STATUS "Using '${CORE_SYMBOL_NAME}' as CORE symbol name" )
 
-if ("${EOSIO_ROOT_KEY}" STREQUAL "")
-   set(EOSIO_ROOT_KEY "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
+if ("${UPCXIO_ROOT_KEY}" STREQUAL "")
+   set(UPCXIO_ROOT_KEY "UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
 endif()
 
-message( STATUS "Using '${EOSIO_ROOT_KEY}' as public key for 'upcxio' account" )
+message( STATUS "Using '${UPCXIO_ROOT_KEY}' as public key for 'upcxio' account" )
 
 find_package( Gperftools QUIET )
 if( GPERFTOOLS_FOUND )
@@ -205,11 +205,11 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/contracts/contracts/upcxio.boot/upcxio
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.in ${CMAKE_CURRENT_BINARY_DIR}/version.hpp)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/upcxio)
 
-set(EOS_ROOT_DIR ${CMAKE_BINARY_DIR})
+set(UPCX_ROOT_DIR ${CMAKE_BINARY_DIR})
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/upcxio-config.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/upcxio/upcxio-config.cmake @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/UpcxioTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/upcxio/UpcxioTester.cmake @ONLY)
 
-set(EOS_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
+set(UPCX_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/upcxio-config.cmake.in ${CMAKE_BINARY_DIR}/modules/upcxio-config.cmake @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/modules/upcxio-config.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/upcxio)
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/UpcxioTester.cmake.in ${CMAKE_BINARY_DIR}/modules/UpcxioTester.cmake @ONLY)

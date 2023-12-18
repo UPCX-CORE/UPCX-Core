@@ -26,7 +26,7 @@ class eosvmoc_instantiated_module : public wasm_instantiated_module_interface {
 
       void apply(apply_context& context) override {
          const code_descriptor* const cd = _eosvmoc_runtime.cc.get_descriptor_for_code_sync(_code_hash, _vm_version);
-         EOS_ASSERT(cd, wasm_execution_error, "UPCX VM OC instantiation failed");
+         UPCX_ASSERT(cd, wasm_execution_error, "UPCX VM OC instantiation failed");
 
          _eosvmoc_runtime.exec.execute(*cd, _eosvmoc_runtime.mem, context);
       }

@@ -64,7 +64,7 @@ target_compile_options( upcx-vm INTERFACE "-Wno-register" )
 # Enable debugging stats for upcx-vm.
 # ##################################################################################################
 if(FULL_DEBUG_BUILD)
-   target_compile_definitions(upcx-vm INTERFACE -DEOS_VM_FULL_DEBUG)
+   target_compile_definitions(upcx-vm INTERFACE -DUPCX_VM_FULL_DEBUG)
 endif()
 
 # ##################################################################################################
@@ -74,12 +74,12 @@ if(ENABLE_SOFTFLOAT)
    if(NOT TARGET softfloat)
       add_subdirectory(external)
    endif()
-   target_compile_definitions(upcx-vm INTERFACE -DEOS_VM_SOFTFLOAT)
+   target_compile_definitions(upcx-vm INTERFACE -DUPCX_VM_SOFTFLOAT)
    target_link_libraries(upcx-vm INTERFACE softfloat)
 endif()
 
 if(ENABLE_MEMORY_OPS_ALIGNMENT)
-   target_compile_definitions(upcx-vm INTERFACE -DEOS_VM_ALIGN_MEMORY_OPS)
+   target_compile_definitions(upcx-vm INTERFACE -DUPCX_VM_ALIGN_MEMORY_OPS)
 endif()
 
 # ##################################################################################################

@@ -32,7 +32,7 @@ function setup() {
         echo "CORE_SYMBOL_NAME: ${CORE_SYMBOL_NAME}"
         echo "BOOST_LOCATION: ${BOOST_LOCATION}"
         echo "BUILD_DIR: ${BUILD_DIR}"
-        echo "EOSIO_INSTALL_DIR: ${EOSIO_INSTALL_DIR}"
+        echo "UPCXIO_INSTALL_DIR: ${UPCXIO_INSTALL_DIR}"
         echo "NONINTERACTIVE: ${NONINTERACTIVE}"
         echo "PROCEED: ${PROCEED}"
         echo "ENABLE_COVERAGE_TESTING: ${ENABLE_COVERAGE_TESTING}"
@@ -72,7 +72,7 @@ function install-directory-prompt() {
     if [[ -z $INSTALL_LOCATION ]]; then
         echo "No installation location was specified. Please provide the location where UPCXIO is installed."
         while true; do
-            [[ $NONINTERACTIVE == false ]] && printf "${COLOR_YELLOW}Do you wish to use the default location? ${EOSIO_INSTALL_DIR}? (y/n)${COLOR_NC}" && read -p " " PROCEED
+            [[ $NONINTERACTIVE == false ]] && printf "${COLOR_YELLOW}Do you wish to use the default location? ${UPCXIO_INSTALL_DIR}? (y/n)${COLOR_NC}" && read -p " " PROCEED
             echo ""
             case $PROCEED in
                 "" )
@@ -80,8 +80,8 @@ function install-directory-prompt() {
                 0 | true | [Yy]* )
                 break;;
                 1 | false | [Nn]* )
-                printf "Enter the desired installation location." && read -p " " EOSIO_INSTALL_DIR;
-                export EOSIO_INSTALL_DIR;
+                printf "Enter the desired installation location." && read -p " " UPCXIO_INSTALL_DIR;
+                export UPCXIO_INSTALL_DIR;
                 break;;
                 * ) echo "Please type 'y' for yes or 'n' for no.";;
             esac
@@ -89,15 +89,15 @@ function install-directory-prompt() {
     else
         # Support relative paths : https://github.com/UPCXIO/upcx/issues/7560
         [[ ! $INSTALL_LOCATION =~ ^\/ ]] && export INSTALL_LOCATION="${CURRENT_WORKING_DIR}/$INSTALL_LOCATION"
-        export EOSIO_INSTALL_DIR="$INSTALL_LOCATION"
+        export UPCXIO_INSTALL_DIR="$INSTALL_LOCATION"
     fi
     . ./scripts/.build_vars
-    echo "UPCXIO will be installed to: ${EOSIO_INSTALL_DIR}"
+    echo "UPCXIO will be installed to: ${UPCXIO_INSTALL_DIR}"
 }
 
 function previous-install-prompt() {
-  if [[ -d $EOSIO_INSTALL_DIR ]]; then
-    echo "UPCXIO has already been installed into ${EOSIO_INSTALL_DIR}... It's suggested that you upcxio_uninstall.sh before re-running this script."
+  if [[ -d $UPCXIO_INSTALL_DIR ]]; then
+    echo "UPCXIO has already been installed into ${UPCXIO_INSTALL_DIR}... It's suggested that you upcxio_uninstall.sh before re-running this script."
     while true; do
       [[ $NONINTERACTIVE == false ]] && printf "${COLOR_YELLOW}Do you wish to proceed anyway? (y/n)${COLOR_NC}" && read -p " " PROCEED
       echo ""
@@ -113,7 +113,7 @@ function previous-install-prompt() {
 
 function resources() {
     echo "${COLOR_CYAN}UPCXIO website:${COLOR_NC} https://upcx.io"
-    echo "${COLOR_CYAN}UPCXIO Telegram channel:${COLOR_NC} https://t.me/EOSProject"
+    echo "${COLOR_CYAN}UPCXIO Telegram channel:${COLOR_NC} https://t.me/UPCXProject"
     echo "${COLOR_CYAN}UPCXIO resources:${COLOR_NC} https://upcx.io/resources/"
     echo "${COLOR_CYAN}UPCXIO Stack Exchange:${COLOR_NC} https://upcxio.stackexchange.com"
 }
@@ -205,7 +205,7 @@ function ensure-cmake() {
         curl -LO https://cmake.org/files/v${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}/cmake-${CMAKE_VERSION}.tar.gz \
         && tar -xzf cmake-${CMAKE_VERSION}.tar.gz \
         && cd cmake-${CMAKE_VERSION} \
-        && ./bootstrap --prefix=${EOSIO_INSTALL_DIR} \
+        && ./bootstrap --prefix=${UPCXIO_INSTALL_DIR} \
         && make -j${JOBS} \
         && make install \
         && cd .. \

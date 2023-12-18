@@ -34,7 +34,7 @@ set(ENABLE_TESTS OFF CACHE BOOL "Build tests")
 set(ENABLE_ADDRESS_SANITIZER OFF CACHE BOOL "Use address sanitizer")
 set(ENABLE_UNDEFINED_BEHAVIOR_SANITIZER OFF CACHE BOOL "Use UB sanitizer")
 set(ENABLE_PROFILE OFF CACHE BOOL "Enable for profile builds")
-if(upcx-vm IN_LIST EOSIO_WASM_RUNTIMES OR upcx-vm-jit IN_LIST EOSIO_WASM_RUNTIMES)
+if(upcx-vm IN_LIST UPCXIO_WASM_RUNTIMES OR upcx-vm-jit IN_LIST UPCXIO_WASM_RUNTIMES)
 add_subdirectory( upcx-vm )
 endif()
 

@@ -157,11 +157,11 @@ constexpr uint64_t billable_size_v = ((billable_size<T>::value + billable_alignm
 
 } } } // namespace upcxio::chain::config
 
-constexpr uint64_t EOS_PERCENT(uint64_t value, uint32_t percentage) {
+constexpr uint64_t UPCX_PERCENT(uint64_t value, uint32_t percentage) {
    return (value * percentage) / upcxio::chain::config::percent_100;
 }
 
 template<typename Number>
-Number EOS_PERCENT_CEIL(Number value, uint32_t percentage) {
+Number UPCX_PERCENT_CEIL(Number value, uint32_t percentage) {
    return ((value * percentage) + upcxio::chain::config::percent_100 - upcxio::chain::config::percent_1)  / upcxio::chain::config::percent_100;
 }

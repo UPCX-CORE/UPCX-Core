@@ -11,17 +11,17 @@
 
 #include "abieos_ripemd160.hpp"
 
-#define ABIEOS_NODISCARD [[nodiscard]]
+#define ABIUPCX_NODISCARD [[nodiscard]]
 
 namespace abieos {
 
 template <typename State>
-ABIEOS_NODISCARD bool set_error(State& state, std::string error) {
+ABIUPCX_NODISCARD bool set_error(State& state, std::string error) {
     state.error = std::move(error);
     return false;
 }
 
-ABIEOS_NODISCARD inline bool set_error(std::string& state, std::string error) {
+ABIUPCX_NODISCARD inline bool set_error(std::string& state, std::string error) {
     state = std::move(error);
     return false;
 }

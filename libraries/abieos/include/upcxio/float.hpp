@@ -28,7 +28,7 @@ static_assert(sizeof(float64) == 8 && std::numeric_limits<float64>::is_iec559 &&
                     std::numeric_limits<float64>::digits == 53,
               "Unexpected double representation");
 
-EOSIO_REFLECT(float128, value);
+UPCXIO_REFLECT(float128, value);
 
 } // namespace upcxio
 

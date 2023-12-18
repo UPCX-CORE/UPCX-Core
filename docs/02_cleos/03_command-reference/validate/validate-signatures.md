@@ -67,7 +67,7 @@ cleos -u https://api.testnet.upcx.io validate signatures '{ "expiration": "2020-
 
 ```console
 [
-  "EOS7pCywBCz5zw2bc7teCVcT7MEWUr9s749qnYDNPEsBoH32vGqqN"
+  "UPCX7pCywBCz5zw2bc7teCVcT7MEWUr9s749qnYDNPEsBoH32vGqqN"
 ]
 ```
 

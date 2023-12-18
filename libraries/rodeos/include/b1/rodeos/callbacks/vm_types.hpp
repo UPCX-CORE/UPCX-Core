@@ -59,7 +59,7 @@ struct type_converter : upcxio::vm::type_converter<Host, Execution_Interface> {
       return { ptr };
    }
 
-   EOS_VM_FROM_WASM(null_terminated_ptr, (const void* ptr)) {
+   UPCX_VM_FROM_WASM(null_terminated_ptr, (const void* ptr)) {
       this->validate_null_terminated_pointer(ptr);
       return { static_cast<const char*>(ptr) };
    }

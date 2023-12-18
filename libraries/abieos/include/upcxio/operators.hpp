@@ -5,7 +5,7 @@
 namespace upcxio { namespace operators {
 
 // Defines comparison operators for a reflected struct
-#define EOSIO_COMPARE(...)                                                                                             \
+#define UPCXIO_COMPARE(...)                                                                                             \
    auto                      upcxio_enable_comparison(const __VA_ARGS__&)->bool;                                        \
    using ::upcxio::operators::operator==;                                                                               \
    using ::upcxio::operators::operator!=;                                                                               \

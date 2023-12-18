@@ -38,8 +38,8 @@ struct struct_type {
    std::optional<int> o;
    std::variant<int, double> va;
 };
-EOSIO_REFLECT(struct_type, v, o, va);
-EOSIO_COMPARE(struct_type);
+UPCXIO_REFLECT(struct_type, v, o, va);
+UPCXIO_COMPARE(struct_type);
 
 // Verifies that the ordering of keys is the same as the ordering of the original objects
 template<typename T>

@@ -25,14 +25,14 @@ These commands set the UPCXIO directories, install git, and clone the�
 
 ```sh
 # set UPCXIO directories
-export EOSIO_LOCATION=~/upcxio/upcx
-export EOSIO_INSTALL_LOCATION=$EOSIO_LOCATION/../install
-mkdir -p $EOSIO_INSTALL_LOCATION
+export UPCXIO_LOCATION=~/upcxio/upcx
+export UPCXIO_INSTALL_LOCATION=$UPCXIO_LOCATION/../install
+mkdir -p $UPCXIO_INSTALL_LOCATION
 # install git
 yum update -y && yum install -y git
 # clone UPCXIO repository
-git clone https://github.com/UPCXIO/upcx.git $EOSIO_LOCATION
-cd $EOSIO_LOCATION && git submodule update --init --recursive
+git clone https://github.com/UPCXIO/upcx.git $UPCXIO_LOCATION
+cd $UPCXIO_LOCATION && git submodule update --init --recursive
 ```
 
 ## Install UPCXIO Dependencies
@@ -50,39 +50,39 @@ yum update -y && \
     python python-devel rh-python36 file libusbx-devel \
     libcurl-devel patch vim-common jq llvm-toolset-7.0-llvm-devel llvm-toolset-7.0-llvm-static
 # build cmake
-export PATH=$EOSIO_INSTALL_LOCATION/bin:$PATH
-cd $EOSIO_INSTALL_LOCATION && curl -LO https://cmake.org/files/v3.13/cmake-3.13.2.tar.gz && \
+export PATH=$UPCXIO_INSTALL_LOCATION/bin:$PATH
+cd $UPCXIO_INSTALL_LOCATION && curl -LO https://cmake.org/files/v3.13/cmake-3.13.2.tar.gz && \
     source /opt/rh/devtoolset-8/enable && \
     tar -xzf cmake-3.13.2.tar.gz && \
     cd cmake-3.13.2 && \
-    ./bootstrap --prefix=$EOSIO_INSTALL_LOCATION && \
+    ./bootstrap --prefix=$UPCXIO_INSTALL_LOCATION && \
     make -j$(nproc) && \
     make install && \
-    rm -rf $EOSIO_INSTALL_LOCATION/cmake-3.13.2.tar.gz $EOSIO_INSTALL_LOCATION/cmake-3.13.2
+    rm -rf $UPCXIO_INSTALL_LOCATION/cmake-3.13.2.tar.gz $UPCXIO_INSTALL_LOCATION/cmake-3.13.2
 # apply clang patch
-cp -f $EOSIO_LOCATION/scripts/clang-devtoolset8-support.patch /tmp/clang-devtoolset8-support.patch
+cp -f $UPCXIO_LOCATION/scripts/clang-devtoolset8-support.patch /tmp/clang-devtoolset8-support.patch
 # build boost
-cd $EOSIO_INSTALL_LOCATION && curl -LO https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2 && \
+cd $UPCXIO_INSTALL_LOCATION && curl -LO https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2 && \
     source /opt/rh/devtoolset-8/enable && \
     tar -xjf boost_1_71_0.tar.bz2 && \
     cd boost_1_71_0 && \
-    ./bootstrap.sh --prefix=$EOSIO_INSTALL_LOCATION && \
+    ./bootstrap.sh --prefix=$UPCXIO_INSTALL_LOCATION && \
     ./b2 --with-iostreams --with-date_time --with-filesystem --with-system --with-program_options --with-chrono --with-test -q -j$(nproc) install && \
-    rm -rf $EOSIO_INSTALL_LOCATION/boost_1_71_0.tar.bz2 $EOSIO_INSTALL_LOCATION/boost_1_71_0
+    rm -rf $UPCXIO_INSTALL_LOCATION/boost_1_71_0.tar.bz2 $UPCXIO_INSTALL_LOCATION/boost_1_71_0
 ```
 
 ## Build UPCXIO
 
 These commands build the UPCXIO software on the specified OS. Make sure to [Install UPCXIO Dependencies](#install-upcxio-dependencies) first.
 
-[[caution | `EOSIO_BUILD_LOCATION` environment variable]]
+[[caution | `UPCXIO_BUILD_LOCATION` environment variable]]
 | Do NOT change this variable. It is set for convenience only. It should always be set to the `build` folder within the cloned repository.
 
 ```sh
-export EOSIO_BUILD_LOCATION=$EOSIO_LOCATION/build
-mkdir -p $EOSIO_BUILD_LOCATION
-cd $EOSIO_BUILD_LOCATION && source /opt/rh/devtoolset-8/enable && cmake -DCMAKE_BUILD_TYPE='Release' -DLLVM_DIR='/opt/rh/llvm-toolset-7.0/root/usr/lib64/cmake/llvm' -DCMAKE_INSTALL_PREFIX=$EOSIO_INSTALL_LOCATION $EOSIO_LOCATION
-cd $EOSIO_BUILD_LOCATION && make -j$(nproc)
+export UPCXIO_BUILD_LOCATION=$UPCXIO_LOCATION/build
+mkdir -p $UPCXIO_BUILD_LOCATION
+cd $UPCXIO_BUILD_LOCATION && source /opt/rh/devtoolset-8/enable && cmake -DCMAKE_BUILD_TYPE='Release' -DLLVM_DIR='/opt/rh/llvm-toolset-7.0/root/usr/lib64/cmake/llvm' -DCMAKE_INSTALL_PREFIX=$UPCXIO_INSTALL_LOCATION $UPCXIO_LOCATION
+cd $UPCXIO_BUILD_LOCATION && make -j$(nproc)
 ```
 
 ## Install UPCXIO
@@ -90,7 +90,7 @@ cd $EOSIO_BUILD_LOCATION && make -j$(nproc)
 This command installs the UPCXIO software on the specified OS. Make sure to [Build UPCXIO](#build-upcxio) first.
 
 ```sh
-cd $EOSIO_BUILD_LOCATION && make install
+cd $UPCXIO_BUILD_LOCATION && make install
 ```
 
 ## Test UPCXIO
@@ -98,7 +98,7 @@ cd $EOSIO_BUILD_LOCATION && make install
 These commands validate the UPCXIO software installation on the specified OS. This task is optional but recommended. Make sure to [Install UPCXIO](#install-upcxio) first.
 
 ```sh
-cd $EOSIO_BUILD_LOCATION && source /opt/rh/rh-python36/enable && make test
+cd $UPCXIO_BUILD_LOCATION && source /opt/rh/rh-python36/enable && make test
 ```
 
 ## Uninstall UPCXIO
@@ -106,6 +106,6 @@ cd $EOSIO_BUILD_LOCATION && source /opt/rh/rh-python36/enable && make test
 These commands uninstall the UPCXIO software from the specified OS.
 
 ```sh
-xargs rm < $EOSIO_BUILD_LOCATION/install_manifest.txt
-rm -rf $EOSIO_BUILD_LOCATION
+xargs rm < $UPCXIO_BUILD_LOCATION/install_manifest.txt
+rm -rf $UPCXIO_BUILD_LOCATION
 ```

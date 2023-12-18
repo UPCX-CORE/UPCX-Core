@@ -17,9 +17,9 @@ else()
    endif()
 endif()
 
-if("upcx-vm-oc" IN_LIST EOSIO_WASM_RUNTIMES)
+if("upcx-vm-oc" IN_LIST UPCXIO_WASM_RUNTIMES)
    enable_language(ASM)
-   set(CHAIN_EOSVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/code_cache.cpp
+   set(CHAIN_UPCXVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/code_cache.cpp
                              webassembly/runtimes/upcx-vm-oc/executor.cpp
                              webassembly/runtimes/upcx-vm-oc/memory.cpp
                              webassembly/runtimes/upcx-vm-oc/intrinsic.cpp
@@ -36,21 +36,21 @@ if("upcx-vm-oc" IN_LIST EOSIO_WASM_RUNTIMES)
 
    if(LLVM_VERSION VERSION_LESS 7.1 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
       enable_language(ASM-LLVMWAR)
-      list(APPEND CHAIN_EOSVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/llvmWARshim.llvmwar)
+      list(APPEND CHAIN_UPCXVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/llvmWARshim.llvmwar)
    else()
-      list(APPEND CHAIN_EOSVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/llvmWARshim.cpp)
+      list(APPEND CHAIN_UPCXVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/llvmWARshim.cpp)
    endif()
 
    llvm_map_components_to_libnames(LLVM_LIBS support core passes mcjit native orcjit)
    include_directories(${LLVM_INCLUDE_DIRS})
    add_definitions(${LLVM_DEFINITIONS})
 
-   option(EOSVMOC_ENABLE_DEVELOPER_OPTIONS "enable developer options for UPCX VM OC" OFF)
+   option(UPCXVMOC_ENABLE_DEVELOPER_OPTIONS "enable developer options for UPCX VM OC" OFF)
 endif()
 
-if("upcx-vm" IN_LIST EOSIO_WASM_RUNTIMES OR "upcx-vm-jit" IN_LIST EOSIO_WASM_RUNTIMES)
-   set(CHAIN_EOSVM_SOURCES "webassembly/runtimes/upcx-vm.cpp")
-   set(CHAIN_EOSVM_LIBRARIES upcx-vm)
+if("upcx-vm" IN_LIST UPCXIO_WASM_RUNTIMES OR "upcx-vm-jit" IN_LIST UPCXIO_WASM_RUNTIMES)
+   set(CHAIN_UPCXVM_SOURCES "webassembly/runtimes/upcx-vm.cpp")
+   set(CHAIN_UPCXVM_LIBRARIES upcx-vm)
 endif()
 
 set(CHAIN_WEBASSEMBLY_SOURCES
@@ -107,8 +107,8 @@ add_library( upcxio_chain
               asset.cpp
               snapshot.cpp
 
-             ${CHAIN_EOSVMOC_SOURCES}
-             ${CHAIN_EOSVM_SOURCES}
+             ${CHAIN_UPCXVMOC_SOURCES}
+             ${CHAIN_UPCXVM_SOURCES}
              ${CHAIN_WEBASSEMBLY_SOURCES}
 
              authority.cpp
@@ -133,7 +133,7 @@ add_library( upcxio_chain
              )
 
 target_link_libraries( upcxio_chain fc chainbase Logging IR WAST WASM Runtime
-                       softfloat builtins rocksdb ${CHAIN_EOSVM_LIBRARIES} ${LLVM_LIBS} ${CHAIN_RT_LINKAGE}
+                       softfloat builtins rocksdb ${CHAIN_UPCXVM_LIBRARIES} ${LLVM_LIBS} ${CHAIN_RT_LINKAGE}
                      )
 target_include_directories( upcxio_chain
                             PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_BINARY_DIR}/include"
@@ -146,19 +146,19 @@ target_include_directories( upcxio_chain
 add_library(upcxio_chain_wrap INTERFACE )
 target_link_libraries(upcxio_chain_wrap INTERFACE upcxio_chain)
 
-if("upcx-vm-oc" IN_LIST EOSIO_WASM_RUNTIMES)
+if("upcx-vm-oc" IN_LIST UPCXIO_WASM_RUNTIMES)
    target_link_libraries(upcxio_chain_wrap INTERFACE "-Wl,-wrap=main")
 endif()
 
-foreach(RUNTIME ${EOSIO_WASM_RUNTIMES})
+foreach(RUNTIME ${UPCXIO_WASM_RUNTIMES})
    string(TOUPPER "${RUNTIME}" RUNTIMEUC)
    string(REPLACE "-" "_" RUNTIMEUC ${RUNTIMEUC})
-   target_compile_definitions(upcxio_chain PUBLIC "EOSIO_${RUNTIMEUC}_RUNTIME_ENABLED")
+   target_compile_definitions(upcxio_chain PUBLIC "UPCXIO_${RUNTIMEUC}_RUNTIME_ENABLED")
 endforeach()
 
-if(EOSVMOC_ENABLE_DEVELOPER_OPTIONS)
+if(UPCXVMOC_ENABLE_DEVELOPER_OPTIONS)
    message(WARNING "UPCX VM OC Developer Options are enabled; these are NOT supported")
-   target_compile_definitions(upcxio_chain PUBLIC EOSIO_EOS_VM_OC_DEVELOPER)
+   target_compile_definitions(upcxio_chain PUBLIC UPCXIO_UPCX_VM_OC_DEVELOPER)
 endif()
 
 add_subdirectory ( backing_store/tests )

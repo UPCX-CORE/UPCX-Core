@@ -44,10 +44,10 @@ struct code_descriptor {
 };
 
 enum eosvmoc_exitcode : int {
-   EOSVMOC_EXIT_CLEAN_EXIT = 1,
-   EOSVMOC_EXIT_CHECKTIME_FAIL,
-   EOSVMOC_EXIT_SEGV,
-   EOSVMOC_EXIT_EXCEPTION
+   UPCXVMOC_EXIT_CLEAN_EXIT = 1,
+   UPCXVMOC_EXIT_CHECKTIME_FAIL,
+   UPCXVMOC_EXIT_SEGV,
+   UPCXVMOC_EXIT_EXCEPTION
 };
 
 }}}
@@ -57,4 +57,4 @@ FC_REFLECT(upcxio::chain::eosvmoc::code_offset, (offset));
 FC_REFLECT(upcxio::chain::eosvmoc::intrinsic_ordinal, (ordinal));
 FC_REFLECT(upcxio::chain::eosvmoc::code_descriptor, (code_hash)(vm_version)(codegen_version)(code_begin)(start)(apply_offset)(starting_memory_pages)(initdata_begin)(initdata_size)(initdata_prologue_size));
 
-#define EOSVMOC_INTRINSIC_INIT_PRIORITY __attribute__((init_priority(198)))
+#define UPCXVMOC_INTRINSIC_INIT_PRIORITY __attribute__((init_priority(198)))

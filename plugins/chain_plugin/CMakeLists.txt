@@ -4,9 +4,9 @@ add_library( chain_plugin
              chain_plugin.cpp
              ${HEADERS} )
 
-if(EOSIO_ENABLE_DEVELOPER_OPTIONS)
+if(UPCXIO_ENABLE_DEVELOPER_OPTIONS)
     message(WARNING "UPCXIO Developer Options are enabled; these are NOT supported")
-    target_compile_definitions(chain_plugin PUBLIC EOSIO_DEVELOPER)
+    target_compile_definitions(chain_plugin PUBLIC UPCXIO_DEVELOPER)
 endif()
 
 target_link_libraries( chain_plugin upcxio_chain appbase resource_monitor_plugin blockvault_client_plugin )

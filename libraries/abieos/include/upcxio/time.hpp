@@ -44,8 +44,8 @@ class microseconds {
    /// @endcond
 };
 
-EOSIO_REFLECT(microseconds, _count);
-EOSIO_COMPARE(microseconds);
+UPCXIO_REFLECT(microseconds, _count);
+UPCXIO_COMPARE(microseconds);
 
 inline microseconds seconds(int64_t s) { return microseconds(s * 1000000); }
 inline microseconds milliseconds(int64_t s) { return microseconds(s * 1000); }
@@ -84,8 +84,8 @@ class time_point {
    /// @endcond
 };
 
-EOSIO_REFLECT(time_point, elapsed);
-EOSIO_COMPARE(time_point);
+UPCXIO_REFLECT(time_point, elapsed);
+UPCXIO_COMPARE(time_point);
 
 template <typename S>
 void from_json(time_point& obj, S& stream) {
@@ -164,8 +164,8 @@ class time_point_sec {
    /// @endcond
 };
 
-EOSIO_REFLECT(time_point_sec, utc_seconds);
-EOSIO_COMPARE(time_point);
+UPCXIO_REFLECT(time_point_sec, utc_seconds);
+UPCXIO_COMPARE(time_point);
 
 template <typename S>
 void from_json(time_point_sec& obj, S& stream) {
@@ -247,7 +247,7 @@ class block_timestamp {
  */
 typedef block_timestamp block_timestamp_type;
 
-EOSIO_REFLECT(block_timestamp_type, slot);
+UPCXIO_REFLECT(block_timestamp_type, slot);
 
 template <typename S>
 void from_json(block_timestamp& obj, S& stream) {

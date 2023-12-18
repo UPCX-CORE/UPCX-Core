@@ -1,5 +1,5 @@
-if( EOSIO_COMPILE_TEST_CONTRACTS )
-   set(EOSIO_WASM_OLD_BEHAVIOR "Off")
+if( UPCXIO_COMPILE_TEST_CONTRACTS )
+   set(UPCXIO_WASM_OLD_BEHAVIOR "Off")
    find_package( upcxio.cdt REQUIRED )
 endif()
 
@@ -7,8 +7,8 @@ if ("${CMAKE_GENERATOR}" STREQUAL "Ninja")
    add_compile_options(-fcolor-diagnostics)
 endif()
 
-if( USE_EOSIO_CDT_1_7_X )
-   add_definitions(-DUSE_EOSIO_CDT_1_7_X=true)
+if( USE_UPCXIO_CDT_1_7_X )
+   add_definitions(-DUSE_UPCXIO_CDT_1_7_X=true)
 endif()
 
 add_subdirectory( asserter )

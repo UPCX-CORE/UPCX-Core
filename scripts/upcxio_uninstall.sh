@@ -75,15 +75,15 @@ if [[ $NONINTERACTIVE == false ]] && $FULL; then
    done
 fi
 
-export EOSIO_INSTALL_DIR=${INSTALL_LOCATION:-$EOSIO_INSTALL_DIR}
+export UPCXIO_INSTALL_DIR=${INSTALL_LOCATION:-$UPCXIO_INSTALL_DIR}
 
-if [[ ! -d "${EOSIO_INSTALL_DIR}" ]]; then
-   echo "[UPCXIO installation ${COLOR_YELLOW}NOT${COLOR_NC} found in ${EOSIO_INSTALL_DIR}]"
+if [[ ! -d "${UPCXIO_INSTALL_DIR}" ]]; then
+   echo "[UPCXIO installation ${COLOR_YELLOW}NOT${COLOR_NC} found in ${UPCXIO_INSTALL_DIR}]"
 else
    # As of 1.8.0, we're using a versioned directories under home: https://github.com/UPCXIO/upcx/issues/6940
-   echo "[UPCXIO installation found: ${EOSIO_INSTALL_DIR}]" && INSTALL_PATHS+=("${EOSIO_INSTALL_DIR}") # EOSIO_INSTALL_DIR set in .environment
+   echo "[UPCXIO installation found: ${UPCXIO_INSTALL_DIR}]" && INSTALL_PATHS+=("${UPCXIO_INSTALL_DIR}") # UPCXIO_INSTALL_DIR set in .environment
    while true; do
-      [[ $NONINTERACTIVE == false ]] && read -p "Do you wish to remove the installation in ${EOSIO_INSTALL_DIR}? (y/n) " PROCEED
+      [[ $NONINTERACTIVE == false ]] && read -p "Do you wish to remove the installation in ${UPCXIO_INSTALL_DIR}? (y/n) " PROCEED
       case $PROCEED in
          "" ) echo "What would you like to do?";;
          0 | true | [Yy]* )

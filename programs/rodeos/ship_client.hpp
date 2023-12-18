@@ -38,7 +38,7 @@ struct connection_config {
 
 struct abi_def_skip_table : upcxio::abi_def {};
 
-EOSIO_REFLECT(abi_def_skip_table, version, types, structs, actions, ricardian_clauses, error_messages, abi_extensions,
+UPCXIO_REFLECT(abi_def_skip_table, version, types, structs, actions, ricardian_clauses, error_messages, abi_extensions,
               variants);
 
 struct connection : std::enable_shared_from_this<connection> {

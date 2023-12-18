@@ -34,13 +34,13 @@ struct example_host_methods {
 struct cnv : type_converter<example_host_methods> {
    using type_converter::type_converter;
    using type_converter::from_wasm;
-   EOS_VM_FROM_WASM(bool, (uint32_t value)) { return value ? 1 : 0; }
-   EOS_VM_FROM_WASM(char*, (void* ptr)) { return static_cast<char*>(ptr); }
-   EOS_VM_FROM_WASM(const char*, (void* ptr)) { return static_cast<char*>(ptr); }
+   UPCX_VM_FROM_WASM(bool, (uint32_t value)) { return value ? 1 : 0; }
+   UPCX_VM_FROM_WASM(char*, (void* ptr)) { return static_cast<char*>(ptr); }
+   UPCX_VM_FROM_WASM(const char*, (void* ptr)) { return static_cast<char*>(ptr); }
 };
 
-EOS_VM_PRECONDITION(test_name,
-      EOS_VM_INVOKE_ON(const char*, [&](auto&& nm, auto&&... rest) {
+UPCX_VM_PRECONDITION(test_name,
+      UPCX_VM_INVOKE_ON(const char*, [&](auto&& nm, auto&&... rest) {
          std::string s = nm;
          if (s == "upcx-vm2")
             throw "failure";

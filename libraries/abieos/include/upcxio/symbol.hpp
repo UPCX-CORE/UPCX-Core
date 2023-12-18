@@ -164,8 +164,8 @@ class symbol_code {
    uint64_t value = 0;
 };
 
-EOSIO_REFLECT(symbol_code, value);
-EOSIO_COMPARE(symbol_code);
+UPCXIO_REFLECT(symbol_code, value);
+UPCXIO_COMPARE(symbol_code);
 
 template <typename S>
 void to_json(const symbol_code& obj, S& stream) {
@@ -242,8 +242,8 @@ class symbol {
    uint64_t value = 0;
 };
 
-EOSIO_REFLECT(symbol, value);
-EOSIO_COMPARE(symbol);
+UPCXIO_REFLECT(symbol, value);
+UPCXIO_COMPARE(symbol);
 
 template <typename S>
 void to_json(const symbol& obj, S& stream) {
@@ -295,6 +295,6 @@ class extended_symbol {
    name   contract; ///< the token contract hosting the symbol
 };
 
-EOSIO_REFLECT(extended_symbol, sym, contract);
-EOSIO_COMPARE(extended_symbol);
+UPCXIO_REFLECT(extended_symbol, sym, contract);
+UPCXIO_COMPARE(extended_symbol);
 } // namespace upcxio

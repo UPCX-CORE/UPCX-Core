@@ -156,7 +156,7 @@ struct asset {
     * @return asset - Reference to this asset
     * @post The amount of this asset is multiplied by a
     */
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIUPCX_NO_INT128
    asset& operator*=(int64_t a) {
       __int128 tmp = (__int128)amount * (__int128)a;
       upcxio::check(tmp <= max_amount, "multiplication overflow");
@@ -174,7 +174,7 @@ struct asset {
     * @param b - The multiplier for the asset's amount
     * @return asset - New asset as the result of multiplication
     */
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIUPCX_NO_INT128
    friend asset operator*(const asset& a, int64_t b) {
       asset result = a;
       result *= b;
@@ -189,7 +189,7 @@ struct asset {
     * @param b - The asset to be multiplied
     * @return asset - New asset as the result of multiplication
     */
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIUPCX_NO_INT128
    friend asset operator*(int64_t b, const asset& a) {
       asset result = a;
       result *= b;
@@ -331,7 +331,7 @@ struct asset {
    std::string to_string() const { return asset_to_string(amount, symbol.value); }
 };
 
-EOSIO_REFLECT(asset, amount, symbol);
+UPCXIO_REFLECT(asset, amount, symbol);
 
 template <typename S>
 inline void from_string(asset& result, S& stream) {
@@ -454,5 +454,5 @@ struct extended_asset {
    /// @endcond
 };
 
-EOSIO_REFLECT(extended_asset, quantity, contract);
+UPCXIO_REFLECT(extended_asset, quantity, contract);
 } // namespace upcxio

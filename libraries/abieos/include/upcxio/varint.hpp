@@ -202,7 +202,7 @@ struct unsigned_int {
 };
 
 using varuint32 = unsigned_int;
-EOSIO_REFLECT(varuint32, value);
+UPCXIO_REFLECT(varuint32, value);
 
 template <typename F>
 void convert(const varuint32& src, uint32_t& dst, F&& chooser) {
@@ -422,7 +422,7 @@ struct signed_int {
 };
 
 using varint32 = signed_int;
-EOSIO_REFLECT(varint32, value);
+UPCXIO_REFLECT(varint32, value);
 
 template <typename S>
 void from_bin(varint32& obj, S& stream) {

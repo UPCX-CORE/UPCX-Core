@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "UPCX.IO"
-PROJECT_NUMBER         = "UPCXIO ${DOXY_EOS_VERSION}"
+PROJECT_NUMBER         = "UPCXIO ${DOXY_UPCX_VERSION}"
 PROJECT_BRIEF          =
 PROJECT_LOGO           = upcx-logo.png
 OUTPUT_DIRECTORY       =

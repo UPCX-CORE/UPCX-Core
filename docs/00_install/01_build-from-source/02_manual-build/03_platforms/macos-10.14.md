@@ -25,14 +25,14 @@ These commands set the UPCXIO directories, install git, and clone the�
 
 ```sh
 # set UPCXIO directories
-export EOSIO_LOCATION=~/upcxio/upcx
-export EOSIO_INSTALL_LOCATION=$EOSIO_LOCATION/../install
-mkdir -p $EOSIO_INSTALL_LOCATION
+export UPCXIO_LOCATION=~/upcxio/upcx
+export UPCXIO_INSTALL_LOCATION=$UPCXIO_LOCATION/../install
+mkdir -p $UPCXIO_INSTALL_LOCATION
 # install git
 brew update && brew install git
 # clone UPCXIO repository
-git clone https://github.com/UPCXIO/upcx.git $EOSIO_LOCATION
-cd $EOSIO_LOCATION && git submodule update --init --recursive
+git clone https://github.com/UPCXIO/upcx.git $UPCXIO_LOCATION
+cd $UPCXIO_LOCATION && git submodule update --init --recursive
 ```
 
 ## Install UPCXIO Dependencies
@@ -42,21 +42,21 @@ These commands install the UPCXIO software dependencies. Make sure to [Downloa
 ```sh
 # install dependencies
 brew install cmake python libtool libusb graphviz automake wget gmp pkgconfig doxygen openssl@1.1 jq boost || :
-export PATH=$EOSIO_INSTALL_LOCATION/bin:$PATH
+export PATH=$UPCXIO_INSTALL_LOCATION/bin:$PATH
 ```
 
 ## Build UPCXIO
 
 These commands build the UPCXIO software on the specified OS. Make sure to [Install UPCXIO Dependencies](#install-upcxio-dependencies) first.
 
-[[caution | `EOSIO_BUILD_LOCATION` environment variable]]
+[[caution | `UPCXIO_BUILD_LOCATION` environment variable]]
 | Do NOT change this variable. It is set for convenience only. It should always be set to the `build` folder within the cloned repository.
 
 ```sh
-export EOSIO_BUILD_LOCATION=$EOSIO_LOCATION/build
-mkdir -p $EOSIO_BUILD_LOCATION
-cd $EOSIO_BUILD_LOCATION && cmake -DCMAKE_BUILD_TYPE='Release' -DCMAKE_INSTALL_PREFIX=$EOSIO_INSTALL_LOCATION $EOSIO_LOCATION
-cd $EOSIO_BUILD_LOCATION && make -j$(getconf _NPROCESSORS_ONLN)
+export UPCXIO_BUILD_LOCATION=$UPCXIO_LOCATION/build
+mkdir -p $UPCXIO_BUILD_LOCATION
+cd $UPCXIO_BUILD_LOCATION && cmake -DCMAKE_BUILD_TYPE='Release' -DCMAKE_INSTALL_PREFIX=$UPCXIO_INSTALL_LOCATION $UPCXIO_LOCATION
+cd $UPCXIO_BUILD_LOCATION && make -j$(getconf _NPROCESSORS_ONLN)
 ```
 
 ## Install UPCXIO
@@ -64,7 +64,7 @@ cd $EOSIO_BUILD_LOCATION && make -j$(getconf _NPROCESSORS_ONLN)
 This command installs the UPCXIO software on the specified OS. Make sure to [Build UPCXIO](#build-upcxio) first.
 
 ```sh
-cd $EOSIO_BUILD_LOCATION && make install
+cd $UPCXIO_BUILD_LOCATION && make install
 ```
 
 ## Test UPCXIO
@@ -72,7 +72,7 @@ cd $EOSIO_BUILD_LOCATION && make install
 These commands validate the UPCXIO software installation on the specified OS. This task is optional but recommended. Make sure to [Install UPCXIO](#install-upcxio) first.
 
 ```sh
-cd $EOSIO_BUILD_LOCATION && make test
+cd $UPCXIO_BUILD_LOCATION && make test
 ```
 
 ## Uninstall UPCXIO
@@ -80,6 +80,6 @@ cd $EOSIO_BUILD_LOCATION && make test
 These commands uninstall the UPCXIO software from the specified OS.
 
 ```sh
-xargs rm < $EOSIO_BUILD_LOCATION/install_manifest.txt
-rm -rf $EOSIO_BUILD_LOCATION
+xargs rm < $UPCXIO_BUILD_LOCATION/install_manifest.txt
+rm -rf $UPCXIO_BUILD_LOCATION
 ```

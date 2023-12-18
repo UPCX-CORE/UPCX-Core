@@ -90,7 +90,7 @@ std::string hex(SrcIt begin, SrcIt end) {
 
 // !!!
 template <typename SrcIt, typename DestIt>
-ABIEOS_NODISCARD bool unhex(std::string& error, SrcIt begin, SrcIt end, DestIt dest) {
+ABIUPCX_NODISCARD bool unhex(std::string& error, SrcIt begin, SrcIt end, DestIt dest) {
     auto get_digit = [&](uint8_t& nibble) {
         if (*begin >= '0' && *begin <= '9')
             nibble = *begin++ - '0';
@@ -373,7 +373,7 @@ using upcxio::checksum160;
 using upcxio::checksum256;
 using upcxio::checksum512;
 
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIUPCX_NO_INT128
 using uint128 = unsigned __int128;
 using int128 = __int128;
 #endif
@@ -398,17 +398,17 @@ using upcxio::extended_asset;
 // 128-bit support when native support is absent
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef ABIEOS_NO_INT128
+#ifdef ABIUPCX_NO_INT128
 
 struct uint128 {
     std::array<uint8_t, 16> data = {};
 };
-EOSIO_REFLECT(uint128, data)
+UPCXIO_REFLECT(uint128, data)
 
 struct int128 {
     std::array<uint8_t, 16> data = {};
 };
-EOSIO_REFLECT(int128, data)
+UPCXIO_REFLECT(int128, data)
 
 template <typename S>
 void from_json(uint128& obj, S& stream) {
@@ -457,7 +457,7 @@ using extensions_type = std::vector<std::pair<uint16_t, bytes>>;
 
 using upcxio::abi_def;
 
-ABIEOS_NODISCARD inline bool check_abi_version(const std::string& s, std::string& error) {
+ABIUPCX_NODISCARD inline bool check_abi_version(const std::string& s, std::string& error) {
     if (s.substr(0, 13) != "upcxio::abi/1.")
         return set_error(error, "unsupported abi version");
     return true;
@@ -467,10 +467,10 @@ ABIEOS_NODISCARD inline bool check_abi_version(const std::string& s, std::string
 // json_to_jvalue
 ///////////////////////////////////////////////////////////////////////////////
 
-ABIEOS_NODISCARD bool json_to_jobject(jvalue& value, json_to_jvalue_state& state, event_type event, bool start);
-ABIEOS_NODISCARD bool json_to_jarray(jvalue& value, json_to_jvalue_state& state, event_type event, bool start);
+ABIUPCX_NODISCARD bool json_to_jobject(jvalue& value, json_to_jvalue_state& state, event_type event, bool start);
+ABIUPCX_NODISCARD bool json_to_jarray(jvalue& value, json_to_jvalue_state& state, event_type event, bool start);
 
-ABIEOS_NODISCARD inline bool receive_event(struct json_to_jvalue_state& state, event_type event, bool start) {
+ABIUPCX_NODISCARD inline bool receive_event(struct json_to_jvalue_state& state, event_type event, bool start) {
     if (state.stack.empty())
         return set_error(state, "extra data");
     if (state.stack.size() > max_stack_size)
@@ -522,7 +522,7 @@ inline void json_to_jvalue(jvalue& value, std::string_view json, F&& f) {
         upcxio::convert_json_error(upcxio::from_json_error::unspecific_syntax_error));
 }
 
-ABIEOS_NODISCARD inline bool json_to_jobject(jvalue& value, json_to_jvalue_state& state, event_type event, bool start) {
+ABIUPCX_NODISCARD inline bool json_to_jobject(jvalue& value, json_to_jvalue_state& state, event_type event, bool start) {
     if (start) {
         if (event != event_type::received_start_object)
             return set_error(state, "expected object");
@@ -549,7 +549,7 @@ ABIEOS_NODISCARD inline bool json_to_jobject(jvalue& value, json_to_jvalue_state
     }
 }
 
-ABIEOS_NODISCARD inline bool json_to_jarray(jvalue& value, json_to_jvalue_state& state, event_type event, bool start) {
+ABIUPCX_NODISCARD inline bool json_to_jarray(jvalue& value, json_to_jvalue_state& state, event_type event, bool start) {
     if (start) {
         if (event != event_type::received_start_array)
             return set_error(state, "expected array");

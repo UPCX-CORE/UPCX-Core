@@ -28,7 +28,7 @@ killAll=args.clean_run
 
 Utils.Debug=debug
 
-killEosInstances=not dontKill
+killupcxInstances=not dontKill
 topo="mesh"
 delay=1
 prodCount=1 # producers per producer node
@@ -88,6 +88,6 @@ try:
     Print("\nEND")
 finally:
     os.remove(nodesFile)
-    TestHelper.shutdown(cluster, None, testSuccessful, killEosInstances, False, False, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, None, testSuccessful, killupcxInstances, False, False, killAll, dumpErrorDetails)
 
 exit(0)

@@ -1,7 +1,7 @@
-# copyright defined in abieos/LICENSE.txt
+# copyright defined in abiupcx/LICENSE.txt
 
 cmake_minimum_required (VERSION 3.8)
-project(abieos VERSION 0.1 LANGUAGES CXX C)
+project(abiupcx VERSION 0.1 LANGUAGES CXX C)
 
 set(default_build_type "Release")
 
@@ -35,60 +35,60 @@ endif()
 find_package(Threads)
 include(GNUInstallDirs)
 
-add_library(abieos STATIC src/abi.cpp src/crypto.cpp include/upcxio/fpconv.c)
-target_include_directories(abieos PUBLIC 
+add_library(abiupcx STATIC src/abi.cpp src/crypto.cpp include/upcxio/fpconv.c)
+target_include_directories(abiupcx PUBLIC 
                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include" 
                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/external/rapidjson/include"
                           "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
 if(ABIUPCX_NO_INT128)
-target_compile_definitions(abieos PUBLIC ABIUPCX_NO_INT128)
+target_compile_definitions(abiupcx PUBLIC ABIUPCX_NO_INT128)
 endif()
 
-add_library(abieos_module MODULE src/abieos.cpp src/abi.cpp src/crypto.cpp include/upcxio/fpconv.c)
-target_include_directories(abieos_module PUBLIC 
+add_library(abiupcx_module MODULE src/abiupcx.cpp src/abi.cpp src/crypto.cpp include/upcxio/fpconv.c)
+target_include_directories(abiupcx_module PUBLIC 
                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include;" 
                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/external/rapidjson/include" 
                           "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
-target_link_libraries(abieos_module ${CMAKE_THREAD_LIBS_INIT})
-set_target_properties(abieos_module PROPERTIES OUTPUT_NAME "abieos")
+target_link_libraries(abiupcx_module ${CMAKE_THREAD_LIBS_INIT})
+set_target_properties(abiupcx_module PROPERTIES OUTPUT_NAME "abiupcx")
 
 enable_testing()
 
-add_executable(test_abieos src/test.cpp src/abieos.cpp src/ship.abi.cpp)
-target_link_libraries(test_abieos abieos ${CMAKE_THREAD_LIBS_INIT})
-add_test(NAME test_abieos COMMAND test_abieos)
+add_executable(test_abiupcx src/test.cpp src/abiupcx.cpp src/ship.abi.cpp)
+target_link_libraries(test_abiupcx abiupcx ${CMAKE_THREAD_LIBS_INIT})
+add_test(NAME test_abiupcx COMMAND test_abiupcx)
 
 if(NOT ABIUPCX_NO_INT128)
-    add_executable(test_abieos_template src/template_test.cpp src/abieos.cpp)
-    target_link_libraries(test_abieos_template abieos ${CMAKE_THREAD_LIBS_INIT})
-    add_test(NAME test_abieos_template COMMAND test_abieos_template)
+    add_executable(test_abiupcx_template src/template_test.cpp src/abiupcx.cpp)
+    target_link_libraries(test_abiupcx_template abiupcx ${CMAKE_THREAD_LIBS_INIT})
+    add_test(NAME test_abiupcx_template COMMAND test_abiupcx_template)
 endif()
 
-add_executable(test_abieos_key src/key_test.cpp src/abieos.cpp)
-target_link_libraries(test_abieos_key abieos ${CMAKE_THREAD_LIBS_INIT})
-add_test(NAME test_abieos_key COMMAND test_abieos_key)
+add_executable(test_abiupcx_key src/key_test.cpp src/abiupcx.cpp)
+target_link_libraries(test_abiupcx_key abiupcx ${CMAKE_THREAD_LIBS_INIT})
+add_test(NAME test_abiupcx_key COMMAND test_abiupcx_key)
 
-add_executable(test_abieos_reflect src/reflect_test.cpp)
-target_include_directories(test_abieos_reflect PRIVATE include)
-add_test(NAME test_abieos_reflect COMMAND test_abieos_reflect)
+add_executable(test_abiupcx_reflect src/reflect_test.cpp)
+target_include_directories(test_abiupcx_reflect PRIVATE include)
+add_test(NAME test_abiupcx_reflect COMMAND test_abiupcx_reflect)
 
 # Causes build issues on some platforms
-# add_executable(test_abieos_sanitize src/test.cpp src/abieos.cpp src/abi.cpp src/crypto.cpp include/upcxio/fpconv.c)
-# target_include_directories(test_abieos_sanitize PRIVATE include external/outcome/single-header external/rapidjson/include external/date/include)
-# target_link_libraries(test_abieos_sanitize abieos -fno-omit-frame-pointer -fsanitize=address,undefined ${CMAKE_THREAD_LIBS_INIT})
-# target_compile_options(test_abieos_sanitize PUBLIC -fno-omit-frame-pointer -fsanitize=address,undefined)
-# add_test(NAME test_abieos_sanitize COMMAND test_abieos_sanitize)
+# add_executable(test_abiupcx_sanitize src/test.cpp src/abiupcx.cpp src/abi.cpp src/crypto.cpp include/upcxio/fpconv.c)
+# target_include_directories(test_abiupcx_sanitize PRIVATE include external/outcome/single-header external/rapidjson/include external/date/include)
+# target_link_libraries(test_abiupcx_sanitize abiupcx -fno-omit-frame-pointer -fsanitize=address,undefined ${CMAKE_THREAD_LIBS_INIT})
+# target_compile_options(test_abiupcx_sanitize PUBLIC -fno-omit-frame-pointer -fsanitize=address,undefined)
+# add_test(NAME test_abiupcx_sanitize COMMAND test_abiupcx_sanitize)
 
-# add_executable(fuzzer src/fuzzer.cpp src/abieos.cpp)
+# add_executable(fuzzer src/fuzzer.cpp src/abiupcx.cpp)
 # target_include_directories(fuzzer PRIVATE external/outcome/single-header external/rapidjson/include external/date/include)
 # target_link_libraries(fuzzer -fsanitize=fuzzer,address,undefined,signed-integer-overflow -fstandalone-debug ${CMAKE_THREAD_LIBS_INIT})
 # target_compile_options(fuzzer PRIVATE -fsanitize=fuzzer,address,undefined,signed-integer-overflow -fstandalone-debug)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES Clang|AppleClang)
-    target_compile_options(abieos PRIVATE -Wall -Wextra -Wno-unused-parameter -fcolor-diagnostics)
-    target_compile_options(test_abieos PRIVATE -Wall -Wextra -Wno-unused-parameter -fcolor-diagnostics)
+    target_compile_options(abiupcx PRIVATE -Wall -Wextra -Wno-unused-parameter -fcolor-diagnostics)
+    target_compile_options(test_abiupcx PRIVATE -Wall -Wextra -Wno-unused-parameter -fcolor-diagnostics)
 endif()
 
 if (NOT ABIUPCX_ONLY_LIBRARY)
@@ -98,20 +98,20 @@ endif()
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/upcxio DESTINATION include)
 
-install(TARGETS abieos
-  EXPORT abieos
+install(TARGETS abiupcx
+  EXPORT abiupcx
 	INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-install(EXPORT abieos
-  DESTINATION "share/abieos"
-  FILE abieos-targets.cmake
+install(EXPORT abiupcx
+  DESTINATION "share/abiupcx"
+  FILE abiupcx-targets.cmake
 )
 
-export(TARGETS abieos 
-       FILE ${CMAKE_CURRENT_BINARY_DIR}/share/abieos/abieos-targets.cmake)
-configure_file(abieos-config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/share/abieos/abieos-config.cmake COPYONLY)
+export(TARGETS abiupcx 
+       FILE ${CMAKE_CURRENT_BINARY_DIR}/share/abiupcx/abiupcx-targets.cmake)
+configure_file(abiupcx-config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/share/abiupcx/abiupcx-config.cmake COPYONLY)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/abieos/abieos-config.cmake
-        DESTINATION "share/abieos")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/abiupcx/abiupcx-config.cmake
+        DESTINATION "share/abiupcx")

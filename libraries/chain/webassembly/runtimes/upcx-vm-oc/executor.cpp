@@ -28,7 +28,7 @@
 
 extern "C" int arch_prctl(int code, unsigned long* addr);
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 static constexpr auto signal_sentinel = 0x4D56534F45534559ul;
 
@@ -72,14 +72,14 @@ notus:
    __builtin_unreachable();
 }
 
-static intrinsic grow_memory_intrinsic UPCXVMOC_INTRINSIC_INIT_PRIORITY("eosvmoc_internal.grow_memory", IR::FunctionType::get(IR::ResultType::i32,{IR::ValueType::i32,IR::ValueType::i32}),
-  (void*)&eos_vm_oc_grow_memory,
-  std::integral_constant<std::size_t, find_intrinsic_index("eosvmoc_internal.grow_memory")>::value
+static intrinsic grow_memory_intrinsic UPCXVMOC_INTRINSIC_INIT_PRIORITY("upcxvmoc_internal.grow_memory", IR::FunctionType::get(IR::ResultType::i32,{IR::ValueType::i32,IR::ValueType::i32}),
+  (void*)&upcx_vm_oc_grow_memory,
+  std::integral_constant<std::size_t, find_intrinsic_index("upcxvmoc_internal.grow_memory")>::value
 );
 
 //This is effectively overriding the upcxio_exit intrinsic in wasm_interface
 static void upcxio_exit(int32_t code) {
-   siglongjmp(*eos_vm_oc_get_jmp_buf(), UPCXVMOC_EXIT_CLEAN_EXIT);
+   siglongjmp(*upcx_vm_oc_get_jmp_buf(), UPCXVMOC_EXIT_CLEAN_EXIT);
    __builtin_unreachable();
 }
 static intrinsic upcxio_exit_intrinsic("env.upcxio_exit", IR::FunctionType::get(IR::ResultType::none,{IR::ValueType::i32}), (void*)&upcxio_exit,
@@ -87,8 +87,8 @@ static intrinsic upcxio_exit_intrinsic("env.upcxio_exit", IR::FunctionType::get(
 );
 
 static void throw_internal_exception(const char* const s) {
-   *reinterpret_cast<std::exception_ptr*>(eos_vm_oc_get_exception_ptr()) = std::make_exception_ptr(wasm_execution_error(FC_LOG_MESSAGE(error, s)));
-   siglongjmp(*eos_vm_oc_get_jmp_buf(), UPCXVMOC_EXIT_EXCEPTION);
+   *reinterpret_cast<std::exception_ptr*>(upcx_vm_oc_get_exception_ptr()) = std::make_exception_ptr(wasm_execution_error(FC_LOG_MESSAGE(error, s)));
+   siglongjmp(*upcx_vm_oc_get_jmp_buf(), UPCXVMOC_EXIT_EXCEPTION);
    __builtin_unreachable();
 }
 
@@ -99,23 +99,23 @@ static void throw_internal_exception(const char* const s) {
    ); \
 	void name()
 
-DEFINE_UPCXVMOC_TRAP_INTRINSIC(eosvmoc_internal,depth_assert) {
+DEFINE_UPCXVMOC_TRAP_INTRINSIC(upcxvmoc_internal,depth_assert) {
    throw_internal_exception("Exceeded call depth maximum");
 }
 
-DEFINE_UPCXVMOC_TRAP_INTRINSIC(eosvmoc_internal,div0_or_overflow) {
+DEFINE_UPCXVMOC_TRAP_INTRINSIC(upcxvmoc_internal,div0_or_overflow) {
    throw_internal_exception("Division by 0 or integer overflow trapped");
 }
 
-DEFINE_UPCXVMOC_TRAP_INTRINSIC(eosvmoc_internal,indirect_call_mismatch) {
+DEFINE_UPCXVMOC_TRAP_INTRINSIC(upcxvmoc_internal,indirect_call_mismatch) {
    throw_internal_exception("Indirect call function type mismatch");
 }
 
-DEFINE_UPCXVMOC_TRAP_INTRINSIC(eosvmoc_internal,indirect_call_oob) {
+DEFINE_UPCXVMOC_TRAP_INTRINSIC(upcxvmoc_internal,indirect_call_oob) {
    throw_internal_exception("Indirect call index out of bounds");
 }
 
-DEFINE_UPCXVMOC_TRAP_INTRINSIC(eosvmoc_internal,unreachable) {
+DEFINE_UPCXVMOC_TRAP_INTRINSIC(upcxvmoc_internal,unreachable) {
    throw_internal_exception("Unreachable reached");
 }
 

@@ -22,7 +22,7 @@
 using namespace IR;
 using namespace Runtime;
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 static constexpr size_t header_offset = 512u;
 static constexpr size_t header_size = 512u;
@@ -39,10 +39,10 @@ static constexpr size_t descriptor_ptr_from_file_start = header_offset + offseto
 
 static_assert(sizeof(code_cache_header) <= header_size, "code_cache_header too big");
 
-code_cache_async::code_cache_async(const bfs::path data_dir, const eosvmoc::config& eosvmoc_config, const chainbase::database& db) :
-   code_cache_base(data_dir, eosvmoc_config, db),
-   _result_queue(eosvmoc_config.threads * 2),
-   _threads(eosvmoc_config.threads)
+code_cache_async::code_cache_async(const bfs::path data_dir, const upcxvmoc::config& upcxvmoc_config, const chainbase::database& db) :
+   code_cache_base(data_dir, upcxvmoc_config, db),
+   _result_queue(upcxvmoc_config.threads * 2),
+   _threads(upcxvmoc_config.threads)
 {
    FC_ASSERT(_threads, "UPCX VM OC requires at least 1 compile thread");
 
@@ -202,7 +202,7 @@ const code_descriptor* const code_cache_sync::get_descriptor_for_code_sync(const
    return &*_cache_index.push_front(std::move(std::get<code_descriptor>(result.result))).first;
 }
 
-code_cache_base::code_cache_base(const boost::filesystem::path data_dir, const eosvmoc::config& eosvmoc_config, const chainbase::database& db) :
+code_cache_base::code_cache_base(const boost::filesystem::path data_dir, const upcxvmoc::config& upcxvmoc_config, const chainbase::database& db) :
    _db(db),
    _cache_file_path(data_dir/"code_cache.bin")
 {
@@ -211,13 +211,13 @@ code_cache_base::code_cache_base(const boost::filesystem::path data_dir, const e
    bfs::create_directories(data_dir);
 
    if(!bfs::exists(_cache_file_path)) {
-      UPCX_ASSERT(eosvmoc_config.cache_size >= allocator_t::get_min_size(total_header_size), database_exception, "configured code cache size is too small");
+      UPCX_ASSERT(upcxvmoc_config.cache_size >= allocator_t::get_min_size(total_header_size), database_exception, "configured code cache size is too small");
       std::ofstream ofs(_cache_file_path.generic_string(), std::ofstream::trunc);
       UPCX_ASSERT(ofs.good(), database_exception, "unable to create UPCX VM Optimized Compiler code cache");
-      bfs::resize_file(_cache_file_path, eosvmoc_config.cache_size);
+      bfs::resize_file(_cache_file_path, upcxvmoc_config.cache_size);
       bip::file_mapping creation_mapping(_cache_file_path.generic_string().c_str(), bip::read_write);
       bip::mapped_region creation_region(creation_mapping, bip::read_write);
-      new (creation_region.get_address()) allocator_t(eosvmoc_config.cache_size, total_header_size);
+      new (creation_region.get_address()) allocator_t(upcxvmoc_config.cache_size, total_header_size);
       new ((char*)creation_region.get_address() + header_offset) code_cache_header;
    }
 
@@ -236,27 +236,27 @@ code_cache_base::code_cache_base(const boost::filesystem::path data_dir, const e
    set_on_disk_region_dirty(true);
 
    auto existing_file_size = bfs::file_size(_cache_file_path);
-   if(eosvmoc_config.cache_size > existing_file_size) {
-      bfs::resize_file(_cache_file_path, eosvmoc_config.cache_size);
+   if(upcxvmoc_config.cache_size > existing_file_size) {
+      bfs::resize_file(_cache_file_path, upcxvmoc_config.cache_size);
 
       bip::file_mapping resize_mapping(_cache_file_path.generic_string().c_str(), bip::read_write);
       bip::mapped_region resize_region(resize_mapping, bip::read_write);
 
       allocator_t* resize_allocator = reinterpret_cast<allocator_t*>(resize_region.get_address());
-      resize_allocator->grow(eosvmoc_config.cache_size - existing_file_size);
+      resize_allocator->grow(upcxvmoc_config.cache_size - existing_file_size);
    }
 
    _cache_fd = ::open(_cache_file_path.generic_string().c_str(), O_RDWR | O_CLOEXEC);
    UPCX_ASSERT(_cache_fd >= 0, database_exception, "failure to open code cache");
 
    //load up the previous cache index
-   char* code_mapping = (char*)mmap(nullptr, eosvmoc_config.cache_size, PROT_READ|PROT_WRITE, MAP_SHARED, _cache_fd, 0);
+   char* code_mapping = (char*)mmap(nullptr, upcxvmoc_config.cache_size, PROT_READ|PROT_WRITE, MAP_SHARED, _cache_fd, 0);
    UPCX_ASSERT(code_mapping != MAP_FAILED, database_exception, "failure to mmap code cache");
 
    allocator_t* allocator = reinterpret_cast<allocator_t*>(code_mapping);
 
    if(cache_header.serialized_descriptor_index) {
-      fc::datastream<const char*> ds(code_mapping + cache_header.serialized_descriptor_index, eosvmoc_config.cache_size - cache_header.serialized_descriptor_index);
+      fc::datastream<const char*> ds(code_mapping + cache_header.serialized_descriptor_index, upcxvmoc_config.cache_size - cache_header.serialized_descriptor_index);
       unsigned number_entries;
       fc::raw::unpack(ds, number_entries);
       for(unsigned i = 0; i < number_entries; ++i) {
@@ -273,9 +273,9 @@ code_cache_base::code_cache_base(const boost::filesystem::path data_dir, const e
 
       ilog("UPCX VM Optimized Compiler code cache loaded with ${c} entries; ${f} of ${t} bytes free", ("c", number_entries)("f", allocator->get_free_memory())("t", allocator->get_size()));
    }
-   munmap(code_mapping, eosvmoc_config.cache_size);
+   munmap(code_mapping, upcxvmoc_config.cache_size);
 
-   _free_bytes_eviction_threshold = eosvmoc_config.cache_size * .1;
+   _free_bytes_eviction_threshold = upcxvmoc_config.cache_size * .1;
 
    wrapped_fd compile_monitor_conn = get_connection_to_compile_monitor(_cache_fd);
 

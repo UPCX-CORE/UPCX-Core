@@ -116,7 +116,7 @@ namespace upcxio { namespace chain {
       UPCX_VM_FROM_WASM(float64_t, (double f)) { return ::to_softfloat64(f); }
    };
 
-   using eos_vm_host_functions_t = upcxio::vm::registered_host_functions<webassembly::interface,
+   using upcx_vm_host_functions_t = upcxio::vm::registered_host_functions<webassembly::interface,
                                                                         upcxio::vm::execution_interface,
                                                                         upcxio::chain::type_converter>;
    using wasm_size_t = upcxio::vm::wasm_size_t;

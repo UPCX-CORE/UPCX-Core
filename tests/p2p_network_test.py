@@ -139,7 +139,7 @@ upcxio.name = "upcxio"
 Print("Info of each node:")
 for i in range(len(hosts)):
     node = node0
-    cmd="%s %s get info" % (testUtils.Utils.EosClientPath, node.endpointArgs)
+    cmd="%s %s get info" % (testUtils.Utils.upcxClientPath, node.endpointArgs)
     trans = node.runCmdReturnJson(cmd)
     Print("host %s: %s" % (hosts[i], trans))
 

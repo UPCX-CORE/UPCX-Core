@@ -38,7 +38,7 @@ Note: These security fixes are relevant to all nodes on UPCXIO blockchain networ
 - ([#9906](https://github.com/UPCXIO/upcx/pull/9906)) Add log path for unsupported log version exception
 - ([#9930](https://github.com/UPCXIO/upcx/pull/9930)) Fix intermittent forked chain test failure
 - ([#9931](https://github.com/UPCXIO/upcx/pull/9931)) trace history log messages should print nicely in syslog
-- ([#9942](https://github.com/UPCXIO/upcx/pull/9942)) Fix "cleos net peers" command error
+- ([#9942](https://github.com/UPCXIO/upcx/pull/9942)) Fix "clupcx net peers" command error
 - ([#9943](https://github.com/UPCXIO/upcx/pull/9943)) Create upcxio-debug-build Pipeline
 - ([#9953](https://github.com/UPCXIO/upcx/pull/9953)) EPE-482 Fixed warning due to unreferenced label
 - ([#9956](https://github.com/UPCXIO/upcx/pull/9956)) PowerTools is now powertools in CentOS 8.3 - 2.1
@@ -61,9 +61,9 @@ Note: These security fixes are relevant to all nodes on UPCXIO blockchain networ
 - ([#9908](https://github.com/UPCXIO/upcx/pull/9908)) Add MacOS 10.15 (Catalina) to list of supported OSs in README
 - ([#9914](https://github.com/UPCXIO/upcx/pull/9914)) [docs] add improvements based on code review
 - ([#9921](https://github.com/UPCXIO/upcx/pull/9921)) [docs] 2.1.x local testnet with consensus
-- ([#9925](https://github.com/UPCXIO/upcx/pull/9925)) [docs] cleos doc-a-thon feedback
-- ([#9933](https://github.com/UPCXIO/upcx/pull/9933)) [docs] cleos doc-a-thon feedback 2
-- ([#9934](https://github.com/UPCXIO/upcx/pull/9934)) [docs] cleos doc-a-thon feedback 3
-- ([#9938](https://github.com/UPCXIO/upcx/pull/9938)) [docs] cleos doc-a-thon feedback 4
+- ([#9925](https://github.com/UPCXIO/upcx/pull/9925)) [docs] clupcx doc-a-thon feedback
+- ([#9933](https://github.com/UPCXIO/upcx/pull/9933)) [docs] clupcx doc-a-thon feedback 2
+- ([#9934](https://github.com/UPCXIO/upcx/pull/9934)) [docs] clupcx doc-a-thon feedback 3
+- ([#9938](https://github.com/UPCXIO/upcx/pull/9938)) [docs] clupcx doc-a-thon feedback 4
 - ([#9952](https://github.com/UPCXIO/upcx/pull/9952)) [docs] 2.1.x - improve annotation for db_update_i64
-- ([#10009](https://github.com/UPCXIO/upcx/pull/10009)) [docs] Update various cleos how-tos and fix index - 2.1
+- ([#10009](https://github.com/UPCXIO/upcx/pull/10009)) [docs] Update various clupcx how-tos and fix index - 2.1

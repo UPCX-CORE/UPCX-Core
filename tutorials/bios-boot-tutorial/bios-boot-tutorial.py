@@ -70,12 +70,12 @@ def sleep(t):
 def startWallet():
     run('rm -rf ' + os.path.abspath(args.wallet_dir))
     run('mkdir -p ' + os.path.abspath(args.wallet_dir))
-    background(args.keosd + ' --unlock-timeout %d --http-server-address 127.0.0.1:6666 --wallet-dir %s' % (unlockTimeout, os.path.abspath(args.wallet_dir)))
+    background(args.kupcxd + ' --unlock-timeout %d --http-server-address 127.0.0.1:6666 --wallet-dir %s' % (unlockTimeout, os.path.abspath(args.wallet_dir)))
     sleep(.4)
-    run(args.cleos + 'wallet create --to-console')
+    run(args.clupcx + 'wallet create --to-console')
 
 def importKeys():
-    run(args.cleos + 'wallet import --private-key ' + args.private_key)
+    run(args.clupcx + 'wallet import --private-key ' + args.private_key)
     keys = {}
     for a in accounts:
         key = a['pvt']
@@ -83,13 +83,13 @@ def importKeys():
             if len(keys) >= args.max_user_keys:
                 break
             keys[key] = True
-            run(args.cleos + 'wallet import --private-key ' + key)
+            run(args.clupcx + 'wallet import --private-key ' + key)
     for i in range(firstProducer, firstProducer + numProducers):
         a = accounts[i]
         key = a['pvt']
         if not key in keys:
             keys[key] = True
-            run(args.cleos + 'wallet import --private-key ' + key)
+            run(args.clupcx + 'wallet import --private-key ' + key)
 
 def startNode(nodeIndex, account):
     dir = args.nodes_dir + ('%02d-' % nodeIndex) + account['name'] + '/'
@@ -101,7 +101,7 @@ def startNode(nodeIndex, account):
         '    --plugin upcxio::history_api_plugin'
     )
     cmd = (
-        args.nodeos +
+        args.nodupcx +
         '    --max-irreversible-block-age -1'
         # max-transaction-time must be less than block time
         # (which is defined in .../chain/include/upcxio/chain/config.hpp
@@ -136,7 +136,7 @@ def startProducers(b, e):
 
 def createSystemAccounts():
     for a in systemAccounts:
-        run(args.cleos + 'create account upcxio ' + a + ' ' + args.public_key)
+        run(args.clupcx + 'create account upcxio ' + a + ' ' + args.public_key)
 
 def intToCurrency(i):
     return '%d.%04d %s' % (i // 10000, i % 10000, args.symbol)
@@ -175,18 +175,18 @@ def createStakedAccounts(b, e):
         stakeCpu = stake - stakeNet
         print('%s: total funds=%s, ram=%s, net=%s, cpu=%s, unstaked=%s' % (a['name'], intToCurrency(a['funds']), intToCurrency(ramFunds), intToCurrency(stakeNet), intToCurrency(stakeCpu), intToCurrency(unstaked)))
         assert(funds == ramFunds + stakeNet + stakeCpu + unstaked)
-        retry(args.cleos + 'system newaccount --transfer upcxio %s %s --stake-net "%s" --stake-cpu "%s" --buy-ram "%s"   ' % 
+        retry(args.clupcx + 'system newaccount --transfer upcxio %s %s --stake-net "%s" --stake-cpu "%s" --buy-ram "%s"   ' % 
             (a['name'], a['pub'], intToCurrency(stakeNet), intToCurrency(stakeCpu), intToCurrency(ramFunds)))
         if unstaked:
-            retry(args.cleos + 'transfer upcxio %s "%s"' % (a['name'], intToCurrency(unstaked)))
+            retry(args.clupcx + 'transfer upcxio %s "%s"' % (a['name'], intToCurrency(unstaked)))
 
 def regProducers(b, e):
     for i in range(b, e):
         a = accounts[i]
-        retry(args.cleos + 'system regproducer ' + a['name'] + ' ' + a['pub'] + ' https://' + a['name'] + '.com' + '/' + a['pub'])
+        retry(args.clupcx + 'system regproducer ' + a['name'] + ' ' + a['pub'] + ' https://' + a['name'] + '.com' + '/' + a['pub'])
 
 def listProducers():
-    run(args.cleos + 'system listproducers')
+    run(args.clupcx + 'system listproducers')
 
 def vote(b, e):
     for i in range(b, e):
@@ -196,27 +196,27 @@ def vote(b, e):
             k = numProducers - 1
         prods = random.sample(range(firstProducer, firstProducer + numProducers), k)
         prods = ' '.join(map(lambda x: accounts[x]['name'], prods))
-        retry(args.cleos + 'system voteproducer prods ' + voter + ' ' + prods)
+        retry(args.clupcx + 'system voteproducer prods ' + voter + ' ' + prods)
 
 def claimRewards():
-    table = getJsonOutput(args.cleos + 'get table upcxio upcxio producers -l 100')
+    table = getJsonOutput(args.clupcx + 'get table upcxio upcxio producers -l 100')
     times = []
     for row in table['rows']:
         if row['unpaid_blocks'] and not row['last_claim_time']:
-            times.append(getJsonOutput(args.cleos + 'system claimrewards -j ' + row['owner'])['processed']['elapsed'])
+            times.append(getJsonOutput(args.clupcx + 'system claimrewards -j ' + row['owner'])['processed']['elapsed'])
     print('Elapsed time for claimrewards:', times)
 
 def proxyVotes(b, e):
     vote(firstProducer, firstProducer + 1)
     proxy = accounts[firstProducer]['name']
-    retry(args.cleos + 'system regproxy ' + proxy)
+    retry(args.clupcx + 'system regproxy ' + proxy)
     sleep(1.0)
     for i in range(b, e):
         voter = accounts[i]['name']
-        retry(args.cleos + 'system voteproducer proxy ' + voter + ' ' + proxy)
+        retry(args.clupcx + 'system voteproducer proxy ' + voter + ' ' + proxy)
 
 def updateAuth(account, permission, parent, controller):
-    run(args.cleos + 'push action upcxio updateauth' + jsonArg({
+    run(args.clupcx + 'push action upcxio updateauth' + jsonArg({
         'account': account,
         'permission': permission,
         'parent': parent,
@@ -233,7 +233,7 @@ def resign(account, controller):
     updateAuth(account, 'owner', '', controller)
     updateAuth(account, 'active', 'owner', controller)
     sleep(1)
-    run(args.cleos + 'get account ' + account)
+    run(args.clupcx + 'get account ' + account)
 
 def randomTransfer(b, e):
     for j in range(20):
@@ -241,7 +241,7 @@ def randomTransfer(b, e):
         dest = src
         while dest == src:
             dest = accounts[random.randint(b, e - 1)]['name']
-        run(args.cleos + 'transfer -f ' + src + ' ' + dest + ' "0.0001 ' + args.symbol + '"' + ' || true')
+        run(args.clupcx + 'transfer -f ' + src + ' ' + dest + ' "0.0001 ' + args.symbol + '"' + ' || true')
 
 def msigProposeReplaceSystem(proposer, proposalName):
     requestedPermissions = []
@@ -250,20 +250,20 @@ def msigProposeReplaceSystem(proposer, proposalName):
     trxPermissions = [{'actor': 'upcxio', 'permission': 'active'}]
     with open(fastUnstakeSystem, mode='rb') as f:
         setcode = {'account': 'upcxio', 'vmtype': 0, 'vmversion': 0, 'code': f.read().hex()}
-    run(args.cleos + 'multisig propose ' + proposalName + jsonArg(requestedPermissions) + 
+    run(args.clupcx + 'multisig propose ' + proposalName + jsonArg(requestedPermissions) + 
         jsonArg(trxPermissions) + 'upcxio setcode' + jsonArg(setcode) + ' -p ' + proposer)
 
 def msigApproveReplaceSystem(proposer, proposalName):
     for i in range(firstProducer, firstProducer + numProducers):
-        run(args.cleos + 'multisig approve ' + proposer + ' ' + proposalName +
+        run(args.clupcx + 'multisig approve ' + proposer + ' ' + proposalName +
             jsonArg({'actor': accounts[i]['name'], 'permission': 'active'}) +
             '-p ' + accounts[i]['name'])
 
 def msigExecReplaceSystem(proposer, proposalName):
-    retry(args.cleos + 'multisig exec ' + proposer + ' ' + proposalName + ' -p ' + proposer)
+    retry(args.clupcx + 'multisig exec ' + proposer + ' ' + proposalName + ' -p ' + proposer)
 
 def msigReplaceSystem():
-    run(args.cleos + 'push action upcxio buyrambytes' + jsonArg(['upcxio', accounts[0]['name'], 200000]) + '-p upcxio')
+    run(args.clupcx + 'push action upcxio buyrambytes' + jsonArg(['upcxio', accounts[0]['name'], 200000]) + '-p upcxio')
     sleep(1)
     msigProposeReplaceSystem(accounts[0]['name'], 'fast.unstake')
     sleep(1)
@@ -273,7 +273,7 @@ def msigReplaceSystem():
 def produceNewAccounts():
     with open('newusers', 'w') as f:
         for i in range(120_000, 200_000):
-            x = getOutput(args.cleos + 'create key --to-console')
+            x = getOutput(args.clupcx + 'create key --to-console')
             r = re.match('Private key: *([^ \n]*)\nPublic key: *([^ \n]*)', x, re.DOTALL | re.MULTILINE)
             name = 'user'
             for j in range(7, -1, -1):
@@ -282,7 +282,7 @@ def produceNewAccounts():
             f.write('        {"name":"%s", "pvt":"%s", "pub":"%s"},\n' % (name, r[1], r[2]))
 
 def stepKillAll():
-    run('killall keosd nodeos || true')
+    run('killall kupcxd nodupcx || true')
     sleep(1.5)
 def stepStartWallet():
     startWallet()
@@ -291,12 +291,12 @@ def stepStartBoot():
     startNode(0, {'name': 'upcxio', 'pvt': args.private_key, 'pub': args.public_key})
     sleep(10.0)
 def stepInstallSystemContracts():
-    run(args.cleos + 'set contract upcxio.token ' + args.contracts_dir + '/upcxio.token/')
-    run(args.cleos + 'set contract upcxio.msig ' + args.contracts_dir + '/upcxio.msig/')
+    run(args.clupcx + 'set contract upcxio.token ' + args.contracts_dir + '/upcxio.token/')
+    run(args.clupcx + 'set contract upcxio.msig ' + args.contracts_dir + '/upcxio.msig/')
 def stepCreateTokens():
-    run(args.cleos + 'push action upcxio.token create \'["upcxio", "10000000000.0000 %s"]\' -p upcxio.token' % (args.symbol))
+    run(args.clupcx + 'push action upcxio.token create \'["upcxio", "10000000000.0000 %s"]\' -p upcxio.token' % (args.symbol))
     totalAllocation = allocateFunds(0, len(accounts))
-    run(args.cleos + 'push action upcxio.token issue \'["upcxio", "%s", "memo"]\' -p upcxio' % intToCurrency(totalAllocation))
+    run(args.clupcx + 'push action upcxio.token issue \'["upcxio", "%s", "memo"]\' -p upcxio' % intToCurrency(totalAllocation))
     sleep(1)
 def stepSetSystemContract():
     # All of the protocol upgrade features introduced in v1.8 first require a special protocol 
@@ -313,52 +313,52 @@ def stepSetSystemContract():
     # action that allows activating desired protocol features prior to 
     # deploying a system contract with more features such as upcxio.bios 
     # or upcxio.system
-    retry(args.cleos + 'set contract upcxio ' + args.contracts_dir + '/upcxio.boot/')
+    retry(args.clupcx + 'set contract upcxio ' + args.contracts_dir + '/upcxio.boot/')
     sleep(3)
 
     # activate remaining features
     # KV_DATABASE
-    retry(args.cleos + 'push action upcxio activate \'["825ee6288fb1373eab1b5187ec2f04f6eacb39cb3a97f356a07c91622dd61d16"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["825ee6288fb1373eab1b5187ec2f04f6eacb39cb3a97f356a07c91622dd61d16"]\' -p upcxio@active')
     # ACTION_RETURN_VALUE
-    retry(args.cleos + 'push action upcxio activate \'["c3a6138c5061cf291310887c0b5c71fcaffeab90d5deb50d3b9e687cead45071"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["c3a6138c5061cf291310887c0b5c71fcaffeab90d5deb50d3b9e687cead45071"]\' -p upcxio@active')
     # CONFIGURABLE_WASM_LIMITS
-    retry(args.cleos + 'push action upcxio activate \'["bf61537fd21c61a60e542a5d66c3f6a78da0589336868307f94a82bccea84e88"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["bf61537fd21c61a60e542a5d66c3f6a78da0589336868307f94a82bccea84e88"]\' -p upcxio@active')
     # BLOCKCHAIN_PARAMETERS
-    retry(args.cleos + 'push action upcxio activate \'["5443fcf88330c586bc0e5f3dee10e7f63c76c00249c87fe4fbf7f38c082006b4"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["5443fcf88330c586bc0e5f3dee10e7f63c76c00249c87fe4fbf7f38c082006b4"]\' -p upcxio@active')
     # GET_SENDER
-    retry(args.cleos + 'push action upcxio activate \'["f0af56d2c5a48d60a4a5b5c903edfb7db3a736a94ed589d0b797df33ff9d3e1d"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["f0af56d2c5a48d60a4a5b5c903edfb7db3a736a94ed589d0b797df33ff9d3e1d"]\' -p upcxio@active')
     # FORWARD_SETCODE
-    retry(args.cleos + 'push action upcxio activate \'["2652f5f96006294109b3dd0bbde63693f55324af452b799ee137a81a905eed25"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["2652f5f96006294109b3dd0bbde63693f55324af452b799ee137a81a905eed25"]\' -p upcxio@active')
     # ONLY_BILL_FIRST_AUTHORIZER
-    retry(args.cleos + 'push action upcxio activate \'["8ba52fe7a3956c5cd3a656a3174b931d3bb2abb45578befc59f283ecd816a405"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["8ba52fe7a3956c5cd3a656a3174b931d3bb2abb45578befc59f283ecd816a405"]\' -p upcxio@active')
     # RESTRICT_ACTION_TO_SELF
-    retry(args.cleos + 'push action upcxio activate \'["ad9e3d8f650687709fd68f4b90b41f7d825a365b02c23a636cef88ac2ac00c43"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["ad9e3d8f650687709fd68f4b90b41f7d825a365b02c23a636cef88ac2ac00c43"]\' -p upcxio@active')
     # DISALLOW_EMPTY_PRODUCER_SCHEDULE
-    retry(args.cleos + 'push action upcxio activate \'["68dcaa34c0517d19666e6b33add67351d8c5f69e999ca1e37931bc410a297428"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["68dcaa34c0517d19666e6b33add67351d8c5f69e999ca1e37931bc410a297428"]\' -p upcxio@active')
      # FIX_LINKAUTH_RESTRICTION
-    retry(args.cleos + 'push action upcxio activate \'["e0fb64b1085cc5538970158d05a009c24e276fb94e1a0bf6a528b48fbc4ff526"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["e0fb64b1085cc5538970158d05a009c24e276fb94e1a0bf6a528b48fbc4ff526"]\' -p upcxio@active')
      # REPLACE_DEFERRED
-    retry(args.cleos + 'push action upcxio activate \'["ef43112c6543b88db2283a2e077278c315ae2c84719a8b25f25cc88565fbea99"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["ef43112c6543b88db2283a2e077278c315ae2c84719a8b25f25cc88565fbea99"]\' -p upcxio@active')
     # NO_DUPLICATE_DEFERRED_ID
-    retry(args.cleos + 'push action upcxio activate \'["4a90c00d55454dc5b059055ca213579c6ea856967712a56017487886a4d4cc0f"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["4a90c00d55454dc5b059055ca213579c6ea856967712a56017487886a4d4cc0f"]\' -p upcxio@active')
     # ONLY_LINK_TO_EXISTING_PERMISSION
-    retry(args.cleos + 'push action upcxio activate \'["1a99a59d87e06e09ec5b028a9cbb7749b4a5ad8819004365d02dc4379a8b7241"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["1a99a59d87e06e09ec5b028a9cbb7749b4a5ad8819004365d02dc4379a8b7241"]\' -p upcxio@active')
     # RAM_RESTRICTIONS
-    retry(args.cleos + 'push action upcxio activate \'["4e7bf348da00a945489b2a681749eb56f5de00b900014e137ddae39f48f69d67"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["4e7bf348da00a945489b2a681749eb56f5de00b900014e137ddae39f48f69d67"]\' -p upcxio@active')
     # WEBAUTHN_KEY
-    retry(args.cleos + 'push action upcxio activate \'["4fca8bd82bbd181e714e283f83e1b45d95ca5af40fb89ad3977b653c448f78c2"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["4fca8bd82bbd181e714e283f83e1b45d95ca5af40fb89ad3977b653c448f78c2"]\' -p upcxio@active')
     # WTMSIG_BLOCK_SIGNATURES
-    retry(args.cleos + 'push action upcxio activate \'["299dcb6af692324b899b39f16d5a530a33062804e41f09dc97e9f156b4476707"]\' -p upcxio@active')
+    retry(args.clupcx + 'push action upcxio activate \'["299dcb6af692324b899b39f16d5a530a33062804e41f09dc97e9f156b4476707"]\' -p upcxio@active')
     sleep(1)
 
     # install upcxio.system latest version
-    retry(args.cleos + 'set contract upcxio ' + args.contracts_dir + '/upcxio.system/')
+    retry(args.clupcx + 'set contract upcxio ' + args.contracts_dir + '/upcxio.system/')
     # setpriv is only available after upcxio.system is installed
-    run(args.cleos + 'push action upcxio setpriv' + jsonArg(['upcxio.msig', 1]) + '-p upcxio@active')
+    run(args.clupcx + 'push action upcxio setpriv' + jsonArg(['upcxio.msig', 1]) + '-p upcxio@active')
     sleep(3)
 
 def stepInitSystemContract():
-    run(args.cleos + 'push action upcxio init' + jsonArg(['0', '4,' + args.symbol]) + '-p upcxio@active')
+    run(args.clupcx + 'push action upcxio init' + jsonArg(['0', '4,' + args.symbol]) + '-p upcxio@active')
     sleep(1)
 def stepCreateStakedAccounts():
     createStakedAccounts(0, len(accounts))
@@ -391,8 +391,8 @@ def stepLog():
 parser = argparse.ArgumentParser()
 
 commands = [
-    ('k', 'kill',               stepKillAll,                True,    "Kill all nodeos and keosd processes"),
-    ('w', 'wallet',             stepStartWallet,            True,    "Start keosd, create wallet, fill with keys"),
+    ('k', 'kill',               stepKillAll,                True,    "Kill all nodupcx and kupcxd processes"),
+    ('w', 'wallet',             stepStartWallet,            True,    "Start kupcxd, create wallet, fill with keys"),
     ('b', 'boot',               stepStartBoot,              True,    "Start boot node"),
     ('s', 'sys',                createSystemAccounts,       True,    "Create system accounts (upcxio.*)"),
     ('c', 'contracts',          stepInstallSystemContracts, True,    "Install system contracts (token, msig)"),
@@ -413,9 +413,9 @@ commands = [
 
 parser.add_argument('--public-key', metavar='', help="UPCXIO Public Key", default='UPCX8Znrtgwt8TfpmbVpTKvA2oB8Nqey625CLN8bCN3TEbgx86Dsvr', dest="public_key")
 parser.add_argument('--private-Key', metavar='', help="UPCXIO Private Key", default='5K463ynhZoCDDa4RDcr63cUwWLTnKqmdcoTKTHBjqoKfv4u5V7p', dest="private_key")
-parser.add_argument('--cleos', metavar='', help="Cleos command", default='../../build/programs/cleos/cleos --wallet-url http://127.0.0.1:6666 ')
-parser.add_argument('--nodeos', metavar='', help="Path to nodeos binary", default='../../build/programs/nodeos/nodeos')
-parser.add_argument('--keosd', metavar='', help="Path to keosd binary", default='../../build/programs/keosd/keosd')
+parser.add_argument('--clupcx', metavar='', help="Clupcx command", default='../../build/programs/clupcx/clupcx --wallet-url http://127.0.0.1:6666 ')
+parser.add_argument('--nodupcx', metavar='', help="Path to nodupcx binary", default='../../build/programs/nodupcx/nodupcx')
+parser.add_argument('--kupcxd', metavar='', help="Path to kupcxd binary", default='../../build/programs/kupcxd/kupcxd')
 parser.add_argument('--contracts-dir', metavar='', help="Path to contracts directory", default='../../build/contracts/')
 parser.add_argument('--nodes-dir', metavar='', help="Path to nodes directory", default='./nodes/')
 parser.add_argument('--genesis', metavar='', help="Path to genesis.json", default="./genesis.json")
@@ -434,7 +434,7 @@ parser.add_argument('--num-voters', metavar='', help="Number of voters", type=in
 parser.add_argument('--num-senders', metavar='', help="Number of users to transfer funds randomly", type=int, default=10)
 parser.add_argument('--producer-sync-delay', metavar='', help="Time (s) to sleep to allow producers to sync", type=int, default=80)
 parser.add_argument('-a', '--all', action='store_true', help="Do everything marked with (*)")
-parser.add_argument('-H', '--http-port', type=int, default=8000, metavar='', help='HTTP port for cleos')
+parser.add_argument('-H', '--http-port', type=int, default=8000, metavar='', help='HTTP port for clupcx')
 
 for (flag, command, function, inAll, help) in commands:
     prefix = ''
@@ -447,8 +447,8 @@ for (flag, command, function, inAll, help) in commands:
         
 args = parser.parse_args()
 
-# Leave a space in front of --url in case the user types cleos alone
-args.cleos += ' --url http://127.0.0.1:%d ' % args.http_port
+# Leave a space in front of --url in case the user types clupcx alone
+args.clupcx += ' --url http://127.0.0.1:%d ' % args.http_port
 
 logFile = open(args.log_path, 'a')
 

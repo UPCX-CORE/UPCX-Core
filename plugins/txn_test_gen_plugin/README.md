@@ -1,6 +1,6 @@
 # txn_test_gen_plugin
 
-This plugin provides a way to generate a given amount of transactions per second against the currency contract. It runs internally to eosd to reduce overhead.
+This plugin provides a way to generate a given amount of transactions per second against the currency contract. It runs internally to upcxd to reduce overhead.
 
 This general procedure was used when doing Dawn 3.0 performance testing as mentioned in https://github.com/UPCXIO/upcx/issues/2078.
 
@@ -54,21 +54,21 @@ EOF
 ### Launch producer
 
 ```bash
-$ ./nodeos -d ~/upcx.data/producer_node --config-dir ~/upcx.data/producer_node -l ~/upcx.data/logging.json --http-server-address "" -p upcxio -e
+$ ./nodupcx -d ~/upcx.data/producer_node --config-dir ~/upcx.data/producer_node -l ~/upcx.data/logging.json --http-server-address "" -p upcxio -e
 ```
 
 ### Launch non-producer that will generate transactions
 
 ```bash
-$ ./nodeos -d ~/upcx.data/generator_node --config-dir ~/upcx.data/generator_node -l ~/upcx.data/logging.json --plugin upcxio::txn_test_gen_plugin --plugin upcxio::chain_api_plugin --p2p-peer-address localhost:9876 --p2p-listen-endpoint localhost:5555
+$ ./nodupcx -d ~/upcx.data/generator_node --config-dir ~/upcx.data/generator_node -l ~/upcx.data/logging.json --plugin upcxio::txn_test_gen_plugin --plugin upcxio::chain_api_plugin --p2p-peer-address localhost:9876 --p2p-listen-endpoint localhost:5555
 ```
 
 ### Create a wallet on the non-producer and set bios contract
 
 ```bash
-$ ./cleos wallet create --to-console
-$ ./cleos wallet import --private-key 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
-$ ./cleos set contract upcxio ~/upcx/build.release/contracts/upcxio.bios/
+$ ./clupcx wallet create --to-console
+$ ./clupcx wallet import --private-key 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
+$ ./clupcx set contract upcxio ~/upcx/build.release/contracts/upcxio.bios/
 ```
 
 ### Initialize the accounts txn_test_gen_plugin uses

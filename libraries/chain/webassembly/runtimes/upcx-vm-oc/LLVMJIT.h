@@ -10,7 +10,7 @@
 #include <vector>
 #include <map>
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 struct instantiated_code {
    std::vector<uint8_t> code;

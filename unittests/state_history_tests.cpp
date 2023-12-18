@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE(test_trace_log) {
    log.prune_transactions(cfd_trace->block_num, ids);
    BOOST_REQUIRE(ids.empty());
 
-   // we assume the nodeos has to be stopped while running, it can only be read
+   // we assume the nodupcx has to be stopped while running, it can only be read
    // correctly with restart
    upcxio::state_history_traces_log new_log({ .log_dir = state_history_dir.path });
    auto                            pruned_traces = get_traces(new_log, cfd_trace->block_num);
@@ -372,7 +372,7 @@ BOOST_AUTO_TEST_CASE(test_splitted_log) {
    chain.traces_log.prune_transactions(cfd_trace->block_num, ids);
    BOOST_REQUIRE(ids.empty());
 
-   // we assume the nodeos has to be stopped while running, it can only be read
+   // we assume the nodupcx has to be stopped while running, it can only be read
    // correctly with restart
    upcxio::state_history_traces_log new_log(config);
    auto                            pruned_traces = get_traces(new_log, cfd_trace->block_num);
@@ -551,7 +551,7 @@ BOOST_AUTO_TEST_CASE(test_state_result_abi) {
          BOOST_CHECK_NO_THROW( serializer.deserialize(deltas_bin, "table_delta[]"));
       }
       {
-         // check the validity of abieos ship_protocol type definitions
+         // check the validity of abiupcx ship_protocol type definitions
          upcxio::input_stream          bin{value.data(), value.data() + value.size()};
          upcxio::ship_protocol::result result;
          BOOST_CHECK_NO_THROW(from_bin(result, bin));

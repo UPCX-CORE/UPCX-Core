@@ -1,5 +1,5 @@
 #include <llvm/IR/IRBuilder.h>
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 namespace LLVMJIT {
 
 llvm::Value* CreateInBoundsGEPWAR(llvm::IRBuilder<>& irBuilder, llvm::Value* Ptr, llvm::Value* v1, llvm::Value* v2) {

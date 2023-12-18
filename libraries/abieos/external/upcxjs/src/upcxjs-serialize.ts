@@ -1,14 +1,14 @@
 /**
  * @module Serialize
  */
-// copyright defined in eosjs/LICENSE.txt
+// copyright defined in upcxjs/LICENSE.txt
 
-import * as numeric from "./eosjs-numeric";
+import * as numeric from "./upcxjs-numeric";
 import {
   Abi,
   BlockTaposInfo,
   BlockHeaderStateTaposInfo,
-} from "./eosjs-rpc-interfaces";
+} from "./upcxjs-rpc-interfaces";
 
 /** A field in an abi */
 export interface Field {

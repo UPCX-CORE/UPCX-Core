@@ -66,7 +66,7 @@ class opaque {
    template <typename ST>
    void pack_to(ST& ds) const {
       // we need to pack as big vector because it can be used to hold the state delta object
-      // which would be as large as the upcx snapshot when the nodeos restarted from a snapshot.
+      // which would be as large as the upcx snapshot when the nodupcx restarted from a snapshot.
       pack_big_bytes(ds, this->data);
    }
 

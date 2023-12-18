@@ -33,8 +33,8 @@
 
 namespace upcxio { namespace chain {
 
-   wasm_interface::wasm_interface(vm_type vm, bool eosvmoc_tierup, const chainbase::database& d, const boost::filesystem::path data_dir, const eosvmoc::config& eosvmoc_config)
-     : my( new wasm_interface_impl(vm, eosvmoc_tierup, d, data_dir, eosvmoc_config) ) {}
+   wasm_interface::wasm_interface(vm_type vm, bool upcxvmoc_tierup, const chainbase::database& d, const boost::filesystem::path data_dir, const upcxvmoc::config& upcxvmoc_config)
+     : my( new wasm_interface_impl(vm, upcxvmoc_tierup, d, data_dir, upcxvmoc_config) ) {}
 
    wasm_interface::~wasm_interface() {}
 
@@ -43,7 +43,7 @@ namespace upcxio { namespace chain {
 
       if (control.is_builtin_activated(builtin_protocol_feature_t::configurable_wasm_limits)) {
          const auto& gpo = control.get_global_properties();
-         webassembly::eos_vm_runtime::validate( code, gpo.wasm_configuration, pso.whitelisted_intrinsics );
+         webassembly::upcx_vm_runtime::validate( code, gpo.wasm_configuration, pso.whitelisted_intrinsics );
          return;
       }
       Module module;
@@ -59,7 +59,7 @@ namespace upcxio { namespace chain {
       wasm_validations::wasm_binary_validation validator(control, module);
       validator.validate();
 
-      webassembly::eos_vm_runtime::validate( code, pso.whitelisted_intrinsics );
+      webassembly::upcx_vm_runtime::validate( code, pso.whitelisted_intrinsics );
 
       //there are a couple opportunties for improvement here--
       //Easy: Cache the Module created here so it can be reused for instantiaion
@@ -80,10 +80,10 @@ namespace upcxio { namespace chain {
 
    void wasm_interface::apply( const digest_type& code_hash, const uint8_t& vm_type, const uint8_t& vm_version, apply_context& context ) {
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
-      if(my->eosvmoc) {
-         const chain::eosvmoc::code_descriptor* cd = nullptr;
+      if(my->upcxvmoc) {
+         const chain::upcxvmoc::code_descriptor* cd = nullptr;
          try {
-            cd = my->eosvmoc->cc.get_descriptor_for_code(code_hash, vm_version);
+            cd = my->upcxvmoc->cc.get_descriptor_for_code(code_hash, vm_version);
          }
          catch(...) {
             //swallow errors here, if UPCX VM OC has gone in to the weeds we shouldn't bail: continue to try and run baseline
@@ -94,7 +94,7 @@ namespace upcxio { namespace chain {
             once_is_enough = true;
          }
          if(cd) {
-            my->eosvmoc->exec.execute(*cd, my->eosvmoc->mem, context);
+            my->upcxvmoc->exec.execute(*cd, my->upcxvmoc->mem, context);
             return;
          }
       }
@@ -113,11 +113,11 @@ std::istream& operator>>(std::istream& in, wasm_interface::vm_type& runtime) {
    std::string s;
    in >> s;
    if (s == "upcx-vm")
-      runtime = upcxio::chain::wasm_interface::vm_type::eos_vm;
+      runtime = upcxio::chain::wasm_interface::vm_type::upcx_vm;
    else if (s == "upcx-vm-jit")
-      runtime = upcxio::chain::wasm_interface::vm_type::eos_vm_jit;
+      runtime = upcxio::chain::wasm_interface::vm_type::upcx_vm_jit;
    else if (s == "upcx-vm-oc")
-      runtime = upcxio::chain::wasm_interface::vm_type::eos_vm_oc;
+      runtime = upcxio::chain::wasm_interface::vm_type::upcx_vm_oc;
    else
       in.setstate(std::ios_base::failbit);
    return in;

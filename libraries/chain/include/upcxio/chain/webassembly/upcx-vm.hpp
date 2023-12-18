@@ -11,19 +11,19 @@
 //upcx-vm includes
 #include <upcxio/vm/backend.hpp>
 
-namespace upcxio { namespace chain { namespace webassembly { namespace eos_vm_runtime {
+namespace upcxio { namespace chain { namespace webassembly { namespace upcx_vm_runtime {
 
 struct apply_options;
 
 }}
 
 template <typename Impl>
-using eos_vm_backend_t = upcxio::vm::backend<eos_vm_host_functions_t, Impl, webassembly::eos_vm_runtime::apply_options>;
+using upcx_vm_backend_t = upcxio::vm::backend<upcx_vm_host_functions_t, Impl, webassembly::upcx_vm_runtime::apply_options>;
 
 template <typename Options>
-using eos_vm_null_backend_t = upcxio::vm::backend<eos_vm_host_functions_t, upcxio::vm::null_backend, Options>;
+using upcx_vm_null_backend_t = upcxio::vm::backend<upcx_vm_host_functions_t, upcxio::vm::null_backend, Options>;
 
-namespace webassembly { namespace eos_vm_runtime {
+namespace webassembly { namespace upcx_vm_runtime {
 
 using namespace fc;
 using namespace upcxio::vm;
@@ -35,9 +35,9 @@ void validate(const bytes& code, const wasm_config& cfg, const whitelisted_intri
 struct apply_options;
 
 template<typename Backend>
-class eos_vm_runtime : public upcxio::chain::wasm_runtime_interface {
+class upcx_vm_runtime : public upcxio::chain::wasm_runtime_interface {
    public:
-      eos_vm_runtime();
+      upcx_vm_runtime();
       bool inject_module(IR::Module&) override;
       std::unique_ptr<wasm_instantiated_module_interface> instantiate_module(const char* code_bytes, size_t code_size, std::vector<uint8_t>,
                                                                              const digest_type& code_hash, const uint8_t& vm_type, const uint8_t& vm_version) override;
@@ -48,10 +48,10 @@ class eos_vm_runtime : public upcxio::chain::wasm_runtime_interface {
       // todo: managing this will get more complicated with sync calls;
       //       immediately_exit_currently_running_module() should probably
       //       move from wasm_runtime_interface to wasm_instantiated_module_interface.
-      eos_vm_backend_t<Backend>* _bkend = nullptr;  // non owning pointer to allow for immediate exit
+      upcx_vm_backend_t<Backend>* _bkend = nullptr;  // non owning pointer to allow for immediate exit
 
    template<typename Impl>
-   friend class eos_vm_instantiated_module;
+   friend class upcx_vm_instantiated_module;
 };
 
-}}}}// upcxio::chain::webassembly::eos_vm_runtime
+}}}}// upcxio::chain::webassembly::upcx_vm_runtime

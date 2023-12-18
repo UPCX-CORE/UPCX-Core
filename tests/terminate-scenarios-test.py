@@ -10,9 +10,9 @@ import random
 ###############################################################
 # terminate-scenarios-test
 #
-# Tests terminate scenarios for nodeos.  Uses "-c" flag to indicate "replay" (--replay-blockchain), "resync"
+# Tests terminate scenarios for nodupcx.  Uses "-c" flag to indicate "replay" (--replay-blockchain), "resync"
 # (--delete-all-blocks), "hardReplay"(--hard-replay-blockchain), and "none" to indicate what kind of restart flag should
-# be used. This is one of the only test that actually verify that nodeos terminates with a good exit status.
+# be used. This is one of the only test that actually verify that nodupcx terminates with a good exit status.
 #
 ###############################################################
 
@@ -31,7 +31,7 @@ debug=args.v
 total_nodes = pnodes
 killCount=args.kill_count if args.kill_count > 0 else 1
 killSignal=args.kill_sig
-killEosInstances= not args.leave_running
+killupcxInstances= not args.leave_running
 dumpErrorDetails=args.dump_error_details
 keepLogs=args.keep_logs
 killAll=args.clean_run
@@ -70,21 +70,21 @@ try:
         errorExit("Cluster never stabilized")
 
     Print("Kill %d cluster node instances." % (killCount))
-    if cluster.killSomeEosInstances(killCount, killSignal) is False:
+    if cluster.killSomeupcxInstances(killCount, killSignal) is False:
         errorExit("Failed to kill Upcx instances")
-    Print("nodeos instances killed.")
+    Print("nodupcx instances killed.")
 
     Print ("Relaunch dead cluster nodes instances.")
     nodeArg = "--terminate-at-block %d" % terminate if terminate > 0 else ""
     if nodeArg != "":
         if chainSyncStrategyStr == "hardReplay":
             nodeArg += " --truncate-at-block %d" % terminate
-    if cluster.relaunchEosInstances(cachePopen=True, nodeArgs=nodeArg) is False:
+    if cluster.relaunchupcxInstances(cachePopen=True, nodeArgs=nodeArg) is False:
         errorExit("Failed to relaunch Upcx instances")
-    Print("nodeos instances relaunched.")
+    Print("nodupcx instances relaunched.")
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killEosInstances, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killupcxInstances=killupcxInstances, killWallet=killupcxInstances, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

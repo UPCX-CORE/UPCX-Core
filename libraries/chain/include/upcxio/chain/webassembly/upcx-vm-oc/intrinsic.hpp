@@ -9,7 +9,7 @@ namespace IR {
    struct FunctionType;
 }
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 struct intrinsic {
    intrinsic(const char* name, const IR::FunctionType* type, void* function_ptr, size_t ordinal);

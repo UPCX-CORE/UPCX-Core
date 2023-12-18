@@ -2,7 +2,7 @@
 
 ### Table of contents
 
-1. [Enable ChainKV in Nodeos](#enable-chainkv-in-nodeos)
+1. [Enable ChainKV in Nodupcx](#enable-chainkv-in-nodupcx)
 2. [ChainKV or Chainbase](#chainkv-or-chainbase)
 3. [Using a database table in a smart contract](#using-a-database-table-in-a-smart-contract)
 4. [Using a kv table in a smart contract](#using-a-kv-table-in-a-smart-contract)
@@ -10,11 +10,11 @@
 6. [Extending Session](#extending-session)
 7. [What is an Undo stack](#what-is-an-undo-stack)
 
-## Enable ChainKV in Nodeos
+## Enable ChainKV in Nodupcx
 
-To enable the use of the RocksDB backing store in nodeos provide this argument when starting nodeos `--backing-store rocksdb`.
-By default Chainbase is the backing store of Nodeos. So when this argument is not present when starting Nodeos, Chainbase will be used. You can also
-be explicit in setting the use of Chainbase by specifying `--backing-store chainbase` when starting Nodeos.
+To enable the use of the RocksDB backing store in nodupcx provide this argument when starting nodupcx `--backing-store rocksdb`.
+By default Chainbase is the backing store of Nodupcx. So when this argument is not present when starting Nodupcx, Chainbase will be used. You can also
+be explicit in setting the use of Chainbase by specifying `--backing-store chainbase` when starting Nodupcx.
 
 ## ChainKV or Chainbase
 

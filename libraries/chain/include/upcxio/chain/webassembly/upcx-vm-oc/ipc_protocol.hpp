@@ -4,7 +4,7 @@
 #include <upcxio/chain/webassembly/upcx-vm-oc/upcx-vm-oc.hpp>
 #include <upcxio/chain/types.hpp>
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 struct initialize_message {
    //Two sent fds: 1) communication socket for this instance  2) the cache file 
@@ -30,7 +30,7 @@ struct evict_wasms_message {
 };
 
 struct code_compilation_result_message {
-   eosvmoc_optional_offset_or_import_t start;
+   upcxvmoc_optional_offset_or_import_t start;
    unsigned apply_offset;
    int starting_memory_pages;
    unsigned initdata_prologue_size;
@@ -51,7 +51,7 @@ struct wasm_compilation_result_message {
    size_t cache_free_bytes;
 };
 
-using eosvmoc_message = std::variant<initialize_message,
+using upcxvmoc_message = std::variant<initialize_message,
                                      initalize_response_message,
                                      compile_wasm_message,
                                      evict_wasms_message,
@@ -59,12 +59,12 @@ using eosvmoc_message = std::variant<initialize_message,
                                      wasm_compilation_result_message>;
 }}}
 
-FC_REFLECT(upcxio::chain::eosvmoc::initialize_message, )
-FC_REFLECT(upcxio::chain::eosvmoc::initalize_response_message, (error_message))
-FC_REFLECT(upcxio::chain::eosvmoc::code_tuple, (code_id)(vm_version))
-FC_REFLECT(upcxio::chain::eosvmoc::compile_wasm_message, (code))
-FC_REFLECT(upcxio::chain::eosvmoc::evict_wasms_message, (codes))
-FC_REFLECT(upcxio::chain::eosvmoc::code_compilation_result_message, (start)(apply_offset)(starting_memory_pages)(initdata_prologue_size))
-FC_REFLECT(upcxio::chain::eosvmoc::compilation_result_unknownfailure, )
-FC_REFLECT(upcxio::chain::eosvmoc::compilation_result_toofull, )
-FC_REFLECT(upcxio::chain::eosvmoc::wasm_compilation_result_message, (code)(result)(cache_free_bytes))
+FC_REFLECT(upcxio::chain::upcxvmoc::initialize_message, )
+FC_REFLECT(upcxio::chain::upcxvmoc::initalize_response_message, (error_message))
+FC_REFLECT(upcxio::chain::upcxvmoc::code_tuple, (code_id)(vm_version))
+FC_REFLECT(upcxio::chain::upcxvmoc::compile_wasm_message, (code))
+FC_REFLECT(upcxio::chain::upcxvmoc::evict_wasms_message, (codes))
+FC_REFLECT(upcxio::chain::upcxvmoc::code_compilation_result_message, (start)(apply_offset)(starting_memory_pages)(initdata_prologue_size))
+FC_REFLECT(upcxio::chain::upcxvmoc::compilation_result_unknownfailure, )
+FC_REFLECT(upcxio::chain::upcxvmoc::compilation_result_toofull, )
+FC_REFLECT(upcxio::chain::upcxvmoc::wasm_compilation_result_message, (code)(result)(cache_free_bytes))

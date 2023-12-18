@@ -9,7 +9,7 @@
 #include <sys/syscall.h>
 #include <linux/memfd.h>
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 class wrapped_fd {
    public:
@@ -47,14 +47,14 @@ class wrapped_fd {
       int _fd;
 };
 
-std::tuple<bool, eosvmoc_message, std::vector<wrapped_fd>> read_message_with_fds(boost::asio::local::datagram_protocol::socket& s);
-std::tuple<bool, eosvmoc_message, std::vector<wrapped_fd>> read_message_with_fds(int fd);
-bool write_message_with_fds(boost::asio::local::datagram_protocol::socket& s, const eosvmoc_message& message, const std::vector<wrapped_fd>& fds = std::vector<wrapped_fd>());
-bool write_message_with_fds(int fd_to_send_to, const eosvmoc_message& message, const std::vector<wrapped_fd>& fds = std::vector<wrapped_fd>());
+std::tuple<bool, upcxvmoc_message, std::vector<wrapped_fd>> read_message_with_fds(boost::asio::local::datagram_protocol::socket& s);
+std::tuple<bool, upcxvmoc_message, std::vector<wrapped_fd>> read_message_with_fds(int fd);
+bool write_message_with_fds(boost::asio::local::datagram_protocol::socket& s, const upcxvmoc_message& message, const std::vector<wrapped_fd>& fds = std::vector<wrapped_fd>());
+bool write_message_with_fds(int fd_to_send_to, const upcxvmoc_message& message, const std::vector<wrapped_fd>& fds = std::vector<wrapped_fd>());
 
 template<typename T>
 wrapped_fd memfd_for_bytearray(const T& bytes) {
-   int fd = syscall(SYS_memfd_create, "eosvmoc_code", MFD_CLOEXEC);
+   int fd = syscall(SYS_memfd_create, "upcxvmoc_code", MFD_CLOEXEC);
    FC_ASSERT(fd >= 0, "Failed to create memfd");
    FC_ASSERT(ftruncate(fd, bytes.size()) == 0, "failed to grow memfd");
    if(bytes.size()) {

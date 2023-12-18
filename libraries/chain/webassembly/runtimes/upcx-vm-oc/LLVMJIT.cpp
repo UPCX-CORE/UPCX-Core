@@ -100,7 +100,7 @@ static void disassembleFunction(U8* bytes,Uptr numBytes)
 }
 #endif
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 namespace LLVMJIT
 {

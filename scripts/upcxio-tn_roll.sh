@@ -39,7 +39,7 @@ fi
 
 prog=""
 RD=""
-for p in eosd upcxiod nodeos; do
+for p in upcxd upcxiod nodupcx; do
     prog=$p
     RD=bin
     if [ -f $RD/$prog ]; then
@@ -55,7 +55,7 @@ for p in eosd upcxiod nodeos; do
 done
 
 if [ \( -z "$prog" \) -o \( -z "$RD" \) ]; then
-    echo unable to locate binary for eosd or upcxiod or nodeos
+    echo unable to locate binary for upcxd or upcxiod or nodupcx
     exit 1
 fi
 

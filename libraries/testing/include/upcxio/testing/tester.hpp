@@ -409,15 +409,15 @@ namespace upcxio { namespace testing {
             cfg.reversible_cache_size = 1024*1024*8;
             cfg.reversible_guard_size = 0;
             cfg.contracts_console = true;
-            cfg.eosvmoc_config.cache_size = 1024*1024*8;
+            cfg.upcxvmoc_config.cache_size = 1024*1024*8;
 
             for(int i = 0; i < boost::unit_test::framework::master_test_suite().argc; ++i) {
                if(boost::unit_test::framework::master_test_suite().argv[i] == std::string("--upcx-vm"))
-                  cfg.wasm_runtime = chain::wasm_interface::vm_type::eos_vm;
+                  cfg.wasm_runtime = chain::wasm_interface::vm_type::upcx_vm;
                else if(boost::unit_test::framework::master_test_suite().argv[i] == std::string("--upcx-vm-jit"))
-                  cfg.wasm_runtime = chain::wasm_interface::vm_type::eos_vm_jit;
+                  cfg.wasm_runtime = chain::wasm_interface::vm_type::upcx_vm_jit;
                else if(boost::unit_test::framework::master_test_suite().argv[i] == std::string("--upcx-vm-oc"))
-                  cfg.wasm_runtime = chain::wasm_interface::vm_type::eos_vm_oc;
+                  cfg.wasm_runtime = chain::wasm_interface::vm_type::upcx_vm_oc;
             }
             auto gen = default_genesis();
             if (genesis_max_inline_action_size) {

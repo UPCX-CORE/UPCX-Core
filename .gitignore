@@ -47,17 +47,17 @@ libraries/wasm-jit/Source/Programs/Disassemble
 libraries/wasm-jit/Source/Programs/Test
 libraries/wasm-jit/Source/Programs/wavm
 
-programs/cleos/cleos
+programs/clupcx/clupcx
 programs/js_operation_serializer/js_operation_serializer
 programs/data-dir
-programs/eosio-abigen/eosio-abigen
-programs/cleos/config.hpp
-programs/eosio-applesedemo/eosio-applesedemo
-programs/eosio-launcher/config.hpp
-programs/eosio-launcher/eosio-launcher
-programs/keosd/keosd
-programs/nodeos/config.hpp
-programs/nodeos/nodeos
+programs/upcxio-abigen/upcxio-abigen
+programs/clupcx/config.hpp
+programs/upcxio-applesedemo/upcxio-applesedemo
+programs/upcxio-launcher/config.hpp
+programs/upcxio-launcher/upcxio-launcher
+programs/kupcxd/kupcxd
+programs/nodupcx/config.hpp
+programs/nodupcx/nodupcx
 
 scripts/tn_init.sh
 
@@ -65,7 +65,7 @@ tests/plugin_test
 unittests/unit_test
 
 doxygen
-eos.doxygen
+upcx.doxygen
 
 wallet.json
 witness_node_data_dir
@@ -80,7 +80,7 @@ build.tar.gz
 build/*
 build-debug/*
 
-etc/eosio/node_*
+etc/upcxio/node_*
 var/lib/node_*
 .vscode
 .idea/

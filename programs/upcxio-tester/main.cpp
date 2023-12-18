@@ -13,7 +13,7 @@
 
 #undef N
 
-#include <b1/rodeos/embedded_rodeos.hpp>
+#include <b1/rodupcx/embedded_rodupcx.hpp>
 #include <upcxio/fixed_bytes.hpp>
 #include <upcxio/chain_types.hpp>
 #include <upcxio/to_bin.hpp>
@@ -197,7 +197,7 @@ struct test_chain {
       cfg->blog.log_dir         = dir.path() / "blocks";
       cfg->state_dir            = dir.path() / "state";
       cfg->contracts_console    = true;
-      cfg->wasm_runtime         = upcxio::chain::wasm_interface::vm_type::eos_vm_jit;
+      cfg->wasm_runtime         = upcxio::chain::wasm_interface::vm_type::upcx_vm_jit;
 
       std::optional<std::ifstream>                           snapshot_file;
       std::shared_ptr<upcxio::chain::istream_snapshot_reader> snapshot_reader;
@@ -330,18 +330,18 @@ test_chain_ref& test_chain_ref::operator=(const test_chain_ref& src) {
    return *this;
 }
 
-struct test_rodeos {
+struct test_rodupcx {
    fc::temp_directory                                dir;
-   b1::embedded_rodeos::context                      context;
-   std::optional<b1::embedded_rodeos::partition>     partition;
-   std::optional<b1::embedded_rodeos::snapshot>      write_snapshot;
-   std::list<b1::embedded_rodeos::filter>            filters;
-   std::optional<b1::embedded_rodeos::query_handler> query_handler;
+   b1::embedded_rodupcx::context                      context;
+   std::optional<b1::embedded_rodupcx::partition>     partition;
+   std::optional<b1::embedded_rodupcx::snapshot>      write_snapshot;
+   std::list<b1::embedded_rodupcx::filter>            filters;
+   std::optional<b1::embedded_rodupcx::query_handler> query_handler;
    test_chain_ref                                    chain;
    uint32_t                                          next_block = 0;
    std::vector<std::vector<char>>                    pushed_data;
 
-   test_rodeos() {
+   test_rodupcx() {
       context.open_db(dir.path().string().c_str(), true);
       partition.emplace(context, "", 0);
       write_snapshot.emplace(partition->obj, true);
@@ -482,7 +482,7 @@ struct state {
    std::vector<char>                         args;
    std::vector<file>                         files;
    std::vector<std::unique_ptr<test_chain>>  chains;
-   std::vector<std::unique_ptr<test_rodeos>> rodeoses;
+   std::vector<std::unique_ptr<test_rodupcx>> rodupcxes;
    std::optional<uint32_t>                   selected_chain_index;
 };
 
@@ -638,7 +638,7 @@ struct callbacks {
       memcpy(alloc(cb_alloc_data, cb_alloc, data.size()), data.data(), data.size());
    }
 
-   void set_data(uint32_t cb_alloc_data, uint32_t cb_alloc, const b1::embedded_rodeos::result& data) {
+   void set_data(uint32_t cb_alloc_data, uint32_t cb_alloc, const b1::embedded_rodupcx::result& data) {
       memcpy(alloc(cb_alloc_data, cb_alloc, data.size), data.data, data.size);
    }
 
@@ -849,47 +849,47 @@ struct callbacks {
       return state.chains[*state.selected_chain_index]->get_apply_context();
    }
 
-   test_rodeos& assert_rodeos(uint32_t rodeos) {
-      if (rodeos >= state.rodeoses.size() || !state.rodeoses[rodeos])
-         throw std::runtime_error("rodeos does not exist or was destroyed");
-      return *state.rodeoses[rodeos];
+   test_rodupcx& assert_rodupcx(uint32_t rodupcx) {
+      if (rodupcx >= state.rodupcxes.size() || !state.rodupcxes[rodupcx])
+         throw std::runtime_error("rodupcx does not exist or was destroyed");
+      return *state.rodupcxes[rodupcx];
    }
 
-   uint32_t create_rodeos() {
-      state.rodeoses.push_back(std::make_unique<test_rodeos>());
-      return state.rodeoses.size() - 1;
+   uint32_t create_rodupcx() {
+      state.rodupcxes.push_back(std::make_unique<test_rodupcx>());
+      return state.rodupcxes.size() - 1;
    }
 
-   void destroy_rodeos(uint32_t rodeos) {
-      assert_rodeos(rodeos);
-      state.rodeoses[rodeos].reset();
-      while (!state.rodeoses.empty() && !state.rodeoses.back()) { state.rodeoses.pop_back(); }
+   void destroy_rodupcx(uint32_t rodupcx) {
+      assert_rodupcx(rodupcx);
+      state.rodupcxes[rodupcx].reset();
+      while (!state.rodupcxes.empty() && !state.rodupcxes.back()) { state.rodupcxes.pop_back(); }
    }
 
-   void rodeos_add_filter(uint32_t rodeos, uint64_t name, span<const char> wasm_filename) {
-      auto& r = assert_rodeos(rodeos);
+   void rodupcx_add_filter(uint32_t rodupcx, uint64_t name, span<const char> wasm_filename) {
+      auto& r = assert_rodupcx(rodupcx);
       r.filters.emplace_back(name, span_str(wasm_filename).c_str());
    }
 
-   void rodeos_enable_queries(uint32_t rodeos, uint32_t max_console_size, uint32_t wasm_cache_size,
+   void rodupcx_enable_queries(uint32_t rodupcx, uint32_t max_console_size, uint32_t wasm_cache_size,
                               uint64_t max_exec_time_ms, span<const char> contract_dir) {
-      auto& r = assert_rodeos(rodeos);
+      auto& r = assert_rodupcx(rodupcx);
       r.query_handler.emplace(*r.partition, max_console_size, wasm_cache_size, max_exec_time_ms,
                               span_str(contract_dir).c_str());
    }
 
-   void connect_rodeos(uint32_t rodeos, uint32_t chain) {
-      auto& r = assert_rodeos(rodeos);
+   void connect_rodupcx(uint32_t rodupcx, uint32_t chain) {
+      auto& r = assert_rodupcx(rodupcx);
       auto& c = assert_chain(chain);
       if (r.chain.chain)
-         throw std::runtime_error("rodeos is already connected");
+         throw std::runtime_error("rodupcx is already connected");
       r.chain = test_chain_ref{ c };
    }
 
-   bool rodeos_sync_block(uint32_t rodeos) {
-      auto& r = assert_rodeos(rodeos);
+   bool rodupcx_sync_block(uint32_t rodupcx) {
+      auto& r = assert_rodupcx(rodupcx);
       if (!r.chain.chain)
-         throw std::runtime_error("rodeos is not connected to a chain");
+         throw std::runtime_error("rodupcx is not connected to a chain");
       auto it = r.chain.chain->history.lower_bound(r.next_block);
       if (it == r.chain.chain->history.end())
          return false;
@@ -909,13 +909,13 @@ struct callbacks {
       return true;
    }
 
-   void rodeos_push_transaction(uint32_t rodeos, span<const char> packed_args, uint32_t cb_alloc_data,
+   void rodupcx_push_transaction(uint32_t rodupcx, span<const char> packed_args, uint32_t cb_alloc_data,
                                 uint32_t cb_alloc) {
-      auto& r = assert_rodeos(rodeos);
+      auto& r = assert_rodupcx(rodupcx);
       if (!r.chain.chain)
-         throw std::runtime_error("rodeos is not connected to a chain");
+         throw std::runtime_error("rodupcx is not connected to a chain");
       if (!r.query_handler)
-         throw std::runtime_error("call rodeos_enable_queries before rodeos_push_transaction");
+         throw std::runtime_error("call rodupcx_enable_queries before rodupcx_push_transaction");
       auto& chain = *r.chain.chain;
       chain.start_if_needed();
 
@@ -929,27 +929,27 @@ struct callbacks {
       auto                             start_time = std::chrono::steady_clock::now();
       auto result = r.query_handler->query_transaction(*r.write_snapshot, data.data(), data.size());
       auto us = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start_time);
-      ilog("rodeos transaction took ${u} us", ("u", us.count()));
+      ilog("rodupcx transaction took ${u} us", ("u", us.count()));
       auto tt = upcxio::convert_from_bin<upcxio::ship_protocol::transaction_trace>(
                                    { result.data, result.data + result.size });
       auto& tt0 = std::get<upcxio::ship_protocol::transaction_trace_v0>(tt);
       for (auto& at : tt0.action_traces) {
          auto& at1 = std::get<upcxio::ship_protocol::action_trace_v1>(at);
          if (!at1.console.empty())
-            ilog("rodeos query console: <<<\n${c}>>>", ("c", at1.console));
+            ilog("rodupcx query console: <<<\n${c}>>>", ("c", at1.console));
       }
       set_data(cb_alloc_data, cb_alloc, result);
    }
 
-   uint32_t rodeos_get_num_pushed_data(uint32_t rodeos) {
-      auto& r = assert_rodeos(rodeos);
+   uint32_t rodupcx_get_num_pushed_data(uint32_t rodupcx) {
+      auto& r = assert_rodupcx(rodupcx);
       return r.pushed_data.size(); 
    }
 
-   uint32_t rodeos_get_pushed_data(uint32_t rodeos, uint32_t index, span<char> dest) {
-      auto& r = assert_rodeos(rodeos);
+   uint32_t rodupcx_get_pushed_data(uint32_t rodupcx, uint32_t index, span<char> dest) {
+      auto& r = assert_rodupcx(rodupcx);
       if (index >= r.pushed_data.size())
-         throw std::runtime_error("rodeos_get_pushed_data: index is out of range");
+         throw std::runtime_error("rodupcx_get_pushed_data: index is out of range");
       memcpy(dest.data(), r.pushed_data[index].data(), std::min(dest.size(), r.pushed_data[index].size()));
       return r.pushed_data[index].size();
    }
@@ -1187,15 +1187,15 @@ void register_callbacks() {
    rhf_t::add<&callbacks::get_history>("env", "get_history");
    rhf_t::add<&callbacks::select_chain_for_db>("env", "select_chain_for_db");
 
-   rhf_t::add<&callbacks::create_rodeos>("env", "create_rodeos");
-   rhf_t::add<&callbacks::destroy_rodeos>("env", "destroy_rodeos");
-   rhf_t::add<&callbacks::rodeos_add_filter>("env", "rodeos_add_filter");
-   rhf_t::add<&callbacks::rodeos_enable_queries>("env", "rodeos_enable_queries");
-   rhf_t::add<&callbacks::connect_rodeos>("env", "connect_rodeos");
-   rhf_t::add<&callbacks::rodeos_sync_block>("env", "rodeos_sync_block");
-   rhf_t::add<&callbacks::rodeos_push_transaction>("env", "rodeos_push_transaction");
-   rhf_t::add<&callbacks::rodeos_get_num_pushed_data>("env", "rodeos_get_num_pushed_data");
-   rhf_t::add<&callbacks::rodeos_get_pushed_data>("env", "rodeos_get_pushed_data");
+   rhf_t::add<&callbacks::create_rodupcx>("env", "create_rodupcx");
+   rhf_t::add<&callbacks::destroy_rodupcx>("env", "destroy_rodupcx");
+   rhf_t::add<&callbacks::rodupcx_add_filter>("env", "rodupcx_add_filter");
+   rhf_t::add<&callbacks::rodupcx_enable_queries>("env", "rodupcx_enable_queries");
+   rhf_t::add<&callbacks::connect_rodupcx>("env", "connect_rodupcx");
+   rhf_t::add<&callbacks::rodupcx_sync_block>("env", "rodupcx_sync_block");
+   rhf_t::add<&callbacks::rodupcx_push_transaction>("env", "rodupcx_push_transaction");
+   rhf_t::add<&callbacks::rodupcx_get_num_pushed_data>("env", "rodupcx_get_num_pushed_data");
+   rhf_t::add<&callbacks::rodupcx_get_pushed_data>("env", "rodupcx_get_pushed_data");
 
    rhf_t::add<&callbacks::db_get_i64>("env", "db_get_i64");
    rhf_t::add<&callbacks::db_next_i64>("env", "db_next_i64");

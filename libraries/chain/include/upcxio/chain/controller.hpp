@@ -103,8 +103,8 @@ namespace upcxio { namespace chain {
             uint32_t                 terminate_at_block     = 0; //< primarily for testing purposes
 
             wasm_interface::vm_type  wasm_runtime = chain::config::default_wasm_runtime;
-            eosvmoc::config          eosvmoc_config;
-            bool                     eosvmoc_tierup         = false;
+            upcxvmoc::config          upcxvmoc_config;
+            bool                     upcxvmoc_tierup         = false;
 
             db_read_mode             read_mode              = db_read_mode::SPECULATIVE;
             validation_mode          block_validation_mode  = validation_mode::FULL;

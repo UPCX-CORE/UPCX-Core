@@ -1,4 +1,4 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiupcx/LICENSE.txt
 
 #pragma once
 
@@ -36,13 +36,13 @@
 #pragma clang diagnostic pop
 #endif
 
-#include "abieos_numeric.hpp"
+#include "abiupcx_numeric.hpp"
 
 #include "rapidjson/reader.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
-namespace abieos {
+namespace abiupcx {
 
 using upcxio::from_bin;
 using upcxio::to_bin;
@@ -288,17 +288,17 @@ struct bin_to_json_state {
 namespace upcxio {
 
 struct abi_serializer {
-  virtual void json_to_bin(::abieos::jvalue_to_bin_state& state, bool allow_extensions, const abi_type* type,
+  virtual void json_to_bin(::abiupcx::jvalue_to_bin_state& state, bool allow_extensions, const abi_type* type,
                                           bool start) const = 0;
-  virtual void json_to_bin(::abieos::json_to_bin_state& state, bool allow_extensions, const abi_type* type,
+  virtual void json_to_bin(::abiupcx::json_to_bin_state& state, bool allow_extensions, const abi_type* type,
                                           bool start) const = 0;
-  virtual void bin_to_json(::abieos::bin_to_json_state& state, bool allow_extensions, const abi_type* type,
+  virtual void bin_to_json(::abiupcx::bin_to_json_state& state, bool allow_extensions, const abi_type* type,
                                           bool start) const = 0;
 };
 
 }
 
-namespace abieos {
+namespace abiupcx {
 
 ///////////////////////////////////////////////////////////////////////////////
 // serializer function prototypes
@@ -1008,4 +1008,4 @@ auto bin_to_json(T* t, bin_to_json_state& state, bool, const abi_type*, bool sta
     return to_json(v, state.writer);
 }
 
-} // namespace abieos
+} // namespace abiupcx

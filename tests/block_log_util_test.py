@@ -14,7 +14,7 @@ from TestHelper import TestHelper
 
 ###############################################################
 # block_log_util_test
-#  Test verifies that the blockLogUtil is still compatible with nodeos
+#  Test verifies that the blockLogUtil is still compatible with nodupcx
 ###############################################################
 
 Print=Utils.Print
@@ -47,11 +47,11 @@ totalNodes=pnodes+1
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killupcxInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
-ClientName="cleos"
+WalletdName=Utils.upcxWalletName
+ClientName="clupcx"
 
 try:
     TestHelper.printSystemInfo("BEGIN")
@@ -225,6 +225,6 @@ try:
     testSuccessful=True
 
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killupcxInstances=killupcxInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

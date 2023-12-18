@@ -17,9 +17,9 @@ namespace upcxio { namespace vm {
 #endif
 
 #ifdef UPCX_VM_FULL_DEBUG
-   inline constexpr bool eos_vm_debug = true;
+   inline constexpr bool upcx_vm_debug = true;
 #else
-   inline constexpr bool eos_vm_debug = false;
+   inline constexpr bool upcx_vm_debug = false;
 #endif
 
 }} // namespace upcxio::vm

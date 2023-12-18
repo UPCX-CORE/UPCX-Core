@@ -39,9 +39,9 @@ killAll=args.clean_run
 keepLogs=args.keep_logs
 
 killWallet=not dontKill
-killEosInstances=not dontKill
+killupcxInstances=not dontKill
 if nodesFile is not None:
-    killEosInstances=False
+    killupcxInstances=False
 
 Utils.Debug=debug
 testSuccessful=False
@@ -65,7 +65,7 @@ try:
         walletMgr.cleanup()
         print("Stand up walletd")
         if walletMgr.launch() is False:
-            errorExit("Failed to stand up keosd.")
+            errorExit("Failed to stand up kupcxd.")
     else:
         cluster.killall(allInstances=killAll)
         cluster.cleanup()
@@ -119,6 +119,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killupcxInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exit(0)

@@ -380,7 +380,7 @@ d.ParseStream(is);
 
 但要注意，由于标准库的内部开销问，此实现的性能可能不如 RapidJSON 的内存／文件流。
 
-## 例子：ostream 的包装类 {#ExampleOStreamWrapper}
+## 例子：ostream 的包装类 {#ExamplupcxtreamWrapper}
 
 以下的例子是 `std::istream` 的包装类，它只需实现 2 个函数。
 

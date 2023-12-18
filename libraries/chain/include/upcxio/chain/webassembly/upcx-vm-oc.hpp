@@ -16,30 +16,30 @@
 
 #include <boost/hana/string.hpp>
 
-namespace upcxio { namespace chain { namespace webassembly { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace webassembly { namespace upcxvmoc {
 
 using namespace IR;
 using namespace Runtime;
 using namespace fc;
 
-using namespace upcxio::chain::eosvmoc;
+using namespace upcxio::chain::upcxvmoc;
 
-class eosvmoc_instantiated_module;
+class upcxvmoc_instantiated_module;
 
-class eosvmoc_runtime : public upcxio::chain::wasm_runtime_interface {
+class upcxvmoc_runtime : public upcxio::chain::wasm_runtime_interface {
    public:
-      eosvmoc_runtime(const boost::filesystem::path data_dir, const eosvmoc::config& eosvmoc_config, const chainbase::database& db);
-      ~eosvmoc_runtime();
+      upcxvmoc_runtime(const boost::filesystem::path data_dir, const upcxvmoc::config& upcxvmoc_config, const chainbase::database& db);
+      ~upcxvmoc_runtime();
       bool inject_module(IR::Module&) override { return false; }
       std::unique_ptr<wasm_instantiated_module_interface> instantiate_module(const char* code_bytes, size_t code_size, std::vector<uint8_t> initial_memory,
                                                                              const digest_type& code_hash, const uint8_t& vm_type, const uint8_t& vm_version) override;
 
       void immediately_exit_currently_running_module() override;
 
-      friend eosvmoc_instantiated_module;
-      eosvmoc::code_cache_sync cc;
-      eosvmoc::executor exec;
-      eosvmoc::memory mem;
+      friend upcxvmoc_instantiated_module;
+      upcxvmoc::code_cache_sync cc;
+      upcxvmoc::executor exec;
+      upcxvmoc::memory mem;
 };
 
 /**
@@ -183,13 +183,13 @@ struct wasm_function_type_provider<Ret(Args...)> {
    }
 };
 
-struct eos_vm_oc_execution_interface {
+struct upcx_vm_oc_execution_interface {
    inline const auto& operand_from_back(std::size_t index) const { return *(os - index - 1); }
    upcxio::vm::native_value* os;
 };
 
-struct eos_vm_oc_type_converter : public upcxio::vm::type_converter<webassembly::interface, eos_vm_oc_execution_interface> {
-   using base_type = upcxio::vm::type_converter<webassembly::interface, eos_vm_oc_execution_interface>;
+struct upcx_vm_oc_type_converter : public upcxio::vm::type_converter<webassembly::interface, upcx_vm_oc_execution_interface> {
+   using base_type = upcxio::vm::type_converter<webassembly::interface, upcx_vm_oc_execution_interface>;
    using base_type::type_converter;
    using base_type::to_wasm;
    using base_type::as_result;
@@ -303,17 +303,17 @@ auto get_ct_args_i() {
 
 template<typename Args, std::size_t... Is>
 auto get_ct_args(std::index_sequence<Is...>) {
-   return std::tuple_cat(get_ct_args_i<eos_vm_oc_type_converter, std::tuple_element_t<Is, Args>>()...);
+   return std::tuple_cat(get_ct_args_i<upcx_vm_oc_type_converter, std::tuple_element_t<Is, Args>>()...);
 }
 
 struct result_resolver {
    // Suppress "expression result unused" warnings
-   result_resolver(eos_vm_oc_type_converter& tc) : tc(tc) {}
+   result_resolver(upcx_vm_oc_type_converter& tc) : tc(tc) {}
    template<typename T>
    auto operator,(T&& res) {
       return make_native_type(vm::detail::resolve_result(tc, static_cast<T&&>(res)));
    }
-   eos_vm_oc_type_converter& tc;
+   upcx_vm_oc_type_converter& tc;
 };
 
 template<auto F, typename Interface, typename Preconditions, bool is_injected, typename... A>
@@ -321,7 +321,7 @@ auto fn(A... a) {
    try {
       if constexpr(!is_injected) {
          constexpr int cb_current_call_depth_remaining_segment_offset = OFFSET_OF_CONTROL_BLOCK_MEMBER(current_call_depth_remaining);
-         constexpr int depth_assertion_intrinsic_offset = OFFSET_OF_FIRST_INTRINSIC - (int) find_intrinsic_index("eosvmoc_internal.depth_assert") * 8;
+         constexpr int depth_assertion_intrinsic_offset = OFFSET_OF_FIRST_INTRINSIC - (int) find_intrinsic_index("upcxvmoc_internal.depth_assert") * 8;
 
          asm volatile("cmpl   $1,%%gs:%c[callDepthRemainOffset]\n"
                       "jne    1f\n"
@@ -341,13 +341,13 @@ auto fn(A... a) {
           : [applyContextOffset] "i" (cb_ctx_ptr_offset)
           );
       Interface host(*ctx);
-      eos_vm_oc_type_converter tc{&host, eos_vm_oc_execution_interface{stack + sizeof...(A)}};
+      upcx_vm_oc_type_converter tc{&host, upcx_vm_oc_execution_interface{stack + sizeof...(A)}};
       return result_resolver{tc}, upcxio::vm::invoke_with_host<F, Preconditions, native_args>(tc, &host, std::make_index_sequence<sizeof...(A)>());
    }
    catch(...) {
-      *reinterpret_cast<std::exception_ptr*>(eos_vm_oc_get_exception_ptr()) = std::current_exception();
+      *reinterpret_cast<std::exception_ptr*>(upcx_vm_oc_get_exception_ptr()) = std::current_exception();
    }
-   siglongjmp(*eos_vm_oc_get_jmp_buf(), UPCXVMOC_EXIT_EXCEPTION);
+   siglongjmp(*upcx_vm_oc_get_jmp_buf(), UPCXVMOC_EXIT_EXCEPTION);
    __builtin_unreachable();
 }
 
@@ -364,7 +364,7 @@ constexpr auto create_function() {
 }
 
 template<auto F, bool injected, typename Preconditions, typename Name>
-void register_eosvm_oc(Name n) {
+void register_upcxvm_oc(Name n) {
    // Has special handling
    if(n == BOOST_HANA_STRING("env.upcxio_exit")) return;
    constexpr auto fn = create_function<F, Preconditions, injected>();
@@ -377,4 +377,4 @@ void register_eosvm_oc(Name n) {
    );
 }
 
-} } } }// upcxio::chain::webassembly::eosvmoc
+} } } }// upcxio::chain::webassembly::upcxvmoc

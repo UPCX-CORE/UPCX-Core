@@ -6,8 +6,8 @@
 
 connected="0"
 
-rundir=programs/nodeos
-prog=nodeos
+rundir=programs/nodupcx
+prog=nodupcx
 
 # Quote any args that are "*", so they are not expanded
 qargs=`echo "$*" | sed -e 's/ \* / "*" /' -e 's/ \*$/ "*"/'`
@@ -18,7 +18,7 @@ if [ "$PWD" != "$UPCXIO_HOME" ]; then
 fi
 
 if [ ! -e $rundir/$prog ]; then
-    echo unable to locate binary for nodeos
+    echo unable to locate binary for nodupcx
     exit -1
 fi
 

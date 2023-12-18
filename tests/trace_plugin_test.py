@@ -17,7 +17,7 @@ class TraceApiPluginTest(unittest.TestCase):
     accounts = []
     cluster.setWalletMgr(walletMgr)
 
-    # kill nodeos and keosd and clean up dir
+    # kill nodupcx and kupcxd and clean up dir
     def cleanEnv(self, shouldCleanup: bool) :
         self.cluster.killall(allInstances=True)
         if shouldCleanup:
@@ -26,11 +26,11 @@ class TraceApiPluginTest(unittest.TestCase):
         if shouldCleanup:
             self.walletMgr.cleanup()
 
-    # start keosd and nodeos
+    # start kupcxd and nodupcx
     def startEnv(self) :
         account_names = ["alice", "bob", "charlie"]
-        traceNodeosArgs = " --plugin upcxio::trace_api_plugin --trace-no-abis --trace-dir=."
-        self.cluster.launch(totalNodes=1, extraNodeosArgs=traceNodeosArgs)
+        traceNodupcxArgs = " --plugin upcxio::trace_api_plugin --trace-no-abis --trace-dir=."
+        self.cluster.launch(totalNodes=1, extraNodupcxArgs=traceNodupcxArgs)
         self.walletMgr.launch()
         testWalletName="testwallet"
         testWallet=self.walletMgr.create(testWalletName, [self.cluster.upcxioAccount, self.cluster.defproduceraAccount])
@@ -57,7 +57,7 @@ class TraceApiPluginTest(unittest.TestCase):
         expectedAmount = Node.currencyIntToStr(5000000, CORE_SYMBOL)
         account_balances = []
         for account in self.accounts:
-            amount = node.getAccountEosBalanceStr(account.name)
+            amount = node.getAccountupcxBalanceStr(account.name)
             self.assertEqual(amount, expectedAmount)
             account_balances.append(amount)
 
@@ -66,8 +66,8 @@ class TraceApiPluginTest(unittest.TestCase):
         transId = Node.getTransId(trans)
         blockNum = Node.getTransBlockNum(trans)
 
-        self.assertEqual(node.getAccountEosBalanceStr(self.accounts[0].name), Utils.deduceAmount(expectedAmount, xferAmount))
-        self.assertEqual(node.getAccountEosBalanceStr(self.accounts[1].name), Utils.addAmount(expectedAmount, xferAmount))
+        self.assertEqual(node.getAccountupcxBalanceStr(self.accounts[0].name), Utils.deduceAmount(expectedAmount, xferAmount))
+        self.assertEqual(node.getAccountupcxBalanceStr(self.accounts[1].name), Utils.addAmount(expectedAmount, xferAmount))
         time.sleep(self.sleep_s)
 
         # verify trans via node api before calling trace_api RPC

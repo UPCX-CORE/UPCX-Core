@@ -7,5 +7,5 @@ docs-build/
 
 #cypress artifacts
 cypress/screenshots/
-cypress/videos/
+cypress/vidupcx/
 reports/

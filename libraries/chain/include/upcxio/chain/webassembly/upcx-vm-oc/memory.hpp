@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 class memory {
       static constexpr uint64_t intrinsic_count                   = intrinsic_table_size();
@@ -63,5 +63,5 @@ class memory {
 
 }}}
 
-#define OFFSET_OF_CONTROL_BLOCK_MEMBER(M) (-(int)upcxio::chain::eosvmoc::memory::cb_offset + (int)offsetof(upcxio::chain::eosvmoc::control_block, M))
-#define OFFSET_OF_FIRST_INTRINSIC ((int)-upcxio::chain::eosvmoc::memory::first_intrinsic_offset)
+#define OFFSET_OF_CONTROL_BLOCK_MEMBER(M) (-(int)upcxio::chain::upcxvmoc::memory::cb_offset + (int)offsetof(upcxio::chain::upcxvmoc::control_block, M))
+#define OFFSET_OF_FIRST_INTRINSIC ((int)-upcxio::chain::upcxvmoc::memory::first_intrinsic_offset)

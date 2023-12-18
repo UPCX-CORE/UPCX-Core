@@ -84,7 +84,7 @@ After installing the prebuilt packages, the actual UPCXIO binaries will be locat
 
 where `version-string` is the UPCXIO version that was installed.
 
-Also, soft links for each UPCXIO program (`nodeos`, `cleos`, `keosd`, etc.) will be created under `usr/bin` or `usr/local/bin` to allow them to be executed from any directory.
+Also, soft links for each UPCXIO program (`nodupcx`, `clupcx`, `kupcxd`, etc.) will be created under `usr/bin` or `usr/local/bin` to allow them to be executed from any directory.
 
 ## Previous Versions
 

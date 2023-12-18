@@ -1,25 +1,25 @@
-## abieos
+## abiupcx
 
-Binary <> JSON conversion using ABIs. Compatible with languages which can interface to C; see [src/abieos.h](src/abieos.h).
+Binary <> JSON conversion using ABIs. Compatible with languages which can interface to C; see [src/abiupcx.h](src/abiupcx.h).
 
 Alpha release. Feedback requested.
 
 ## Packing transactions
 
-1. Create a context: `abieos_create`
-1. Use `abieos_set_abi` to load [eosjs2/src/transaction.abi](https://github.com/UPCXIO/eosjs2/blob/master/src/transaction.abi) into contract 0.
-1. Use `abieos_set_abi` to load the contract's ABI.
-1. Use `abieos_json_to_bin` and `abieos_get_bin_hex` to convert action data to hex. Use `abieos_get_type_for_action` to get the action's type.
-1. Use `abieos_json_to_bin` and `abieos_get_bin_hex` to convert transaction to hex. Use `contract = 0` and `type = abieos_string_to_name(context, "transaction")`.
-1. Destroy the context: `abieos_destroy`
+1. Create a context: `abiupcx_create`
+1. Use `abiupcx_set_abi` to load [upcxjs2/src/transaction.abi](https://github.com/UPCXIO/upcxjs2/blob/master/src/transaction.abi) into contract 0.
+1. Use `abiupcx_set_abi` to load the contract's ABI.
+1. Use `abiupcx_json_to_bin` and `abiupcx_get_bin_hex` to convert action data to hex. Use `abiupcx_get_type_for_action` to get the action's type.
+1. Use `abiupcx_json_to_bin` and `abiupcx_get_bin_hex` to convert transaction to hex. Use `contract = 0` and `type = abiupcx_string_to_name(context, "transaction")`.
+1. Destroy the context: `abiupcx_destroy`
 
 ## Usage note
 
-abieos expects object attributes to be in order. It will complain about missing attributes if they are out of order.
+abiupcx expects object attributes to be in order. It will complain about missing attributes if they are out of order.
 
 ## Example data
 
-Example action data for `abieos_json_to_bin`:
+Example action data for `abiupcx_json_to_bin`:
 
 ```
 {
@@ -30,7 +30,7 @@ Example action data for `abieos_json_to_bin`:
 }
 ```
 
-Example transaction data for `abieos_json_to_bin`:
+Example transaction data for `abiupcx_json_to_bin`:
 
 ```
 {

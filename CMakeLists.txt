@@ -30,10 +30,10 @@ else()
     set(VERSION_FULL "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 endif()
 
-set( CLI_CLIENT_EXECUTABLE_NAME cleos )
-set( NODE_EXECUTABLE_NAME nodeos )
-set( KEY_STORE_EXECUTABLE_NAME keosd )
-set( RODUPCX_EXECUTABLE_NAME rodeos )
+set( CLI_CLIENT_EXECUTABLE_NAME clupcx )
+set( NODE_EXECUTABLE_NAME nodupcx )
+set( KEY_STORE_EXECUTABLE_NAME kupcxd )
+set( RODUPCX_EXECUTABLE_NAME rodupcx )
 set( TESTER_EXECUTABLE_NAME upcxio-tester )
 
 # http://stackoverflow.com/a/18369825
@@ -57,7 +57,7 @@ if ("${CMAKE_GENERATOR}" STREQUAL "Ninja")
 endif()
 
 set(BUILD_DOXYGEN FALSE CACHE BOOL "Build doxygen documentation on every make")
-set(ENABLE_MULTIVERSION_PROTOCOL_TEST FALSE CACHE BOOL "Enable nodeos multiversion protocol test")
+set(ENABLE_MULTIVERSION_PROTOCOL_TEST FALSE CACHE BOOL "Enable nodupcx multiversion protocol test")
 
 # add defaults for openssl
 if(APPLE AND UNIX AND "${OPENSSL_ROOT_DIR}" STREQUAL "")

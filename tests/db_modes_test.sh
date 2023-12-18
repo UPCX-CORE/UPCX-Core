@@ -30,11 +30,11 @@ done
 
 UPCXIO_STUFF_DIR=$(mktemp -d)
 trap "rm -rf $UPCXIO_STUFF_DIR" EXIT
-NODUPCX_LAUNCH_PARAMS="./programs/nodeos/nodeos -d $UPCXIO_STUFF_DIR --config-dir $UPCXIO_STUFF_DIR \
+NODUPCX_LAUNCH_PARAMS="./programs/nodupcx/nodupcx -d $UPCXIO_STUFF_DIR --config-dir $UPCXIO_STUFF_DIR \
 --chain-state-db-size-mb 8 --chain-state-db-guard-size-mb 0 --reversible-blocks-db-size-mb 1 \
 --reversible-blocks-db-guard-size-mb 0 -e -pupcxio"
 
-run_nodeos() {
+run_nodupcx() {
    if (( $VERBOSE == 0 )); then
       $NODUPCX_LAUNCH_PARAMS --http-server-address '' --p2p-listen-endpoint '' "$@" 2>/dev/null &
    else
@@ -43,7 +43,7 @@ run_nodeos() {
 }
 
 run_expect_success() {
-   run_nodeos "$@"
+   run_nodupcx "$@"
    local NODUPCX_PID=$!
    sleep 10
    kill $NODUPCX_PID
@@ -51,7 +51,7 @@ run_expect_success() {
 }
 
 run_and_kill() {
-   run_nodeos "$@"
+   run_nodupcx "$@"
    local NODUPCX_PID=$!
    sleep 10
    kill -KILL $NODUPCX_PID
@@ -59,7 +59,7 @@ run_and_kill() {
 }
 
 run_expect_failure() {
-   run_nodeos "$@"
+   run_nodupcx "$@"
    local NODUPCX_PID=$!
    MYPID=$$
    (sleep 20; kill -ALRM $MYPID) & local TIMER_PID=$!

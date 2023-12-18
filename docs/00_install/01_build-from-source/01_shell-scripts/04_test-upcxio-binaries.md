@@ -12,4 +12,4 @@ make test
 ```
 
 [[info | What's Next?]]
-| Configure and use [Nodeos](../../../01_nodeos/index.md).
+| Configure and use [Nodupcx](../../../01_nodupcx/index.md).

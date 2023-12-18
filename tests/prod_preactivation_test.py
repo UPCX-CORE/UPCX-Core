@@ -45,12 +45,12 @@ localTest=True
 cluster=Cluster(host=server, port=port, walletd=True, defproduceraPrvtKey=defproduceraPrvtKey, defproducerbPrvtKey=defproducerbPrvtKey)
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killupcxInstances=not dontKill
 killWallet=not dontKill
 dontBootstrap=sanityTest
 
-WalletdName=Utils.EosWalletName
-ClientName="cleos"
+WalletdName=Utils.upcxWalletName
+ClientName="clupcx"
 
 try:
     TestHelper.printSystemInfo("BEGIN prod_preactivation_test.py")
@@ -64,7 +64,7 @@ try:
         Print("Stand up cluster")
         if cluster.launch(pnodes=prodCount, totalNodes=prodCount, prodCount=1, onlyBios=onlyBios,
                          dontBootstrap=dontBootstrap, useBiosBootFile=False,
-                         pfSetupPolicy=PFSetupPolicy.NONE, extraNodeosArgs=" --plugin upcxio::producer_api_plugin  --http-max-response-time-ms 990000 ") is False:
+                         pfSetupPolicy=PFSetupPolicy.NONE, extraNodupcxArgs=" --plugin upcxio::producer_api_plugin  --http-max-response-time-ms 990000 ") is False:
             cmdError("launcher")
             errorExit("Failed to stand up upcx cluster.")
 
@@ -171,6 +171,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killupcxInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exit(0)

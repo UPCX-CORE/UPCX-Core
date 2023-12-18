@@ -8,7 +8,7 @@
 #include <boost/filesystem/path.hpp>
 #include <fc/reflect/reflect.hpp>
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 struct config {
    uint64_t cache_size = 1024u*1024u*1024u;

@@ -380,7 +380,7 @@ d.ParseStream(is);
 
 Note that, this implementation may not be as efficient as RapidJSON's memory or file streams, due to internal overheads of the standard library.
 
-## Example: ostream wrapper {#ExampleOStreamWrapper}
+## Example: ostream wrapper {#ExamplupcxtreamWrapper}
 
 The following example is a simple wrapper of `std::istream`, which only implements 2 functions.
 

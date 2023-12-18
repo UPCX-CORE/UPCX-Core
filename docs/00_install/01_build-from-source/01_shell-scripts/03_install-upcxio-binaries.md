@@ -21,4 +21,4 @@ make install
 ```
 
 [[info | What's Next?]]
-| Configure and use [Nodeos](../../../01_nodeos/index.md), or optionally [Test the UPCXIO binaries](04_test-upcxio-binaries.md).
+| Configure and use [Nodupcx](../../../01_nodupcx/index.md), or optionally [Test the UPCXIO binaries](04_test-upcxio-binaries.md).

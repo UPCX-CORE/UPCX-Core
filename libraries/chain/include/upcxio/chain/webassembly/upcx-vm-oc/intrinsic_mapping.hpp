@@ -4,7 +4,7 @@
 #include <limits>
 #include <string_view>
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 //NEVER reorder or remove indexes; the PIC uses the indexes in this table as an offset in to a jump
 // table. Adding on the bottom is fine and requires no other updates elsewhere
 namespace detail {
@@ -12,16 +12,16 @@ namespace detail {
    inline constexpr auto generate_table( Args&&... args ) {
       return std::array<std::string_view, sizeof...(Args)> { args... };
    }
-} // ns upcxio::chain::eosvmoc::detail
+} // ns upcxio::chain::upcxvmoc::detail
 
 inline constexpr auto get_intrinsic_table() {
    return detail::generate_table(
-      "eosvmoc_internal.unreachable",
-      "eosvmoc_internal.grow_memory",
-      "eosvmoc_internal.div0_or_overflow",
-      "eosvmoc_internal.indirect_call_mismatch",
-      "eosvmoc_internal.indirect_call_oob",
-      "eosvmoc_internal.depth_assert",
+      "upcxvmoc_internal.unreachable",
+      "upcxvmoc_internal.grow_memory",
+      "upcxvmoc_internal.div0_or_overflow",
+      "upcxvmoc_internal.indirect_call_mismatch",
+      "upcxvmoc_internal.indirect_call_oob",
+      "upcxvmoc_internal.depth_assert",
       "upcxio_injection.call_depth_assert",  //these two are never used by UPCX VM OC but all intrinsics
       "upcxio_injection.checktime",          //must be mapped
       "env.__ashlti3",

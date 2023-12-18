@@ -1,5 +1,5 @@
 #include <upcxio/to_key.hpp>
-#include "abieos.hpp"
+#include "abiupcx.hpp"
 
 int error_count;
 
@@ -12,25 +12,25 @@ void report_error(const char* assertion, const char* file, int line) {
 
 #define CHECK(...) do { if(__VA_ARGS__) {} else { report_error(#__VA_ARGS__, __FILE__, __LINE__); } } while(0)
 
-using abieos::int128;
-using abieos::uint128;
-using abieos::varint32;
-using abieos::varuint32;
-using abieos::float128;
-using abieos::time_point;
-using abieos::time_point_sec;
-using abieos::block_timestamp;
+using abiupcx::int128;
+using abiupcx::uint128;
+using abiupcx::varint32;
+using abiupcx::varuint32;
+using abiupcx::float128;
+using abiupcx::time_point;
+using abiupcx::time_point_sec;
+using abiupcx::block_timestamp;
 using upcxio::name;
-using abieos::bytes;
-using abieos::checksum160;
-using abieos::checksum256;
-using abieos::checksum512;
-using abieos::public_key;
-using abieos::private_key;
-using abieos::signature;
-using abieos::symbol;
-using abieos::symbol_code;
-using abieos::asset;
+using abiupcx::bytes;
+using abiupcx::checksum160;
+using abiupcx::checksum256;
+using abiupcx::checksum512;
+using abiupcx::public_key;
+using abiupcx::private_key;
+using abiupcx::signature;
+using abiupcx::symbol;
+using abiupcx::symbol_code;
+using abiupcx::asset;
 
 using vec_type = std::vector<int>;
 struct struct_type {

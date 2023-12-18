@@ -117,7 +117,7 @@ try {
    BOOST_TEST( name{"e"}.to_string() == "e" );
    BOOST_TEST( name{"eo"}.to_string() == "eo" );
    BOOST_TEST( name{"upcx"}.to_string() == "upcx" );
-   BOOST_TEST( name{"eosi"}.to_string() == "eosi" );
+   BOOST_TEST( name{"upcxi"}.to_string() == "upcxi" );
    BOOST_TEST( name{"upcxio"}.to_string() == "upcxio" );
    BOOST_TEST( name{"upcxioa"}.to_string() == "upcxioa" );
    BOOST_TEST( name{"upcxioac"}.to_string() == "upcxioac" );

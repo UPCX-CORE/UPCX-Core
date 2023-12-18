@@ -26,7 +26,7 @@ stderrFile=dataDir + "/stderr.txt"
 
 testNum=0
 
-# We need debug level to get more information about nodeos process
+# We need debug level to get more information about nodupcx process
 logging="""{
   "includes": [],
   "appenders": [{
@@ -75,12 +75,12 @@ def prepareDirectories():
     with open(loggingFile, "w") as textFile:
         print(logging,file=textFile)
 
-def runNodeos(extraNodeosArgs, myTimeout):
-    """Startup nodeos, wait for timeout (before forced shutdown) and collect output."""
-    if debug: Print("Launching nodeos process.")
-    cmd="programs/nodeos/nodeos --config-dir rsmStaging/etc -e -p upcxio --plugin upcxio::chain_api_plugin --plugin upcxio::history_api_plugin --data-dir " + dataDir + " "
+def runNodupcx(extraNodupcxArgs, myTimeout):
+    """Startup nodupcx, wait for timeout (before forced shutdown) and collect output."""
+    if debug: Print("Launching nodupcx process.")
+    cmd="programs/nodupcx/nodupcx --config-dir rsmStaging/etc -e -p upcxio --plugin upcxio::chain_api_plugin --plugin upcxio::history_api_plugin --data-dir " + dataDir + " "
 
-    cmd=cmd + extraNodeosArgs;
+    cmd=cmd + extraNodupcxArgs;
     if debug: Print("cmd: %s" % (cmd))
     with open(stderrFile, 'w') as serr:
         proc=subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=serr)
@@ -100,15 +100,15 @@ def isMsgInStderrFile(msg):
                 break
     return msgFound
 
-def testCommon(title, extraNodeosArgs, expectedMsgs):
+def testCommon(title, extraNodupcxArgs, expectedMsgs):
     global testNum
     testNum+=1
     Print("Test %d: %s" % (testNum, title))
 
     prepareDirectories()
 
-    timeout=120  # Leave sufficient time such nodeos can start up fully in any platforms
-    runNodeos(extraNodeosArgs, timeout)
+    timeout=120  # Leave sufficient time such nodupcx can start up fully in any platforms
+    runNodupcx(extraNodupcxArgs, timeout)
 
     for msg in expectedMsgs:
         if not isMsgInStderrFile(msg):
@@ -148,9 +148,9 @@ def fillFS(dir, threshold):
         filesize = (available - warningAvailable) * 1.1 // (1024 * 1024) # add 0.1 redundancy to ensure warning be triggered
         os.system('dd if=/dev/zero of=' + fillerFile + ' count=' + str(filesize) + ' bs=1M')
 
-testIntervalMaxTimeout = 300 # Assume nodeos at most runs 300 sec for this test
+testIntervalMaxTimeout = 300 # Assume nodupcx at most runs 300 sec for this test
 
-def testInterval(title, extraNodeosArgs, interval, expectedMsgs, warningThreshold):
+def testInterval(title, extraNodupcxArgs, interval, expectedMsgs, warningThreshold):
     global testNum
     testNum += 1
     Print("Test %d: %s" % (testNum, title))
@@ -158,10 +158,10 @@ def testInterval(title, extraNodeosArgs, interval, expectedMsgs, warningThreshol
     prepareDirectories()
     fillFS(dataDir, warningThreshold)
 
-    timeout = 120 + interval * 2 # Leave sufficient time so nodeos can start up fully in any platforms, and at least two warnings can be output
+    timeout = 120 + interval * 2 # Leave sufficient time so nodupcx can start up fully in any platforms, and at least two warnings can be output
     if timeout > testIntervalMaxTimeout: 
         errorExit ("Max timeout for testInterval is %d sec" % (testIntervalMaxTimeout))
-    runNodeos(extraNodeosArgs, timeout)
+    runNodupcx(extraNodupcxArgs, timeout)
 
     for msg in expectedMsgs:
         hasMsg, validInterval = isMsgIntervalValid(msg, interval)
@@ -204,7 +204,7 @@ total_nodes = pnodes
 killCount=1
 killSignal=Utils.SigKillTag
 
-killEosInstances= not args.leave_running
+killupcxInstances= not args.leave_running
 dumpErrorDetails=args.dump_error_details
 keepLogs=args.keep_logs
 killAll=args.clean_run
@@ -233,7 +233,7 @@ try:
 finally:
     if debug: Print("Cleanup in finally block.")
     cleanDirectories()
-    TestHelper.shutdown(cluster, None, testSuccessful, killEosInstances, False, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, None, testSuccessful, killupcxInstances, False, keepLogs, killAll, dumpErrorDetails)
 
 if debug: Print("Exiting test, exit value 0.")
 exit(0)

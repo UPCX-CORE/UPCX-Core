@@ -150,13 +150,13 @@ To uninstall the UPCXIO built/installed binaries and dependencies, run:
 
 ## Documentation
 
-1. [Nodeos](https://developers.upcx.io/manuals/upcx/latest/nodeos)
-   - [Usage](https://developers.upcx.io/manuals/upcx/latest/nodeos/usage)
-   - [Replays](https://developers.upcx.io/manuals/upcx/latest/nodeos/replays)
-   - [Chain API Reference](https://developers.upcx.io/manuals/upcx/latest/nodeos/plugins/chain_api_plugin/api-reference)
-   - [Troubleshooting](https://developers.upcx.io/manuals/upcx/latest/nodeos/troubleshooting)
-1. [Cleos](https://developers.upcx.io/manuals/upcx/latest/cleos)
-1. [Keosd](https://developers.upcx.io/manuals/upcx/latest/keosd)
+1. [Nodupcx](https://developers.upcx.io/manuals/upcx/latest/nodupcx)
+   - [Usage](https://developers.upcx.io/manuals/upcx/latest/nodupcx/usage)
+   - [Replays](https://developers.upcx.io/manuals/upcx/latest/nodupcx/replays)
+   - [Chain API Reference](https://developers.upcx.io/manuals/upcx/latest/nodupcx/plugins/chain_api_plugin/api-reference)
+   - [Troubleshooting](https://developers.upcx.io/manuals/upcx/latest/nodupcx/troubleshooting)
+1. [Clupcx](https://developers.upcx.io/manuals/upcx/latest/clupcx)
+1. [Kupcxd](https://developers.upcx.io/manuals/upcx/latest/kupcxd)
 
 ## Resources
 

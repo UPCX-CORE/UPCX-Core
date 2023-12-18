@@ -20,7 +20,7 @@ class blockvault_client_plugin_impl;
 /// blockvault_client_plugin is a proposed clustered component in an UPCXIO
 /// network architecture which provides a replicated durable storage with strong
 /// consistency guarantees for all the input required by a redundant cluster of
-/// nodeos nodes to achieve the guarantees:
+/// nodupcx nodes to achieve the guarantees:
 ///
 /// Guarantee against double-production of blocks
 /// Guarantee against finality violation

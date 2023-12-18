@@ -17,14 +17,14 @@
 #include <thread>
 
 namespace std {
-    template<> struct hash<upcxio::chain::eosvmoc::code_tuple> {
-        size_t operator()(const upcxio::chain::eosvmoc::code_tuple& ct) const noexcept {
+    template<> struct hash<upcxio::chain::upcxvmoc::code_tuple> {
+        size_t operator()(const upcxio::chain::upcxvmoc::code_tuple& ct) const noexcept {
             return ct.code_id._hash[0];
         }
     };
 }
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 using namespace boost::multi_index;
 using namespace boost::asio;
@@ -38,7 +38,7 @@ struct config;
 
 class code_cache_base {
    public:
-      code_cache_base(const bfs::path data_dir, const eosvmoc::config& eosvmoc_config, const chainbase::database& db);
+      code_cache_base(const bfs::path data_dir, const upcxvmoc::config& upcxvmoc_config, const chainbase::database& db);
       ~code_cache_base();
 
       const int& fd() const { return _cache_fd; }
@@ -88,7 +88,7 @@ class code_cache_base {
 
 class code_cache_async : public code_cache_base {
    public:
-      code_cache_async(const bfs::path data_dir, const eosvmoc::config& eosvmoc_config, const chainbase::database& db);
+      code_cache_async(const bfs::path data_dir, const upcxvmoc::config& upcxvmoc_config, const chainbase::database& db);
       ~code_cache_async();
 
       //If code is in cache: returns pointer & bumps to front of MRU list

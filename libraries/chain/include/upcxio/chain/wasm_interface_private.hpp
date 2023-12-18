@@ -32,7 +32,7 @@ using boost::multi_index_container;
 
 namespace upcxio { namespace chain {
 
-   namespace eosvmoc { struct config; }
+   namespace upcxvmoc { struct config; }
 
    struct wasm_interface_impl {
       struct wasm_cache_entry {
@@ -48,36 +48,36 @@ namespace upcxio { namespace chain {
       struct by_last_block_num;
 
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
-      struct eosvmoc_tier {
-         eosvmoc_tier(const boost::filesystem::path& d, const eosvmoc::config& c, const chainbase::database& db)
+      struct upcxvmoc_tier {
+         upcxvmoc_tier(const boost::filesystem::path& d, const upcxvmoc::config& c, const chainbase::database& db)
           : cc(d, c, db), exec(cc),
             mem(wasm_constraints::maximum_linear_memory/wasm_constraints::wasm_page_size) {}
-         eosvmoc::code_cache_async cc;
-         eosvmoc::executor exec;
-         eosvmoc::memory mem;
+         upcxvmoc::code_cache_async cc;
+         upcxvmoc::executor exec;
+         upcxvmoc::memory mem;
       };
 #endif
 
-      wasm_interface_impl(wasm_interface::vm_type vm, bool eosvmoc_tierup, const chainbase::database& d, const boost::filesystem::path data_dir, const eosvmoc::config& eosvmoc_config) : db(d), wasm_runtime_time(vm) {
+      wasm_interface_impl(wasm_interface::vm_type vm, bool upcxvmoc_tierup, const chainbase::database& d, const boost::filesystem::path data_dir, const upcxvmoc::config& upcxvmoc_config) : db(d), wasm_runtime_time(vm) {
 #ifdef UPCXIO_UPCX_VM_RUNTIME_ENABLED
-         if(vm == wasm_interface::vm_type::eos_vm)
-            runtime_interface = std::make_unique<webassembly::eos_vm_runtime::eos_vm_runtime<upcxio::vm::interpreter>>();
+         if(vm == wasm_interface::vm_type::upcx_vm)
+            runtime_interface = std::make_unique<webassembly::upcx_vm_runtime::upcx_vm_runtime<upcxio::vm::interpreter>>();
 #endif
 #ifdef UPCXIO_UPCX_VM_JIT_RUNTIME_ENABLED
-         if(vm == wasm_interface::vm_type::eos_vm_jit)
-            runtime_interface = std::make_unique<webassembly::eos_vm_runtime::eos_vm_runtime<upcxio::vm::jit>>();
+         if(vm == wasm_interface::vm_type::upcx_vm_jit)
+            runtime_interface = std::make_unique<webassembly::upcx_vm_runtime::upcx_vm_runtime<upcxio::vm::jit>>();
 #endif
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
-         if(vm == wasm_interface::vm_type::eos_vm_oc)
-            runtime_interface = std::make_unique<webassembly::eosvmoc::eosvmoc_runtime>(data_dir, eosvmoc_config, d);
+         if(vm == wasm_interface::vm_type::upcx_vm_oc)
+            runtime_interface = std::make_unique<webassembly::upcxvmoc::upcxvmoc_runtime>(data_dir, upcxvmoc_config, d);
 #endif
          if(!runtime_interface)
             UPCX_THROW(wasm_exception, "${r} wasm runtime not supported on this platform and/or configuration", ("r", vm));
 
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
-         if(eosvmoc_tierup) {
-            UPCX_ASSERT(vm != wasm_interface::vm_type::eos_vm_oc, wasm_exception, "You can't use UPCX VM OC as the base runtime when tier up is activated");
-            eosvmoc.emplace(data_dir, eosvmoc_config, d);
+         if(upcxvmoc_tierup) {
+            UPCX_ASSERT(vm != wasm_interface::vm_type::upcx_vm_oc, wasm_exception, "You can't use UPCX VM OC as the base runtime when tier up is activated");
+            upcxvmoc.emplace(data_dir, upcxvmoc_config, d);
          }
 #endif
       }
@@ -121,8 +121,8 @@ namespace upcxio { namespace chain {
          const auto first_it = wasm_instantiation_cache.get<by_last_block_num>().begin();
          const auto last_it  = wasm_instantiation_cache.get<by_last_block_num>().upper_bound(lib);
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
-         if(eosvmoc) for(auto it = first_it; it != last_it; it++)
-            eosvmoc->cc.free_code(it->code_hash, it->vm_version);
+         if(upcxvmoc) for(auto it = first_it; it != last_it; it++)
+            upcxvmoc->cc.free_code(it->code_hash, it->vm_version);
 #endif
          wasm_instantiation_cache.get<by_last_block_num>().erase(first_it, last_it);
       }
@@ -213,7 +213,7 @@ namespace upcxio { namespace chain {
       const wasm_interface::vm_type wasm_runtime_time;
 
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
-      std::optional<eosvmoc_tier> eosvmoc;
+      std::optional<upcxvmoc_tier> upcxvmoc;
 #endif
    };
 

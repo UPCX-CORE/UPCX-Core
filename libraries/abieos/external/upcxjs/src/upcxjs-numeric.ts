@@ -1,7 +1,7 @@
 /**
  * @module Numeric
  */
-// copyright defined in eosjs/LICENSE.txt
+// copyright defined in upcxjs/LICENSE.txt
 
 const ripemd160 = require("./ripemd").RIPEMD160.hash as (
   a: Uint8Array

@@ -10,7 +10,7 @@ if [ "$PWD" != "$UPCXIO_HOME" ]; then
     exit -1
 fi
 
-prog=nodeos
+prog=nodupcx
 
 DD=var/lib/node_$UPCXIO_NODE
 runtest=`cat $DD/$prog.pid`

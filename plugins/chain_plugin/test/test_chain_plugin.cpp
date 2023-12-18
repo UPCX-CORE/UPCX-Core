@@ -300,8 +300,8 @@ public:
        );
     }
 
-    action_result buyram( const account_name& payer, account_name receiver, const asset& eosin ) {
-        return push_action( payer, "buyram"_n, mvo()( "payer",payer)("receiver",receiver)("quant",eosin) );
+    action_result buyram( const account_name& payer, account_name receiver, const asset& upcxin ) {
+        return push_action( payer, "buyram"_n, mvo()( "payer",payer)("receiver",receiver)("quant",upcxin) );
     }
 
     vector<name> active_and_vote_producers() {

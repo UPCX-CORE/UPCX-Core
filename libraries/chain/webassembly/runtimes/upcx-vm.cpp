@@ -13,7 +13,7 @@
 #include <boost/hana/string.hpp>
 #include <boost/hana/equal.hpp>
 
-namespace upcxio { namespace chain { namespace webassembly { namespace eos_vm_runtime {
+namespace upcxio { namespace chain { namespace webassembly { namespace upcx_vm_runtime {
 
 using namespace upcxio::vm;
 
@@ -64,9 +64,9 @@ struct setcode_options {
 void validate(const bytes& code, const whitelisted_intrinsics_type& intrinsics) {
    wasm_code_ptr code_ptr((uint8_t*)code.data(), code.size());
    try {
-      eos_vm_null_backend_t<setcode_options> bkend(code_ptr, code.size(), nullptr);
+      upcx_vm_null_backend_t<setcode_options> bkend(code_ptr, code.size(), nullptr);
       // check import signatures
-       eos_vm_host_functions_t::resolve(bkend.get_module());
+       upcx_vm_host_functions_t::resolve(bkend.get_module());
       // check that the imports are all currently enabled
       const auto& imports = bkend.get_module().imports;
       for(std::uint32_t i = 0; i < imports.size(); ++i) {
@@ -85,9 +85,9 @@ void validate( const bytes& code, const wasm_config& cfg, const whitelisted_intr
    UPCX_ASSERT(code.size() <= cfg.max_module_bytes, wasm_serialization_error, "Code too large");
    wasm_code_ptr code_ptr((uint8_t*)code.data(), code.size());
    try {
-      eos_vm_null_backend_t<wasm_config> bkend(code_ptr, code.size(), nullptr, cfg);
+      upcx_vm_null_backend_t<wasm_config> bkend(code_ptr, code.size(), nullptr, cfg);
       // check import signatures
-      eos_vm_host_functions_t::resolve(bkend.get_module());
+      upcx_vm_host_functions_t::resolve(bkend.get_module());
       // check that the imports are all currently enabled
       const auto& imports = bkend.get_module().imports;
       for(std::uint32_t i = 0; i < imports.size(); ++i) {
@@ -119,11 +119,11 @@ struct apply_options {
 };
 
 template<typename Impl>
-class eos_vm_instantiated_module : public wasm_instantiated_module_interface {
-   using backend_t = eos_vm_backend_t<Impl>;
+class upcx_vm_instantiated_module : public wasm_instantiated_module_interface {
+   using backend_t = upcx_vm_backend_t<Impl>;
    public:
 
-      eos_vm_instantiated_module(eos_vm_runtime<Impl>* runtime, std::unique_ptr<backend_t> mod) :
+      upcx_vm_instantiated_module(upcx_vm_runtime<Impl>* runtime, std::unique_ptr<backend_t> mod) :
          _runtime(runtime),
          _instantiated_module(std::move(mod)) {}
 
@@ -158,42 +158,42 @@ class eos_vm_instantiated_module : public wasm_instantiated_module_interface {
       }
 
    private:
-      eos_vm_runtime<Impl>*            _runtime;
+      upcx_vm_runtime<Impl>*            _runtime;
       std::unique_ptr<backend_t> _instantiated_module;
 };
 
 template<typename Impl>
-eos_vm_runtime<Impl>::eos_vm_runtime() {}
+upcx_vm_runtime<Impl>::upcx_vm_runtime() {}
 
 template<typename Impl>
-void eos_vm_runtime<Impl>::immediately_exit_currently_running_module() {
+void upcx_vm_runtime<Impl>::immediately_exit_currently_running_module() {
    throw wasm_exit{};
 }
 
 template<typename Impl>
-bool eos_vm_runtime<Impl>::inject_module(IR::Module& module) {
+bool upcx_vm_runtime<Impl>::inject_module(IR::Module& module) {
    return false;
 }
 
 template<typename Impl>
-std::unique_ptr<wasm_instantiated_module_interface> eos_vm_runtime<Impl>::instantiate_module(const char* code_bytes, size_t code_size, std::vector<uint8_t>,
+std::unique_ptr<wasm_instantiated_module_interface> upcx_vm_runtime<Impl>::instantiate_module(const char* code_bytes, size_t code_size, std::vector<uint8_t>,
                                                                                              const digest_type&, const uint8_t&, const uint8_t&) {
 
-   using backend_t = eos_vm_backend_t<Impl>;
+   using backend_t = upcx_vm_backend_t<Impl>;
    try {
       wasm_code_ptr code((uint8_t*)code_bytes, code_size);
       apply_options options = { .max_pages = 65536,
                                 .max_call_depth = 0 };
       std::unique_ptr<backend_t> bkend = std::make_unique<backend_t>(code, code_size, nullptr, options);
-      eos_vm_host_functions_t::resolve(bkend->get_module());
-      return std::make_unique<eos_vm_instantiated_module<Impl>>(this, std::move(bkend));
+      upcx_vm_host_functions_t::resolve(bkend->get_module());
+      return std::make_unique<upcx_vm_instantiated_module<Impl>>(this, std::move(bkend));
    } catch(upcxio::vm::exception& e) {
       FC_THROW_EXCEPTION(wasm_execution_error, "Error building upcx-vm interp: ${e}", ("e", e.what()));
    }
 }
 
-template class eos_vm_runtime<upcxio::vm::interpreter>;
-template class eos_vm_runtime<upcxio::vm::jit>;
+template class upcx_vm_runtime<upcxio::vm::interpreter>;
+template class upcx_vm_runtime<upcxio::vm::jit>;
 
 } 
 
@@ -201,11 +201,11 @@ template <auto HostFunction, typename... Preconditions>
 struct host_function_registrator {
    template <typename Mod, typename Name>
    constexpr host_function_registrator(Mod mod_name, Name fn_name) {
-      using rhf_t = eos_vm_host_functions_t;
+      using rhf_t = upcx_vm_host_functions_t;
       rhf_t::add<HostFunction, Preconditions...>(mod_name.c_str(), fn_name.c_str());
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
       constexpr bool is_injected = (Mod() == BOOST_HANA_STRING(UPCXIO_INJECTED_MODULE_NAME));
-      eosvmoc::register_eosvm_oc<HostFunction, is_injected, std::tuple<Preconditions...>>(
+      upcxvmoc::register_upcxvm_oc<HostFunction, is_injected, std::tuple<Preconditions...>>(
           mod_name + BOOST_HANA_STRING(".") + fn_name);
 #endif
    }

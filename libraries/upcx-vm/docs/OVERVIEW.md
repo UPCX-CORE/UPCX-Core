@@ -12,7 +12,7 @@ These are designed to be modified by the end-user and are simply there to show h
 
 ## Integrating Into Existing CMake Project
 
-Adding **UPCX-VM** as a submodule to your project and adding the subdirectory that contains **UPCX-VM**, and adding **upcx-vm** to the list of link libraries of your executables/libraries is all that is required to integrate into your project. CMake options that can be passed into via command line or with CMake **set**. These can be found in **CMakeLists.txt** and **modules/EosVMBuildUtils.cmake**, or by running `ccmake ..` instead of `cmake ..`.
+Adding **UPCX-VM** as a submodule to your project and adding the subdirectory that contains **UPCX-VM**, and adding **upcx-vm** to the list of link libraries of your executables/libraries is all that is required to integrate into your project. CMake options that can be passed into via command line or with CMake **set**. These can be found in **CMakeLists.txt** and **modules/upcxVMBuildUtils.cmake**, or by running `ccmake ..` instead of `cmake ..`.
 
 ### Getting Started
 

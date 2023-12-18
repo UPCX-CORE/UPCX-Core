@@ -2,23 +2,23 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="web.css" />
-    <script src="../../dist-web/eosjs-api.js"></script>
-    <script src="../../dist-web/eosjs-jsonrpc.js"></script>
-    <script src="../../dist-web/eosjs-jssig.js"></script>
+    <script src="../../dist-web/upcxjs-api.js"></script>
+    <script src="../../dist-web/upcxjs-jsonrpc.js"></script>
+    <script src="../../dist-web/upcxjs-jssig.js"></script>
     <script>
       const privateKey = "5JuH9fCXmU3xbj8nRmhPZaVrxxXrdPaRmZLW1cznNTmTQR2Kg5Z"; // replace with 'bob' account private key
-      /* new accounts for testing can be created by unlocking a cleos wallet then calling:
-       * 1) cleos create key --to-console (copy this privateKey & publicKey)
-       * 2) cleos wallet import
-       * 3) cleos create account bob publicKey
-       * 4) cleos create account alice publicKey
+      /* new accounts for testing can be created by unlocking a clupcx wallet then calling:
+       * 1) clupcx create key --to-console (copy this privateKey & publicKey)
+       * 2) clupcx wallet import
+       * 3) clupcx create account bob publicKey
+       * 4) clupcx create account alice publicKey
        */
 
-      const rpc = new eosjs_jsonrpc.JsonRpc("http://localhost:8888");
-      const signatureProvider = new eosjs_jssig.JsSignatureProvider([
+      const rpc = new upcxjs_jsonrpc.JsonRpc("http://localhost:8888");
+      const signatureProvider = new upcxjs_jssig.JsSignatureProvider([
         privateKey,
       ]);
-      const api = new eosjs_api.Api({ rpc, signatureProvider });
+      const api = new upcxjs_api.Api({ rpc, signatureProvider });
 
       const EXECUTING = "Executing Test",
         SUCCESS = "Success",
@@ -283,7 +283,7 @@
         try {
           await rpcShouldFail();
         } catch (e) {
-          if (e instanceof eosjs_jsonrpc.RpcError) {
+          if (e instanceof upcxjs_jsonrpc.RpcError) {
             resultsLabel.className = "success";
             resultsLabel.innerText = SUCCESS;
             return true;

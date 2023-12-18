@@ -11,7 +11,7 @@ namespace upcxio { namespace chain {
    class apply_context;
    class wasm_runtime_interface;
    class controller;
-   namespace eosvmoc { struct config; }
+   namespace upcxvmoc { struct config; }
 
    struct wasm_exit {
       int32_t code = 0;
@@ -24,24 +24,24 @@ namespace upcxio { namespace chain {
    class wasm_interface {
       public:
          enum class vm_type {
-            eos_vm,
-            eos_vm_jit,
-            eos_vm_oc
+            upcx_vm,
+            upcx_vm_jit,
+            upcx_vm_oc
          };
 
          //return string description of vm_type
          static std::string vm_type_string(vm_type vmtype) {
              switch (vmtype) {
-             case vm_type::eos_vm:
+             case vm_type::upcx_vm:
                 return "upcx-vm";
-             case vm_type::eos_vm_oc:
+             case vm_type::upcx_vm_oc:
                 return "upcx-vm-oc";
              default:
                  return "upcx-vm-jit";
              }
          }
 
-         wasm_interface(vm_type vm, bool eosvmoc_tierup, const chainbase::database& d, const boost::filesystem::path data_dir, const eosvmoc::config& eosvmoc_config);
+         wasm_interface(vm_type vm, bool upcxvmoc_tierup, const chainbase::database& d, const boost::filesystem::path data_dir, const upcxvmoc::config& upcxvmoc_config);
          ~wasm_interface();
 
          //call before dtor to skip what can be minutes of dtor overhead with some runtimes; can cause leaks
@@ -72,4 +72,4 @@ namespace upcxio{ namespace chain {
    std::istream& operator>>(std::istream& in, wasm_interface::vm_type& runtime);
 }}
 
-FC_REFLECT_ENUM( upcxio::chain::wasm_interface::vm_type, (eos_vm)(eos_vm_jit)(eos_vm_oc) )
+FC_REFLECT_ENUM( upcxio::chain::wasm_interface::vm_type, (upcx_vm)(upcx_vm_jit)(upcx_vm_oc) )

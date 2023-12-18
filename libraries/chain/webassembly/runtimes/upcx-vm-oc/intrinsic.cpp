@@ -1,6 +1,6 @@
 #include <upcxio/chain/webassembly/upcx-vm-oc/intrinsic.hpp>
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 static intrinsic_map_t& the_intrinsic_map() {
    static intrinsic_map_t intrinsic_map;

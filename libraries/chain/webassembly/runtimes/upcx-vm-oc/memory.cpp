@@ -9,12 +9,12 @@
 #include <sys/mman.h>
 #include <linux/memfd.h>
 
-namespace upcxio { namespace chain { namespace eosvmoc {
+namespace upcxio { namespace chain { namespace upcxvmoc {
 
 memory::memory(uint64_t max_pages) {
    uint64_t number_slices = max_pages + 1;
    uint64_t wasm_memory_size = max_pages * wasm_constraints::wasm_page_size;
-   int fd = syscall(SYS_memfd_create, "eosvmoc_mem", MFD_CLOEXEC);
+   int fd = syscall(SYS_memfd_create, "upcxvmoc_mem", MFD_CLOEXEC);
    FC_ASSERT(fd >= 0, "Failed to create memory memfd");
    auto cleanup_fd = fc::make_scoped_exit([&fd](){close(fd);});
    int ret = ftruncate(fd, wasm_memory_size+memory_prologue_size);

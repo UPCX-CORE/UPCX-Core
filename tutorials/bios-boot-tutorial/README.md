@@ -27,7 +27,7 @@ The `bios-boot-tutorial.py` script simulates the UPCXIO bios boot sequence.
 $ cd ~
 $ git clone https://github.com/UPCXIO/upcx.git
 $ cd ./upcx/tutorials/bios-boot-tutorial/
-$ python3 bios-boot-tutorial.py --cleos=cleos --nodeos=nodeos --keosd=keosd --contracts-dir="UPCXIO_CONTRACTS_DIRECTORY" -w -a
+$ python3 bios-boot-tutorial.py --clupcx=clupcx --nodupcx=nodupcx --kupcxd=kupcxd --contracts-dir="UPCXIO_CONTRACTS_DIRECTORY" -w -a
 
 ```
 

@@ -1,18 +1,18 @@
-# eosjs ![npm](https://img.shields.io/npm/dw/eosjs.svg)
+# upcxjs ![npm](https://img.shields.io/npm/dw/upcxjs.svg)
 
-Javascript API for integration with UPCXIO-based blockchains using [UPCXIO RPC API](https://developers.upcx.io/upcxio-nodeos/reference).
+Javascript API for integration with UPCXIO-based blockchains using [UPCXIO RPC API](https://developers.upcx.io/upcxio-nodupcx/reference).
 
-Documentation can be found [here](https://upcxio.github.io/eosjs)
+Documentation can be found [here](https://upcxio.github.io/upcxjs)
 
 ## Installation
 
 ### NPM
 
-The official distribution package can be found at [npm](https://www.npmjs.com/package/eosjs).
+The official distribution package can be found at [npm](https://www.npmjs.com/package/upcxjs).
 
 ### NodeJS Dependency
 
-`yarn add eosjs`
+`yarn add upcxjs`
 
 ### Using with Typescript
 
@@ -31,7 +31,7 @@ If you're using Node (not a browser) then you'll also need to make sure the `dom
 
 ### Browser Distribution
 
-Clone this repository locally then run `yarn build-web`. The browser distribution will be located in `dist-web` and can be directly copied into your project repository. The `dist-web` folder contains minified bundles ready for production, along with source mapped versions of the library for debugging. For full browser usage examples, [see the documentation](https://upcxio.github.io/eosjs/guides/1.-Browsers.html).
+Clone this repository locally then run `yarn build-web`. The browser distribution will be located in `dist-web` and can be directly copied into your project repository. The `dist-web` folder contains minified bundles ready for production, along with source mapped versions of the library for debugging. For full browser usage examples, [see the documentation](https://upcxio.github.io/upcxjs/guides/1.-Browsers.html).
 
 ## Import
 
@@ -40,8 +40,8 @@ Clone this repository locally then run `yarn build-web`. The browser distributio
 Importing using ES6 module syntax in the browser is supported if you have a transpiler, such as Babel.
 
 ```js
-import { Api, JsonRpc, RpcError } from "eosjs";
-import { JsSignatureProvider } from "eosjs/dist/eosjs-jssig"; // development only
+import { Api, JsonRpc, RpcError } from "upcxjs";
+import { JsSignatureProvider } from "upcxjs/dist/upcxjs-jssig"; // development only
 ```
 
 ### CommonJS
@@ -49,8 +49,8 @@ import { JsSignatureProvider } from "eosjs/dist/eosjs-jssig"; // development onl
 Importing using commonJS syntax is supported by NodeJS out of the box.
 
 ```js
-const { Api, JsonRpc, RpcError } = require("eosjs");
-const { JsSignatureProvider } = require("eosjs/dist/eosjs-jssig"); // development only
+const { Api, JsonRpc, RpcError } = require("upcxjs");
+const { JsSignatureProvider } = require("upcxjs/dist/upcxjs-jssig"); // development only
 const fetch = require("node-fetch"); // node only; not needed in browsers
 const { TextEncoder, TextDecoder } = require("util"); // node only; native TextEncoder/Decoder
 const { TextEncoder, TextDecoder } = require("text-encoding"); // React Native, IE11, and Edge Browsers only

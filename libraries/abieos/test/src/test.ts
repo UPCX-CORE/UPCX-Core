@@ -1,4 +1,4 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiupcx/LICENSE.txt
 
 "use strict";
 
@@ -7,12 +7,12 @@ const useRpcEndpoint = false;
 
 const fetch = require("node-fetch");
 const fastcall = require("fastcall");
-const abiAbi = require("../../external/eosjs/src/abi.abi.json");
-const transactionAbi = require("../../external/eosjs/src/transaction.abi.json");
-import * as eosjs from "../../external/eosjs/src/eosjs-api";
-import * as eosjs_jsonrpc from "../../external/eosjs/src/eosjs-jsonrpc";
-import * as eosjs_jssig from "../../external/eosjs/src/eosjs-jssig";
-import * as eosjs_ser from "../../external/eosjs/src/eosjs-serialize";
+const abiAbi = require("../../external/upcxjs/src/abi.abi.json");
+const transactionAbi = require("../../external/upcxjs/src/transaction.abi.json");
+import * as upcxjs from "../../external/upcxjs/src/upcxjs-api";
+import * as upcxjs_jsonrpc from "../../external/upcxjs/src/upcxjs-jsonrpc";
+import * as upcxjs_jssig from "../../external/upcxjs/src/upcxjs-jssig";
+import * as upcxjs_ser from "../../external/upcxjs/src/upcxjs-serialize";
 
 const useTokenHexApi = true;
 const tokenHexApi =
@@ -99,39 +99,41 @@ const testAbi = `{
         ]
     }`;
 
-const lib = new fastcall.Library("../build/libabieos.so")
-  .function("void* abieos_create()")
-  .function("void abieos_destroy(void* context)")
-  .function("char* abieos_get_error(void* context)")
-  .function("int abieos_get_bin_size(void* context)")
-  .function("char* abieos_get_bin_data(void* context)")
-  .function("char* abieos_get_bin_hex(void* context)")
-  .function("uint64 abieos_string_to_name(void* context, char* str)")
-  .function("char* abieos_name_to_string(void* context, uint64 name)")
-  .function("int abieos_set_abi(void* context, uint64 contract, char* abi)")
-  .function("int abieos_set_abi_hex(void* context, uint64 contract, char* hex)")
+const lib = new fastcall.Library("../build/libabiupcx.so")
+  .function("void* abiupcx_create()")
+  .function("void abiupcx_destroy(void* context)")
+  .function("char* abiupcx_get_error(void* context)")
+  .function("int abiupcx_get_bin_size(void* context)")
+  .function("char* abiupcx_get_bin_data(void* context)")
+  .function("char* abiupcx_get_bin_hex(void* context)")
+  .function("uint64 abiupcx_string_to_name(void* context, char* str)")
+  .function("char* abiupcx_name_to_string(void* context, uint64 name)")
+  .function("int abiupcx_set_abi(void* context, uint64 contract, char* abi)")
   .function(
-    "char* abieos_get_type_for_action(void* context, uint64 contract, uint64 action)"
+    "int abiupcx_set_abi_hex(void* context, uint64 contract, char* hex)"
   )
   .function(
-    "int abieos_json_to_bin(void* context, uint64 contract, char* name, char* json)"
+    "char* abiupcx_get_type_for_action(void* context, uint64 contract, uint64 action)"
   )
   .function(
-    "char* abieos_hex_to_json(void* context, uint64 contract, char* type, char* hex)"
+    "int abiupcx_json_to_bin(void* context, uint64 contract, char* name, char* json)"
+  )
+  .function(
+    "char* abiupcx_hex_to_json(void* context, uint64 contract, char* type, char* hex)"
   );
 
 const l = lib.interface;
 const cstr = fastcall.makeStringBuffer;
 
-const context = l.abieos_create();
+const context = l.abiupcx_create();
 
 function check(result: any) {
-  if (!result) throw new Error(l.abieos_get_error(context).readCString());
+  if (!result) throw new Error(l.abiupcx_get_error(context).readCString());
 }
 
 function checkPtr(result: any) {
   if (result.isNull())
-    throw new Error(l.abieos_get_error(context).readCString());
+    throw new Error(l.abiupcx_get_error(context).readCString());
   return result;
 }
 
@@ -140,37 +142,37 @@ function jsonStr(v: any) {
 }
 
 function name(s: string) {
-  return l.abieos_string_to_name(context, cstr(s));
+  return l.abiupcx_string_to_name(context, cstr(s));
 }
 
-const rpc = new eosjs_jsonrpc.JsonRpc(rpcEndpoint, { fetch });
-const signatureProvider = new eosjs_jssig.JsSignatureProvider([
+const rpc = new upcxjs_jsonrpc.JsonRpc(rpcEndpoint, { fetch });
+const signatureProvider = new upcxjs_jssig.JsSignatureProvider([
   "5JtUScZK2XEp3g9gh7F8bwtPTRAkASmNrrftmx4AxDKD5K4zDnr",
 ]);
 const textEncoder = new (require("util").TextEncoder)();
 const textDecoder = new (require("util").TextDecoder)("utf-8", { fatal: true });
-const api = new eosjs.Api({
+const api = new upcxjs.Api({
   rpc,
   signatureProvider,
   chainId: null,
   textEncoder,
   textDecoder,
 });
-const abiTypes = eosjs_ser.getTypesFromAbi(
-  eosjs_ser.createInitialTypes(),
+const abiTypes = upcxjs_ser.getTypesFromAbi(
+  upcxjs_ser.createInitialTypes(),
   abiAbi
 );
-const js2Types = eosjs_ser.getTypesFromAbi(
-  eosjs_ser.createInitialTypes(),
+const js2Types = upcxjs_ser.getTypesFromAbi(
+  upcxjs_ser.createInitialTypes(),
   transactionAbi
 );
 
-function eosjs_hex_abi_to_json(hex: string): any {
-  return api.rawAbiToJson(eosjs_ser.hexToUint8Array(hex));
+function upcxjs_hex_abi_to_json(hex: string): any {
+  return api.rawAbiToJson(upcxjs_ser.hexToUint8Array(hex));
 }
 
-function eosjs_json_abi_to_hex(abi: any) {
-  let buf = new eosjs_ser.SerialBuffer({ textEncoder, textDecoder });
+function upcxjs_json_abi_to_hex(abi: any) {
+  let buf = new upcxjs_ser.SerialBuffer({ textEncoder, textDecoder });
   abiTypes.get("abi_def").serialize(buf, {
     types: [],
     actions: [],
@@ -181,33 +183,33 @@ function eosjs_json_abi_to_hex(abi: any) {
     abi_extensions: [],
     ...abi,
   });
-  return eosjs_ser.arrayToHex(buf.asUint8Array());
+  return upcxjs_ser.arrayToHex(buf.asUint8Array());
 }
 
-function abieos_json_to_hex(contract: number, type: string, data: string) {
-  check(l.abieos_json_to_bin(context, contract, cstr(type), cstr(data)));
-  return l.abieos_get_bin_hex(context).readCString();
+function abiupcx_json_to_hex(contract: number, type: string, data: string) {
+  check(l.abiupcx_json_to_bin(context, contract, cstr(type), cstr(data)));
+  return l.abiupcx_get_bin_hex(context).readCString();
 }
 
-function abieos_hex_to_json(contract: number, type: string, hex: string) {
-  let result = l.abieos_hex_to_json(context, contract, cstr(type), cstr(hex));
+function abiupcx_hex_to_json(contract: number, type: string, hex: string) {
+  let result = l.abiupcx_hex_to_json(context, contract, cstr(type), cstr(hex));
   checkPtr(result);
   return result.readCString();
 }
 
-function eosjs_json_to_hex(types: any, type: string, data: any) {
-  let js2Type = eosjs_ser.getType(types, type);
-  let buf = new eosjs_ser.SerialBuffer({ textEncoder, textDecoder });
+function upcxjs_json_to_hex(types: any, type: string, data: any) {
+  let js2Type = upcxjs_ser.getType(types, type);
+  let buf = new upcxjs_ser.SerialBuffer({ textEncoder, textDecoder });
   js2Type.serialize(buf, data);
-  return eosjs_ser.arrayToHex(buf.asUint8Array());
+  return upcxjs_ser.arrayToHex(buf.asUint8Array());
 }
 
-function eosjs_hex_to_json(types: any, type: string, hex: string) {
-  let js2Type = eosjs_ser.getType(types, type);
-  let buf = new eosjs_ser.SerialBuffer({
+function upcxjs_hex_to_json(types: any, type: string, hex: string) {
+  let js2Type = upcxjs_ser.getType(types, type);
+  let buf = new upcxjs_ser.SerialBuffer({
     textEncoder,
     textDecoder,
-    array: eosjs_ser.hexToUint8Array(hex),
+    array: upcxjs_ser.hexToUint8Array(hex),
   });
   return js2Type.deserialize(buf);
 }
@@ -229,62 +231,68 @@ function check_type(
   data: string,
   expected = data
 ) {
-  let hex = abieos_json_to_hex(contract, type, data);
-  let json = abieos_hex_to_json(contract, type, hex);
+  let hex = abiupcx_json_to_hex(contract, type, data);
+  let json = abiupcx_hex_to_json(contract, type, hex);
   console.log(type, data, hex, json);
   if (json !== expected) throw new Error("conversion mismatch");
   json = JSON.stringify(JSON.parse(json));
 
   //console.log(type, data);
-  let js2Type = eosjs_ser.getType(types, type);
-  let buf = new eosjs_ser.SerialBuffer({ textEncoder, textDecoder });
+  let js2Type = upcxjs_ser.getType(types, type);
+  let buf = new upcxjs_ser.SerialBuffer({ textEncoder, textDecoder });
   js2Type.serialize(buf, JSON.parse(data));
-  let js2Hex = eosjs_ser.arrayToHex(buf.asUint8Array()).toUpperCase();
+  let js2Hex = upcxjs_ser.arrayToHex(buf.asUint8Array()).toUpperCase();
   //console.log(hex)
   //console.log(js2Hex)
-  if (js2Hex != hex) throw new Error("eosjs hex mismatch");
+  if (js2Hex != hex) throw new Error("upcxjs hex mismatch");
   let js2Json = JSON.stringify(js2Type.deserialize(buf));
   //console.log(json);
   //console.log(js2Json);
-  if (js2Json != json) throw new Error("eosjs json mismatch");
+  if (js2Json != json) throw new Error("upcxjs json mismatch");
 }
 
 function check_types() {
   let token = name("upcxio.token");
   let test = name("test.abi");
-  check(l.abieos_set_abi_hex(context, token, cstr(tokenHexApi)));
-  check(l.abieos_set_abi(context, test, cstr(testAbi)));
-  const tokenTypes = eosjs_ser.getTypesFromAbi(
-    eosjs_ser.createInitialTypes(),
-    eosjs_hex_abi_to_json(tokenHexApi)
+  check(l.abiupcx_set_abi_hex(context, token, cstr(tokenHexApi)));
+  check(l.abiupcx_set_abi(context, test, cstr(testAbi)));
+  const tokenTypes = upcxjs_ser.getTypesFromAbi(
+    upcxjs_ser.createInitialTypes(),
+    upcxjs_hex_abi_to_json(tokenHexApi)
   );
-  const testTypes = eosjs_ser.getTypesFromAbi(
-    eosjs_ser.createInitialTypes(),
-    eosjs_hex_abi_to_json(eosjs_json_abi_to_hex(JSON.parse(testAbi)))
+  const testTypes = upcxjs_ser.getTypesFromAbi(
+    upcxjs_ser.createInitialTypes(),
+    upcxjs_hex_abi_to_json(upcxjs_json_abi_to_hex(JSON.parse(testAbi)))
   );
 
   check_throw("Error: missing abi_def.version (type=string)", () =>
-    eosjs_hex_abi_to_json(eosjs_json_abi_to_hex({}))
+    upcxjs_hex_abi_to_json(upcxjs_json_abi_to_hex({}))
   );
   check_throw("Error: Unsupported abi version", () =>
-    eosjs_hex_abi_to_json(eosjs_json_abi_to_hex({ version: "" }))
+    upcxjs_hex_abi_to_json(upcxjs_json_abi_to_hex({ version: "" }))
   );
   check_throw("Error: Unsupported abi version", () =>
-    eosjs_hex_abi_to_json(eosjs_json_abi_to_hex({ version: "upcxio::abi/9.0" }))
+    upcxjs_hex_abi_to_json(
+      upcxjs_json_abi_to_hex({ version: "upcxio::abi/9.0" })
+    )
   );
-  eosjs_hex_abi_to_json(eosjs_json_abi_to_hex({ version: "upcxio::abi/1.0" }));
-  eosjs_hex_abi_to_json(eosjs_json_abi_to_hex({ version: "upcxio::abi/1.1" }));
+  upcxjs_hex_abi_to_json(
+    upcxjs_json_abi_to_hex({ version: "upcxio::abi/1.0" })
+  );
+  upcxjs_hex_abi_to_json(
+    upcxjs_json_abi_to_hex({ version: "upcxio::abi/1.1" })
+  );
 
   check_type(0, js2Types, "bool", "true");
   check_type(0, js2Types, "bool", "false");
   check_throw("Error: Read past end of buffer", () =>
-    eosjs_hex_to_json(js2Types, "bool", "")
+    upcxjs_hex_to_json(js2Types, "bool", "")
   );
   check_throw("Error: Expected true or false", () =>
-    eosjs_json_to_hex(js2Types, "bool", "trues")
+    upcxjs_json_to_hex(js2Types, "bool", "trues")
   );
   check_throw("Error: Expected true or false", () =>
-    eosjs_json_to_hex(js2Types, "bool", null)
+    upcxjs_json_to_hex(js2Types, "bool", null)
   );
   check_type(0, js2Types, "int8", "0");
   check_type(0, js2Types, "int8", "127");
@@ -294,28 +302,28 @@ function check_types() {
   check_type(0, js2Types, "uint8", "254");
   check_type(0, js2Types, "uint8", "255");
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int8", 128)
+    upcxjs_json_to_hex(js2Types, "int8", 128)
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int8", -129)
+    upcxjs_json_to_hex(js2Types, "int8", -129)
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint8", -1)
+    upcxjs_json_to_hex(js2Types, "uint8", -1)
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint8", 256)
+    upcxjs_json_to_hex(js2Types, "uint8", 256)
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int8", "128")
+    upcxjs_json_to_hex(js2Types, "int8", "128")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int8", "-129")
+    upcxjs_json_to_hex(js2Types, "int8", "-129")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint8", "-1")
+    upcxjs_json_to_hex(js2Types, "uint8", "-1")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint8", "256")
+    upcxjs_json_to_hex(js2Types, "uint8", "256")
   );
   check_type(0, js2Types, "uint8[]", "[]");
   check_type(0, js2Types, "uint8[]", "[10]");
@@ -325,21 +333,21 @@ function check_types() {
   check_type(0, js2Types, "int16", "32767");
   check_type(0, js2Types, "int16", "-32768");
   check_throw("Error: Read past end of buffer", () =>
-    eosjs_hex_to_json(js2Types, "int16", "01")
+    upcxjs_hex_to_json(js2Types, "int16", "01")
   );
   check_type(0, js2Types, "uint16", "0");
   check_type(0, js2Types, "uint16", "65535");
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int16", 32768)
+    upcxjs_json_to_hex(js2Types, "int16", 32768)
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int16", -32769)
+    upcxjs_json_to_hex(js2Types, "int16", -32769)
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint16", -1)
+    upcxjs_json_to_hex(js2Types, "uint16", -1)
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint16", 655356)
+    upcxjs_json_to_hex(js2Types, "uint16", 655356)
   );
   check_type(0, js2Types, "int32", "0");
   check_type(0, js2Types, "int32", "2147483647");
@@ -347,28 +355,28 @@ function check_types() {
   check_type(0, js2Types, "uint32", "0");
   check_type(0, js2Types, "uint32", "4294967295");
   check_throw("Error: Expected number", () =>
-    eosjs_json_to_hex(js2Types, "int32", "foo")
+    upcxjs_json_to_hex(js2Types, "int32", "foo")
   );
   check_throw("Error: Expected number", () =>
-    eosjs_json_to_hex(js2Types, "int32", true)
+    upcxjs_json_to_hex(js2Types, "int32", true)
   );
   check_throw("Error: Expected number", () =>
-    eosjs_json_to_hex(js2Types, "int32", [])
+    upcxjs_json_to_hex(js2Types, "int32", [])
   );
   check_throw("Error: Expected number", () =>
-    eosjs_json_to_hex(js2Types, "int32", {})
+    upcxjs_json_to_hex(js2Types, "int32", {})
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int32", "2147483648")
+    upcxjs_json_to_hex(js2Types, "int32", "2147483648")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int32", "-2147483649")
+    upcxjs_json_to_hex(js2Types, "int32", "-2147483649")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint32", "-1")
+    upcxjs_json_to_hex(js2Types, "uint32", "-1")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint32", "4294967296")
+    upcxjs_json_to_hex(js2Types, "uint32", "4294967296")
   );
   check_type(0, js2Types, "int64", "0", '"0"');
   check_type(0, js2Types, "int64", "1", '"1"');
@@ -379,16 +387,16 @@ function check_types() {
   check_type(0, js2Types, "uint64", '"0"');
   check_type(0, js2Types, "uint64", '"18446744073709551615"');
   check_throw("Error: number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int64", "9223372036854775808")
+    upcxjs_json_to_hex(js2Types, "int64", "9223372036854775808")
   );
   check_throw("Error: number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "int64", "-9223372036854775809")
+    upcxjs_json_to_hex(js2Types, "int64", "-9223372036854775809")
   );
   check_throw("Error: invalid number", () =>
-    eosjs_json_to_hex(js2Types, "uint64", "-1")
+    upcxjs_json_to_hex(js2Types, "uint64", "-1")
   );
   check_throw("Error: number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "uint64", "18446744073709551616")
+    upcxjs_json_to_hex(js2Types, "uint64", "18446744073709551616")
   );
   check_type(0, js2Types, "int128", '"0"');
   check_type(0, js2Types, "int128", '"1"');
@@ -429,34 +437,34 @@ function check_types() {
     '"340282366920938463463374607431768211455"'
   );
   check_throw("Error: number is out of range", () =>
-    eosjs_json_to_hex(
+    upcxjs_json_to_hex(
       js2Types,
       "int128",
       "170141183460469231731687303715884105728"
     )
   );
   check_throw("Error: number is out of range", () =>
-    eosjs_json_to_hex(
+    upcxjs_json_to_hex(
       js2Types,
       "int128",
       "-170141183460469231731687303715884105729"
     )
   );
   check_throw("Error: invalid number", () =>
-    eosjs_json_to_hex(js2Types, "int128", "true")
+    upcxjs_json_to_hex(js2Types, "int128", "true")
   );
   check_throw("Error: invalid number", () =>
-    eosjs_json_to_hex(js2Types, "uint128", "-1")
+    upcxjs_json_to_hex(js2Types, "uint128", "-1")
   );
   check_throw("Error: number is out of range", () =>
-    eosjs_json_to_hex(
+    upcxjs_json_to_hex(
       js2Types,
       "uint128",
       "340282366920938463463374607431768211456"
     )
   );
   check_throw("Error: invalid number", () =>
-    eosjs_json_to_hex(js2Types, "uint128", "true")
+    upcxjs_json_to_hex(js2Types, "uint128", "true")
   );
   check_type(0, js2Types, "varuint32", "0");
   check_type(0, js2Types, "varuint32", "127");
@@ -482,16 +490,16 @@ function check_types() {
   check_type(0, js2Types, "varint32", "2147483647");
   check_type(0, js2Types, "varint32", "-2147483648");
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "varint32", "2147483648")
+    upcxjs_json_to_hex(js2Types, "varint32", "2147483648")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "varint32", "-2147483649")
+    upcxjs_json_to_hex(js2Types, "varint32", "-2147483649")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "varuint32", "-1")
+    upcxjs_json_to_hex(js2Types, "varuint32", "-1")
   );
   check_throw("Error: Number is out of range", () =>
-    eosjs_json_to_hex(js2Types, "varuint32", "4294967296")
+    upcxjs_json_to_hex(js2Types, "varuint32", "4294967296")
   );
   check_type(0, js2Types, "float32", "0.0");
   check_type(0, js2Types, "float32", "0.125");
@@ -506,7 +514,7 @@ function check_types() {
   check_type(0, js2Types, "time_point_sec", '"2018-06-15T19:17:47.000"');
   check_type(0, js2Types, "time_point_sec", '"2060-06-15T19:17:47.000"');
   check_throw("Error: Invalid time format", () =>
-    eosjs_json_to_hex(js2Types, "time_point_sec", true)
+    upcxjs_json_to_hex(js2Types, "time_point_sec", true)
   );
   check_type(0, js2Types, "time_point", '"1970-01-01T00:00:00.000"');
   check_type(0, js2Types, "time_point", '"1970-01-01T00:00:00.001"');
@@ -517,7 +525,7 @@ function check_types() {
   check_type(0, js2Types, "time_point", '"2018-06-15T19:17:47.999"');
   check_type(0, js2Types, "time_point", '"2060-06-15T19:17:47.999"');
   check_throw("Error: Invalid time format", () =>
-    eosjs_json_to_hex(js2Types, "time_point", true)
+    upcxjs_json_to_hex(js2Types, "time_point", true)
   );
   check_type(0, js2Types, "block_timestamp_type", '"2000-01-01T00:00:00.000"');
   check_type(0, js2Types, "block_timestamp_type", '"2000-01-01T00:00:00.500"');
@@ -525,7 +533,7 @@ function check_types() {
   check_type(0, js2Types, "block_timestamp_type", '"2018-06-15T19:17:47.500"');
   check_type(0, js2Types, "block_timestamp_type", '"2018-06-15T19:17:48.000"');
   check_throw("Error: Invalid time format", () =>
-    eosjs_json_to_hex(js2Types, "block_timestamp_type", true)
+    upcxjs_json_to_hex(js2Types, "block_timestamp_type", true)
   );
   check_type(0, js2Types, "name", '""');
   check_type(0, js2Types, "name", '"1"');
@@ -536,22 +544,22 @@ function check_types() {
   check_type(0, js2Types, "name", '"zzzzzzzzzzzz"');
   check_type(0, js2Types, "name", '"zzzzzzzzzzzzz"', '"zzzzzzzzzzzzj"');
   check_throw("Error: Expected string containing name", () =>
-    eosjs_json_to_hex(js2Types, "name", true)
+    upcxjs_json_to_hex(js2Types, "name", true)
   );
   check_type(0, js2Types, "bytes", '""');
   check_type(0, js2Types, "bytes", '"00"');
   check_type(0, js2Types, "bytes", '"AABBCCDDEEFF00010203040506070809"');
   check_throw("Error: Odd number of hex digits", () =>
-    eosjs_json_to_hex(js2Types, "bytes", '"0"')
+    upcxjs_json_to_hex(js2Types, "bytes", '"0"')
   );
   check_throw("Error: Expected hex string", () =>
-    eosjs_json_to_hex(js2Types, "bytes", '"yz"')
+    upcxjs_json_to_hex(js2Types, "bytes", '"yz"')
   );
   check_throw("Error: Expected string containing hex digits", () =>
-    eosjs_json_to_hex(js2Types, "bytes", true)
+    upcxjs_json_to_hex(js2Types, "bytes", true)
   );
   check_throw("Error: Read past end of buffer", () =>
-    eosjs_hex_to_json(js2Types, "bytes", "01")
+    upcxjs_hex_to_json(js2Types, "bytes", "01")
   );
   check_type(0, js2Types, "string", '""');
   check_type(0, js2Types, "string", '"z"');
@@ -564,7 +572,7 @@ function check_types() {
     `"\\u0000  这是一个测试  Это тест  هذا اختبار 👍"`
   );
   check_throw("Error: Read past end of buffer", () =>
-    eosjs_hex_to_json(js2Types, "string", "01")
+    upcxjs_hex_to_json(js2Types, "string", "01")
   );
   check_type(
     0,
@@ -603,13 +611,13 @@ function check_types() {
     '"0987654321ABCDEF0987654321FFFF1234567890ABCDEF001234567890ABCDEF0987654321ABCDEF0987654321FFFF1234567890ABCDEF001234567890ABCDEF"'
   );
   check_throw("Error: Expected hex string", () =>
-    eosjs_json_to_hex(js2Types, "checksum256", "yz")
+    upcxjs_json_to_hex(js2Types, "checksum256", "yz")
   );
   check_throw("Error: Expected string containing hex digits", () =>
-    eosjs_json_to_hex(js2Types, "checksum256", true)
+    upcxjs_json_to_hex(js2Types, "checksum256", true)
   );
   check_throw("Error: Binary data has incorrect size", () =>
-    eosjs_json_to_hex(js2Types, "checksum256", "a0")
+    upcxjs_json_to_hex(js2Types, "checksum256", "a0")
   );
   check_type(
     0,
@@ -804,10 +812,10 @@ function check_types() {
     '"PUB_WA_6VFnP5vnq1GjNyMR7S17e2yp6SRoChiborF2LumbnXvMTsPASXykJaBBGLhprXTpk"'
   );
   check_throw("Error: expected string containing public key", () =>
-    eosjs_json_to_hex(js2Types, "public_key", true)
+    upcxjs_json_to_hex(js2Types, "public_key", true)
   );
   check_throw("Error: unrecognized public key format", () =>
-    eosjs_json_to_hex(js2Types, "public_key", "foo")
+    upcxjs_json_to_hex(js2Types, "public_key", "foo")
   );
   check_type(
     0,
@@ -822,10 +830,10 @@ function check_types() {
     '"PVT_R1_vbRKUuE34hjMVQiePj2FEjM8FvuG7yemzQsmzx89kPS9J8Coz"'
   );
   check_throw("Error: expected string containing private key", () =>
-    eosjs_json_to_hex(js2Types, "private_key", true)
+    upcxjs_json_to_hex(js2Types, "private_key", true)
   );
   check_throw("Error: unrecognized private key type", () =>
-    eosjs_json_to_hex(js2Types, "private_key", "foo")
+    upcxjs_json_to_hex(js2Types, "private_key", "foo")
   );
   check_type(
     0,
@@ -852,22 +860,22 @@ function check_types() {
     '"SIG_WA_FejsRu4VrdwoZ27v2D3wmp4Kge46JJSqWsiMgbJapVuuYnPDyZZjJSTggdHUNPMp3zt2fGfAdpWY7ScsohZzWTJ1iTerbab2pNE6Tso7MJRjdMAG56K4fjrASEK6QsUs7rxG9Syp7kstBcq8eZidayrtK9YSH1MCNTAqrDPMbN366vR8q5XeN5BSDmyDsqmjsMMSKWMeEbUi7jNHKLziZY6dKHNqDYqjmDmuXoevxyDRWrNVHjAzvBtfTuVtj2r5tCScdCZ3a7yQ1D2zZvstphB4t5HN9YXw1HGS3yKCY6uRZ2V"'
   );
   check_throw("Error: expected string containing signature", () =>
-    eosjs_json_to_hex(js2Types, "signature", true)
+    upcxjs_json_to_hex(js2Types, "signature", true)
   );
   check_throw("Error: unrecognized signature format", () =>
-    eosjs_json_to_hex(js2Types, "signature", "foo")
+    upcxjs_json_to_hex(js2Types, "signature", "foo")
   );
   check_type(0, js2Types, "symbol_code", '"A"');
   check_type(0, js2Types, "symbol_code", '"B"');
   check_type(0, js2Types, "symbol_code", '"SYS"');
   check_throw("Error: Expected string containing symbol_code", () =>
-    eosjs_json_to_hex(js2Types, "symbol_code", true)
+    upcxjs_json_to_hex(js2Types, "symbol_code", true)
   );
   check_type(0, js2Types, "symbol", '"0,A"');
   check_type(0, js2Types, "symbol", '"1,Z"');
   check_type(0, js2Types, "symbol", '"4,SYS"');
   check_throw("Error: Expected string containing symbol", () =>
-    eosjs_json_to_hex(js2Types, "symbol", null)
+    upcxjs_json_to_hex(js2Types, "symbol", null)
   );
   check_type(0, js2Types, "asset", '"0 FOO"');
   check_type(0, js2Types, "asset", '"0.0 FOO"');
@@ -876,7 +884,7 @@ function check_types() {
   check_type(0, js2Types, "asset", '"1.2345 SYS"');
   check_type(0, js2Types, "asset", '"-1.2345 SYS"');
   check_throw("Error: Expected string containing asset", () =>
-    eosjs_json_to_hex(js2Types, "asset", null)
+    upcxjs_json_to_hex(js2Types, "asset", null)
   );
   check_type(0, js2Types, "asset[]", "[]");
   check_type(0, js2Types, "asset[]", '["0 FOO"]');
@@ -941,25 +949,25 @@ function check_types() {
 async function push_transfer() {
   if (useTokenHexApi)
     check(
-      l.abieos_set_abi_hex(context, name("upcxio.token"), cstr(tokenHexApi))
+      l.abiupcx_set_abi_hex(context, name("upcxio.token"), cstr(tokenHexApi))
     );
   else
     check(
-      l.abieos_set_abi(
+      l.abiupcx_set_abi(
         context,
         name("upcxio.token"),
         jsonStr((await rpc.get_abi("upcxio.token")).abi)
       )
     );
   let type = checkPtr(
-    l.abieos_get_type_for_action(
+    l.abiupcx_get_type_for_action(
       context,
       name("upcxio.token"),
       name("transfer")
     )
   );
   check(
-    l.abieos_json_to_bin(
+    l.abiupcx_json_to_bin(
       context,
       name("upcxio.token"),
       type,
@@ -971,18 +979,18 @@ async function push_transfer() {
       })
     )
   );
-  const actionDataHex = l.abieos_get_bin_hex(context).readCString();
+  const actionDataHex = l.abiupcx_get_bin_hex(context).readCString();
   console.log("action json->bin: ", actionDataHex);
   console.log(
     "action bin->json: ",
-    abieos_hex_to_json(name("upcxio.token"), "transfer", actionDataHex)
+    abiupcx_hex_to_json(name("upcxio.token"), "transfer", actionDataHex)
   );
 
   let info = await rpc.get_info();
   let refBlock = await rpc.get_block(info.head_block_num - 3);
   let transaction = {
-    expiration: eosjs_ser.timePointSecToDate(
-      eosjs_ser.dateToTimePointSec(refBlock.timestamp) + 10
+    expiration: upcxjs_ser.timePointSecToDate(
+      upcxjs_ser.dateToTimePointSec(refBlock.timestamp) + 10
     ),
     ref_block_num: refBlock.block_num,
     ref_block_prefix: refBlock.ref_block_prefix,
@@ -1006,19 +1014,19 @@ async function push_transfer() {
     transaction_extensions: [] as any,
   };
   check(
-    l.abieos_json_to_bin(context, 0, cstr("transaction"), jsonStr(transaction))
+    l.abiupcx_json_to_bin(context, 0, cstr("transaction"), jsonStr(transaction))
   );
-  let transactionDataHex = l.abieos_get_bin_hex(context).readCString();
+  let transactionDataHex = l.abiupcx_get_bin_hex(context).readCString();
   console.log("transaction json->bin: ", transactionDataHex);
   console.log(
     "transaction bin->json: ",
-    abieos_hex_to_json(0, "transaction", transactionDataHex)
+    abiupcx_hex_to_json(0, "transaction", transactionDataHex)
   );
 
   let sig = await signatureProvider.sign({
     chainId: info.chain_id,
     requiredKeys: await signatureProvider.getAvailableKeys(),
-    serializedTransaction: eosjs_ser.hexToUint8Array(transactionDataHex),
+    serializedTransaction: upcxjs_ser.hexToUint8Array(transactionDataHex),
     abis: [],
   });
   console.log("sig:", sig);
@@ -1035,7 +1043,7 @@ async function push_transfer() {
 (async () => {
   try {
     check(context);
-    check(l.abieos_set_abi(context, 0, jsonStr(transactionAbi)));
+    check(l.abiupcx_set_abi(context, 0, jsonStr(transactionAbi)));
     check_types();
     if (useRpcEndpoint) await push_transfer();
   } catch (e) {

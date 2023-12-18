@@ -13,8 +13,8 @@
 
 pushd $UPCXIO_HOME
 
-if [ ! -f programs/nodeos/nodeos ]; then
-    echo unable to locate binary for nodeos
+if [ ! -f programs/nodupcx/nodupcx ]; then
+    echo unable to locate binary for nodupcx
     exit 1
 fi
 

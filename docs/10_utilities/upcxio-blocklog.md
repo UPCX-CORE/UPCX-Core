@@ -3,7 +3,7 @@ content_title: upcxio-blocklog
 link_text: upcxio-blocklog
 ---
 
-`upcxio-blocklog` is a command-line interface (CLI) utility that allows node operators to perform low-level tasks on the block logs created by a `nodeos` instance. `upcxio-blocklog` can perform one of the following operations:
+`upcxio-blocklog` is a command-line interface (CLI) utility that allows node operators to perform low-level tasks on the block logs created by a `nodupcx` instance. `upcxio-blocklog` can perform one of the following operations:
 
 - Convert a range of blocks to JSON format, as single objects or array.
 - Generate `blocks.index` from `blocks.log` in blocks directory.

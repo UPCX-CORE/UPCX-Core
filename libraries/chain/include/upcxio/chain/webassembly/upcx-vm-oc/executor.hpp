@@ -15,7 +15,7 @@ namespace upcxio { namespace chain {
 
 class apply_context;
 
-namespace eosvmoc {
+namespace upcxvmoc {
 
 class code_cache_base;
 class memory;

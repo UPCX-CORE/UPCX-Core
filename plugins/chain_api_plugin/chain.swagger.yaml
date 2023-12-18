@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Chain API
-  description: "OAS 3.0 Nodeos Chain API Specification\r"
+  description: "OAS 3.0 Nodupcx Chain API Specification\r"
   version: 1.0.0
   license:
     name: MIT

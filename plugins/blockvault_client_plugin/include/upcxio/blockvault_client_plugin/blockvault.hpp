@@ -43,7 +43,7 @@ class block_vault_interface {
    ///
    /// \brief The primary method for adding externally discovered blocks to the
    /// Block Vault. If an external block is accepted, the Block Vault cluster
-   /// will guarantee that all future nodeos nodes will know about this block OR
+   /// will guarantee that all future nodupcx nodes will know about this block OR
    /// about an accepted snapshot state that exceeds this block's block height
    /// before proposing a constructed block. If the implied LIB of this block
    /// conflicts with the Block Vault state, then it will be rejected. If the
@@ -63,7 +63,7 @@ class block_vault_interface {
                                             std::function<void(bool)> handler) = 0;
 
    ///
-   /// \brief The primary method for a nodeos node to offer snapshot data to
+   /// \brief The primary method for a nodupcx node to offer snapshot data to
    /// Block Vault that facilitates log pruning. If a snapshot's height is
    /// greater than the current snapshot AND less than or equal to the current
    /// implied LIB height, it will be accepted, and Block Vault will be able to
@@ -77,10 +77,10 @@ class block_vault_interface {
    virtual bool propose_snapshot(watermark_t watermark, const char* snapshot_filename) = 0;
 
    ///
-   /// \brief The primary method for bringing a new nodeos node into sync with
-   /// the Block Vault. This is the primary method for bringing a new nodeos
+   /// \brief The primary method for bringing a new nodupcx node into sync with
+   /// the Block Vault. This is the primary method for bringing a new nodupcx
    /// node into sync with the Block Vault. Syncing is semi-session based, a
-   /// syncing nodeos will establish a session with a single Block Vault node,
+   /// syncing nodupcx will establish a session with a single Block Vault node,
    /// stored on that node for the duration of the syncing process.  This
    /// session is used to guarantee that the Block Vault node does not prune any
    /// data that will be needed to complete this sync process until it is

@@ -48,7 +48,7 @@ cmake_dependent_option(ENABLE_SPEC_TESTS "enable wasm spec tests" ON "ENABLE_TES
 cmake_dependent_option(ENABLE_FUZZ_TESTS "enable fuzz testing" OFF "ENABLE_TESTS" ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
-include(EosVMBuildUtils)
+include(upcxVMBuildUtils)
 
 # ##################################################################################################
 # Create the upcx-vm library.
@@ -103,7 +103,7 @@ if(ENABLE_TESTS)
    if (NOT EXISTS ${CMAKE_BINARY_DIR}/wasms AND ENABLE_SPEC_TESTS)
       include(ExternalProject)
       ExternalProject_Add(
-         eos_vm_test_wasms
+         upcx_vm_test_wasms
          GIT_REPOSITORY "https://github.com/UPCXIO/upcx-vm-test-wasms.git"
          SOURCE_DIR ${CMAKE_BINARY_DIR}/wasms
          BINARY_DIR ${CMAKE_BINARY_DIR}/wasms

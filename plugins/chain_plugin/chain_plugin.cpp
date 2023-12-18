@@ -292,7 +292,7 @@ void chain_plugin::set_program_options(options_description& cli, options_descrip
          ("blocks-archive-dir", bpo::value<bfs::path>()->default_value(config::default_blocks_archive_dir_name),
           "the location of the blocks archive directory (absolute path or relative to blocks dir).\n"
           "If the value is empty, blocks files beyond the retained limit will be deleted.\n"
-          "All files in the archive directory are completely under user's control, i.e. they won't be accessed by nodeos anymore.")
+          "All files in the archive directory are completely under user's control, i.e. they won't be accessed by nodupcx anymore.")
          ("fix-irreversible-blocks", bpo::value<bool>()->default_value("false"),
           "When the existing block log is inconsistent with the index, allows fixing the block log and index files automatically - that is, " 
           "it will take the highest indexed block if it is valid; otherwise it will repair the block log and reconstruct the index.")
@@ -302,7 +302,7 @@ void chain_plugin::set_program_options(options_description& cli, options_descrip
          ("wasm-runtime", bpo::value<upcxio::chain::wasm_interface::vm_type>()->value_name("runtime")->notifier([](const auto& vm){
 #ifndef UPCXIO_UPCX_VM_OC_DEVELOPER
             //throwing an exception here (like UPCX_ASSERT) is just gobbled up with a "Failed to initialize" error :(
-            if(vm == wasm_interface::vm_type::eos_vm_oc) {
+            if(vm == wasm_interface::vm_type::upcx_vm_oc) {
                elog("UPCX VM OC is a tier-up compiler and works in conjunction with the configured base WASM runtime. Enable UPCX VM OC via 'upcx-vm-oc-enable' option");
                UPCX_ASSERT(false, plugin_exception, "");
             }
@@ -338,7 +338,7 @@ void chain_plugin::set_program_options(options_description& cli, options_descrip
           "print deeper information about chain operations")
          ("telemetry-url", bpo::value<std::string>(),
           "Send Zipkin spans to url. e.g. http://127.0.0.1:9411/api/v2/spans" )
-         ("telemetry-service-name", bpo::value<std::string>()->default_value("nodeos"),
+         ("telemetry-service-name", bpo::value<std::string>()->default_value("nodupcx"),
           "Zipkin localEndpoint.serviceName sent with each span" )
          ("telemetry-timeout-us", bpo::value<uint32_t>()->default_value(200000),
           "Timeout for sending Zipkin span." )
@@ -387,7 +387,7 @@ void chain_plugin::set_program_options(options_description& cli, options_descrip
          )
 
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
-         ("upcx-vm-oc-cache-size-mb", bpo::value<uint64_t>()->default_value(eosvmoc::config().cache_size / (1024u*1024u)), "Maximum size (in MiB) of the UPCX VM OC code cache")
+         ("upcx-vm-oc-cache-size-mb", bpo::value<uint64_t>()->default_value(upcxvmoc::config().cache_size / (1024u*1024u)), "Maximum size (in MiB) of the UPCX VM OC code cache")
          ("upcx-vm-oc-compile-threads", bpo::value<uint64_t>()->default_value(1u)->notifier([](const auto t) {
                if(t == 0) {
                   elog("upcx-vm-oc-compile-threads must be set to a non-zero value");
@@ -1187,11 +1187,11 @@ void chain_plugin::plugin_initialize(const variables_map& options) {
 
 #ifdef UPCXIO_UPCX_VM_OC_RUNTIME_ENABLED
       if( options.count("upcx-vm-oc-cache-size-mb") )
-         my->chain_config->eosvmoc_config.cache_size = options.at( "upcx-vm-oc-cache-size-mb" ).as<uint64_t>() * 1024u * 1024u;
+         my->chain_config->upcxvmoc_config.cache_size = options.at( "upcx-vm-oc-cache-size-mb" ).as<uint64_t>() * 1024u * 1024u;
       if( options.count("upcx-vm-oc-compile-threads") )
-         my->chain_config->eosvmoc_config.threads = options.at("upcx-vm-oc-compile-threads").as<uint64_t>();
+         my->chain_config->upcxvmoc_config.threads = options.at("upcx-vm-oc-compile-threads").as<uint64_t>();
       if( options["upcx-vm-oc-enable"].as<bool>() )
-         my->chain_config->eosvmoc_tierup = true;
+         my->chain_config->upcxvmoc_tierup = true;
 #endif
 
       my->account_queries_enabled = options.at("enable-account-queries").as<bool>();
@@ -1669,20 +1669,20 @@ void chain_plugin::log_guard_exception(const chain::guard_exception&e ) {
 void chain_plugin::handle_guard_exception(const chain::guard_exception& e) {
    log_guard_exception(e);
 
-   elog("database chain::guard_exception, quitting..."); // log string searched for in: tests/nodeos_under_min_avail_ram.py
+   elog("database chain::guard_exception, quitting..."); // log string searched for in: tests/nodupcx_under_min_avail_ram.py
    // quit the app
    app().quit();
 }
 
 void chain_plugin::handle_db_exhaustion() {
    elog("database memory exhausted: increase chain-state-db-size-mb and/or reversible-blocks-db-size-mb");
-   //return 1 -- it's what programs/nodeos/main.cpp considers "BAD_ALLOC"
+   //return 1 -- it's what programs/nodupcx/main.cpp considers "BAD_ALLOC"
    std::_Exit(1);
 }
 
 void chain_plugin::handle_bad_alloc() {
    elog("std::bad_alloc - memory exhausted");
-   //return -2 -- it's what programs/nodeos/main.cpp reports for std::exception
+   //return -2 -- it's what programs/nodupcx/main.cpp reports for std::exception
    std::_Exit(-2);
 }
   
@@ -2158,7 +2158,7 @@ struct key_converter<std::string, void> {
 
    static std::string from_hex(const std::string& bytes_in_hex, short_string encode_type) {
       std::string result = boost::algorithm::unhex(bytes_in_hex);
-      /// restore the string following the encoding rule from `template <typename S> to_key(std::string, S&)` in abieos
+      /// restore the string following the encoding rule from `template <typename S> to_key(std::string, S&)` in abiupcx
       /// to_key.hpp
       boost::replace_all(result, "\0\1", "\0");
       // remove trailing '\0\0'

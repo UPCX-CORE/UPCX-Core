@@ -1,4 +1,4 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiupcx/LICENSE.txt
 
 #pragma once
 
@@ -9,11 +9,11 @@
 #include <string_view>
 #include <upcxio/from_json.hpp>
 
-#include "abieos_ripemd160.hpp"
+#include "abiupcx_ripemd160.hpp"
 
 #define ABIUPCX_NODISCARD [[nodiscard]]
 
-namespace abieos {
+namespace abiupcx {
 
 template <typename State>
 ABIUPCX_NODISCARD bool set_error(State& state, std::string error) {
@@ -91,4 +91,4 @@ std::string binary_to_decimal(const std::array<uint8_t, size>& bin) {
     return result;
 }
 
-} // namespace abieos
+} // namespace abiupcx

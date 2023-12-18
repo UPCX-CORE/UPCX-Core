@@ -2,7 +2,7 @@
 #include <fc/exception/exception.hpp>
 #include <sys/mman.h>
 
-using namespace upcxio::chain::eosvmoc;
+using namespace upcxio::chain::upcxvmoc;
 
 void execution_stack::reset(std::size_t max_call_depth) {
    if(max_call_depth > call_depth_limit) {

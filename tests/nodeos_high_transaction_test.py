@@ -63,10 +63,10 @@ numRounds = int(numTransactions / args.total_accounts)
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killUpcxInstances=not dontKill
+killEosInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.UpcxWalletName
+WalletdName=Utils.EosWalletName
 ClientName="cleos"
 
 maxTransactionAttempts = 2            # max number of attempts to try to send a transaction
@@ -386,7 +386,7 @@ try:
 
     testSuccessful = not delayedReportError
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killUpcxInstances=killUpcxInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
     if not testSuccessful:
         Print(Utils.FileDivider)
         Print("Compare Blocklog")

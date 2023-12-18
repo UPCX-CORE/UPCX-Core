@@ -39,7 +39,7 @@
 #if defined(__SSE4_2__) && defined(__x86_64__)
 #include <nmmintrin.h>
 #else
-uint32_t _mm_crc32_u64(uint32_t a, uint64_t b );
+uint64_t _mm_crc32_u64(uint64_t a, uint64_t b );
 #endif
 
 namespace fc {
@@ -555,9 +555,9 @@ static void CityHashCrc256Long(const char *s, size_t len,
   uint64_t f = 0;
   uint64_t g = 0;
   uint64_t h = c + d;
-  uint32_t x = seed;
-  uint32_t y = 0;
-  uint32_t z = 0;
+  uint64_t x = seed;
+  uint64_t y = 0;
+  uint64_t z = 0;
 
   // 240 bytes of input per iter.
   size_t iters = len / 240;
@@ -681,4 +681,3 @@ uint128 city_hash_crc_128(const char *s, size_t len) {
 } // end namespace fc
 
 //#endif
-

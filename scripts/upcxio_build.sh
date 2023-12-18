@@ -2,8 +2,8 @@
 set -eo pipefail
 SCRIPT_VERSION=3.1 # Build script version (change this to re-build the CICD image)
 ##########################################################################
-# This is the EOSIO automated install script for Linux and Mac OS.
-# This file was downloaded from https://github.com/EOSIO/upcx
+# This is the UPCXIO automated install script for Linux and Mac OS.
+# This file was downloaded from https://github.com/UPCXIO/upcx
 #
 # Copyright (c) 2017, Respective Authors all rights reserved.
 #
@@ -29,7 +29,7 @@ SCRIPT_VERSION=3.1 # Build script version (change this to re-build the CICD imag
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-# https://github.com/EOSIO/upcx/blob/master/LICENSE
+# https://github.com/UPCXIO/upcx/blob/master/LICENSE
 ##########################################################################
 
 function usage() {
@@ -38,7 +38,7 @@ function usage() {
   -o TYPE     Build <Debug|Release|RelWithDebInfo|MinSizeRel> (default: Release)
   -s NAME     Core Symbol Name <1-7 characters> (default: SYS)
   -b DIR      Use pre-built boost in DIR
-  -i DIR      Directory to use for installing dependencies & EOSIO (default: $HOME)
+  -i DIR      Directory to use for installing dependencies & UPCXIO (default: $HOME)
   -y          Noninteractive mode (answers yes to every prompt)
   -c          Enable Code Coverage
   -d          Generate Doxygen
@@ -113,7 +113,7 @@ cd $( dirname "${BASH_SOURCE[0]}" )/..
 . ./scripts/helpers/upcxio.sh
 
 $VERBOSE && echo "Build Script Version: ${SCRIPT_VERSION}"
-echo "EOSIO Version: ${EOSIO_VERSION_FULL}"
+echo "UPCXIO Version: ${EOSIO_VERSION_FULL}"
 echo "$( date -u )"
 echo "User: ${CURRENT_USER}"
 # echo "git head id: %s" "$( cat .git/refs/heads/master )"
@@ -194,7 +194,7 @@ fi
 execute bash -c "sed -e 's~@~$OPT_DIR~g' $SCRIPT_DIR/pinned_toolchain.cmake &> $BUILD_DIR/pinned_toolchain.cmake"
 
 echo "${COLOR_CYAN}====================================================================================="
-echo "======================= ${COLOR_WHITE}Starting EOSIO Dependency Install${COLOR_CYAN} ===========================${COLOR_NC}"
+echo "======================= ${COLOR_WHITE}Starting UPCXIO Dependency Install${COLOR_CYAN} ===========================${COLOR_NC}"
 execute cd $SRC_DIR
 set_system_vars # JOBS, Memory, disk space available, etc
 echo "Architecture: ${ARCH}"
@@ -203,7 +203,7 @@ execute cd $REPO_ROOT
 
 echo ""
 echo "${COLOR_CYAN}========================================================================"
-echo "======================= ${COLOR_WHITE}Starting EOSIO Build${COLOR_CYAN} ===========================${COLOR_NC}"
+echo "======================= ${COLOR_WHITE}Starting UPCXIO Build${COLOR_CYAN} ===========================${COLOR_NC}"
 if $VERBOSE; then
    echo "CXX: $CXX"
    echo "CC: $CC"
@@ -235,7 +235,7 @@ echo "| (____/\| (___) |/\____) |___) (___| (___) |"
 echo "(_______/(_______)\_______)\_______/(_______)"
 echo "=============================================${COLOR_NC}"
 
-echo "${COLOR_GREEN}EOSIO has been successfully built. $(($TIME_END/3600)):$(($TIME_END%3600/60)):$(($TIME_END%60))"
+echo "${COLOR_GREEN}UPCXIO has been successfully built. $(($TIME_END/3600)):$(($TIME_END%3600/60)):$(($TIME_END%60))"
 echo "${COLOR_GREEN}You can now install using: ${SCRIPT_DIR}/upcxio_install.sh${COLOR_NC}"
 echo "${COLOR_YELLOW}Uninstall with: ${SCRIPT_DIR}/upcxio_uninstall.sh${COLOR_NC}"
 

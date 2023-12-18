@@ -8,8 +8,6 @@ SET( CMAKE_DEBUG_POSTFIX _debug )
 SET( BUILD_SHARED_LIBS NO )
 SET( ECC_IMPL secp256k1 CACHE STRING "secp256k1 or openssl or mixed" )
 
-add_definitions(-DSKIP_FC_TESTS)
-
 set(platformBitness 32)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(platformBitness 64)
@@ -205,7 +203,7 @@ ELSE()
 ENDIF()
 
 IF(NOT DEFINED SKIP_FC_TESTS)
-  # add_subdirectory( test )
+  add_subdirectory( test )
 ENDIF()
 
 install(TARGETS fc

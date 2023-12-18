@@ -303,7 +303,7 @@ void chain_plugin::set_program_options(options_description& cli, options_descrip
 #ifndef EOSIO_EOS_VM_OC_DEVELOPER
             //throwing an exception here (like EOS_ASSERT) is just gobbled up with a "Failed to initialize" error :(
             if(vm == wasm_interface::vm_type::eos_vm_oc) {
-               elog("EOS VM OC is a tier-up compiler and works in conjunction with the configured base WASM runtime. Enable EOS VM OC via 'upcx-vm-oc-enable' option");
+               elog("UPCX VM OC is a tier-up compiler and works in conjunction with the configured base WASM runtime. Enable UPCX VM OC via 'upcx-vm-oc-enable' option");
                EOS_ASSERT(false, plugin_exception, "");
             }
 #endif
@@ -387,14 +387,14 @@ void chain_plugin::set_program_options(options_description& cli, options_descrip
          )
 
 #ifdef EOSIO_EOS_VM_OC_RUNTIME_ENABLED
-         ("upcx-vm-oc-cache-size-mb", bpo::value<uint64_t>()->default_value(eosvmoc::config().cache_size / (1024u*1024u)), "Maximum size (in MiB) of the EOS VM OC code cache")
+         ("upcx-vm-oc-cache-size-mb", bpo::value<uint64_t>()->default_value(eosvmoc::config().cache_size / (1024u*1024u)), "Maximum size (in MiB) of the UPCX VM OC code cache")
          ("upcx-vm-oc-compile-threads", bpo::value<uint64_t>()->default_value(1u)->notifier([](const auto t) {
                if(t == 0) {
                   elog("upcx-vm-oc-compile-threads must be set to a non-zero value");
                   EOS_ASSERT(false, plugin_exception, "");
                }
-         }), "Number of threads to use for EOS VM OC tier-up")
-         ("upcx-vm-oc-enable", bpo::bool_switch(), "Enable EOS VM OC tier-up runtime")
+         }), "Number of threads to use for UPCX VM OC tier-up")
+         ("upcx-vm-oc-enable", bpo::bool_switch(), "Enable UPCX VM OC tier-up runtime")
 #endif
          ("enable-account-queries", bpo::value<bool>()->default_value(false), "enable queries to find accounts by various metadata.")
          ("max-nonprivileged-inline-action-size", bpo::value<uint32_t>()->default_value(config::default_max_nonprivileged_inline_action_size), "maximum allowed size (in bytes) of an inline action for a nonprivileged account")
@@ -1860,7 +1860,7 @@ uint64_t convert_to_type(const string& str, const string& desc) {
       return s.to_uint64_t();
    } catch( ... ) { }
 
-   if (str.find(',') != string::npos) { // fix #6274 only match formats like 4,EOS
+   if (str.find(',') != string::npos) { // fix #6274 only match formats like 4,UPCX
       try {
          auto symb = upcxio::chain::symbol::from_string(str);
          return symb.value();

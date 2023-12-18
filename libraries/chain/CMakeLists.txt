@@ -45,7 +45,7 @@ if("upcx-vm-oc" IN_LIST EOSIO_WASM_RUNTIMES)
    include_directories(${LLVM_INCLUDE_DIRS})
    add_definitions(${LLVM_DEFINITIONS})
 
-   option(EOSVMOC_ENABLE_DEVELOPER_OPTIONS "enable developer options for EOS VM OC" OFF)
+   option(EOSVMOC_ENABLE_DEVELOPER_OPTIONS "enable developer options for UPCX VM OC" OFF)
 endif()
 
 if("upcx-vm" IN_LIST EOSIO_WASM_RUNTIMES OR "upcx-vm-jit" IN_LIST EOSIO_WASM_RUNTIMES)
@@ -157,11 +157,11 @@ foreach(RUNTIME ${EOSIO_WASM_RUNTIMES})
 endforeach()
 
 if(EOSVMOC_ENABLE_DEVELOPER_OPTIONS)
-   message(WARNING "EOS VM OC Developer Options are enabled; these are NOT supported")
+   message(WARNING "UPCX VM OC Developer Options are enabled; these are NOT supported")
    target_compile_definitions(upcxio_chain PUBLIC EOSIO_EOS_VM_OC_DEVELOPER)
 endif()
 
-# add_subdirectory ( backing_store/tests )
+add_subdirectory ( backing_store/tests )
 
 install( TARGETS upcxio_chain
    RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}

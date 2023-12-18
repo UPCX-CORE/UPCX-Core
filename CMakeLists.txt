@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.8 )
 
-project( EOSIO )
+project( UPCXIO )
 include(CTest) # suppresses DartConfiguration.tcl error
 enable_testing()
 
@@ -14,8 +14,7 @@ include( GNUInstallDirs )
 include( InstallDirectoryPermissions )
 include( MASSigning )
 
-set(CMAKE_OSX_ARCHITECTURES "x86_64")
-set( BLOCKCHAIN_NAME "EOSIO" )
+set( BLOCKCHAIN_NAME "UPCXIO" )
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_EXTENSIONS ON )
 set( CXX_STANDARD_REQUIRED ON)
@@ -72,11 +71,11 @@ endif()
 if(CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT WIN32)
    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" AND "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
       list(APPEND EOSIO_WASM_RUNTIMES upcx-vm-oc)
-      # EOS VM OC requires LLVM, but move the check up here to a central location so that the UpcxioTester.cmakes
+      # UPCX VM OC requires LLVM, but move the check up here to a central location so that the UpcxioTester.cmakes
       # can be created with the exact version found
       find_package(LLVM REQUIRED CONFIG)
      if(LLVM_VERSION_MAJOR VERSION_LESS 7 OR LLVM_VERSION_MAJOR VERSION_GREATER_EQUAL 12)
-        message(FATAL_ERROR "EOSIO requires an LLVM version 7 through 11")
+        message(FATAL_ERROR "UPCXIO requires an LLVM version 7 through 11")
      endif()
    endif()
 endif()
@@ -108,12 +107,12 @@ find_package(Boost 1.67 REQUIRED COMPONENTS program_options unit_test_framework)
 
 if( APPLE AND UNIX )
 # Apple Specific Options Here
-    message( STATUS "Configuring EOSIO on macOS" )
+    message( STATUS "Configuring UPCXIO on macOS" )
     set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Wall -Wno-deprecated-declarations" )
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-deprecated-declarations" )
 else()
     # Linux Specific Options Here
-    message( STATUS "Configuring EOSIO on Linux" )
+    message( STATUS "Configuring UPCXIO on Linux" )
     set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Wall" )
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
     if ( FULL_STATIC_BUILD )
@@ -127,13 +126,13 @@ else()
     endif()
 endif()
 
-option(EOSIO_ENABLE_DEVELOPER_OPTIONS "enable developer options for EOSIO" OFF)
+option(EOSIO_ENABLE_DEVELOPER_OPTIONS "enable developer options for UPCXIO" OFF)
 
 # based on http://www.delorie.com/gnu/docs/gdb/gdb_70.html
 # uncomment this line to tell GDB about macros (slows compile times)
 # set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -gdwarf-2 -g3" )
 
-set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build EOSIO for code coverage analysis")
+set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build UPCXIO for code coverage analysis")
 
 if(ENABLE_COVERAGE_TESTING)
   SET(CMAKE_C_FLAGS   "--coverage ${CMAKE_C_FLAGS}")
@@ -165,7 +164,7 @@ message( STATUS "Using '${EOSIO_ROOT_KEY}' as public key for 'upcxio' account" )
 
 find_package( Gperftools QUIET )
 if( GPERFTOOLS_FOUND )
-    message( STATUS "Found gperftools; compiling EOSIO with TCMalloc")
+    message( STATUS "Found gperftools; compiling UPCXIO with TCMalloc")
     #if doing this by the book, simply link_libraries( ${GPERFTOOLS_TCMALLOC} ) here. That will
     #give the performance benefits of tcmalloc but since it won't be linked last
     #the heap profiler & checker may not be accurate. This here is rather undocumented behavior
@@ -178,15 +177,15 @@ add_subdirectory( libraries )
 add_subdirectory( plugins )
 add_subdirectory( programs )
 add_subdirectory( scripts )
-# add_subdirectory( unittests )
+add_subdirectory( unittests )
 add_subdirectory( contracts )
-# add_subdirectory( tests )
+add_subdirectory( tests )
 add_subdirectory( tools )
 
 option(DISABLE_WASM_SPEC_TESTS "disable building of wasm spec unit tests" OFF)
 
 if (NOT DISABLE_WASM_SPEC_TESTS)
-# add_subdirectory( upcxio-wasm-spec-tests/generated-tests )
+add_subdirectory( upcxio-wasm-spec-tests/generated-tests )
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")

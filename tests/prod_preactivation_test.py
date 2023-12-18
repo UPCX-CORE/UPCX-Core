@@ -45,11 +45,11 @@ localTest=True
 cluster=Cluster(host=server, port=port, walletd=True, defproduceraPrvtKey=defproduceraPrvtKey, defproducerbPrvtKey=defproducerbPrvtKey)
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killUpcxInstances=not dontKill
+killEosInstances=not dontKill
 killWallet=not dontKill
 dontBootstrap=sanityTest
 
-WalletdName=Utils.UpcxWalletName
+WalletdName=Utils.EosWalletName
 ClientName="cleos"
 
 try:
@@ -171,6 +171,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killUpcxInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exit(0)

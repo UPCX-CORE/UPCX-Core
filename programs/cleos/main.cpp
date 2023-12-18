@@ -9,7 +9,7 @@
    cleos contains documentation for all of its commands. For a list of all commands known to cleos, simply run it with no arguments:
 ```
 $ ./cleos
-Command Line Interface to EOSIO Client
+Command Line Interface to UPCXIO Client
 Usage: programs/cleos/cleos [OPTIONS] SUBCOMMAND
 
 Options:
@@ -247,7 +247,7 @@ void add_standard_transaction_options(CLI::App* cmd, string default_permission =
 }
 
 bool is_public_key_str(const std::string& potential_key_str) {
-   return boost::istarts_with(potential_key_str, "EOS") || boost::istarts_with(potential_key_str, "PUB_R1") ||  boost::istarts_with(potential_key_str, "PUB_K1") ||  boost::istarts_with(potential_key_str, "PUB_WA");
+   return boost::istarts_with(potential_key_str, "UPCX") || boost::istarts_with(potential_key_str, "PUB_R1") ||  boost::istarts_with(potential_key_str, "PUB_K1") ||  boost::istarts_with(potential_key_str, "PUB_WA");
 }
 
 class signing_keys_option {
@@ -2501,7 +2501,7 @@ int main( int argc, char** argv ) {
    context = upcxio::client::http::create_http_context();
    wallet_url = default_wallet_url;
 
-   CLI::App app{"Command Line Interface to EOSIO Client"};
+   CLI::App app{"Command Line Interface to UPCXIO Client"};
    app.require_subcommand();
    // Hide obsolete options by putting them into a group with an empty name.
    app.add_option( "-H,--host", obsoleted_option_host_port, localized("The host where ${n} is running", ("n", node_executable_name)) )->group("");

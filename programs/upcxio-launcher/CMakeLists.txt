@@ -3,8 +3,6 @@ if( UNIX AND NOT APPLE )
   set(rt_library rt )
 endif()
 
-set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE INTERNAL "" FORCE)
-
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../.git)
   find_package(Git)
   if(GIT_FOUND)

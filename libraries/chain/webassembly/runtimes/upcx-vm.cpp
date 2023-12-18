@@ -128,7 +128,7 @@ class eos_vm_instantiated_module : public wasm_instantiated_module_interface {
          _instantiated_module(std::move(mod)) {}
 
       void apply(apply_context& context) override {
-         // _instantiated_module->set_wasm_allocator(&context.control.get_wasm_allocator());
+         _instantiated_module->set_wasm_allocator(&context.control.get_wasm_allocator());
          _runtime->_bkend = _instantiated_module.get();
          apply_options opts;
          if(context.control.is_builtin_activated(builtin_protocol_feature_t::configurable_wasm_limits)) {

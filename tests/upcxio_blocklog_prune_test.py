@@ -38,7 +38,7 @@ Utils.Debug = args.v
 killAll=args.clean_run
 dumpErrorDetails=args.dump_error_details
 dontKill=args.leave_running
-killUpcxInstances=not dontKill
+killEosInstances=not dontKill
 killWallet=not dontKill
 keepLogs=args.keep_logs
 
@@ -104,7 +104,7 @@ try:
     producerNode.waitForBlock(cfTrxBlockNum, blockType=BlockType.lib, timeout=WaitSpec.calculate(), errorContext="producerNode LIB did not advance")
 
     Utils.Print("verify the account payloadless from producer node")
-    trans = producerNode.getUpcxAccount("payloadless")
+    trans = producerNode.getEosAccount("payloadless")
     assert trans["account_name"], "Failed to get the account payloadless"
 
     Utils.Print("verify the context free transaction from producer node")
@@ -190,7 +190,7 @@ try:
 
     testSuccessful = True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killUpcxInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exitCode = 0 if testSuccessful else 1
 exit(exitCode)

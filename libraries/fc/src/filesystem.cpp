@@ -10,8 +10,6 @@
 #include <boost/config.hpp>
 #include <boost/filesystem.hpp>
 
-#include <fstream>
-
 #ifdef _WIN32
 # include <windows.h>
 # include <userenv.h>

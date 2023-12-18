@@ -1,0 +1,103 @@
+---
+content_title: Amazon Linux 2
+---
+
+This section contains shell commands to manually download, build, install, test, and uninstall UPCXIO and dependencies on Amazon Linux 2.
+
+[[info | Building UPCXIO is for Advanced Developers]]
+| If you are new to UPCXIO, it is recommended that you install the [UPCXIO Prebuilt Binaries](../../../00_install-prebuilt-binaries.md) instead of building from source.
+
+Select a task below, then copy/paste the shell commands to a Unix terminal to execute:
+
+- [Download UPCXIO Repository](#download-upcxio-repository)
+- [Install UPCXIO Dependencies](#install-upcxio-dependencies)
+- [Build UPCXIO](#build-upcxio)
+- [Install UPCXIO](#install-upcxio)
+- [Test UPCXIO](#test-upcxio)
+- [Uninstall UPCXIO](#uninstall-upcxio)
+
+[[info | Building UPCXIO on another OS?]]
+| Visit the [Build UPCXIO from Source](../../index.md) section.
+
+## Download UPCXIO Repository
+
+These commands set the UPCXIO directories, install git, and clone the UPCXIO repository.
+
+```sh
+# set UPCXIO directories
+export EOSIO_LOCATION=~/upcxio/upcx
+export EOSIO_INSTALL_LOCATION=$EOSIO_LOCATION/../install
+mkdir -p $EOSIO_INSTALL_LOCATION
+# install git
+yum update -y && yum install -y git
+# clone UPCXIO repository
+git clone https://github.com/UPCXIO/upcx.git $EOSIO_LOCATION
+cd $EOSIO_LOCATION && git submodule update --init --recursive
+```
+
+## Install UPCXIO Dependencies
+
+These commands install the UPCXIO software dependencies. Make sure to [Download the UPCXIO Repository](#download-upcxio-repository) first and set the UPCXIO directories.
+
+```sh
+# install dependencies
+yum install -y which sudo procps-ng util-linux autoconf automake \
+    libtool make bzip2 bzip2-devel openssl-devel gmp-devel libstdc++ libcurl-devel \
+    libusbx-devel python3 python3-devel python-devel libedit-devel doxygen \
+    graphviz clang patch llvm-devel llvm-static vim-common jq
+# build cmake
+export PATH=$EOSIO_INSTALL_LOCATION/bin:$PATH
+cd $EOSIO_INSTALL_LOCATION && curl -LO https://cmake.org/files/v3.13/cmake-3.13.2.tar.gz && \
+    tar -xzf cmake-3.13.2.tar.gz && \
+    cd cmake-3.13.2 && \
+    ./bootstrap --prefix=$EOSIO_INSTALL_LOCATION && \
+    make -j$(nproc) && \
+    make install && \
+    rm -rf $EOSIO_INSTALL_LOCATION/cmake-3.13.2.tar.gz $EOSIO_INSTALL_LOCATION/cmake-3.13.2
+# build boost
+cd $EOSIO_INSTALL_LOCATION && curl -LO https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2 && \
+    tar -xjf boost_1_71_0.tar.bz2 && \
+    cd boost_1_71_0 && \
+    ./bootstrap.sh --prefix=$EOSIO_INSTALL_LOCATION && \
+    ./b2 --with-iostreams --with-date_time --with-filesystem --with-system --with-program_options --with-chrono --with-test -q -j$(nproc) install && \
+    rm -rf $EOSIO_INSTALL_LOCATION/boost_1_71_0.tar.bz2 $EOSIO_INSTALL_LOCATION/boost_1_71_0
+```
+
+## Build UPCXIO
+
+These commands build the UPCXIO software on the specified OS. Make sure to [Install UPCXIO Dependencies](#install-upcxio-dependencies) first.
+
+[[caution | `EOSIO_BUILD_LOCATION` environment variable]]
+| Do NOT change this variable. It is set for convenience only. It should always be set to the `build` folder within the cloned repository.
+
+```sh
+export EOSIO_BUILD_LOCATION=$EOSIO_LOCATION/build
+mkdir -p $EOSIO_BUILD_LOCATION
+cd $EOSIO_BUILD_LOCATION && $EOSIO_INSTALL_LOCATION/bin/cmake -DCMAKE_BUILD_TYPE='Release' -DCMAKE_CXX_COMPILER='clang++' -DCMAKE_C_COMPILER='clang' -DCMAKE_INSTALL_PREFIX=$EOSIO_INSTALL_LOCATION $EOSIO_LOCATION
+cd $EOSIO_BUILD_LOCATION && make -j$(nproc)
+```
+
+## Install UPCXIO
+
+This command installs the UPCXIO software on the specified OS. Make sure to [Build UPCXIO](#build-upcxio) first.
+
+```sh
+cd $EOSIO_BUILD_LOCATION && make install
+```
+
+## Test UPCXIO
+
+These commands validate the UPCXIO software installation on the specified OS. This task is optional but recommended. Make sure to [Install UPCXIO](#install-upcxio) first.
+
+```sh
+cd $EOSIO_BUILD_LOCATION && make test
+```
+
+## Uninstall UPCXIO
+
+These commands uninstall the UPCXIO software from the specified OS.
+
+```sh
+xargs rm < $EOSIO_BUILD_LOCATION/install_manifest.txt
+rm -rf $EOSIO_BUILD_LOCATION
+```

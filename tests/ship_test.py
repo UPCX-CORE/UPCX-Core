@@ -50,10 +50,10 @@ walletPort=TestHelper.DEFAULT_WALLET_PORT
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killUpcxInstances=not dontKill
+killEosInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.UpcxWalletName
+WalletdName=Utils.EosWalletName
 ClientName="cleos"
 shipTempDir=None
 
@@ -201,7 +201,7 @@ try:
 
     testSuccessful = True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killUpcxInstances=killUpcxInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
     if shipTempDir is not None:
         if testSuccessful and not keepLogs:
             shutil.rmtree(shipTempDir, ignore_errors=True)

@@ -1,9 +1,7 @@
 #include "../postgres_backend.hpp"
 #include <boost/test/unit_test.hpp>
-#include <boost/mpl/list.hpp>
 #include <fc/filesystem.hpp>
 #include <fc/log/appender.hpp>
-#include <list>
 
 std::vector<char> mock_snapshot_content = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'};
 

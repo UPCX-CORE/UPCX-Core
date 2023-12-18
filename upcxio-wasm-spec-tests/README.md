@@ -1,6 +1,6 @@
-# EOSIO WASM Spec Tests
+# UPCXIO WASM Spec Tests
 
-This repo provides a set of EOSIO unit tests that can be used to check a WASM Backend's conformance to the
+This repo provides a set of UPCXIO unit tests that can be used to check a WASM Backend's conformance to the
 WebAssembly spec.
 
 ## Tests
@@ -48,7 +48,7 @@ WebAssembly spec.
 
 - start.7 -- Will fail if not deleted from generated tests.
 
-  - Imports "print" from "spectest". Changing to any of the EOSIO print functions results in "start function must be nullary" due to their requiring a parameter.
+  - Imports "print" from "spectest". Changing to any of the UPCXIO print functions results in "start function must be nullary" due to their requiring a parameter.
 
 - globals.2 -- Delete from generated tests or it segfaults due to missing wasm.
   - `upcxio-wasm2wast` error "mutable globals cannot be exported" when converting to wast.
@@ -58,7 +58,7 @@ WebAssembly spec.
     - `wasm2wat` provided by WABT handles this correctly, implying an error in CDT.
 - globals.14 -- Delete from generated tests or it segfaults due to missing wasm.
   - Imports "global_i32" from "spectest".
-    - Unclear what an appropriate substition from EOSIO would be.
+    - Unclear what an appropriate substition from UPCXIO would be.
 
 ## Contributing
 

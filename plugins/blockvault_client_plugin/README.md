@@ -1,6 +1,6 @@
 # Overview
 
-Block Vault is a component in an EOSIO network architecture which provides a replicated durable storage with strong consistency guarantees for all the input required by a redundant cluster of nodeos nodes to achieve the guarantees outlined in BlockVault: Failover for Nodeos reproduced here:
+Block Vault is a component in an UPCXIO network architecture which provides a replicated durable storage with strong consistency guarantees for all the input required by a redundant cluster of nodeos nodes to achieve the guarantees outlined in BlockVault: Failover for Nodeos reproduced here:
 
 - Guarantee against double-production of blocks
 - Guarantee against finality violation

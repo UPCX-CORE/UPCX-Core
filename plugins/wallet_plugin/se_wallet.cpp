@@ -50,7 +50,7 @@ void se_wallet::lock() {
 void se_wallet::unlock(string password) {
    promise<bool> prom;
    future<bool> fut = prom.get_future();
-   macos_user_auth(detail::auth_callback, &prom, CFSTR("unlock your EOSIO wallet"));
+   macos_user_auth(detail::auth_callback, &prom, CFSTR("unlock your UPCXIO wallet"));
    if(!fut.get())
       FC_THROW_EXCEPTION(chain::wallet_invalid_password_exception, "Local user authentication failed");
    my->locked = false;

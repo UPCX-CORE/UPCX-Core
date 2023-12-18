@@ -22,7 +22,7 @@ inline constexpr auto get_intrinsic_table() {
       "eosvmoc_internal.indirect_call_mismatch",
       "eosvmoc_internal.indirect_call_oob",
       "eosvmoc_internal.depth_assert",
-      "upcxio_injection.call_depth_assert",  //these two are never used by EOS VM OC but all intrinsics
+      "upcxio_injection.call_depth_assert",  //these two are never used by UPCX VM OC but all intrinsics
       "upcxio_injection.checktime",          //must be mapped
       "env.__ashlti3",
       "env.__ashrti3",

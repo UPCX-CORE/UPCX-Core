@@ -641,7 +641,7 @@ void new_chain_banner(const upcxio::chain::controller& db)
       "*******************************\n"
       "*                             *\n"
       "*   ------ NEW CHAIN ------   *\n"
-      "*   -  Welcome to EOSIO!  -   *\n"
+      "*   -  Welcome to UPCXIO!  -   *\n"
       "*   -----------------------   *\n"
       "*                             *\n"
       "*******************************\n"

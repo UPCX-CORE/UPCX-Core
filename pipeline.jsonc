@@ -27,7 +27,7 @@
     },
     "configuration": ["170=v1.7.0"]
   },
-  // upcxio-resume-from-state documentation: https://github.com/EOSIO/auto-eks-sync-nodes/blob/master/pipelines/upcxio-resume-from-state/README.md
+  // upcxio-resume-from-state documentation: https://github.com/UPCXIO/auto-eks-sync-nodes/blob/master/pipelines/upcxio-resume-from-state/README.md
   "upcxio-resume-from-state": {
     "test": [
       {

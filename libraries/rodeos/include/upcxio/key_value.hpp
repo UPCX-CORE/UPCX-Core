@@ -222,7 +222,7 @@ inline key_type table_key(const key_type& prefix, const key_type& key) {
 // This is the "best" way to document a function that does not technically exist using Doxygen.
 #if EOSIO_CDT_DOXYGEN
 /**
- * @brief A function for converting types to the appropriate binary representation for the EOSIO Key Value database.
+ * @brief A function for converting types to the appropriate binary representation for the UPCXIO Key Value database.
  * @details The CDT provides implementations of this function for many of the common primitives and for structs/tuples.
  * If sticking with standard types, contract developers should not need to interact with this function.
  * If doing something more advanced, contract developers may need to provide their own implementation for a special type.
@@ -242,8 +242,8 @@ struct default_constructor_tag;
  * @defgroup keyvalue Key Value Table
  * @ingroup contracts
  *
- * @brief Defines an EOSIO Key Value Table
- * @details EOSIO Key Value API provides a C++ interface to the EOSIO Key Value database.
+ * @brief Defines an UPCXIO Key Value Table
+ * @details UPCXIO Key Value API provides a C++ interface to the UPCXIO Key Value database.
  * Key Value Tables require 1 primary index, of any type that can be serialized to a binary representation.
  * Key Value Tables support 0 or more secondary index, of any type that can be serialized to a binary representation.
  * Indexes must be a member variable or a member function.
@@ -463,7 +463,7 @@ public:
    /**
     * @ingroup keyvalue
     *
-    * @brief Defines an index on an EOSIO Key Value Table
+    * @brief Defines an index on an UPCXIO Key Value Table
     * @details A Key Value Index allows a user of the table to search based on a given field.
     * The only restrictions on that field are that it is serializable to a binary representation sortable by the KV intrinsics.
     * Convenience functions exist to handle most of the primitive types as well as some more complex types, and are

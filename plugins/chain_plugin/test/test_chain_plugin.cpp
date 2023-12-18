@@ -305,7 +305,7 @@ public:
     }
 
     vector<name> active_and_vote_producers() {
-        //stake more than 15% of total EOS supply to activate chain
+        //stake more than 15% of total UPCX supply to activate chain
         transfer( name("upcxio"), name("alice1111111"), core_from_string("650000000.0000"), name("upcxio") );
         BOOST_CHECK_EQUAL( success(), stake( name("alice1111111"), name("alice1111111"), core_from_string("300000000.0000"), core_from_string("300000000.0000") ) );
 
@@ -377,7 +377,7 @@ BOOST_FIXTURE_TEST_CASE(account_results_total_resources_test, chain_plugin_teste
     setup_system_accounts();
     produce_blocks();
     create_account_with_resources("alice1111111"_n, config::system_account_name);
-    //stake more than 15% of total EOS supply to activate chain
+    //stake more than 15% of total UPCX supply to activate chain
     transfer( name("upcxio"), name("alice1111111"), core_from_string("650000000.0000"), name("upcxio") );
 
     read_only::get_account_results results = get_account_info(name("alice1111111"));
@@ -496,7 +496,7 @@ BOOST_FIXTURE_TEST_CASE(account_results_rex_info_test, chain_plugin_tester) { tr
 
     create_account_with_resources("alice1111111"_n, config::system_account_name, core_from_string("1.0000"), false);
 
-    //stake more than 15% of total EOS supply to activate chain
+    //stake more than 15% of total UPCX supply to activate chain
     transfer( name("upcxio"), name("alice1111111"), core_from_string("650000000.0000"), name("upcxio") );
     deposit(name("alice1111111"), core_from_string("1000.0000"));
     BOOST_CHECK_EQUAL( success(), buyrex(name("alice1111111"), core_from_string("100.0000")) );

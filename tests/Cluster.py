@@ -203,7 +203,7 @@ class Cluster(object):
         Utils.Print("alternateVersionLabelsFile=%s" % (alternateVersionLabelsFile))
 
         if not self.localCluster:
-            Utils.Print("WARNING: Cluster not local, not launching %s." % (Utils.UpcxServerName))
+            Utils.Print("WARNING: Cluster not local, not launching %s." % (Utils.EosServerName))
             return True
 
         if len(self.nodes) > 0:
@@ -236,7 +236,7 @@ class Cluster(object):
             time.sleep(2)
 
         cmd="%s -p %s -n %s -d %s -i %s -f %s --unstarted-nodes %s" % (
-            Utils.UpcxLauncherPath, pnodes, totalNodes, delay, datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3],
+            Utils.EosLauncherPath, pnodes, totalNodes, delay, datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3],
             producerFlag, unstartedNodes)
         cmdArr=cmd.split()
         if self.staging:
@@ -440,7 +440,7 @@ class Cluster(object):
         nodes=self.discoverLocalNodes(startedNodes, timeout=Utils.systemWaitTimeout)
         if nodes is None or startedNodes != len(nodes):
             Utils.Print("ERROR: Unable to validate %s instances, expected: %d, actual: %d" %
-                          (Utils.UpcxServerName, startedNodes, len(nodes)))
+                          (Utils.EosServerName, startedNodes, len(nodes)))
             return False
 
         self.nodes=nodes
@@ -621,7 +621,7 @@ class Cluster(object):
         """Returns client version (string)"""
         p = re.compile(r'^Build version:\s(\w+)\n$')
         try:
-            cmd="%s version client" % (Utils.UpcxClientPath)
+            cmd="%s version client" % (Utils.EosClientPath)
             if verbose: Utils.Print("cmd: %s" % (cmd))
             response=Utils.checkOutput(cmd.split())
             assert(response)
@@ -645,7 +645,7 @@ class Cluster(object):
         p = re.compile('Private key: (.+)\nPublic key: (.+)\n', re.MULTILINE)
         for _ in range(0, count):
             try:
-                cmd="%s create key --to-console" % (Utils.UpcxClientPath)
+                cmd="%s create key --to-console" % (Utils.EosClientPath)
                 if Utils.Debug: Utils.Print("cmd: %s" % (cmd))
                 keyStr=Utils.checkOutput(cmd.split())
                 m=p.search(keyStr)
@@ -656,7 +656,7 @@ class Cluster(object):
                 ownerPrivate=m.group(1)
                 ownerPublic=m.group(2)
 
-                cmd="%s create key --to-console" % (Utils.UpcxClientPath)
+                cmd="%s create key --to-console" % (Utils.EosClientPath)
                 if Utils.Debug: Utils.Print("cmd: %s" % (cmd))
                 keyStr=Utils.checkOutput(cmd.split())
                 m=p.match(keyStr)
@@ -775,15 +775,15 @@ class Cluster(object):
 
         if Utils.Debug: Utils.Print("Funds transfered on transaction id %s." % (transId))
 
-        nextUpcxIdx=-1
+        nextEosIdx=-1
         for i in range(0, count):
             account=accounts[i]
             nextInstanceFound=False
             for _ in range(0, count):
-                #Utils.Print("nextUpcxIdx: %d, n: %d" % (nextUpcxIdx, n))
-                nextUpcxIdx=(nextUpcxIdx + 1)%count
-                if not self.nodes[nextUpcxIdx].killed:
-                    #Utils.Print("nextUpcxIdx: %d" % (nextUpcxIdx))
+                #Utils.Print("nextEosIdx: %d, n: %d" % (nextEosIdx, n))
+                nextEosIdx=(nextEosIdx + 1)%count
+                if not self.nodes[nextEosIdx].killed:
+                    #Utils.Print("nextEosIdx: %d" % (nextEosIdx))
                     nextInstanceFound=True
                     break
 
@@ -791,8 +791,8 @@ class Cluster(object):
                 Utils.Print("ERROR: No active nodes found.")
                 return False
 
-            #Utils.Print("nextUpcxIdx: %d, count: %d" % (nextUpcxIdx, count))
-            node=self.nodes[nextUpcxIdx]
+            #Utils.Print("nextEosIdx: %d, count: %d" % (nextEosIdx, count))
+            node=self.nodes[nextEosIdx]
             if Utils.Debug: Utils.Print("Wait for transaction id %s on node port %d" % (transId, node.port))
             if node.waitForTransInBlock(transId) is False:
                 Utils.Print("ERROR: Failed to validate transaction %s got rolled into a block on server port %d." % (transId, node.port))
@@ -838,7 +838,7 @@ class Cluster(object):
                 continue
 
             if Utils.Debug: Utils.Print("Validate funds on %s server port %d." %
-                                        (Utils.UpcxServerName, node.port))
+                                        (Utils.EosServerName, node.port))
 
             if node.validateFunds(initialBalances, transferAmount, source, accounts) is False:
                 Utils.Print("ERROR: Failed to validate funds on upcx node port: %d" % (node.port))
@@ -851,7 +851,7 @@ class Cluster(object):
         receiving transferAmount*n SYS and forwarding x-transferAmount funds. Transfer actions are spread round-robin across the cluster to vaidate system cohesiveness."""
 
         if Utils.Debug: Utils.Print("Get initial system balances.")
-        initialBalances=self.nodes[0].getUpcxBalances([self.defproduceraAccount] + self.accounts)
+        initialBalances=self.nodes[0].getEosBalances([self.defproduceraAccount] + self.accounts)
         assert(initialBalances)
         assert(isinstance(initialBalances, dict))
 
@@ -1315,7 +1315,7 @@ class Cluster(object):
 
         expectedAmount="1000000000.0000 {0}".format(CORE_SYMBOL)
         Utils.Print("Verify upcxio issue, Expected: %s" % (expectedAmount))
-        actualAmount=biosNode.getAccountUpcxBalanceStr(upcxioAccount.name)
+        actualAmount=biosNode.getAccountEosBalanceStr(upcxioAccount.name)
         if expectedAmount != actualAmount:
             Utils.Print("ERROR: Issue verification failed. Excepted %s, actual: %s" %
                         (expectedAmount, actualAmount))
@@ -1367,8 +1367,8 @@ class Cluster(object):
         return biosNode
 
     @staticmethod
-    def pgrepUpcxServers(timeout=None):
-        cmd=Utils.pgrepCmd(Utils.UpcxServerName)
+    def pgrepEosServers(timeout=None):
+        cmd=Utils.pgrepCmd(Utils.EosServerName)
 
         def myFunc():
             psOut=None
@@ -1385,15 +1385,15 @@ class Cluster(object):
         return Utils.waitForTruth(myFunc, timeout)
 
     @staticmethod
-    def pgrepUpcxServerPattern(nodeInstance):
+    def pgrepEosServerPattern(nodeInstance):
         dataLocation=Utils.getNodeDataDir(nodeInstance)
         return r"[\n]?(\d+) (.* --data-dir %s .*)\n" % (dataLocation)
 
-    # Populates list of UpcxInstanceInfo objects, matched to actual running instances
+    # Populates list of EosInstanceInfo objects, matched to actual running instances
     def discoverLocalNodes(self, totalNodes, timeout=None):
         nodes=[]
 
-        psOut=Cluster.pgrepUpcxServers(timeout)
+        psOut=Cluster.pgrepEosServers(timeout)
         if psOut is None:
             Utils.Print("ERROR: No nodes discovered.")
             return nodes
@@ -1415,36 +1415,36 @@ class Cluster(object):
     # Populate a node matched to actual running instance
     def discoverLocalNode(self, nodeNum, psOut=None, timeout=None):
         if psOut is None:
-            psOut=Cluster.pgrepUpcxServers(timeout)
+            psOut=Cluster.pgrepEosServers(timeout)
         if psOut is None:
             Utils.Print("ERROR: No nodes discovered.")
             return None
-        pattern=Cluster.pgrepUpcxServerPattern(nodeNum)
+        pattern=Cluster.pgrepEosServerPattern(nodeNum)
         m=re.search(pattern, psOut, re.MULTILINE)
         if m is None:
-            Utils.Print("ERROR: Failed to find %s pid. Pattern %s" % (Utils.UpcxServerName, pattern))
+            Utils.Print("ERROR: Failed to find %s pid. Pattern %s" % (Utils.EosServerName, pattern))
             return None
         instance=Node(self.host, self.port + nodeNum, nodeNum, pid=int(m.group(1)), cmd=m.group(2), walletMgr=self.walletMgr)
         if Utils.Debug: Utils.Print("Node>", instance)
         return instance
 
     def discoverBiosNode(self, timeout=None):
-        psOut=Cluster.pgrepUpcxServers(timeout=timeout)
-        pattern=Cluster.pgrepUpcxServerPattern("bios")
+        psOut=Cluster.pgrepEosServers(timeout=timeout)
+        pattern=Cluster.pgrepEosServerPattern("bios")
         Utils.Print("pattern={\n%s\n}, psOut=\n%s\n" % (pattern,psOut))
         m=re.search(pattern, psOut, re.MULTILINE)
         if m is None:
-            Utils.Print("ERROR: Failed to find %s pid. Pattern %s" % (Utils.UpcxServerName, pattern))
+            Utils.Print("ERROR: Failed to find %s pid. Pattern %s" % (Utils.EosServerName, pattern))
             return None
         else:
             return Node(Cluster.__BiosHost, Cluster.__BiosPort, "bios", pid=int(m.group(1)), cmd=m.group(2), walletMgr=self.walletMgr)
 
     # Kills a percentange of Upcx instances starting from the tail and update eosInstanceInfos state
-    def killSomeUpcxInstances(self, killCount, killSignalStr=Utils.SigKillTag):
+    def killSomeEosInstances(self, killCount, killSignalStr=Utils.SigKillTag):
         killSignal=signal.SIGKILL
         if killSignalStr == Utils.SigTermTag:
             killSignal=signal.SIGTERM
-        Utils.Print("Kill %d %s instances with signal %s." % (killCount, Utils.UpcxServerName, killSignal))
+        Utils.Print("Kill %d %s instances with signal %s." % (killCount, Utils.EosServerName, killSignal))
 
         killedCount=0
         for node in reversed(self.nodes):
@@ -1458,7 +1458,7 @@ class Cluster(object):
         time.sleep(1) # Give processes time to stand down
         return True
 
-    def relaunchUpcxInstances(self, cachePopen=False, nodeArgs=""):
+    def relaunchEosInstances(self, cachePopen=False, nodeArgs=""):
 
         chainArg=self.__chainSyncStrategy.arg + " " + nodeArgs
 
@@ -1505,14 +1505,14 @@ class Cluster(object):
     def killall(self, kill=True, silent=True, allInstances=False):
         """Kill cluster nodeos instances. allInstances will kill all nodeos instances running on the system."""
         signalNum=9 if kill else 15
-        cmd="%s -k %d" % (Utils.UpcxLauncherPath, signalNum)
+        cmd="%s -k %d" % (Utils.EosLauncherPath, signalNum)
         if Utils.Debug: Utils.Print("cmd: %s" % (cmd))
         if 0 != subprocess.call(cmd.split(), stdout=Utils.FNull):
             if not silent: Utils.Print("Launcher failed to shut down upcx cluster.")
 
         if allInstances:
             # ocassionally the launcher cannot kill the upcx server
-            cmd="pkill -9 %s" % (Utils.UpcxServerName)
+            cmd="pkill -9 %s" % (Utils.EosServerName)
             if Utils.Debug: Utils.Print("cmd: %s" % (cmd))
             if 0 != subprocess.call(cmd.split(), stdout=Utils.FNull):
                 if not silent: Utils.Print("Failed to shut down upcx cluster.")

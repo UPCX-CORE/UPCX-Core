@@ -57,7 +57,7 @@ class PluginHttpTest(unittest.TestCase):
         nodeos_flags = (" --data-dir=%s --trace-dir=%s --trace-no-abis --filter-on=%s --access-control-allow-origin=%s "
                         "--contracts-console --http-validate-host=%s --verbose-http-errors "
                         "--p2p-peer-address localhost:9011 ") % (self.data_dir, self.data_dir, "\"*\"", "\'*\'", "false")
-        start_nodeos_cmd = ("%s -e -p upcxio %s %s ") % (Utils.UpcxServerPath, nodeos_plugins, nodeos_flags)
+        start_nodeos_cmd = ("%s -e -p upcxio %s %s ") % (Utils.EosServerPath, nodeos_plugins, nodeos_flags)
         self.nodeos.launchCmd(start_nodeos_cmd, self.node_id)
         time.sleep(self.sleep_s)
 

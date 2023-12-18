@@ -1,6 +1,6 @@
 set(VENDOR "block.one")
 set(PROJECT_NAME "upcxio")
-set(DESC "Software for the EOS.IO network")
+set(DESC "Software for the UPCX.IO network")
 set(URL "https://github.com/upcxio/upcx")
 set(EMAIL "support@block.one")
 

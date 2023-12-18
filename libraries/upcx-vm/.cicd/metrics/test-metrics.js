@@ -52,7 +52,7 @@ async function download(url) {
 async function getBuild(pipeline, buildNumber) {
   if (debug) console.log(`getBuild(${pipeline}, ${buildNumber})`); // DEBUG
   const httpResponse = await fetch(
-    `https://api.buildkite.com/v2/organizations/EOSIO/pipelines/${pipeline}/builds/${buildNumber}${buildkiteAccessToken}`
+    `https://api.buildkite.com/v2/organizations/UPCXIO/pipelines/${pipeline}/builds/${buildNumber}${buildkiteAccessToken}`
   );
   return httpResponse.json();
 }
@@ -274,7 +274,8 @@ function testDiagnostics(test, logText) {
     output.errorMsg = errorLine
       .split("exception")[1]
       .replace(/[: \d.]/g, "")
-      .replace(/sec$/, ""); // isolate the error message after exception
+      .replace(/sec$/, "");
+  // isolate the error message after exception
   else if (
     /fc::.*exception/.test(testLog.filter((line) => !isNullOrEmpty(line))[1])
   ) {
@@ -364,7 +365,7 @@ async function testMetrics(buildkiteObject) {
     // get test metrics
     const env = await getEnvironment(job);
     env.BUILDKITE_REPO = env.BUILDKITE_REPO.replace(
-      new RegExp("^git@github.com:(EOSIO/)?"),
+      new RegExp("^git@github.com:(UPCXIO/)?"),
       ""
     ).replace(new RegExp(".git$"), "");
     const metrics = [];

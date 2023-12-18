@@ -74,7 +74,7 @@ static yh_rc backend_init(uint8_t verbosity, FILE *output) {
   return YHR_SUCCESS;
 }
 
-static yh_backend *backend_create(void) { return curl_easy_init(); }
+static yh_backend *backend_create() { return curl_easy_init(); }
 
 static yh_rc backend_connect(yh_connector *connector, int timeout) {
 

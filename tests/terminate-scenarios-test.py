@@ -31,7 +31,7 @@ debug=args.v
 total_nodes = pnodes
 killCount=args.kill_count if args.kill_count > 0 else 1
 killSignal=args.kill_sig
-killUpcxInstances= not args.leave_running
+killEosInstances= not args.leave_running
 dumpErrorDetails=args.dump_error_details
 keepLogs=args.keep_logs
 killAll=args.clean_run
@@ -70,7 +70,7 @@ try:
         errorExit("Cluster never stabilized")
 
     Print("Kill %d cluster node instances." % (killCount))
-    if cluster.killSomeUpcxInstances(killCount, killSignal) is False:
+    if cluster.killSomeEosInstances(killCount, killSignal) is False:
         errorExit("Failed to kill Upcx instances")
     Print("nodeos instances killed.")
 
@@ -79,12 +79,12 @@ try:
     if nodeArg != "":
         if chainSyncStrategyStr == "hardReplay":
             nodeArg += " --truncate-at-block %d" % terminate
-    if cluster.relaunchUpcxInstances(cachePopen=True, nodeArgs=nodeArg) is False:
+    if cluster.relaunchEosInstances(cachePopen=True, nodeArgs=nodeArg) is False:
         errorExit("Failed to relaunch Upcx instances")
     Print("nodeos instances relaunched.")
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killUpcxInstances=killUpcxInstances, killWallet=killUpcxInstances, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killEosInstances, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

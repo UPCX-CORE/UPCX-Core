@@ -122,7 +122,7 @@ namespace std
 
 }
 
-/* namespace boost
+namespace boost
 {
     template<>
     struct hash<fc::sha256>
@@ -132,6 +132,6 @@ namespace std
            return  s._hash[3];//*((size_t*)&s);
        }
     };
-} */
+}
 #include <fc/reflect/reflect.hpp>
 FC_REFLECT_TYPENAME( fc::sha256 )

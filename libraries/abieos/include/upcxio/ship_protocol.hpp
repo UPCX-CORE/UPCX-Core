@@ -99,8 +99,8 @@ namespace upcxio { namespace ship_protocol {
    EOSIO_REFLECT(get_status_result_v0, head, last_irreversible, trace_begin_block, trace_end_block,
                  chain_state_begin_block, chain_state_end_block, chain_id)
 
-   // When using `get_blocks_request_v1`, `get_blocks_result_v0` will be returned for EOS version 2.0.x and before and
-   // `get_blocks_result_v1` will be returned for EOS version 2.1 RC bug not stable. 
+   // When using `get_blocks_request_v1`, `get_blocks_result_v0` will be returned for UPCX version 2.0.x and before and
+   // `get_blocks_result_v1` will be returned for UPCX version 2.1 RC bug not stable. 
    struct get_blocks_request_v0 {
       uint32_t                    start_block_num        = {};
       uint32_t                    end_block_num          = {};

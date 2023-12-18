@@ -73,10 +73,10 @@ void signature_provider_plugin::set_program_options(options_description&, option
 const char* const signature_provider_plugin::signature_provider_help_text() const {
    return "Key=Value pairs in the form <public-key>=<provider-spec>\n"
           "Where:\n"
-          "   <public-key>    \tis a string form of a vaild EOSIO public key\n\n"
+          "   <public-key>    \tis a string form of a vaild UPCXIO public key\n\n"
           "   <provider-spec> \tis a string in the form <provider-type>:<data>\n\n"
           "   <provider-type> \tis KEY, KEOSD, or SE\n\n"
-          "   KEY:<data>      \tis a string form of a valid EOSIO private key which maps to the provided public key\n\n"
+          "   KEY:<data>      \tis a string form of a valid UPCXIO private key which maps to the provided public key\n\n"
           "   KEOSD:<data>    \tis the URL where keosd is available and the approptiate wallet(s) are unlocked\n\n"
 #ifdef __APPLE__
           "   SE:             \tindicates the key resides in Secure Enclave"

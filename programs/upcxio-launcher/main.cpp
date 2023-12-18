@@ -29,7 +29,6 @@
 #include <netinet/in.h>
 #include <net/if.h>
 #include <upcxio/chain/genesis_state.hpp>
-#include <boost/filesystem/fstream.hpp>
 
 #include "config.hpp"
 

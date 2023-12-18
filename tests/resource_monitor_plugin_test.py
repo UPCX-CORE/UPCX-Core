@@ -204,7 +204,7 @@ total_nodes = pnodes
 killCount=1
 killSignal=Utils.SigKillTag
 
-killUpcxInstances= not args.leave_running
+killEosInstances= not args.leave_running
 dumpErrorDetails=args.dump_error_details
 keepLogs=args.keep_logs
 killAll=args.clean_run
@@ -233,7 +233,7 @@ try:
 finally:
     if debug: Print("Cleanup in finally block.")
     cleanDirectories()
-    TestHelper.shutdown(cluster, None, testSuccessful, killUpcxInstances, False, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, None, testSuccessful, killEosInstances, False, keepLogs, killAll, dumpErrorDetails)
 
 if debug: Print("Exiting test, exit value 0.")
 exit(0)

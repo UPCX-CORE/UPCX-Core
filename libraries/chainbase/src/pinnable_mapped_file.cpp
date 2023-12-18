@@ -4,7 +4,6 @@
 #include <boost/interprocess/anonymous_shared_memory.hpp>
 #include <boost/asio/signal_set.hpp>
 #include <iostream>
-#include <fstream>
 
 #ifdef __linux__
 #include <linux/mman.h>

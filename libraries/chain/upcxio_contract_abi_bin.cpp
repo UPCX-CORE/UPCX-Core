@@ -2,7 +2,7 @@ namespace upcxio { namespace chain {
 
 // Initial value for upcxio ABI. This value affects consensus; if different
 // nodeos versions have different versions of the initial upcxio ABI, then
-// they could potentially fork. See https://github.com/EOSIO/upcx/issues/7794
+// they could potentially fork. See https://github.com/UPCXIO/upcx/issues/7794
 //
 // This is a capture of the ABI produced by versions 1.7 and 1.8.
 

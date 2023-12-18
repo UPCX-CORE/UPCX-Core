@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # upcxio-tn_down.sh is used by the upcxio-tn_bounce.sh and upcxio-tn_roll.sh scripts.
-# It is intended to terminate specific EOS.IO daemon processes.
+# It is intended to terminate specific UPCX.IO daemon processes.
 #
 
 

@@ -72,16 +72,16 @@ class TestHelper(object):
             parser.add_argument("--seed", type=int, help="random seed", default=1)
 
         if "--host" in includeArgs:
-            parser.add_argument("-h", "--host", type=str, help="%s host name" % (Utils.UpcxServerName),
+            parser.add_argument("-h", "--host", type=str, help="%s host name" % (Utils.EosServerName),
                                      default=TestHelper.LOCAL_HOST)
         if "--port" in includeArgs:
-            parser.add_argument("--port", type=int, help="%s host port" % Utils.UpcxServerName,
+            parser.add_argument("--port", type=int, help="%s host port" % Utils.EosServerName,
                                      default=TestHelper.DEFAULT_PORT)
         if "--wallet-host" in includeArgs:
-            parser.add_argument("--wallet-host", type=str, help="%s host" % Utils.UpcxWalletName,
+            parser.add_argument("--wallet-host", type=str, help="%s host" % Utils.EosWalletName,
                                      default=TestHelper.LOCAL_HOST)
         if "--wallet-port" in includeArgs:
-            parser.add_argument("--wallet-port", type=int, help="%s port" % Utils.UpcxWalletName,
+            parser.add_argument("--wallet-port", type=int, help="%s port" % Utils.EosWalletName,
                                      default=TestHelper.DEFAULT_WALLET_PORT)
         if "--prod-count" in includeArgs:
             parser.add_argument("-c", "--prod-count", type=int, help="Per node producer count", default=1)
@@ -128,20 +128,20 @@ class TestHelper(object):
             Utils.Print(str(prefix))
         clientVersion=Cluster.getClientVersion()
         Utils.Print("UTC time: %s" % str(datetime.utcnow()))
-        Utils.Print("EOS Client version: %s" % (clientVersion))
+        Utils.Print("UPCX Client version: %s" % (clientVersion))
         Utils.Print("Processor: %s" % (platform.processor()))
         Utils.Print("OS name: %s" % (platform.platform()))
     
     @staticmethod
     # pylint: disable=too-many-arguments
-    def shutdown(cluster, walletMgr, testSuccessful=True, killUpcxInstances=True, killWallet=True, keepLogs=False, cleanRun=True, dumpErrorDetails=False):
+    def shutdown(cluster, walletMgr, testSuccessful=True, killEosInstances=True, killWallet=True, keepLogs=False, cleanRun=True, dumpErrorDetails=False):
         """Cluster and WalletMgr shutdown and cleanup."""
         assert(cluster)
         assert(isinstance(cluster, Cluster))
         if walletMgr:
             assert(isinstance(walletMgr, WalletMgr))
         assert(isinstance(testSuccessful, bool))
-        assert(isinstance(killUpcxInstances, bool))
+        assert(isinstance(killEosInstances, bool))
         assert(isinstance(killWallet, bool))
         assert(isinstance(cleanRun, bool))
         assert(isinstance(dumpErrorDetails, bool))
@@ -163,7 +163,7 @@ class TestHelper(object):
         if not testSuccessful and dumpErrorDetails:
             cluster.reportStatus()
             Utils.Print(Utils.FileDivider)
-            psOut = Cluster.pgrepUpcxServers(timeout=60)
+            psOut = Cluster.pgrepEosServers(timeout=60)
             Utils.Print("pgrep output:\n%s" % (psOut))
             reportProductionAnalysis(thresholdMs=0)
             Utils.Print("== Errors see above ==")
@@ -171,7 +171,7 @@ class TestHelper(object):
             # for now report these to know how many blocks we are missing production windows for
             reportProductionAnalysis(thresholdMs=200)
 
-        if killUpcxInstances:
+        if killEosInstances:
             Utils.Print("Shut down the cluster.")
             cluster.killall(allInstances=cleanRun, kill=testSuccessful)
             if testSuccessful and not keepLogs:

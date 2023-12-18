@@ -39,9 +39,9 @@ killAll=args.clean_run
 keepLogs=args.keep_logs
 
 killWallet=not dontKill
-killUpcxInstances=not dontKill
+killEosInstances=not dontKill
 if nodesFile is not None:
-    killUpcxInstances=False
+    killEosInstances=False
 
 Utils.Debug=debug
 testSuccessful=False
@@ -119,6 +119,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killUpcxInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exit(0)

@@ -135,6 +135,7 @@ setup
 
 execute cd $REPO_ROOT
 
+echo "Installing CMAKE..."
 # Try using oob cmake if possible so as to save building time
 if [[ $ARCH == "Linux"  ]]; then
    if [[ ${NAME} == "Ubuntu" ]]; then

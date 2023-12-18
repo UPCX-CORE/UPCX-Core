@@ -24,7 +24,7 @@ fi
 . ./scripts/helpers/general.sh
 
 function setup() {
-    if $VERBOSE; then
+
         echo "VERBOSE: ${VERBOSE}"
         echo "DRYRUN: ${DRYRUN}"
         echo "TEMP_DIR: ${TEMP_DIR}"
@@ -39,7 +39,7 @@ function setup() {
         echo "ENABLE_DOXYGEN: ${ENABLE_DOXYGEN}"
         echo "SUDO_LOCATION: ${SUDO_LOCATION}"
         echo "PIN_COMPILER: ${PIN_COMPILER}"
-    fi
+
     ( [[ -d $BUILD_DIR ]] && [[ -z $BUILD_DIR_CLEANUP_SKIP ]] ) && execute rm -rf $BUILD_DIR # cleanup old build directory; support disabling it (Zach requested)
     execute-always mkdir -p $TEMP_DIR
     execute mkdir -p $BUILD_DIR

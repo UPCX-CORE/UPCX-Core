@@ -135,9 +135,7 @@ setup
 
 execute cd $REPO_ROOT
 
-# Submodules need to be up to date
-ensure-submodules-up-to-date
-
+echo "Installing CMAKE..."
 # Try using oob cmake if possible so as to save building time
 if [[ $ARCH == "Linux"  ]]; then
    if [[ ${NAME} == "Ubuntu" ]]; then
@@ -164,6 +162,8 @@ if [[ ! -z $CMAKE_CURRENT_VERSION ]] && [[ $((10#$( echo $CMAKE_CURRENT_VERSION 
    fi
 fi
 
+echo $ARCH
+echo $NAME
 # Use existing cmake on system (either global or specific to upcxio)
 # Setup based on architecture
 if [[ $ARCH == "Linux" ]]; then

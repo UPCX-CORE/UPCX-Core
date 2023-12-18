@@ -135,9 +135,6 @@ setup
 
 execute cd $REPO_ROOT
 
-# Submodules need to be up to date
-ensure-submodules-up-to-date
-
 # Try using oob cmake if possible so as to save building time
 if [[ $ARCH == "Linux"  ]]; then
    if [[ ${NAME} == "Ubuntu" ]]; then

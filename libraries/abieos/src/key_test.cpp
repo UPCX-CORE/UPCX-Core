@@ -1,5 +1,5 @@
-#include <eosio/to_key.hpp>
-#include "abieos.hpp"
+#include <upcx/to_key.hpp>
+#include "abiupcx.hpp"
 
 int error_count;
 
@@ -12,25 +12,25 @@ void report_error(const char* assertion, const char* file, int line) {
 
 #define CHECK(...) do { if(__VA_ARGS__) {} else { report_error(#__VA_ARGS__, __FILE__, __LINE__); } } while(0)
 
-using abieos::int128;
-using abieos::uint128;
-using abieos::varint32;
-using abieos::varuint32;
-using abieos::float128;
-using abieos::time_point;
-using abieos::time_point_sec;
-using abieos::block_timestamp;
-using eosio::name;
-using abieos::bytes;
-using abieos::checksum160;
-using abieos::checksum256;
-using abieos::checksum512;
-using abieos::public_key;
-using abieos::private_key;
-using abieos::signature;
-using abieos::symbol;
-using abieos::symbol_code;
-using abieos::asset;
+using abiupcx::int128;
+using abiupcx::uint128;
+using abiupcx::varint32;
+using abiupcx::varuint32;
+using abiupcx::float128;
+using abiupcx::time_point;
+using abiupcx::time_point_sec;
+using abiupcx::block_timestamp;
+using upcx::name;
+using abiupcx::bytes;
+using abiupcx::checksum160;
+using abiupcx::checksum256;
+using abiupcx::checksum512;
+using abiupcx::public_key;
+using abiupcx::private_key;
+using abiupcx::signature;
+using abiupcx::symbol;
+using abiupcx::symbol_code;
+using abiupcx::asset;
 
 using vec_type = std::vector<int>;
 struct struct_type {
@@ -38,14 +38,14 @@ struct struct_type {
    std::optional<int> o;
    std::variant<int, double> va;
 };
-EOSIO_REFLECT(struct_type, v, o, va);
-EOSIO_COMPARE(struct_type);
+UPCX_REFLECT(struct_type, v, o, va);
+UPCX_COMPARE(struct_type);
 
 // Verifies that the ordering of keys is the same as the ordering of the original objects
 template<typename T>
 void test_key(const T& x, const T& y) {
-   auto keyx = eosio::convert_to_key(x);
-   auto keyy = eosio::convert_to_key(y);
+   auto keyx = upcx::convert_to_key(x);
+   auto keyy = upcx::convert_to_key(y);
    CHECK(std::lexicographical_compare(keyx.begin(), keyx.end(), keyy.begin(), keyy.end(), std::less<unsigned char>()) == (x < y));
    CHECK(std::lexicographical_compare(keyy.begin(), keyy.end(), keyx.begin(), keyx.end(), std::less<unsigned char>()) == (y < x));
 }
@@ -74,7 +74,7 @@ enum class enum_s16 : std::int16_t {
 
 template<typename T>
 std::size_t key_size(const T& obj) {
-   eosio::size_stream ss;
+   upcx::size_stream ss;
    to_key(obj, ss);
    return ss.size;
 }
@@ -106,7 +106,7 @@ void test_compare() {
    test_key(-std::numeric_limits<double>::infinity(), 0.);
    test_key(std::numeric_limits<double>::infinity(), 0.);
    test_key(-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
-   using namespace eosio::literals;
+   using namespace upcx::literals;
    test_key("a"_n, "a"_n);
    test_key(name(), name());
    test_key("a"_n, "b"_n);
@@ -118,9 +118,9 @@ void test_compare() {
    test_key(checksum256(std::array{0xffffffffffffffffull, 0xffffffffffffff00ull, 0xffffffffffffffffull, 0xffffffffffffffffull}),
             checksum256(std::array{0xffffffffffffffffull, 0x00ffffffffffffffull, 0xffffffffffffffffull, 0xffffffffffffffffull}));
    test_key(public_key(), public_key());
-   test_key(public_key(std::in_place_index<0>, eosio::ecc_public_key{1}), public_key(std::in_place_index<1>));
-   test_key(public_key(eosio::webauthn_public_key{{}, eosio::webauthn_public_key::user_presence_t::USER_PRESENCE_NONE, "b"}),
-            public_key(eosio::webauthn_public_key{{}, eosio::webauthn_public_key::user_presence_t::USER_PRESENCE_PRESENT, "a"}));
+   test_key(public_key(std::in_place_index<0>, upcx::ecc_public_key{1}), public_key(std::in_place_index<1>));
+   test_key(public_key(upcx::webauthn_public_key{{}, upcx::webauthn_public_key::user_presence_t::USER_PRESENCE_NONE, "b"}),
+            public_key(upcx::webauthn_public_key{{}, upcx::webauthn_public_key::user_presence_t::USER_PRESENCE_PRESENT, "a"}));
 
    using namespace std::literals;
    test_key(""s, ""s);

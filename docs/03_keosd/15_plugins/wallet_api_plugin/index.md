@@ -1,18 +1,18 @@
 ## Description
 
-The `wallet_api_plugin` exposes functionality from the [`wallet_plugin`](../wallet_plugin/index.md) to the RPC API interface managed by the [`http_plugin`](../../../01_nodeos/03_plugins/http_plugin/index.md).
+The `wallet_api_plugin` exposes functionality from the [`wallet_plugin`](../wallet_plugin/index.md) to the RPC API interface managed by the [`http_plugin`](../../../01_nodupcx/03_plugins/http_plugin/index.md).
 
 [[caution | Caution]]
-| This plugin exposes wallets. Therefore, running this plugin on a publicly accessible node is not recommended. As of 1.2.0, the `wallet_api_plugin` is only available through `keosd`. It is no longer supported by `nodeos`.
+| This plugin exposes wallets. Therefore, running this plugin on a publicly accessible node is not recommended. As of 1.2.0, the `wallet_api_plugin` is only available through `kupcxd`. It is no longer supported by `nodupcx`.
 
 ## Usage
 
 ```sh
 # config.ini
-plugin = eosio::wallet_api_plugin
+plugin = upcx::wallet_api_plugin
 
 # command-line
-keosd ... --plugin eosio::wallet_api_plugin
+kupcxd ... --plugin upcx::wallet_api_plugin
 ```
 
 ## Options
@@ -21,8 +21,8 @@ None
 
 ## Dependencies
 
-* [`wallet_plugin`](../wallet_plugin/index.md)
-* [`http_plugin`](../../../01_nodeos/03_plugins/http_plugin/index.md)
+- [`wallet_plugin`](../wallet_plugin/index.md)
+- [`http_plugin`](../../../01_nodupcx/03_plugins/http_plugin/index.md)
 
 ### Load Dependency Examples
 
@@ -30,12 +30,12 @@ The following plugins are loaded with default settings if not specified on the c
 
 ```sh
 # config.ini
-plugin = eosio::wallet_plugin
+plugin = upcx::wallet_plugin
 [options]
-plugin = eosio::http_plugin
+plugin = upcx::http_plugin
 [options]
 
 # command-line
-keosd ... --plugin eosio::wallet_plugin [options]  \
-           --plugin eosio::http_plugin [options]
+kupcxd ... --plugin upcx::wallet_plugin [options]  \
+           --plugin upcx::http_plugin [options]
 ```

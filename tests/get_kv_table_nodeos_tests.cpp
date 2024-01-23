@@ -1,14 +1,14 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
-#include <eosio/testing/tester.hpp>
-#include <eosio/chain/abi_serializer.hpp>
-#include <eosio/chain/wasm_eosio_constraints.hpp>
-#include <eosio/chain/resource_limits.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/wast_to_wasm.hpp>
-#include <eosio/chain_plugin/chain_plugin.hpp>
-#include <eosio/chain/backing_store/kv_context.hpp>
+#include <upcx/testing/tester.hpp>
+#include <upcx/chain/abi_serializer.hpp>
+#include <upcx/chain/wasm_upcx_constraints.hpp>
+#include <upcx/chain/resource_limits.hpp>
+#include <upcx/chain/exceptions.hpp>
+#include <upcx/chain/wast_to_wasm.hpp>
+#include <upcx/chain_plugin/chain_plugin.hpp>
+#include <upcx/chain/backing_store/kv_context.hpp>
 
 #include <contracts.hpp>
 
@@ -28,15 +28,15 @@
 #define TESTER validating_tester
 #endif
 
-BOOST_AUTO_TEST_SUITE(get_kv_table_nodeos_tests)
+BOOST_AUTO_TEST_SUITE(get_kv_table_nodupcx_tests)
 
-using namespace eosio::chain;
-using namespace eosio::testing;
+using namespace upcx::chain;
+using namespace upcx::testing;
 using namespace fc;
 
-BOOST_FIXTURE_TEST_CASE( get_kv_table_nodeos_test, TESTER ) try {
+BOOST_FIXTURE_TEST_CASE( get_kv_table_nodupcx_test, TESTER ) try {
 
-   eosio::chain_apis::read_only::get_table_rows_result result;
+   upcx::chain_apis::read_only::get_table_rows_result result;
    auto chk_result = [&](int row, int data, bool show_payer = false) {
       char bar[5] = {'b', 'o', 'b', 'a', 0};
       bar[3] += data - 1; // 'a' + data - 1
@@ -65,7 +65,7 @@ BOOST_FIXTURE_TEST_CASE( get_kv_table_nodeos_test, TESTER ) try {
 
    set_code(config::system_account_name, contracts::kv_bios_wasm());
    set_abi(config::system_account_name, contracts::kv_bios_abi().data());
-   push_action("eosio"_n, "ramkvlimits"_n, "eosio"_n, mutable_variant_object()("k", 1024)("v", 1024)("i", 1024));
+   push_action("upcx"_n, "ramkvlimits"_n, "upcx"_n, mutable_variant_object()("k", 1024)("v", 1024)("i", 1024));
    produce_blocks(1);
 
    set_code("kvtable"_n, contracts::kv_table_test_wasm());
@@ -78,8 +78,8 @@ BOOST_FIXTURE_TEST_CASE( get_kv_table_nodeos_test, TESTER ) try {
    //////////////////////////////
    // primarykey
    //////////////////////////////
-   eosio::chain_apis::read_only plugin(*(this->control), {}, fc::microseconds::maximum());
-   eosio::chain_apis::read_only::get_kv_table_rows_params p;
+   upcx::chain_apis::read_only plugin(*(this->control), {}, fc::microseconds::maximum());
+   upcx::chain_apis::read_only::get_kv_table_rows_params p;
    p.code = "kvtable"_n;
    p.table = "kvtable"_n;
    p.index_name = "primarykey"_n;

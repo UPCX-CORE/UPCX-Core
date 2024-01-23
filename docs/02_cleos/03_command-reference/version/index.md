@@ -5,18 +5,18 @@ Retrieve version information
 ## Command
 
 ```sh
-cleos version
+clupcx version
 ```
 
 ## Subcommands
+
 [client](client) - Retrieve version information of the client
 
 ```sh
-cleos version client
+clupcx version client
 ```
 
 ## Output
-
 
 ```console
 Build version: 7f854a61

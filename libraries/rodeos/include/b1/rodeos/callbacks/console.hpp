@@ -1,9 +1,9 @@
 #pragma once
 
-#include <b1/rodeos/callbacks/vm_types.hpp>
-#include <eosio/to_json.hpp>
+#include <b1/rodupcx/callbacks/vm_types.hpp>
+#include <upcx/to_json.hpp>
 
-namespace b1::rodeos {
+namespace b1::rodupcx {
 
 struct console_state {
    uint32_t    max_console_size = 0;
@@ -48,7 +48,7 @@ struct console_callbacks {
       auto& state = derived().get_state();
       if (!state.max_console_size)
          return;
-      auto s = eosio::name{ value }.to_string();
+      auto s = upcx::name{ value }.to_string();
       append_console(s.c_str(), s.size());
    }
 
@@ -79,4 +79,4 @@ struct console_callbacks {
    }
 }; // console_callbacks
 
-} // namespace b1::rodeos
+} // namespace b1::rodupcx

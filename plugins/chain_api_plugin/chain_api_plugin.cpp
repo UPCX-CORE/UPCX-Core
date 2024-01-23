@@ -1,13 +1,13 @@
-#include <eosio/chain_api_plugin/chain_api_plugin.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <upcx/chain_api_plugin/chain_api_plugin.hpp>
+#include <upcx/chain/exceptions.hpp>
 
 #include <fc/io/json.hpp>
 
-namespace eosio {
+namespace upcx {
 
 static appbase::abstract_plugin& _chain_api_plugin = app().register_plugin<chain_api_plugin>();
 
-using namespace eosio;
+using namespace upcx;
 
 class chain_api_plugin_impl {
 public:
@@ -35,16 +35,16 @@ namespace {
    template<typename T>
    T parse_params(const std::string& body) {
       if (body.empty()) {
-         EOS_THROW(chain::invalid_http_request, "A Request body is required");
+         UPCX_THROW(chain::invalid_http_request, "A Request body is required");
       }
 
       try {
         try {
            return fc::json::from_string(body).as<T>();
-        } catch (const chain::chain_exception& e) { // EOS_RETHROW_EXCEPTIONS does not re-type these so, re-code it
+        } catch (const chain::chain_exception& e) { // UPCX_RETHROW_EXCEPTIONS does not re-type these so, re-code it
           throw fc::exception(e);
         }
-      } EOS_RETHROW_EXCEPTIONS(chain::invalid_http_request, "Unable to parse valid input from POST body");
+      } UPCX_RETHROW_EXCEPTIONS(chain::invalid_http_request, "Unable to parse valid input from POST body");
    }
 }
 

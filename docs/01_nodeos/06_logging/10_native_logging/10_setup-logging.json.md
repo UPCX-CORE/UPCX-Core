@@ -2,11 +2,12 @@
 content_title: Setup logging.json
 ---
 
-The `logging.json` file is usually located in the specified `--config-dir`, the same directory as the `config.ini` file. This path can be explicitly defined using the `-l` or `--logconf` options when starting `nodeos`.
- 
+The `logging.json` file is usually located in the specified `--config-dir`, the same directory as the `config.ini` file. This path can be explicitly defined using the `-l` or `--logconf` options when starting `nodupcx`.
+
 ```sh
-nodeos --help
+nodupcx --help
 ```
+
 ```console
 ...
 Application Command Line Options:

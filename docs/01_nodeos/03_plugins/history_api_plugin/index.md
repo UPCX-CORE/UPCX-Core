@@ -7,30 +7,31 @@ The `history_api_plugin` exposes functionality from the [`history_plugin`](../hi
 
 It provides four RPC API endpoints:
 
-* get_actions
-* get_transaction
-* get_key_accounts
-* get_controlled_accounts
+- get_actions
+- get_transaction
+- get_key_accounts
+- get_controlled_accounts
 
 [[info | More Info]]
-| See HISTORY section of [RPC API](https://developers.eos.io/eosio-nodeos/reference).
+| See HISTORY section of [RPC API](https://developers.upcx.io/upcx-nodupcx/reference).
 
-The four actions listed above are used by the following `cleos` commands (matching order):
+The four actions listed above are used by the following `clupcx` commands (matching order):
 
-* get actions
-* get transaction
-* get accounts
-* get servants
+- get actions
+- get transaction
+- get accounts
+- get servants
 
 ## Usage
 
 ```console
 # config.ini
-plugin = eosio::history_api_plugin
+plugin = upcx::history_api_plugin
 ```
+
 ```sh
 # command-line
-nodeos ... --plugin eosio::history_api_plugin
+nodupcx ... --plugin upcx::history_api_plugin
 ```
 
 ## Options
@@ -39,24 +40,25 @@ None
 
 ## Dependencies
 
-* [`history_plugin`](../history_plugin/index.md)
-* [`chain_plugin`](../chain_plugin/index.md)
-* [`http_plugin`](../http_plugin/index.md)
+- [`history_plugin`](../history_plugin/index.md)
+- [`chain_plugin`](../chain_plugin/index.md)
+- [`http_plugin`](../http_plugin/index.md)
 
 ### Load Dependency Examples
 
 ```console
 # config.ini
-plugin = eosio::history_plugin
+plugin = upcx::history_plugin
 [options]
-plugin = eosio::chain_plugin
+plugin = upcx::chain_plugin
 [options]
-plugin = eosio::http_plugin
+plugin = upcx::http_plugin
 [options]
 ```
+
 ```sh
 # command-line
-nodeos ... --plugin eosio::history_plugin [options]  \
-           --plugin eosio::chain_plugin [operations] [options]  \
-           --plugin eosio::http_plugin [options]
+nodupcx ... --plugin upcx::history_plugin [options]  \
+           --plugin upcx::chain_plugin [operations] [options]  \
+           --plugin upcx::http_plugin [options]
 ```

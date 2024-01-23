@@ -1,13 +1,13 @@
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <upcx/upcx.hpp>
 
-class [[eosio::contract]] noop : public eosio::contract {
+class [[upcx::contract]] noop : public upcx::contract {
 public:
-   using eosio::contract::contract;
+   using upcx::contract::contract;
 
-   [[eosio::action]]
-   void anyaction( eosio::name                       from,
-                   const eosio::ignore<std::string>& type,
-                   const eosio::ignore<std::string>& data );
+   [[upcx::action]]
+   void anyaction( upcx::name                       from,
+                   const upcx::ignore<std::string>& type,
+                   const upcx::ignore<std::string>& data );
 };

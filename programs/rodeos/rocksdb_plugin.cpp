@@ -24,7 +24,7 @@ rocksdb_plugin::~rocksdb_plugin() {}
 
 void rocksdb_plugin::set_program_options(options_description& cli, options_description& cfg) {
    auto op = cfg.add_options();
-   op("rdb-database", bpo::value<bfs::path>()->default_value("rodeos.rocksdb"),
+   op("rdb-database", bpo::value<bfs::path>()->default_value("rodupcx.rocksdb"),
       "Database path (absolute path or relative to application data dir)");
    op("rdb-threads", bpo::value<uint32_t>(),
       "Increase number of background RocksDB threads. Only used with cloner_plugin. Recommend 8 for full history "
@@ -56,7 +56,7 @@ void rocksdb_plugin::plugin_shutdown() {}
 std::shared_ptr<chain_kv::database> rocksdb_plugin::get_db() {
    std::lock_guard<std::mutex> lock(my->mutex);
    if (!my->database) {
-      ilog("rodeos database is ${d}", ("d", my->db_path.string()));
+      ilog("rodupcx database is ${d}", ("d", my->db_path.string()));
       if (!bfs::exists(my->db_path.parent_path()))
          bfs::create_directories(my->db_path.parent_path());
       my->database = std::make_shared<chain_kv::database>(my->db_path.c_str(), true, my->threads, my->max_open_files);

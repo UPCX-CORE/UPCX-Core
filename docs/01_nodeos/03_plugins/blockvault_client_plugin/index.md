@@ -1,66 +1,66 @@
-
 ## Overview
 
 The `blockvault_client_plugin` enables blockchain administrators to implement industry standard disaster recovery to maximize producer operational uptime. The plugin allows a block producer to cluster two or more nodes deployed as a single logical producer. If one of the nodes goes down, the other nodes in the cluster continue to operate, thereby meeting certain guarantees for the producer to continue to function with minimal service disruption.
 
 ## Goals
 
-Block Vault is a clustered component within an EOSIO network architecture that enables replicated durable storage with strong consistency guarantees for the input required by a redundant cluster of nodes. In particular, Block Vault achieves the following guarantees for any cluster node running `nodeos` configured as a Block Vault client in producing mode:
+Block Vault is a clustered component within an UPCX network architecture that enables replicated durable storage with strong consistency guarantees for the input required by a redundant cluster of nodes. In particular, Block Vault achieves the following guarantees for any cluster node running `nodupcx` configured as a Block Vault client in producing mode:
 
-* Guarantee against double-production of blocks
-* Guarantee against finality violation
-* Guarantee of liveness (ability to make progress as a blockchain)
+- Guarantee against double-production of blocks
+- Guarantee against finality violation
+- Guarantee of liveness (ability to make progress as a blockchain)
 
-To facilitate these guarantees, Block Vault allows `nodeos` to run in a redundant and/or highly available mode. Block Vault itself does not implement any coordination of nodes in a cluster. It merely guarantees that any such coordination, including faulty coordination leading to multiple active block constructing nodes, will be safe as defined by the above guarantees. For more information, read the [Block Vault Operation](#block-vault-operation) section below.
+To facilitate these guarantees, Block Vault allows `nodupcx` to run in a redundant and/or highly available mode. Block Vault itself does not implement any coordination of nodes in a cluster. It merely guarantees that any such coordination, including faulty coordination leading to multiple active block constructing nodes, will be safe as defined by the above guarantees. For more information, read the [Block Vault Operation](#block-vault-operation) section below.
 
 ## Usage
 
 ```console
 # config.ini
-plugin = eosio::blockvault_client_plugin
+plugin = upcx::blockvault_client_plugin
 [options]
 ```
+
 ```sh
 # command-line
-nodeos ... --plugin eosio::blockvault_client_plugin [options]
+nodupcx ... --plugin upcx::blockvault_client_plugin [options]
 ```
 
 ## Configuration Options
 
-These can be specified from both the `nodeos` command-line or the `config.ini` file:
+These can be specified from both the `nodupcx` command-line or the `config.ini` file:
 
 ```console
-Config Options for eosio::blockvault_client_plugin:
+Config Options for upcx::blockvault_client_plugin:
 
-  --block-vault-backend arg             the uri for block vault backend. 
-                                        Currently, only PostgreSQL is 
-                                        supported, the format is 
+  --block-vault-backend arg             the uri for block vault backend.
+                                        Currently, only PostgreSQL is
+                                        supported, the format is
                                         'postgresql://username:password@localho
                                         st/company'
 ```
 
 ## Plugin Dependencies
 
-* [`producer_plugin`](../producer_plugin/index.md)
+- [`producer_plugin`](../producer_plugin/index.md)
 
 ## Configuration Example
 
-To use `blockvault_client_plugin`, the `nodeos` service must be configured as a producer with the `--block-vault-backend` option:
+To use `blockvault_client_plugin`, the `nodupcx` service must be configured as a producer with the `--block-vault-backend` option:
 
 ```sh
-nodeos --plugin eosio::producer_plugin --producer-name myproducer --plugin eosio::blockvault_client_plugin --block-vault-backend postgresql://user:password@mycompany.com
+nodupcx --plugin upcx::producer_plugin --producer-name myproducer --plugin upcx::blockvault_client_plugin --block-vault-backend postgresql://user:password@mycompany.com
 ```
 
 For production deployments, it is recommend to use the `PGPASSWORD` environment variable to configure the password, instead of embedding the password in the URI.
 
 ```sh
 export PGPASSWORD=password
-nodeos --plugin eosio::producer_plugin --producer-name myproducer --plugin eosio::blockvault_client_plugin --block-vault-backend postgresql://user@mycompany.com
+nodupcx --plugin upcx::producer_plugin --producer-name myproducer --plugin upcx::blockvault_client_plugin --block-vault-backend postgresql://user@mycompany.com
 ```
 
 ## Software Dependencies
 
-To build `blockvault_client_plugin` you need `libpq` version 10 or above and `libpqxx` version 6 or above. These dependencies are typically installed (alongside other dependencies) when you either [Install EOSIO](../../../00_install/index.md) from prebuilt binaries or build from source. You may also opt to install these dependencies manually prior to installing or building EOSIO.
+To build `blockvault_client_plugin` you need `libpq` version 10 or above and `libpqxx` version 6 or above. These dependencies are typically installed (alongside other dependencies) when you either [Install UPCX](../../../00_install/index.md) from prebuilt binaries or build from source. You may also opt to install these dependencies manually prior to installing or building UPCX.
 
 For MacOS, you can simply use homebrew to install these dependencies:
 
@@ -82,7 +82,7 @@ We recommend to use `docker`:
 docker run  -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres
 ```
 
-### Running PostgreSQL for Production 
+### Running PostgreSQL for Production
 
 We recommend to deploy `PostgreSQL` with HA (high availability) mode and synchronous replication strategy.
 
@@ -106,9 +106,9 @@ Block Vault is exclusively responsible for providing guarantees against double-p
 
 Cluster nodes interact with the Block Vault through the following messages:
 
-* [`async_propose_constructed_block()`](../../../classeosio_1_1blockvault_1_1block__vault__interface#function-async_propose_constructed_block)
-* [`async_append_external_block()`](../../../classeosio_1_1blockvault_1_1block__vault__interface#function-async_append_external_block)
-* [`propose_snapshot()`](../../../classeosio_1_1blockvault_1_1block__vault__interface#function-propose_snapshot)
-* [`sync()`](../../../classeosio_1_1blockvault_1_1block__vault__interface#function-sync)
+- [`async_propose_constructed_block()`](../../../classupcx_1_1blockvault_1_1block__vault__interface#function-async_propose_constructed_block)
+- [`async_append_external_block()`](../../../classupcx_1_1blockvault_1_1block__vault__interface#function-async_append_external_block)
+- [`propose_snapshot()`](../../../classupcx_1_1blockvault_1_1block__vault__interface#function-propose_snapshot)
+- [`sync()`](../../../classupcx_1_1blockvault_1_1block__vault__interface#function-sync)
 
-For more information visit the [block_vault_interface](../../../classeosio_1_1blockvault_1_1block__vault__interface) C++ reference.
+For more information visit the [block_vault_interface](../../../classupcx_1_1blockvault_1_1block__vault__interface) C++ reference.

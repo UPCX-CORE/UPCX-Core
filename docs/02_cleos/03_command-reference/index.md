@@ -1,6 +1,7 @@
-Documentation for all `cleos` main commands
+Documentation for all `clupcx` main commands
 
 ## Commands
+
 - [version](version) - Retrieve version information
 - [create](create) - Create various items, on and off the blockchain
 - [convert](convert) - Pack and unpack transactions
@@ -14,4 +15,4 @@ Documentation for all `cleos` main commands
 - [push](push) - Push arbitrary transactions to the blockchain
 - [multisig](multisig) - Multisig contract commands
 - [wrap](wrap) - Wrap contract commands
-- [system](system) - Send eosio.system contract action to the blockchain.
+- [system](system) - Send upcx.system contract action to the blockchain.

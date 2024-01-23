@@ -1,29 +1,29 @@
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <upcx/upcx.hpp>
 #include <vector>
 
-class [[eosio::contract]] deferred_test : public eosio::contract {
+class [[upcx::contract]] deferred_test : public upcx::contract {
 public:
-   using eosio::contract::contract;
+   using upcx::contract::contract;
 
-   [[eosio::action]]
-   void defercall( eosio::name payer, uint64_t sender_id, eosio::name contract, uint64_t payload );
+   [[upcx::action]]
+   void defercall( upcx::name payer, uint64_t sender_id, upcx::name contract, uint64_t payload );
 
-   [[eosio::action]]
-   void delayedcall( eosio::name payer, uint64_t sender_id, eosio::name contract,
+   [[upcx::action]]
+   void delayedcall( upcx::name payer, uint64_t sender_id, upcx::name contract,
                      uint64_t payload, uint32_t delay_sec, bool replace_existing );
 
-   [[eosio::action]]
+   [[upcx::action]]
    void deferfunc( uint64_t payload );
-   using deferfunc_action = eosio::action_wrapper<"deferfunc"_n, &deferred_test::deferfunc>;
+   using deferfunc_action = upcx::action_wrapper<"deferfunc"_n, &deferred_test::deferfunc>;
 
-   [[eosio::action]]
-   void inlinecall( eosio::name contract, eosio::name authorizer, uint64_t payload );
+   [[upcx::action]]
+   void inlinecall( upcx::name contract, upcx::name authorizer, uint64_t payload );
 
-   [[eosio::action]]
+   [[upcx::action]]
    void fail();
 
-   [[eosio::on_notify("eosio::onerror")]]
-   void on_error( uint128_t sender_id, eosio::ignore<std::vector<char>> sent_trx );
+   [[upcx::on_notify("upcx::onerror")]]
+   void on_error( uint128_t sender_id, upcx::ignore<std::vector<char>> sent_trx );
 };

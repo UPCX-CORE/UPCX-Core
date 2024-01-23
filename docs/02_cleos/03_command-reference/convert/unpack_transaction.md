@@ -9,12 +9,12 @@ From packed to plain signed json form
 ## Options
 
 - `-h,--help` - Print this help message and exit
-- `--unpack-action-data` - Unpack all action data within transaction, needs interaction with `nodeos`
+- `--unpack-action-data` - Unpack all action data within transaction, needs interaction with `nodupcx`
 
 ## Usage
 
 ```sh
-cleos convert unpack_transaction '{
+clupcx convert unpack_transaction '{
   "signatures": [
     "SIG_K1_KmRbWahefwxs6uyCGNR6wNRjw7cntEeFQhNCbyg8S92Kbp7zdSSVGTD2QS7pNVWgcU126zpxaBp9CwUxFpRwSnfkjd46bS"
   ],
@@ -26,7 +26,6 @@ cleos convert unpack_transaction '{
 
 ## Output
 
-
 ```json
 {
   "expiration": "2018-08-02T20:24:36",
@@ -36,11 +35,13 @@ cleos convert unpack_transaction '{
   "max_cpu_usage_ms": 0,
   "delay_sec": 0,
   "context_free_actions": [],
-  "actions": [{
-      "account": "eosio",
+  "actions": [
+    {
+      "account": "upcx",
       "name": "newaccount",
-      "authorization": [{
-          "actor": "eosio",
+      "authorization": [
+        {
+          "actor": "upcx",
           "permission": "active"
         }
       ],
@@ -53,5 +54,4 @@ cleos convert unpack_transaction '{
   ],
   "context_free_data": []
 }
-
 ```

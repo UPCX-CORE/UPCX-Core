@@ -1,18 +1,18 @@
 #include <vector>
 
-#include <eosio/crypto.hpp>
-#include <eosio/eosio.hpp>
-#include <eosio/print.hpp>
+#include <upcx/crypto.hpp>
+#include <upcx/upcx.hpp>
+#include <upcx/print.hpp>
 
 #include "test_api.hpp"
-using namespace eosio;
+using namespace upcx;
 
 void test_checktime::checktime_pass() {
    int p = 0;
    for ( int i = 0; i < 10000; i++ )
       p += i;
 
-   eosio::print(p);
+   upcx::print(p);
 }
 
 
@@ -25,7 +25,7 @@ void test_checktime::checktime_failure() {
       for ( unsigned long long j = 0; j < bound; j++ )
          p += i+j+bound;
 
-   eosio::print(p);
+   upcx::print(p);
 }
 
 constexpr size_t size = 20000000;

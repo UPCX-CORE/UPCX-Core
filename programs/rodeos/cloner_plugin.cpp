@@ -2,7 +2,7 @@
 #include "ship_client.hpp"
 #include "config.hpp"
 
-#include <b1/rodeos/rodeos.hpp>
+#include <b1/rodupcx/rodupcx.hpp>
 
 #include <fc/log/logger.hpp>
 #include <fc/log/logger_config.hpp>
@@ -17,20 +17,20 @@ namespace b1 {
 
 using namespace appbase;
 using namespace std::literals;
-using namespace eosio::ship_protocol;
+using namespace upcx::ship_protocol;
 
 namespace asio          = boost::asio;
 namespace bpo           = boost::program_options;
-namespace ship_protocol = eosio::ship_protocol;
+namespace ship_protocol = upcx::ship_protocol;
 namespace websocket     = boost::beast::websocket;
 
 using asio::ip::tcp;
 using boost::beast::flat_buffer;
 using boost::system::error_code;
 
-using rodeos::rodeos_db_partition;
-using rodeos::rodeos_db_snapshot;
-using rodeos::rodeos_filter;
+using rodupcx::rodupcx_db_partition;
+using rodupcx::rodupcx_db_snapshot;
+using rodupcx::rodupcx_filter;
 
 struct cloner_session;
 
@@ -38,7 +38,7 @@ struct cloner_config : ship_client::connection_config {
    uint32_t    skip_to     = 0;
    uint32_t    stop_before = 0;
    bool        exit_on_filter_wasm_error = false;
-   eosio::name filter_name = {}; // todo: remove
+   upcx::name filter_name = {}; // todo: remove
    std::string filter_wasm = {}; // todo: remove
 };
 
@@ -67,34 +67,34 @@ struct cloner_session : ship_client::connection_callbacks, std::enable_shared_fr
    cloner_plugin_impl*                  my = nullptr;
    std::shared_ptr<cloner_config>       config;
    std::shared_ptr<chain_kv::database>  db = app().find_plugin<rocksdb_plugin>()->get_db();
-   std::shared_ptr<rodeos_db_partition> partition =
-         std::make_shared<rodeos_db_partition>(db, std::vector<char>{}); // todo: prefix
+   std::shared_ptr<rodupcx_db_partition> partition =
+         std::make_shared<rodupcx_db_partition>(db, std::vector<char>{}); // todo: prefix
 
-   std::optional<rodeos_db_snapshot>        rodeos_snapshot;
+   std::optional<rodupcx_db_snapshot>        rodupcx_snapshot;
    std::shared_ptr<ship_client::connection> connection;
    bool                                     reported_block = false;
-   std::unique_ptr<rodeos_filter>           filter         = {}; // todo: remove
+   std::unique_ptr<rodupcx_filter>           filter         = {}; // todo: remove
 
    cloner_session(cloner_plugin_impl* my) : my(my), config(my->config) {
       // todo: remove
       if (!config->filter_wasm.empty())
-         filter = std::make_unique<rodeos_filter>(config->filter_name, config->filter_wasm);
+         filter = std::make_unique<rodupcx_filter>(config->filter_name, config->filter_wasm);
    }
 
    void connect(asio::io_context& ioc) {
-      rodeos_snapshot.emplace(partition, true);
+      rodupcx_snapshot.emplace(partition, true);
 
       ilog("cloner database status:");
       ilog("    revisions:    ${f} - ${r}",
-           ("f", rodeos_snapshot->undo_stack->first_revision())("r", rodeos_snapshot->undo_stack->revision()));
-      ilog("    chain:        ${a}", ("a", eosio::convert_to_json(rodeos_snapshot->chain_id)));
+           ("f", rodupcx_snapshot->undo_stack->first_revision())("r", rodupcx_snapshot->undo_stack->revision()));
+      ilog("    chain:        ${a}", ("a", upcx::convert_to_json(rodupcx_snapshot->chain_id)));
       ilog("    head:         ${a} ${b}",
-           ("a", rodeos_snapshot->head)("b", eosio::convert_to_json(rodeos_snapshot->head_id)));
+           ("a", rodupcx_snapshot->head)("b", upcx::convert_to_json(rodupcx_snapshot->head_id)));
       ilog("    irreversible: ${a} ${b}",
-           ("a", rodeos_snapshot->irreversible)(
-                 "b", eosio::convert_to_json(rodeos_snapshot->irreversible_id)));
+           ("a", rodupcx_snapshot->irreversible)(
+                 "b", upcx::convert_to_json(rodupcx_snapshot->irreversible_id)));
 
-      rodeos_snapshot->end_write(true);
+      rodupcx_snapshot->end_write(true);
       db->flush(true, true);
 
       connection = std::make_shared<ship_client::connection>(ioc, *config, shared_from_this());
@@ -106,16 +106,16 @@ struct cloner_session : ship_client::connection_callbacks, std::enable_shared_fr
       connection->send(get_status_request_v0{});
    }
 
-   bool received(get_status_result_v0& status, eosio::input_stream bin) override {
-      ilog("nodeos has chain ${c}", ("c", eosio::convert_to_json(status.chain_id)));
-      if (rodeos_snapshot->chain_id == eosio::checksum256{})
-         rodeos_snapshot->chain_id = status.chain_id;
-      if (rodeos_snapshot->chain_id != status.chain_id)
+   bool received(get_status_result_v0& status, upcx::input_stream bin) override {
+      ilog("nodupcx has chain ${c}", ("c", upcx::convert_to_json(status.chain_id)));
+      if (rodupcx_snapshot->chain_id == upcx::checksum256{})
+         rodupcx_snapshot->chain_id = status.chain_id;
+      if (rodupcx_snapshot->chain_id != status.chain_id)
          throw std::runtime_error(
-               "database is for chain " + eosio::convert_to_json(rodeos_snapshot->chain_id) +
-               " but nodeos has chain " + eosio::convert_to_json(status.chain_id));
+               "database is for chain " + upcx::convert_to_json(rodupcx_snapshot->chain_id) +
+               " but nodupcx has chain " + upcx::convert_to_json(status.chain_id));
       ilog("request blocks");
-      connection->request_blocks(status, std::max(config->skip_to, rodeos_snapshot->head + 1), get_positions(),
+      connection->request_blocks(status, std::max(config->skip_to, rodupcx_snapshot->head + 1), get_positions(),
                                  ship_client::request_block | ship_client::request_traces |
                                        ship_client::request_deltas);
       return true;
@@ -123,15 +123,15 @@ struct cloner_session : ship_client::connection_callbacks, std::enable_shared_fr
 
    std::vector<block_position> get_positions() {
       std::vector<block_position> result;
-      if (rodeos_snapshot->head) {
-         rodeos::db_view_state view_state{ rodeos::state_account, *db, *rodeos_snapshot->write_session,
+      if (rodupcx_snapshot->head) {
+         rodupcx::db_view_state view_state{ rodupcx::state_account, *db, *rodupcx_snapshot->write_session,
                                            partition->contract_kv_prefix };
-         for (uint32_t i = rodeos_snapshot->irreversible; i <= rodeos_snapshot->head; ++i) {
-            auto info = rodeos::get_state_row<rodeos::block_info>(
-                  view_state.kv_state.view, std::make_tuple(eosio::name{ "block.info" }, eosio::name{ "primary" }, i));
+         for (uint32_t i = rodupcx_snapshot->irreversible; i <= rodupcx_snapshot->head; ++i) {
+            auto info = rodupcx::get_state_row<rodupcx::block_info>(
+                  view_state.kv_state.view, std::make_tuple(upcx::name{ "block.info" }, upcx::name{ "primary" }, i));
             if (!info)
                throw std::runtime_error("database is missing block.info for block " + std::to_string(i));
-            auto& info0 = std::get<rodeos::block_info_v0>(info->second);
+            auto& info0 = std::get<rodupcx::block_info_v0>(info->second);
             result.push_back({ info0.num, info0.id });
          }
       }
@@ -139,20 +139,20 @@ struct cloner_session : ship_client::connection_callbacks, std::enable_shared_fr
    }
 
    template<typename Get_Blocks_Result>
-   bool process_received(Get_Blocks_Result& result, eosio::input_stream bin) {
+   bool process_received(Get_Blocks_Result& result, upcx::input_stream bin) {
       if (!result.this_block)
          return true;
       if (config->stop_before && result.this_block->block_num >= config->stop_before) {
          ilog("block ${b}: stop requested", ("b", result.this_block->block_num));
-         rodeos_snapshot->end_write(true);
+         rodupcx_snapshot->end_write(true);
          db->flush(false, false);
          return false;
       }
-      if (rodeos_snapshot->head && result.this_block->block_num > rodeos_snapshot->head + 1)
-         throw std::runtime_error("state-history plugin is missing block " + std::to_string(rodeos_snapshot->head + 1));
+      if (rodupcx_snapshot->head && result.this_block->block_num > rodupcx_snapshot->head + 1)
+         throw std::runtime_error("state-history plugin is missing block " + std::to_string(rodupcx_snapshot->head + 1));
 
-      rodeos_snapshot->start_block(result);
-      if (result.this_block->block_num <= rodeos_snapshot->head)
+      rodupcx_snapshot->start_block(result);
+      if (result.this_block->block_num <= rodupcx_snapshot->head)
          reported_block = false;
 
       bool near      = result.this_block->block_num + 4 >= result.last_irreversible.block_num;
@@ -163,26 +163,26 @@ struct cloner_session : ship_client::connection_callbacks, std::enable_shared_fr
                     "i", result.this_block->block_num <= result.last_irreversible.block_num ? "irreversible" : ""));
       reported_block = true;
 
-      rodeos_snapshot->write_block_info(result);
-      rodeos_snapshot->write_deltas(result, [] { return app().is_quiting(); });
+      rodupcx_snapshot->write_block_info(result);
+      rodupcx_snapshot->write_deltas(result, [] { return app().is_quiting(); });
 
       if (filter) {
-         filter->process(*rodeos_snapshot, result, bin, [&](const char* data, uint64_t data_size) {
+         filter->process(*rodupcx_snapshot, result, bin, [&](const char* data, uint64_t data_size) {
             if (my->streamer) {
                my->streamer(data, data_size);
             }
          });
       }
 
-      rodeos_snapshot->end_block(result, false);
+      rodupcx_snapshot->end_block(result, false);
       return true;
    }
 
-   bool received(get_blocks_result_v0& result, eosio::input_stream bin) override {
+   bool received(get_blocks_result_v0& result, upcx::input_stream bin) override {
       return process_received(result, bin);
    }
 
-   bool received(get_blocks_result_v1& result, eosio::input_stream bin) override {
+   bool received(get_blocks_result_v1& result, upcx::input_stream bin) override {
       return process_received(result, bin);
    }
 
@@ -220,14 +220,14 @@ void cloner_plugin::set_program_options(options_description& cli, options_descri
    auto op   = cfg.add_options();
    auto clop = cli.add_options();
    op("clone-connect-to,f", bpo::value<std::string>()->default_value("127.0.0.1:8080"),
-      "State-history endpoint to connect to (nodeos)");
+      "State-history endpoint to connect to (nodupcx)");
    clop("clone-skip-to,k", bpo::value<uint32_t>(), "Skip blocks before [arg]");
    clop("clone-stop,x", bpo::value<uint32_t>(), "Stop before block [arg]");
    op("clone-exit-on-filter-wasm-error", bpo::bool_switch()->default_value(false),
       "Shutdown application if filter wasm throws an exception");
    op("telemetry-url", bpo::value<std::string>(),
       "Send Zipkin spans to url. e.g. http://127.0.0.1:9411/api/v2/spans" );
-   op("telemetry-service-name", bpo::value<std::string>()->default_value(b1::rodeos::config::rodeos_executable_name),
+   op("telemetry-service-name", bpo::value<std::string>()->default_value(b1::rodupcx::config::rodupcx_executable_name),
       "Zipkin localEndpoint.serviceName sent with each span" );
    op("telemetry-timeout-us", bpo::value<uint32_t>()->default_value(200000),
       "Timeout for sending Zipkin span." );
@@ -250,7 +250,7 @@ void cloner_plugin::plugin_initialize(const variables_map& options) {
       my->config->stop_before = options.count("clone-stop") ? options["clone-stop"].as<uint32_t>() : 0;
       my->config->exit_on_filter_wasm_error = options["clone-exit-on-filter-wasm-error"].as<bool>();
       if (options.count("filter-name") && options.count("filter-wasm")) {
-         my->config->filter_name = eosio::name{ options["filter-name"].as<std::string>() };
+         my->config->filter_name = upcx::name{ options["filter-name"].as<std::string>() };
          my->config->filter_wasm = options["filter-wasm"].as<std::string>();
       } else if (options.count("filter-name") || options.count("filter-wasm")) {
          throw std::runtime_error("filter-name and filter-wasm must be used together");

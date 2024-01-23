@@ -1,14 +1,14 @@
-if( EOSIO_COMPILE_TEST_CONTRACTS )
-   set(EOSIO_WASM_OLD_BEHAVIOR "Off")
-   find_package( eosio.cdt REQUIRED )
+if( UPCX_COMPILE_TEST_CONTRACTS )
+   set(UPCX_WASM_OLD_BEHAVIOR "Off")
+   find_package( upcx.cdt REQUIRED )
 endif()
 
 if ("${CMAKE_GENERATOR}" STREQUAL "Ninja")
    add_compile_options(-fcolor-diagnostics)
 endif()
 
-if( USE_EOSIO_CDT_1_7_X )
-   add_definitions(-DUSE_EOSIO_CDT_1_7_X=true)
+if( USE_UPCX_CDT_1_7_X )
+   add_definitions(-DUSE_UPCX_CDT_1_7_X=true)
 endif()
 
 add_subdirectory( asserter )

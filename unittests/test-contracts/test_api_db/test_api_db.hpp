@@ -1,42 +1,42 @@
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <upcx/upcx.hpp>
 
-class [[eosio::contract]] test_api_db : public eosio::contract {
+class [[upcx::contract]] test_api_db : public upcx::contract {
 public:
-   using eosio::contract::contract;
+   using upcx::contract::contract;
 
-   [[eosio::action("pg")]]
+   [[upcx::action("pg")]]
    void primary_i64_general();
 
-   [[eosio::action("pl")]]
+   [[upcx::action("pl")]]
    void primary_i64_lowerbound();
 
-   [[eosio::action("pu")]]
+   [[upcx::action("pu")]]
    void primary_i64_upperbound();
 
-   [[eosio::action("s1g")]]
+   [[upcx::action("s1g")]]
    void idx64_general();
 
-   [[eosio::action("s1l")]]
+   [[upcx::action("s1l")]]
    void idx64_lowerbound();
 
-   [[eosio::action("s1u")]]
+   [[upcx::action("s1u")]]
    void idx64_upperbound();
 
-   [[eosio::action("tia")]]
-   void test_invalid_access( eosio::name code, uint64_t val, uint32_t index, bool store );
+   [[upcx::action("tia")]]
+   void test_invalid_access( upcx::name code, uint64_t val, uint32_t index, bool store );
 
-   [[eosio::action("sdnancreate")]]
+   [[upcx::action("sdnancreate")]]
    void idx_double_nan_create_fail();
 
-   [[eosio::action("sdnanmodify")]]
+   [[upcx::action("sdnanmodify")]]
    void idx_double_nan_modify_fail();
 
-   [[eosio::action("sdnanlookup")]]
+   [[upcx::action("sdnanlookup")]]
    void idx_double_nan_lookup_fail( uint32_t lookup_type );
 
-   [[eosio::action("sk32align")]]
+   [[upcx::action("sk32align")]]
    void misaligned_secondary_key256_tests();
 
 };

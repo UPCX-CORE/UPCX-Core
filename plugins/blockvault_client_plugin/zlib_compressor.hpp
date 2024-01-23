@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace eosio {
+namespace upcx {
 namespace blockvault {
 
 struct zlib_compressor {
@@ -35,4 +35,4 @@ struct zlib_compressor {
 };
 
 } // namespace blockvault
-} // namespace eosio
+} // namespace upcx

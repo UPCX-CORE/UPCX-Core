@@ -1,8 +1,8 @@
-#include <eosio/resource_monitor_plugin/system_file_space_provider.hpp>
+#include <upcx/resource_monitor_plugin/system_file_space_provider.hpp>
 
 namespace bfs = boost::filesystem;
 
-namespace eosio::resource_monitor {
+namespace upcx::resource_monitor {
    int system_file_space_provider::get_stat(const char *path, struct stat *buf) const {
       return stat(path, buf);
    }

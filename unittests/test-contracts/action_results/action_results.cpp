@@ -1,37 +1,37 @@
-#include <eosio/eosio.hpp>                   /* contract, datastream, unsigned_int */
+#include <upcx/upcx.hpp>                   /* contract, datastream, unsigned_int */
 #include <vector>                            /* vector */
 
-using namespace eosio;
+using namespace upcx;
 using namespace std;
 
 extern "C" { 
-__attribute__((eosio_wasm_import))
+__attribute__((upcx_wasm_import))
 void set_parameters_packed( const char* params, uint32_t params_size );
-__attribute__((eosio_wasm_import))
+__attribute__((upcx_wasm_import))
 void set_action_return_value(void*, size_t);
 };
 
-class [[eosio::contract]] action_results : public contract {
+class [[upcx::contract]] action_results : public contract {
   public:
       using contract::contract;
 
-      [[eosio::action]]
+      [[upcx::action]]
       int actionresret() {
          return 10;
       }
 
-      [[eosio::action]]
+      [[upcx::action]]
       vector<char> retoverlim() {
          return vector<char>(512, '0');
       }
 
-      [[eosio::action]]
+      [[upcx::action]]
       vector<char> retlim() {
          //2 is for size of type unsigned_int
          return vector<char>(256 - 2, '0');
       }
 
-      [[eosio::action]]
+      [[upcx::action]]
       vector<char> ret1overlim() {
          //2 is for size of type unsigned_int
          return vector<char>(257 - 2, '0');
@@ -40,7 +40,7 @@ class [[eosio::contract]] action_results : public contract {
       /**
        * required to be called as system contract for priviledged host function call  
        */
-      [[eosio::action]]
+      [[upcx::action]]
       void retmaxlim() {
          
          char buffer[12];
@@ -55,7 +55,7 @@ class [[eosio::contract]] action_results : public contract {
          set_action_return_value( ret_vec.data(), ret_vec.size() );
       }
 
-      [[eosio::action]]
+      [[upcx::action]]
       void setliminv() {
          
          char buffer[12];

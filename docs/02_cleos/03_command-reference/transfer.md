@@ -1,13 +1,16 @@
 ## Description
+
 Transfer tokens from account to account
 
 ## Positional Parameters
-- `sender` _TEXT_ - The account sending EOS
-- `recipient` _TEXT_ - The account receiving EOS
-- `amount` _UINT_ - The amount of EOS to send
+
+- `sender` _TEXT_ - The account sending UPCX
+- `recipient` _TEXT_ - The account receiving UPCX
+- `amount` _UINT_ - The amount of UPCX to send
 - `memo` _TEXT_ - The memo for the transfer
 
 ## Options
+
 - `-c,--contract` _TEXT_ - The contract which controls the token
 - `--pay-ram-to-open` - Pay ram to open recipient's token balance row
 - `-x,--expiration` - set the time in seconds before a transaction expires, defaults to 30s
@@ -25,11 +28,13 @@ Transfer tokens from account to account
 - `--delay-sec` _UINT_ - set the delay_sec seconds, defaults to 0s
 
 ## Example
+
 Transfer 1000 SYS from **inita** to **tester**
 
 ```sh
-cleos transfer inita tester 1000
+clupcx transfer inita tester 1000
 ```
+
 The response should look something like this:
 
 ```json
@@ -47,7 +52,7 @@ The response should look something like this:
       "1f22e64240e1e479eee6ccbbd79a29f1a6eb6020384b4cca1a958e7c708d3e562009ae6e60afac96f9a3b89d729a50cd5a7b5a7a647540ba1678831bf970e83312"
     ],
     "messages": [{
-        "code": "eos",
+        "code": "upcx",
         "type": "transfer",
         "authorization": [{
             "account": "inita",

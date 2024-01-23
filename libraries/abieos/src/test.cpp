@@ -1,7 +1,7 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiupcx/LICENSE.txt
 
-#include "abieos.h"
-#include "abieos.hpp"
+#include "abiupcx.h"
+#include "abiupcx.hpp"
 #include "fuzzer.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -36,7 +36,7 @@ const char testHexAbi[] = "0E656F73696F3A3A6162692F312E3100040273310001027831046
                           "02623107696E74385B5D240000000000010276310304696E7438027331027332";
 
 const char testAbi[] = R"({
-    "version": "eosio::abi/1.1",
+    "version": "upcx::abi/1.1",
     "structs": [
         {
             "name": "s1",
@@ -134,7 +134,7 @@ const char testAbi[] = R"({
 })";
 
 const char transactionAbi[] = R"({
-    "version": "eosio::abi/1.0",
+    "version": "upcx::abi/1.0",
     "types": [
         {
             "new_type_name": "account_name",
@@ -252,7 +252,7 @@ const char transactionAbi[] = R"({
 })";
 
 const char testKvTablesAbi[] = R"({
-    "version": "eosio::abi/1.2",
+    "version": "upcx::abi/1.2",
     "types": [],
     "structs": [
         {
@@ -389,7 +389,7 @@ const char testKvTablesAbi[] = R"({
 })";
 
 const char packedTransactionAbi[] = R"({
-    "version": "eosio::abi/1.0",
+    "version": "upcx::abi/1.0",
     "types": [
         {
             "new_type_name": "account_name",
@@ -531,8 +531,8 @@ const char packedTransactionAbi[] = R"({
 std::string string_to_hex(const std::string& s) {
     std::string result;
     uint8_t size = s.size();
-    abieos::hex(&size, &size + 1, std::back_inserter(result));
-    abieos::hex(s.begin(), s.end(), std::back_inserter(result));
+    abiupcx::hex(&size, &size + 1, std::back_inserter(result));
+    abiupcx::hex(s.begin(), s.end(), std::back_inserter(result));
     return result;
 }
 
@@ -544,27 +544,27 @@ T check(T value, const char* msg = "") {
 }
 
 template <typename T>
-T check_context(abieos_context* context, T value) {
+T check_context(abiupcx_context* context, T value) {
     if (!value)
-        throw std::runtime_error(abieos_get_error(context));
+        throw std::runtime_error(abiupcx_get_error(context));
     return value;
 }
 
-void run_check_type(abieos_context* context, uint64_t contract, const char* type, const char* data,
+void run_check_type(abiupcx_context* context, uint64_t contract, const char* type, const char* data,
                     const char* expected = nullptr, bool check_ordered = true) {
     if (!expected)
         expected = data;
     // printf("%s %s\n", type, data);
-    check_context(context, abieos_json_to_bin_reorderable(context, contract, type, data));
-    std::string reorderable_hex = check_context(context, abieos_get_bin_hex(context));
+    check_context(context, abiupcx_json_to_bin_reorderable(context, contract, type, data));
+    std::string reorderable_hex = check_context(context, abiupcx_get_bin_hex(context));
     if (check_ordered) {
-        check_context(context, abieos_json_to_bin(context, contract, type, data));
-        std::string ordered_hex = check_context(context, abieos_get_bin_hex(context));
+        check_context(context, abiupcx_json_to_bin(context, contract, type, data));
+        std::string ordered_hex = check_context(context, abiupcx_get_bin_hex(context));
         if (reorderable_hex != ordered_hex)
             throw std::runtime_error("mismatch between reorderable_hex, ordered_hex");
     }
     // printf("%s\n", reorderable_hex.c_str());
-    std::string result = check_context(context, abieos_hex_to_json(context, contract, type, reorderable_hex.c_str()));
+    std::string result = check_context(context, abiupcx_hex_to_json(context, contract, type, reorderable_hex.c_str()));
     // printf("%s\n", result.c_str());
     printf("%s %s %s %s\n", type, data, reorderable_hex.c_str(), result.c_str());
     if (result != expected)
@@ -587,27 +587,27 @@ void check_except(const std::string& s, F f) {
 }
 
 template <typename F>
-void check_error(abieos_context* context, const std::string& s, F f) {
+void check_error(abiupcx_context* context, const std::string& s, F f) {
     check_except(s, [&] { check_context(context, f()); });
 }
 
 void check_types() {
-    auto context = check(abieos_create());
-    auto token = check_context(context, abieos_string_to_name(context, "eosio.token"));
-    auto testAbiName = check_context(context, abieos_string_to_name(context, "test.abi"));
-    auto testHexAbiName = check_context(context, abieos_string_to_name(context, "test.hex"));
-    auto testKvAbiName = check_context(context, abieos_string_to_name(context, "testkv.abi"));
-    check_context(context, abieos_set_abi(context, 0, transactionAbi));
-    check_context(context, abieos_set_abi(context, 1, packedTransactionAbi));
-    check_context(context, abieos_set_abi(context, 2, state_history_plugin_abi));
-    check_context(context, abieos_set_abi_hex(context, token, tokenHexAbi));
-    check_context(context, abieos_set_abi(context, testAbiName, testAbi));
-    check_context(context, abieos_set_abi_hex(context, testHexAbiName, testHexAbi));
-    check_context(context, abieos_set_abi(context, testKvAbiName, testKvTablesAbi));
+    auto context = check(abiupcx_create());
+    auto token = check_context(context, abiupcx_string_to_name(context, "upcx.token"));
+    auto testAbiName = check_context(context, abiupcx_string_to_name(context, "test.abi"));
+    auto testHexAbiName = check_context(context, abiupcx_string_to_name(context, "test.hex"));
+    auto testKvAbiName = check_context(context, abiupcx_string_to_name(context, "testkv.abi"));
+    check_context(context, abiupcx_set_abi(context, 0, transactionAbi));
+    check_context(context, abiupcx_set_abi(context, 1, packedTransactionAbi));
+    check_context(context, abiupcx_set_abi(context, 2, state_history_plugin_abi));
+    check_context(context, abiupcx_set_abi_hex(context, token, tokenHexAbi));
+    check_context(context, abiupcx_set_abi(context, testAbiName, testAbi));
+    check_context(context, abiupcx_set_abi_hex(context, testHexAbiName, testHexAbi));
+    check_context(context, abiupcx_set_abi(context, testKvAbiName, testKvTablesAbi));
 
     int next_id = 0;
-    auto write_corpus = [&](bool abi_is_bin, uint8_t operation, uint64_t contract, eosio::input_stream abi,
-                            eosio::input_stream type, eosio::input_stream data) {
+    auto write_corpus = [&](bool abi_is_bin, uint8_t operation, uint64_t contract, upcx::input_stream abi,
+                            upcx::input_stream type, upcx::input_stream data) {
         fuzzer_header header;
         header.abi_is_bin = abi_is_bin;
         header.operation = operation;
@@ -628,7 +628,7 @@ void check_types() {
         fclose(f);
     };
 
-    auto check_type = [&](abieos_context* context, uint64_t contract, const char* type, const char* data,
+    auto check_type = [&](abiupcx_context* context, uint64_t contract, const char* type, const char* data,
                           const char* expected = nullptr, bool check_ordered = true) {
         if (!generate_corpus)
             return run_check_type(context, contract, type, data, expected, check_ordered);
@@ -647,7 +647,7 @@ void check_types() {
         } else if (contract == token) {
             abi_is_bin = true;
             std::string error;
-            if (!abieos::unhex(error, tokenHexAbi, tokenHexAbi + strlen(tokenHexAbi), std::back_inserter(abi)))
+            if (!abiupcx::unhex(error, tokenHexAbi, tokenHexAbi + strlen(tokenHexAbi), std::back_inserter(abi)))
                 throw std::runtime_error(error);
         } else if (contract == testAbiName) {
             abi_is_bin = false;
@@ -655,7 +655,7 @@ void check_types() {
         } else if (contract == testHexAbiName) {
             abi_is_bin = true;
             std::string error;
-            if (!abieos::unhex(error, testHexAbi, testHexAbi + strlen(testHexAbi), std::back_inserter(abi)))
+            if (!abiupcx::unhex(error, testHexAbi, testHexAbi + strlen(testHexAbi), std::back_inserter(abi)))
                 throw std::runtime_error(error);
         } else {
             throw std::runtime_error("missing case in check_type");
@@ -665,37 +665,37 @@ void check_types() {
         write_corpus(abi_is_bin, fuzzer_json_to_bin, contract, {abi.data(), abi.data() + abi.size()},
                      {type, type + strlen(type) + 1}, {data, data + strlen(data) + 1});
 
-        check_context(context, abieos_json_to_bin_reorderable(context, contract, type, data));
-        std::string hex = check_context(context, abieos_get_bin_hex(context));
+        check_context(context, abiupcx_json_to_bin_reorderable(context, contract, type, data));
+        std::string hex = check_context(context, abiupcx_get_bin_hex(context));
 
         write_corpus(abi_is_bin, fuzzer_hex_to_json, contract, {abi.data(), abi.data() + abi.size()},
                      {type, type + strlen(type) + 1}, {hex.c_str(), hex.c_str() + hex.size() + 1});
     };
 
-    check_error(context, "no data", [&] { return abieos_set_abi_hex(context, 8, ""); });
-    check_error(context, "unsupported abi version", [&] { return abieos_set_abi_hex(context, 8, "00"); });
+    check_error(context, "no data", [&] { return abiupcx_set_abi_hex(context, 8, ""); });
+    check_error(context, "unsupported abi version", [&] { return abiupcx_set_abi_hex(context, 8, "00"); });
     check_error(context, "unsupported abi version",
-                [&] { return abieos_set_abi_hex(context, 8, string_to_hex("eosio::abi/9.0").c_str()); });
+                [&] { return abiupcx_set_abi_hex(context, 8, string_to_hex("upcx::abi/9.0").c_str()); });
     check_error(context, "Stream overrun",
-                [&] { return abieos_set_abi_hex(context, 8, string_to_hex("eosio::abi/1.0").c_str()); });
+                [&] { return abiupcx_set_abi_hex(context, 8, string_to_hex("upcx::abi/1.0").c_str()); });
     check_error(context, "Stream overrun",
-                [&] { return abieos_set_abi_hex(context, 8, string_to_hex("eosio::abi/1.1").c_str()); });
+                [&] { return abiupcx_set_abi_hex(context, 8, string_to_hex("upcx::abi/1.1").c_str()); });
 
     check_error(context, "unsupported abi version",
-                [&] { return abieos_set_abi(context, 8, R"({"version":"eosio::abi/9.0"})"); });
-    abieos_set_abi(context, 8, R"({"version":"eosio::abi/1.0"})");
-    abieos_set_abi(context, 8, R"({"version":"eosio::abi/1.1"})");
+                [&] { return abiupcx_set_abi(context, 8, R"({"version":"upcx::abi/9.0"})"); });
+    abiupcx_set_abi(context, 8, R"({"version":"upcx::abi/1.0"})");
+    abiupcx_set_abi(context, 8, R"({"version":"upcx::abi/1.1"})");
 
     check_type(context, 0, "bool", R"(true)");
     check_type(context, 0, "bool", R"(false)");
-    check_error(context, "Stream overrun", [&] { return abieos_hex_to_json(context, 0, "bool", ""); });
+    check_error(context, "Stream overrun", [&] { return abiupcx_hex_to_json(context, 0, "bool", ""); });
     // !!!
     check_error(context, "The document root must not follow by other values",
-                [&] { return abieos_json_to_bin(context, 0, "bool", R"(trues)"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "bool", R"(trues)"); });
     check_error(context, "Expected number or boolean",
-                [&] { return abieos_json_to_bin(context, 0, "bool", R"(null)"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "bool", R"(null)"); });
     check_error(context, "Expected positive integer",
-                [&] { return abieos_json_to_bin(context, 0, "bool", R"("foo")"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "bool", R"("foo")"); });
     check_type(context, 0, "int8", R"(0)");
     check_type(context, 0, "int8", R"(127)");
     check_type(context, 0, "int8", R"(-128)");
@@ -703,10 +703,10 @@ void check_types() {
     check_type(context, 0, "uint8", R"(1)");
     check_type(context, 0, "uint8", R"(254)");
     check_type(context, 0, "uint8", R"(255)");
-    check_error(context, "number is out of range", [&] { return abieos_json_to_bin(context, 0, "int8", "128"); });
-    check_error(context, "number is out of range", [&] { return abieos_json_to_bin(context, 0, "int8", "-129"); });
-    check_error(context, "expected non-negative number", [&] { return abieos_json_to_bin(context, 0, "uint8", "-1"); });
-    check_error(context, "number is out of range", [&] { return abieos_json_to_bin(context, 0, "uint8", "256"); });
+    check_error(context, "number is out of range", [&] { return abiupcx_json_to_bin(context, 0, "int8", "128"); });
+    check_error(context, "number is out of range", [&] { return abiupcx_json_to_bin(context, 0, "int8", "-129"); });
+    check_error(context, "expected non-negative number", [&] { return abiupcx_json_to_bin(context, 0, "uint8", "-1"); });
+    check_error(context, "number is out of range", [&] { return abiupcx_json_to_bin(context, 0, "uint8", "256"); });
     check_type(context, 0, "uint8[]", R"([])");
     check_type(context, 0, "uint8[]", R"([10])");
     check_type(context, 0, "uint8[]", R"([10,9])");
@@ -714,27 +714,27 @@ void check_types() {
     check_type(context, 0, "int16", R"(0)");
     check_type(context, 0, "int16", R"(32767)");
     check_type(context, 0, "int16", R"(-32768)");
-    check_error(context, "Stream overrun", [&] { return abieos_hex_to_json(context, 0, "int16", "01"); });
+    check_error(context, "Stream overrun", [&] { return abiupcx_hex_to_json(context, 0, "int16", "01"); });
     check_type(context, 0, "uint16", R"(0)");
     check_type(context, 0, "uint16", R"(65535)");
-    check_error(context, "number is out of range", [&] { return abieos_json_to_bin(context, 0, "int16", "32768"); });
-    check_error(context, "number is out of range", [&] { return abieos_json_to_bin(context, 0, "int16", "-32769"); });
+    check_error(context, "number is out of range", [&] { return abiupcx_json_to_bin(context, 0, "int16", "32768"); });
+    check_error(context, "number is out of range", [&] { return abiupcx_json_to_bin(context, 0, "int16", "-32769"); });
     check_error(context, "expected non-negative number",
-                [&] { return abieos_json_to_bin(context, 0, "uint16", "-1"); });
-    check_error(context, "number is out of range", [&] { return abieos_json_to_bin(context, 0, "uint16", "655356"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "uint16", "-1"); });
+    check_error(context, "number is out of range", [&] { return abiupcx_json_to_bin(context, 0, "uint16", "655356"); });
     check_type(context, 0, "int32", R"(0)");
     check_type(context, 0, "int32", R"(2147483647)");
     check_type(context, 0, "int32", R"(-2147483648)");
     check_type(context, 0, "uint32", R"(0)");
     check_type(context, 0, "uint32", R"(4294967295)");
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "int32", "2147483648"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int32", "2147483648"); });
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "int32", "-2147483649"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int32", "-2147483649"); });
     check_error(context, "expected non-negative number",
-                [&] { return abieos_json_to_bin(context, 0, "uint32", "-1"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "uint32", "-1"); });
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "uint32", "4294967296"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "uint32", "4294967296"); });
     check_type(context, 0, "int64", R"(0)", R"("0")");
     check_type(context, 0, "int64", R"(1)", R"("1")");
     check_type(context, 0, "int64", R"(-1)", R"("-1")");
@@ -744,13 +744,13 @@ void check_types() {
     check_type(context, 0, "uint64", R"("0")");
     check_type(context, 0, "uint64", R"("18446744073709551615")");
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "int64", "9223372036854775808"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int64", "9223372036854775808"); });
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "int64", "-9223372036854775809"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int64", "-9223372036854775809"); });
     check_error(context, "expected non-negative number",
-                [&] { return abieos_json_to_bin(context, 0, "uint64", "-1"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "uint64", "-1"); });
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "uint64", "18446744073709551616"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "uint64", "18446744073709551616"); });
     check_type(context, 0, "int128", R"("0")");
     check_type(context, 0, "int128", R"("1")");
     check_type(context, 0, "int128", R"("-1")");
@@ -765,16 +765,16 @@ void check_types() {
     check_type(context, 0, "uint128", R"("340282366920938463463374607431768211454")");
     check_type(context, 0, "uint128", R"("340282366920938463463374607431768211455")");
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "int128", "170141183460469231731687303715884105728"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int128", "170141183460469231731687303715884105728"); });
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "int128", "-170141183460469231731687303715884105729"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int128", "-170141183460469231731687303715884105729"); });
     check_error(context, "expected string containing int128",
-                [&] { return abieos_json_to_bin(context, 0, "int128", "true"); });
-    check_error(context, "invalid number", [&] { return abieos_json_to_bin(context, 0, "uint128", "-1"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int128", "true"); });
+    check_error(context, "invalid number", [&] { return abiupcx_json_to_bin(context, 0, "uint128", "-1"); });
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "uint128", "340282366920938463463374607431768211456"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "uint128", "340282366920938463463374607431768211456"); });
     check_error(context, "expected string containing uint128",
-                [&] { return abieos_json_to_bin(context, 0, "uint128", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "uint128", "true"); });
     check_type(context, 0, "varuint32", R"(0)");
     check_type(context, 0, "varuint32", R"(127)");
     check_type(context, 0, "varuint32", R"(128)");
@@ -799,13 +799,13 @@ void check_types() {
     check_type(context, 0, "varint32", R"(2147483647)");
     check_type(context, 0, "varint32", R"(-2147483648)");
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "varint32", "2147483648"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "varint32", "2147483648"); });
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "varint32", "-2147483649"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "varint32", "-2147483649"); });
     check_error(context, "expected non-negative number",
-                [&] { return abieos_json_to_bin(context, 0, "varuint32", "-1"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "varuint32", "-1"); });
     check_error(context, "number is out of range",
-                [&] { return abieos_json_to_bin(context, 0, "varuint32", "4294967296"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "varuint32", "4294967296"); });
     check_type(context, 0, "float32", R"(0.0)", "0");
     check_type(context, 0, "float32", R"(0.125)");
     check_type(context, 0, "float32", R"(-0.125)");
@@ -819,7 +819,7 @@ void check_types() {
     check_type(context, 0, "time_point_sec", R"("2018-06-15T19:17:47.000")");
     check_type(context, 0, "time_point_sec", R"("2030-06-15T19:17:47.000")");
     check_error(context, "expected string containing time_point_sec",
-                [&] { return abieos_json_to_bin(context, 0, "time_point_sec", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "time_point_sec", "true"); });
     check_type(context, 0, "time_point", R"("1970-01-01T00:00:00.000")");
     check_type(context, 0, "time_point", R"("1970-01-01T00:00:00.001")");
     check_type(context, 0, "time_point", R"("1970-01-01T00:00:00.002")");
@@ -830,14 +830,14 @@ void check_types() {
     check_type(context, 0, "time_point", R"("2030-06-15T19:17:47.999")");
     check_type(context, 0, "time_point", R"("2000-12-31T23:59:59.999999")", R"("2000-12-31T23:59:59.999")");
     check_error(context, "expected string containing time_point",
-                [&] { return abieos_json_to_bin(context, 0, "time_point", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "time_point", "true"); });
     check_type(context, 0, "block_timestamp_type", R"("2000-01-01T00:00:00.000")");
     check_type(context, 0, "block_timestamp_type", R"("2000-01-01T00:00:00.500")");
     check_type(context, 0, "block_timestamp_type", R"("2000-01-01T00:00:01.000")");
     check_type(context, 0, "block_timestamp_type", R"("2018-06-15T19:17:47.500")");
     check_type(context, 0, "block_timestamp_type", R"("2018-06-15T19:17:48.000")");
     check_error(context, "expected string containing block_timestamp_type",
-                [&] { return abieos_json_to_bin(context, 0, "block_timestamp_type", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "block_timestamp_type", "true"); });
     check_type(context, 0, "name", R"("")");
     check_type(context, 0, "name", R"("1")");
     check_type(context, 0, "name", R"("abcd")");
@@ -847,28 +847,28 @@ void check_types() {
     check_type(context, 0, "name", R"("zzzzzzzzzzzz")");
     // todo: should json conversion fall back to hash? reenable this error?
     // check_error(context, "thirteenth character in name cannot be a letter that comes after j",
-    //             [&] { return abieos_json_to_bin(context, 0, "name", R"("zzzzzzzzzzzzz")"); });
+    //             [&] { return abiupcx_json_to_bin(context, 0, "name", R"("zzzzzzzzzzzzz")"); });
     check_error(context, "expected string containing name",
-                [&] { return abieos_json_to_bin(context, 0, "name", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "name", "true"); });
     check_type(context, 0, "bytes", R"("")");
     check_type(context, 0, "bytes", R"("00")");
     check_type(context, 0, "bytes", R"("AABBCCDDEEFF00010203040506070809")");
-    check_error(context, "odd number of hex digits", [&] { return abieos_json_to_bin(context, 0, "bytes", R"("0")"); });
-    check_error(context, "expected hex string", [&] { return abieos_json_to_bin(context, 0, "bytes", R"("yz")"); });
+    check_error(context, "odd number of hex digits", [&] { return abiupcx_json_to_bin(context, 0, "bytes", R"("0")"); });
+    check_error(context, "expected hex string", [&] { return abiupcx_json_to_bin(context, 0, "bytes", R"("yz")"); });
     check_error(context, "expected string containing hex digits",
-                [&] { return abieos_json_to_bin(context, 0, "bytes", R"(true)"); });
-    check_error(context, "Stream overrun", [&] { return abieos_hex_to_json(context, 0, "bytes", "01"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "bytes", R"(true)"); });
+    check_error(context, "Stream overrun", [&] { return abiupcx_hex_to_json(context, 0, "bytes", "01"); });
     check_type(context, 0, "string", R"("")");
     check_type(context, 0, "string", R"("z")");
     check_type(context, 0, "string", R"("This is a string.")");
     check_type(context, 0, "string", R"("' + '*'.repeat(128) + '")");
     check_type(context, 0, "string", R"("\u0000  这是一个测试  Это тест  هذا اختبار 👍")");
-    check(abieos_bin_to_json(context, 0, "string", "\x11invalid utf8: \xff\xfe\xfd", 18) ==
+    check(abiupcx_bin_to_json(context, 0, "string", "\x11invalid utf8: \xff\xfe\xfd", 18) ==
               std::string(R"("invalid utf8: ???")"),
           "invalid utf8");
-    check(abieos_bin_to_json(context, 0, "string", "\4\xe8\xbf\x99\n", 5) == std::string("\"\xe8\xbf\x99\\u000A\""),
+    check(abiupcx_bin_to_json(context, 0, "string", "\4\xe8\xbf\x99\n", 5) == std::string("\"\xe8\xbf\x99\\u000A\""),
           "escaping");
-    check_error(context, "Stream overrun", [&] { return abieos_hex_to_json(context, 0, "string", "01"); });
+    check_error(context, "Stream overrun", [&] { return abiupcx_hex_to_json(context, 0, "string", "01"); });
     check_type(context, 0, "checksum160", R"("0000000000000000000000000000000000000000")");
     check_type(context, 0, "checksum160", R"("123456789ABCDEF01234567890ABCDEF70123456")");
     check_type(context, 0, "checksum256", R"("0000000000000000000000000000000000000000000000000000000000000000")");
@@ -880,34 +880,34 @@ void check_types() {
         context, 0, "checksum512",
         R"("0987654321ABCDEF0987654321FFFF1234567890ABCDEF001234567890ABCDEF0987654321ABCDEF0987654321FFFF1234567890ABCDEF001234567890ABCDEF")");
     check_error(context, "expected hex string",
-                [&] { return abieos_json_to_bin(context, 0, "checksum256", R"("yz")"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "checksum256", R"("yz")"); });
     check_error(context, "expected string containing hex",
-                [&] { return abieos_json_to_bin(context, 0, "checksum256", R"(true)"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "checksum256", R"(true)"); });
     check_error(context, "hex string has incorrect length",
-                [&] { return abieos_json_to_bin(context, 0, "checksum256", R"("a0")"); });
-    check_type(context, 0, "public_key", R"("EOS1111111111111111111111111111111114T1Anm")",
+                [&] { return abiupcx_json_to_bin(context, 0, "checksum256", R"("a0")"); });
+    check_type(context, 0, "public_key", R"("UPCX1111111111111111111111111111111114T1Anm")",
                R"("PUB_K1_11111111111111111111111111111111149Mr2R")");
-    check_type(context, 0, "public_key", R"("EOS11111111111111111111111115qCHTcgbQwptSz99m")",
+    check_type(context, 0, "public_key", R"("UPCX11111111111111111111111115qCHTcgbQwptSz99m")",
                R"("PUB_K1_11111111111111111111111115qCHTcgbQwpvP72Uq")");
-    check_type(context, 0, "public_key", R"("EOS111111111111111114ZrjxJnU1LA5xSyrWMNuXTrYSJ57")",
+    check_type(context, 0, "public_key", R"("UPCX111111111111111114ZrjxJnU1LA5xSyrWMNuXTrYSJ57")",
                R"("PUB_K1_111111111111111114ZrjxJnU1LA5xSyrWMNuXTrVub2r")");
-    check_type(context, 0, "public_key", R"("EOS1111111113diW7pnisfdBvHTXP7wvW5k5Ky1e5DVuF23dosU")",
+    check_type(context, 0, "public_key", R"("UPCX1111111113diW7pnisfdBvHTXP7wvW5k5Ky1e5DVuF23dosU")",
                R"("PUB_K1_1111111113diW7pnisfdBvHTXP7wvW5k5Ky1e5DVuF4PizpM")");
-    check_type(context, 0, "public_key", R"("EOS11DsZ6Lyr1aXpm9aBqqgV4iFJpNbSw5eE9LLTwNAxqjJgmjgbT")",
+    check_type(context, 0, "public_key", R"("UPCX11DsZ6Lyr1aXpm9aBqqgV4iFJpNbSw5eE9LLTwNAxqjJgmjgbT")",
                R"("PUB_K1_11DsZ6Lyr1aXpm9aBqqgV4iFJpNbSw5eE9LLTwNAxqjJgXSdB8")");
-    check_type(context, 0, "public_key", R"("EOS12wkBET2rRgE8pahuaczxKbmv7ciehqsne57F9gtzf1PVYNMRa2")",
+    check_type(context, 0, "public_key", R"("UPCX12wkBET2rRgE8pahuaczxKbmv7ciehqsne57F9gtzf1PVYNMRa2")",
                R"("PUB_K1_12wkBET2rRgE8pahuaczxKbmv7ciehqsne57F9gtzf1PVb7Rf7o")");
-    check_type(context, 0, "public_key", R"("EOS1yp8ebBuKZ13orqUrZsGsP49e6K3ThVK1nLutxSyU5j9SaXz9a")",
+    check_type(context, 0, "public_key", R"("UPCX1yp8ebBuKZ13orqUrZsGsP49e6K3ThVK1nLutxSyU5j9SaXz9a")",
                R"("PUB_K1_1yp8ebBuKZ13orqUrZsGsP49e6K3ThVK1nLutxSyU5j9Tx1r96")");
-    check_type(context, 0, "public_key", R"("EOS9adaAMuB9v8yX1mZ5PtoB6VFSCeqRGjASd8ZTM6VUkiHL7mue4K")",
+    check_type(context, 0, "public_key", R"("UPCX9adaAMuB9v8yX1mZ5PtoB6VFSCeqRGjASd8ZTM6VUkiHL7mue4K")",
                R"("PUB_K1_9adaAMuB9v8yX1mZ5PtoB6VFSCeqRGjASd8ZTM6VUkiHLB5XEdw")");
-    check_type(context, 0, "public_key", R"("EOS69X3383RzBZj41k73CSjUNXM5MYGpnDxyPnWUKPEtYQmTBWz4D")",
+    check_type(context, 0, "public_key", R"("UPCX69X3383RzBZj41k73CSjUNXM5MYGpnDxyPnWUKPEtYQmTBWz4D")",
                R"("PUB_K1_69X3383RzBZj41k73CSjUNXM5MYGpnDxyPnWUKPEtYQmVzqTY7")");
-    check_type(context, 0, "public_key", R"("EOS7yBtksm8Kkg85r4in4uCbfN77uRwe82apM8jjbhFVDgEgz3w8S")",
+    check_type(context, 0, "public_key", R"("UPCX7yBtksm8Kkg85r4in4uCbfN77uRwe82apM8jjbhFVDgEgz3w8S")",
                R"("PUB_K1_7yBtksm8Kkg85r4in4uCbfN77uRwe82apM8jjbhFVDgEcarGb8")");
-    check_type(context, 0, "public_key", R"("EOS7WnhaKwHpbSidYuh2DF1qAExTRUtPEdZCaZqt75cKcixuQUtdA")",
+    check_type(context, 0, "public_key", R"("UPCX7WnhaKwHpbSidYuh2DF1qAExTRUtPEdZCaZqt75cKcixuQUtdA")",
                R"("PUB_K1_7WnhaKwHpbSidYuh2DF1qAExTRUtPEdZCaZqt75cKcixtU7gEn")");
-    check_type(context, 0, "public_key", R"("EOS7Bn1YDeZ18w2N9DU4KAJxZDt6hk3L7eUwFRAc1hb5bp6xJwxNV")",
+    check_type(context, 0, "public_key", R"("UPCX7Bn1YDeZ18w2N9DU4KAJxZDt6hk3L7eUwFRAc1hb5bp6xJwxNV")",
                R"("PUB_K1_7Bn1YDeZ18w2N9DU4KAJxZDt6hk3L7eUwFRAc1hb5bp6uEBZA8")");
     check_type(context, 0, "public_key", R"("PUB_K1_11111111111111111111111111111111149Mr2R")");
     check_type(context, 0, "public_key", R"("PUB_K1_11111111111111111111111115qCHTcgbQwpvP72Uq")");
@@ -930,17 +930,17 @@ void check_types() {
     check_type(context, 0, "public_key",
                R"("PUB_WA_6VFnP5vnq1GjNyMR7S17e2yp6SRoChiborF2LumbnXvMTsPASXykJaBBGLhprXTpk")");
     check_error(context, "expected string containing public_key",
-                [&] { return abieos_json_to_bin(context, 0, "public_key", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "public_key", "true"); });
     check_error(context, "unrecognized public key format",
-                [&] { return abieos_json_to_bin(context, 0, "public_key", R"("foo")"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "public_key", R"("foo")"); });
     check_type(context, 0, "private_key", R"("PVT_R1_PtoxLPzJZURZmPS4e26pjBiAn41mkkLPrET5qHnwDvbvqFEL6")");
     check_type(context, 0, "private_key", R"("PVT_R1_vbRKUuE34hjMVQiePj2FEjM8FvuG7yemzQsmzx89kPS9J8Coz")");
     check_type(context, 0, "private_key", R"("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3")",
                R"("PVT_K1_2bfGi9rYsXQSXXTvJbDAPhHLQUojjaNLomdm3cEJ1XTzMqUt3V")");
     check_error(context, "expected string containing private_key",
-                [&] { return abieos_json_to_bin(context, 0, "private_key", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "private_key", "true"); });
     check_error(context, "key has invalid size",
-                [&] { return abieos_json_to_bin(context, 0, "private_key", R"("foo")"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "private_key", R"("foo")"); });
     check_type(
         context, 0, "signature",
         R"("SIG_K1_Kg2UKjXTX48gw2wWH4zmsZmWu3yarcfC21Bd9JPj7QoDURqiAacCHmtExPk3syPb2tFLsp1R4ttXLXgr7FYgDvKPC5RCkx")");
@@ -954,19 +954,19 @@ void check_types() {
         context, 0, "signature",
         R"("SIG_WA_FejsRu4VrdwoZ27v2D3wmp4Kge46JJSqWsiMgbJapVuuYnPDyZZjJSTggdHUNPMp3zt2fGfAdpWY7ScsohZzWTJ1iTerbab2pNE6Tso7MJRjdMAG56K4fjrASEK6QsUs7rxG9Syp7kstBcq8eZidayrtK9YSH1MCNTAqrDPMbN366vR8q5XeN5BSDmyDsqmjsMMSKWMeEbUi7jNHKLziZY6dKHNqDYqjmDmuXoevxyDRWrNVHjAzvBtfTuVtj2r5tCScdCZ3a7yQ1D2zZvstphB4t5HN9YXw1HGS3yKCY6uRZ2V")");
     check_error(context, "expected string containing signature",
-                [&] { return abieos_json_to_bin(context, 0, "signature", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "signature", "true"); });
     check_error(context, "unrecognized signature format",
-                [&] { return abieos_json_to_bin(context, 0, "signature", R"("foo")"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "signature", R"("foo")"); });
     check_type(context, 0, "symbol_code", R"("A")");
     check_type(context, 0, "symbol_code", R"("B")");
     check_type(context, 0, "symbol_code", R"("SYS")");
     check_error(context, "expected string containing symbol_code",
-                [&] { return abieos_json_to_bin(context, 0, "symbol_code", "true"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "symbol_code", "true"); });
     check_type(context, 0, "symbol", R"("0,A")");
     check_type(context, 0, "symbol", R"("1,Z")");
     check_type(context, 0, "symbol", R"("4,SYS")");
     check_error(context, "expected string containing symbol",
-                [&] { return abieos_json_to_bin(context, 0, "symbol", "null"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "symbol", "null"); });
     check_type(context, 0, "asset", R"("0 FOO")");
     check_type(context, 0, "asset", R"("0.0 FOO")");
     check_type(context, 0, "asset", R"("0.00 FOO")");
@@ -974,7 +974,7 @@ void check_types() {
     check_type(context, 0, "asset", R"("1.2345 SYS")");
     check_type(context, 0, "asset", R"("-1.2345 SYS")");
     check_error(context, "expected string containing asset",
-                [&] { return abieos_json_to_bin(context, 0, "asset", "null"); });
+                [&] { return abiupcx_json_to_bin(context, 0, "asset", "null"); });
     check_type(context, 0, "asset[]", R"([])");
     check_type(context, 0, "asset[]", R"(["0 FOO"])");
     check_type(context, 0, "asset[]", R"(["0 FOO","0.000 FOO"])");
@@ -987,7 +987,7 @@ void check_types() {
                R"({"from":"useraaaaaaaa","to":"useraaaaaaab","quantity":"0.0001 SYS","memo":"test memo"})");
     check_type(
         context, 0, "transaction",
-        R"({"expiration":"2009-02-13T23:31:31.000","ref_block_num":1234,"ref_block_prefix":5678,"max_net_usage_words":0,"max_cpu_usage_ms":0,"delay_sec":0,"context_free_actions":[],"actions":[{"account":"eosio.token","name":"transfer","authorization":[{"actor":"useraaaaaaaa","permission":"active"}],"data":"608C31C6187315D6708C31C6187315D60100000000000000045359530000000000"}],"transaction_extensions":[]})");
+        R"({"expiration":"2009-02-13T23:31:31.000","ref_block_num":1234,"ref_block_prefix":5678,"max_net_usage_words":0,"max_cpu_usage_ms":0,"delay_sec":0,"context_free_actions":[],"actions":[{"account":"upcx.token","name":"transfer","authorization":[{"actor":"useraaaaaaaa","permission":"active"}],"data":"608C31C6187315D6708C31C6187315D60100000000000000045359530000000000"}],"transaction_extensions":[]})");
 
     check_type( //
         context, token, "transfer",
@@ -995,219 +995,219 @@ void check_types() {
         R"({"from":"useraaaaaaaa","to":"useraaaaaaab","quantity":"0.0001 SYS","memo":"test memo"})", false);
     check_type(
         context, 0, "transaction",
-        R"({"ref_block_num":1234,"ref_block_prefix":5678,"expiration":"2009-02-13T23:31:31.000","max_net_usage_words":0,"max_cpu_usage_ms":0,"delay_sec":0,"context_free_actions":[],"actions":[{"account":"eosio.token","name":"transfer","authorization":[{"actor":"useraaaaaaaa","permission":"active"}],"data":"608C31C6187315D6708C31C6187315D60100000000000000045359530000000000"}],"transaction_extensions":[]})",
-        R"({"expiration":"2009-02-13T23:31:31.000","ref_block_num":1234,"ref_block_prefix":5678,"max_net_usage_words":0,"max_cpu_usage_ms":0,"delay_sec":0,"context_free_actions":[],"actions":[{"account":"eosio.token","name":"transfer","authorization":[{"actor":"useraaaaaaaa","permission":"active"}],"data":"608C31C6187315D6708C31C6187315D60100000000000000045359530000000000"}],"transaction_extensions":[]})",
+        R"({"ref_block_num":1234,"ref_block_prefix":5678,"expiration":"2009-02-13T23:31:31.000","max_net_usage_words":0,"max_cpu_usage_ms":0,"delay_sec":0,"context_free_actions":[],"actions":[{"account":"upcx.token","name":"transfer","authorization":[{"actor":"useraaaaaaaa","permission":"active"}],"data":"608C31C6187315D6708C31C6187315D60100000000000000045359530000000000"}],"transaction_extensions":[]})",
+        R"({"expiration":"2009-02-13T23:31:31.000","ref_block_num":1234,"ref_block_prefix":5678,"max_net_usage_words":0,"max_cpu_usage_ms":0,"delay_sec":0,"context_free_actions":[],"actions":[{"account":"upcx.token","name":"transfer","authorization":[{"actor":"useraaaaaaaa","permission":"active"}],"data":"608C31C6187315D6708C31C6187315D60100000000000000045359530000000000"}],"transaction_extensions":[]})",
         false);
     check_type(
         context, 1, "packed_transaction_v0",
-        R"({"signatures":["SIG_K1_K5PGhrkUBkThs8zdTD9mGUJZvxL4eU46UjfYJSEdZ9PXS2Cgv5jAk57yTx4xnrdSocQm6DDvTaEJZi5WLBsoZC4XYNS8b3"],"compression":0,"packed_context_free_data":"","packed_trx":{"expiration":"2009-02-13T23:31:31.000","ref_block_num":1234,"ref_block_prefix":5678,"max_net_usage_words":0,"max_cpu_usage_ms":0,"delay_sec":0,"context_free_actions":[],"actions":[{"account":"eosio.token","name":"transfer","authorization":[{"actor":"useraaaaaaaa","permission":"active"}],"data":"608C31C6187315D6708C31C6187315D60100000000000000045359530000000000"}],"transaction_extensions":[]}})");
+        R"({"signatures":["SIG_K1_K5PGhrkUBkThs8zdTD9mGUJZvxL4eU46UjfYJSEdZ9PXS2Cgv5jAk57yTx4xnrdSocQm6DDvTaEJZi5WLBsoZC4XYNS8b3"],"compression":0,"packed_context_free_data":"","packed_trx":{"expiration":"2009-02-13T23:31:31.000","ref_block_num":1234,"ref_block_prefix":5678,"max_net_usage_words":0,"max_cpu_usage_ms":0,"delay_sec":0,"context_free_actions":[],"actions":[{"account":"upcx.token","name":"transfer","authorization":[{"actor":"useraaaaaaaa","permission":"active"}],"data":"608C31C6187315D6708C31C6187315D60100000000000000045359530000000000"}],"transaction_extensions":[]}})");
     check_type(
         context, 2, "transaction_trace",
-        R"(["transaction_trace_v0",{"id":"3098EA9476266BFA957C13FA73C26806D78753099CE8DEF2A650971F07595A69","status":0,"cpu_usage_us":2000,"net_usage_words":25,"elapsed":"194","net_usage":"200","scheduled":false,"action_traces":[["action_trace_v1",{"action_ordinal":1,"creator_action_ordinal":0,"receipt":["action_receipt_v0",{"receiver":"eosio","act_digest":"F2FDEEFF77EFC899EED23EE05F9469357A096DC3083D493571CF68A422C69EFE","global_sequence":"11","recv_sequence":"11","auth_sequence":[{"account":"eosio","sequence":"11"}],"code_sequence":2,"abi_sequence":0}],"receiver":"eosio","act":{"account":"eosio","name":"newaccount","authorization":[{"actor":"eosio","permission":"active"}],"data":"0000000000EA305500409406A888CCA501000000010002C0DED2BC1F1305FB0FAAC5E6C03EE3A1924234985427B6167CA569D13DF435CF0100000001000000010002C0DED2BC1F1305FB0FAAC5E6C03EE3A1924234985427B6167CA569D13DF435CF01000000"},"context_free":false,"elapsed":"83","console":"","account_ram_deltas":[{"account":"oracle.aml","delta":"2724"}],"account_disk_deltas":[],"except":null,"error_code":null,"return_value":""}]],"account_ram_delta":null,"except":null,"error_code":null,"failed_dtrx_trace":null,"partial":null}])");
+        R"(["transaction_trace_v0",{"id":"3098EA9476266BFA957C13FA73C26806D78753099CE8DEF2A650971F07595A69","status":0,"cpu_usage_us":2000,"net_usage_words":25,"elapsed":"194","net_usage":"200","scheduled":false,"action_traces":[["action_trace_v1",{"action_ordinal":1,"creator_action_ordinal":0,"receipt":["action_receipt_v0",{"receiver":"upcx","act_digest":"F2FDEEFF77EFC899EED23EE05F9469357A096DC3083D493571CF68A422C69EFE","global_sequence":"11","recv_sequence":"11","auth_sequence":[{"account":"upcx","sequence":"11"}],"code_sequence":2,"abi_sequence":0}],"receiver":"upcx","act":{"account":"upcx","name":"newaccount","authorization":[{"actor":"upcx","permission":"active"}],"data":"0000000000EA305500409406A888CCA501000000010002C0DED2BC1F1305FB0FAAC5E6C03EE3A1924234985427B6167CA569D13DF435CF0100000001000000010002C0DED2BC1F1305FB0FAAC5E6C03EE3A1924234985427B6167CA569D13DF435CF01000000"},"context_free":false,"elapsed":"83","console":"","account_ram_deltas":[{"account":"oracle.aml","delta":"2724"}],"account_disk_deltas":[],"except":null,"error_code":null,"return_value":""}]],"account_ram_delta":null,"except":null,"error_code":null,"failed_dtrx_trace":null,"partial":null}])");
     check_type(
         context, 2, "transaction_trace_msg",
         R"(["transaction_trace_exception",{"error_code":"3","error_message":"error happens"}])");
     check_type(
         context, 2, "transaction_trace_msg",
-        R"(["transaction_trace",["transaction_trace_v0",{"id":"B2C8D46F161E06740CFADABFC9D11F013A1C90E25337FF3E22840B195E1ADC4B","status":0,"cpu_usage_us":2000,"net_usage_words":12,"elapsed":"7670","net_usage":"96","scheduled":false,"action_traces":[["action_trace_v1",{"action_ordinal":1,"creator_action_ordinal":0,"receipt":["action_receipt_v0",{"receiver":"eosio","act_digest":"7670940C29EC0A4C573EF052C5A29236393F587F208222B3C1B6A9C8FEA2C66A","global_sequence":"27","recv_sequence":"1","auth_sequence":[{"account":"eosio","sequence":"2"}],"code_sequence":1,"abi_sequence":0}],"receiver":"eosio","act":{"account":"eosio","name":"doit","authorization":[{"actor":"eosio","permission":"active"}],"data":"00"},"context_free":false,"elapsed":"7589","console":"","account_ram_deltas":[],"account_disk_deltas":[],"except":null,"error_code":null,"return_value":"01FFFFFFFFFFFFFFFF00"}]],"account_ram_delta":null,"except":null,"error_code":null,"failed_dtrx_trace":null,"partial":null}]])");
+        R"(["transaction_trace",["transaction_trace_v0",{"id":"B2C8D46F161E06740CFADABFC9D11F013A1C90E25337FF3E22840B195E1ADC4B","status":0,"cpu_usage_us":2000,"net_usage_words":12,"elapsed":"7670","net_usage":"96","scheduled":false,"action_traces":[["action_trace_v1",{"action_ordinal":1,"creator_action_ordinal":0,"receipt":["action_receipt_v0",{"receiver":"upcx","act_digest":"7670940C29EC0A4C573EF052C5A29236393F587F208222B3C1B6A9C8FEA2C66A","global_sequence":"27","recv_sequence":"1","auth_sequence":[{"account":"upcx","sequence":"2"}],"code_sequence":1,"abi_sequence":0}],"receiver":"upcx","act":{"account":"upcx","name":"doit","authorization":[{"actor":"upcx","permission":"active"}],"data":"00"},"context_free":false,"elapsed":"7589","console":"","account_ram_deltas":[],"account_disk_deltas":[],"except":null,"error_code":null,"return_value":"01FFFFFFFFFFFFFFFF00"}]],"account_ram_delta":null,"except":null,"error_code":null,"failed_dtrx_trace":null,"partial":null}]])");
 
     check_error(context, "recursion limit reached", [&] {
-        return abieos_json_to_bin_reorderable(
+        return abiupcx_json_to_bin_reorderable(
             context, 0, "int8",
             "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[["
             "[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]"
             "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
     });
-    check_error(context, "json parse error", [&] { return abieos_json_to_bin_reorderable(context, 0, "int8", "1,2"); });
+    check_error(context, "json parse error", [&] { return abiupcx_json_to_bin_reorderable(context, 0, "int8", "1,2"); });
 
     check_error(context, "optional (?) and array ([]) don't support nesting",
-                [&] { return abieos_json_to_bin(context, 0, "int8?[]", ""); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int8?[]", ""); });
     check_error(context, "optional (?) and array ([]) don't support nesting",
-                [&] { return abieos_json_to_bin(context, 0, "int8[]?", ""); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int8[]?", ""); });
     check_error(context, "optional (?) may not contain binary extensions ($)",
-                [&] { return abieos_json_to_bin(context, 0, "int8$?", ""); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int8$?", ""); });
     check_error(context, "array ([]) may not contain binary extensions ($)",
-                [&] { return abieos_json_to_bin(context, 0, "int8$[]", ""); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int8$[]", ""); });
     check_error(context, "binary extensions ($) may not contain binary extensions ($)",
-                [&] { return abieos_json_to_bin(context, 0, "int8$$", ""); });
-    check_error(context, "unknown type \"fee\"", [&] { return abieos_json_to_bin(context, 0, "fee", ""); });
+                [&] { return abiupcx_json_to_bin(context, 0, "int8$$", ""); });
+    check_error(context, "unknown type \"fee\"", [&] { return abiupcx_json_to_bin(context, 0, "fee", ""); });
 
     check_error(context, "abi has a type with a missing name", [&] {
-        return abieos_set_abi( //
-            context, 0, R"({"version":"eosio::abi/1.1","types":[{"new_type_name":"","type":"int8"}]})");
+        return abiupcx_set_abi( //
+            context, 0, R"({"version":"upcx::abi/1.1","types":[{"new_type_name":"","type":"int8"}]})");
     });
     check_error(context, "can't use extensions ($) within typedefs", [&] {
-        return abieos_set_abi( //
-            context, 0, R"({"version":"eosio::abi/1.1","types":[{"new_type_name":"a","type":"int8$"}]})");
+        return abiupcx_set_abi( //
+            context, 0, R"({"version":"upcx::abi/1.1","types":[{"new_type_name":"a","type":"int8$"}]})");
     });
     check_error(context, "abi redefines type \"a\"", [&] {
-        return abieos_set_abi(
+        return abiupcx_set_abi(
             context, 0,
-            R"({"version":"eosio::abi/1.1","types":[{"new_type_name":"a","type":"int8"},{"new_type_name":"a","type":"int8"}]})");
+            R"({"version":"upcx::abi/1.1","types":[{"new_type_name":"a","type":"int8"},{"new_type_name":"a","type":"int8"}]})");
     });
 
-    check_error(context, "expected object", [&] { return abieos_json_to_bin(context, testAbiName, "s4", "null"); });
-    check_error(context, "expected object", [&] { return abieos_json_to_bin(context, testAbiName, "s4", "[]"); });
+    check_error(context, "expected object", [&] { return abiupcx_json_to_bin(context, testAbiName, "s4", "null"); });
+    check_error(context, "expected object", [&] { return abiupcx_json_to_bin(context, testAbiName, "s4", "[]"); });
     check_error(context, R"(s4: expected field "a1")",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s4", R"({"foo":7})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s4", R"({"foo":7})"); });
     check_error(context, R"(s4.a1: expected number or boolean)",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s4", R"({"a1":[]})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s4", R"({"a1":[]})"); });
     check_error(context, R"(expected variant: ["type", value])",
-                [&] { return abieos_json_to_bin(context, testAbiName, "v1", "null"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "v1", "null"); });
     check_error(context, R"(<variant>: expected variant: ["type", value])",
-                [&] { return abieos_json_to_bin(context, testAbiName, "v1", "[]"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "v1", "[]"); });
     check_error(context, R"(<variant>: type is not valid for this variant)",
-                [&] { return abieos_json_to_bin(context, testAbiName, "v1", R"(["x"])"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "v1", R"(["x"])"); });
     check_error(context, R"(<variant>: expected variant: ["type", value])",
-                [&] { return abieos_json_to_bin(context, testAbiName, "v1", R"(["int8",7,5])"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "v1", R"(["int8",7,5])"); });
     check_error(context, R"(s5: expected field "x1")",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({})"); });
     check_error(context, R"(s5: expected field "x2")",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":5})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":5})"); });
     check_error(context, R"(s5: expected field "x3")",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":5,"x2":7})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":5,"x2":7})"); });
     check_error(context, R"(s5.x1: expected number or boolean)",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":null})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":null})"); });
     check_error(context, R"(s5.x2: expected number or boolean)",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":null})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":null})"); });
     check_error(context, R"(s5: expected field "x3")",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10})"); });
     check_error(context, R"(s5.x3: expected object)",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":null)"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":null)"); });
     check_error(context, R"(s5.x3: expected field "c1")",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{})"); });
     check_error(context, R"(s5.x3: expected field "c2")",
-                [&] { return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4})"); });
+                [&] { return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4})"); });
     check_error(context, R"(s5.x3.c2: expected array)", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":{}})");
+        return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":{}})");
     });
     check_error(context, R"(s5.x3.c2[0]: expected object)", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[7])");
+        return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[7])");
     });
     check_error(context, R"(s5.x3.c2[0]: expected field "x1")", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{}])");
+        return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{}])");
     });
     check_error(context, R"(s5.x3.c2[0].x1: expected number or boolean)", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":null}]}} )");
+        return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":null}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0]: expected field "x2")", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7}]}} )");
+        return abiupcx_json_to_bin(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0]: expected field "x2")", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5",
+        return abiupcx_json_to_bin(context, testAbiName, "s5",
                                   R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x3":null}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0].x2: expected number or boolean)", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5",
+        return abiupcx_json_to_bin(context, testAbiName, "s5",
                                   R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":null}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0]: expected field "x3")", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5",
+        return abiupcx_json_to_bin(context, testAbiName, "s5",
                                   R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0].x3: expected object)", [&] {
-        return abieos_json_to_bin(context, testAbiName, "s5",
+        return abiupcx_json_to_bin(context, testAbiName, "s5",
                                   R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true,"x3":null}]}} )");
     });
     check_error(context, R"(s5.x3.c2[1]: expected object)", [&] {
-        return abieos_json_to_bin(
+        return abiupcx_json_to_bin(
             context, testAbiName, "s5",
             R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true,"x3":{"c1":0,"c2":[],"c3":7}},null]}} )");
     });
     check_error(context, R"(s5.x3.c2[1]: expected field "x1")", [&] {
-        return abieos_json_to_bin(
+        return abiupcx_json_to_bin(
             context, testAbiName, "s5",
             R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true,"x3":{"c1":0,"c2":[],"c3":7}},{} ]}} )");
     });
     check_error(context, R"(s5.x3.c2[1].x1: expected number or boolean)", [&] {
-        return abieos_json_to_bin(
+        return abiupcx_json_to_bin(
             context, testAbiName, "s5",
             R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true,"x3":{"c1":0,"c2":[],"c3":7}},{"x1":null} ]}} )");
     });
 
     check_error(context, "expected object",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s4", "null"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s4", "null"); });
     check_error(context, "expected object",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s4", "[]"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s4", "[]"); });
     check_error(context, R"(s4.a1: expected number or boolean)",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s4", R"({"a1":[]})"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s4", R"({"a1":[]})"); });
     check_error(context, R"(expected variant: ["type", value])",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "v1", "null"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "v1", "null"); });
     check_error(context, R"(expected variant: ["type", value])",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "v1", "[]"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "v1", "[]"); });
     check_error(context, R"(expected variant: ["type", value])",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "v1", R"(["x",7,5])"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "v1", R"(["x",7,5])"); });
     check_error(context, R"(<variant>: type is not valid for this variant)",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "v1", R"(["x",7])"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "v1", R"(["x",7])"); });
     check_error(context, R"(expected variant: ["type", value])",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "v1", R"(["int8",7,5])"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "v1", R"(["int8",7,5])"); });
     check_error(context, R"(s5: expected field "x1")",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({})"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({})"); });
     check_error(context, R"(s5: expected field "x2")",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":5})"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":5})"); });
     check_error(context, R"(s5: expected field "x3")",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":5,"x2":7})"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":5,"x2":7})"); });
     check_error(context, R"(s5.x1: expected number or boolean)",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":null})"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":null})"); });
     check_error(context, R"(s5.x2: expected number or boolean)",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":null})"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":null})"); });
     check_error(context, R"(s5: expected field "x3")",
-                [&] { return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10})"); });
+                [&] { return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10})"); });
     check_error(context, R"(s5.x3: expected object)", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":null})");
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":null})");
     });
     check_error(context, R"(s5.x3: expected field "c1")", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{}})");
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{}})");
     });
     check_error(context, R"(s5.x3: expected field "c2")", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4}})");
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4}})");
     });
     check_error(context, R"(s5.x3.c2: expected array)", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":{}}})");
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":{}}})");
     });
     check_error(context, R"(s5.x3.c2[0]: expected object)", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[7]}})");
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5", R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[7]}})");
     });
     check_error(context, R"(s5.x3.c2[0]: expected field "x1")", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5",
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5",
                                               R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{}]}})");
     });
     check_error(context, R"(s5.x3.c2[0].x1: expected number or boolean)", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5",
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5",
                                               R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":null}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0]: expected field "x2")", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5",
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5",
                                               R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0]: expected field "x2")", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5",
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5",
                                               R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x3":null}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0].x2: expected number or boolean)", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5",
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5",
                                               R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":null}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0]: expected field "x3")", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5",
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5",
                                               R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true}]}} )");
     });
     check_error(context, R"(s5.x3.c2[0].x3: expected object)", [&] {
-        return abieos_json_to_bin_reorderable(context, testAbiName, "s5",
+        return abiupcx_json_to_bin_reorderable(context, testAbiName, "s5",
                                               R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true,"x3":null}]}} )");
     });
     check_error(context, R"(s5.x3.c2[1]: expected object)", [&] {
-        return abieos_json_to_bin_reorderable(
+        return abiupcx_json_to_bin_reorderable(
             context, testAbiName, "s5",
             R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true,"x3":{"c1":0,"c2":[],"c3":7}},null]}} )");
     });
     check_error(context, R"(s5.x3.c2[1]: expected field "x1")", [&] {
-        return abieos_json_to_bin_reorderable(
+        return abiupcx_json_to_bin_reorderable(
             context, testAbiName, "s5",
             R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true,"x3":{"c1":0,"c2":[],"c3":7}},{} ]}} )");
     });
     check_error(context, R"(s5.x3.c2[1].x1: expected number or boolean)", [&] {
-        return abieos_json_to_bin_reorderable(
+        return abiupcx_json_to_bin_reorderable(
             context, testAbiName, "s5",
             R"({"x1":9,"x2":10,"x3":{"c1":4,"c2":[{"x1":7,"x2":true,"x3":{"c1":0,"c2":[],"c3":7}},{"x1":null} ]}} )");
     });
@@ -1235,7 +1235,7 @@ void check_types() {
     testWith(testHexAbiName);
 
     std::string table_def = check_context(
-        context, abieos_get_kv_table_def(context, testKvAbiName, abieos_string_to_name(context, "testtable")));
+        context, abiupcx_get_kv_table_def(context, testKvAbiName, abiupcx_string_to_name(context, "testtable")));
     if (table_def !=
         R"({"type":"my_struct","primary_index":{"name":"primary","type":"name"},"secondary_indices":{"bar":{"type":"uint64"},"foo":{"type":"string"}}})")
         throw std::runtime_error("mismatch");
@@ -1245,43 +1245,43 @@ void check_types() {
             throw std::runtime_error(std::string{msg} + " capacity test failed");
     };
 
-    check_checksum_capacity(eosio::checksum160(), 20, "checksum160");
-    check_checksum_capacity(eosio::checksum256(), 32, "checksum256");
-    check_checksum_capacity(eosio::checksum512(), 64, "checksum512");
+    check_checksum_capacity(upcx::checksum160(), 20, "checksum160");
+    check_checksum_capacity(upcx::checksum256(), 32, "checksum256");
+    check_checksum_capacity(upcx::checksum512(), 64, "checksum512");
 
-    check_checksum_capacity(eosio::checksum160({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 20, "checksum160");
-    check_checksum_capacity(eosio::checksum256({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 32, "checksum256");
-    check_checksum_capacity(eosio::checksum512({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 64, "checksum512");
+    check_checksum_capacity(upcx::checksum160({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 20, "checksum160");
+    check_checksum_capacity(upcx::checksum256({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 32, "checksum256");
+    check_checksum_capacity(upcx::checksum512({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 64, "checksum512");
 
-    abieos_destroy(context);
+    abiupcx_destroy(context);
 }
 
 void test_abi_kv_table() {
     using namespace std;
-    std::vector<std::string> version_list{"eosio::abi/1.0", "eosio::abi/1.1"};
+    std::vector<std::string> version_list{"upcx::abi/1.0", "upcx::abi/1.1"};
 
     // empty abi_def
     {
         for(const auto& ver : version_list) {
-           abieos_context* abi_cnxt = abieos_create();
-           abieos::abi_def empty_abi_def;
+           abiupcx_context* abi_cnxt = abiupcx_create();
+           abiupcx::abi_def empty_abi_def;
            empty_abi_def.version = ver;
            std::vector<char> bytes;
-           eosio::vector_stream byte_stream(bytes);
+           upcx::vector_stream byte_stream(bytes);
            to_json(empty_abi_def, byte_stream);
            const std::string empty_abi_def_json(bytes.begin(), bytes.end());
-           if (!abieos_abi_json_to_bin(abi_cnxt, empty_abi_def_json.c_str())) {
-              printf("test_abi_kv_table: %s\n", abieos_get_error(abi_cnxt));
+           if (!abiupcx_abi_json_to_bin(abi_cnxt, empty_abi_def_json.c_str())) {
+              printf("test_abi_kv_table: %s\n", abiupcx_get_error(abi_cnxt));
               throw std::runtime_error("test_abi_kv_table: Failed to convert empty_abi_def_json (json) to bin");
            }
            printf("test_abi_kv_table: Successfully converted empty_abi_def_json to bin :\n%s\n", empty_abi_def_json.c_str());
 
-           const int bin_data_size = abieos_get_bin_size(abi_cnxt);
+           const int bin_data_size = abiupcx_get_bin_size(abi_cnxt);
            printf("test_abi_kv_table: Get empty_abi_def_json (bin) data size: %d\n", bin_data_size);
 
-           const char* abi_bin_data = abieos_get_bin_data(abi_cnxt);
+           const char* abi_bin_data = abiupcx_get_bin_data(abi_cnxt);
 
-           const char* abi_json_data = abieos_abi_bin_to_json(abi_cnxt, abi_bin_data, bin_data_size);
+           const char* abi_json_data = abiupcx_abi_bin_to_json(abi_cnxt, abi_bin_data, bin_data_size);
            if (abi_json_data == nullptr) {
               throw std::runtime_error("empty_abi_def_json: Failed to convert testKvTablesAbi (bin) to json");
            }
@@ -1301,49 +1301,49 @@ void test_abi_kv_table() {
            if (strcmp(orig_buf.GetString(), cvtd_buf.GetString())) {
               throw std::runtime_error("test_abi_kv_table: Converted empty_abi_def_json json is different from orig");
            }
-           abieos_destroy(abi_cnxt);
+           abiupcx_destroy(abi_cnxt);
         }
     }
     // every field o abi_def has some value
     {
        for(const auto& ver : version_list) {
-          abieos_context *abi_cnxt = abieos_create();
-          abieos::abi_def all_abi_def;
+          abiupcx_context *abi_cnxt = abiupcx_create();
+          abiupcx::abi_def all_abi_def;
           all_abi_def.version = ver;
           all_abi_def.types.push_back({"t_new_type_1", "t_type1"});
-          all_abi_def.structs.push_back(eosio::struct_def{""});
+          all_abi_def.structs.push_back(upcx::struct_def{""});
           all_abi_def.structs.push_back(
-                eosio::struct_def{"s_name1", "s_base1", {eosio::field_def{"f_name1", "f_type1"}}});
-          all_abi_def.actions.push_back(eosio::action_def{eosio::name{"name1"}, "a_type1", "a_rc_1"});
+                upcx::struct_def{"s_name1", "s_base1", {upcx::field_def{"f_name1", "f_type1"}}});
+          all_abi_def.actions.push_back(upcx::action_def{upcx::name{"name1"}, "a_type1", "a_rc_1"});
           all_abi_def.tables.push_back(
-                eosio::table_def{eosio::name{"tname1"}, "idx_type1", {"k_name_1"}, {"k_type1"}, {"t_type1"}});
-          all_abi_def.ricardian_clauses.push_back(eosio::clause_pair{"cp_id_1", "cp_body_1"});
-          all_abi_def.error_messages.push_back(eosio::error_message{1234567890, "msg1"});
+                upcx::table_def{upcx::name{"tname1"}, "idx_type1", {"k_name_1"}, {"k_type1"}, {"t_type1"}});
+          all_abi_def.ricardian_clauses.push_back(upcx::clause_pair{"cp_id_1", "cp_body_1"});
+          all_abi_def.error_messages.push_back(upcx::error_message{1234567890, "msg1"});
           // Ignore abi_extensions in to_json and from_json
-          all_abi_def.variants.value.push_back(eosio::variant_def{"v_name1", {"v_type1"}});
-          all_abi_def.action_results.value.push_back(eosio::action_result_def{eosio::name{"aname1"}, {"a_type1"}});
-          eosio::kv_table_entry_def kv_def{"kv_type1", eosio::primary_key_index_def{eosio::name{"pki1"}, "kv_type1"},
+          all_abi_def.variants.value.push_back(upcx::variant_def{"v_name1", {"v_type1"}});
+          all_abi_def.action_results.value.push_back(upcx::action_result_def{upcx::name{"aname1"}, {"a_type1"}});
+          upcx::kv_table_entry_def kv_def{"kv_type1", upcx::primary_key_index_def{upcx::name{"pki1"}, "kv_type1"},
                                            {}};
-          kv_def.secondary_indices[eosio::name{"sec2"}] = eosio::secondary_index_def{"sid2"};
-          all_abi_def.kv_tables.value[eosio::name{"kv1"}] = kv_def;
+          kv_def.secondary_indices[upcx::name{"sec2"}] = upcx::secondary_index_def{"sid2"};
+          all_abi_def.kv_tables.value[upcx::name{"kv1"}] = kv_def;
 
           std::vector<char> bytes;
-          eosio::vector_stream byte_stream(bytes);
+          upcx::vector_stream byte_stream(bytes);
           to_json(all_abi_def, byte_stream);
           const std::string all_abi_def_json(bytes.begin(), bytes.end());
 
-          if (!abieos_abi_json_to_bin(abi_cnxt, all_abi_def_json.c_str())) {
-             printf("test_abi_kv_table: %s\n", abieos_get_error(abi_cnxt));
+          if (!abiupcx_abi_json_to_bin(abi_cnxt, all_abi_def_json.c_str())) {
+             printf("test_abi_kv_table: %s\n", abiupcx_get_error(abi_cnxt));
              throw std::runtime_error("test_abi_kv_table: Failed to convert all_abi_def_json (json) to bin");
           }
           printf("test_abi_kv_table: Successfully converted all_abi_def_json (json) to bin\n:%s\n", all_abi_def_json.c_str());
 
-          const int bin_data_size = abieos_get_bin_size(abi_cnxt);
+          const int bin_data_size = abiupcx_get_bin_size(abi_cnxt);
           printf("test_abi_kv_table: Get all_abi_def_json (bin) data size: %d\n", bin_data_size);
 
-          const char *abi_bin_data = abieos_get_bin_data(abi_cnxt);
+          const char *abi_bin_data = abiupcx_get_bin_data(abi_cnxt);
 
-          const char *abi_json_data = abieos_abi_bin_to_json(abi_cnxt, abi_bin_data, bin_data_size);
+          const char *abi_json_data = abiupcx_abi_bin_to_json(abi_cnxt, abi_bin_data, bin_data_size);
           if (abi_json_data == nullptr) {
              throw std::runtime_error("all_abi_def_json: Failed to convert testKvTablesAbi (bin) to json");
           }
@@ -1363,7 +1363,7 @@ void test_abi_kv_table() {
           if (strcmp(orig_buf.GetString(), cvtd_buf.GetString())) {
              throw std::runtime_error("test_abi_kv_table: Converted all_abi_def_json json is different from orig");
           }
-          abieos_destroy(abi_cnxt);
+          abiupcx_destroy(abi_cnxt);
        }
     }
 }

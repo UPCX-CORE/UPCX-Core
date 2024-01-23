@@ -3,6 +3,6 @@
  */
 #pragma once
 
-namespace eosio { namespace nodeos_sectl { namespace config {
+namespace upcx { namespace nodupcx_sectl { namespace config {
   const std::string node_executable_name = "${NODE_EXECUTABLE_NAME}";
 }}}

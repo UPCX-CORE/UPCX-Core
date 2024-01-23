@@ -5,18 +5,18 @@ link_text: How to prune context-free data
 
 ## Summary
 
-This how-to procedure showcases the steps to prune context-free data (CFD) from a transaction. The process involves launching the [`eosio-blocklog`](../../../10_utilities/eosio-blocklog.md) utility with the `--prune-transactions` option, the transaction ID(s) that contain(s) the context-free data, and additional options as specified below.
+This how-to procedure showcases the steps to prune context-free data (CFD) from a transaction. The process involves launching the [`upcx-blocklog`](../../../10_utilities/upcx-blocklog.md) utility with the `--prune-transactions` option, the transaction ID(s) that contain(s) the context-free data, and additional options as specified below.
 
 [[caution | Data Pruning on Public Chains]]
-| Pruning transaction data is not suitable for public EOSIO blockchains, unless previously agreed upon through EOSIO consensus by a supermajority of producers. Even if a producing node on a public EOSIO network prunes context-free data from a transaction, only their node would be affected. The integrity of the blockchain would not be compromised.
+| Pruning transaction data is not suitable for public UPCX blockchains, unless previously agreed upon through UPCX consensus by a supermajority of producers. Even if a producing node on a public UPCX network prunes context-free data from a transaction, only their node would be affected. The integrity of the blockchain would not be compromised.
 
 ## Prerequisites
 
 The following items must be known in advance or completed before starting the procedure:
 
-* The ID of a retired transaction with context-free data in a finalized block.
-* Become familiar with the [context-free data](index.md) section of a transaction.
-* Review the [`eosio-blocklog`](../../../10_utilities/eosio-blocklog.md) command-line utility reference.
+- The ID of a retired transaction with context-free data in a finalized block.
+- Become familiar with the [context-free data](index.md) section of a transaction.
+- Review the [`upcx-blocklog`](../../../10_utilities/upcx-blocklog.md) command-line utility reference.
 
 ## Procedure
 
@@ -25,27 +25,29 @@ Complete the following steps to prune the context-free data from the transaction
 1. Locate the transaction ID you want to prune the context-free data from, e.g. `<trx_id>`. The transaction ID can also be found on the `id` field of the transaction.
 2. Locate the block number that contains the transaction, e.g. `<block_num>`. Make sure the block number matches the `block_num` field of the transaction.
 3. Find the blocks directory and state history directory (if applicable), e.g. `<blocks_dir>` and `<state_hist_dir>`, respectively.
-4. Launch the [`eosio-blocklog`](../../../10_utilities/eosio-blocklog.md) utility as follows:
+4. Launch the [`upcx-blocklog`](../../../10_utilities/upcx-blocklog.md) utility as follows:
 
-   `eosio-blocklog [--blocks-dir <blocks_dir>] [--state-history-dir <state_hist_dir>] --prune-transactions --block-num <block_num> --transaction <trx_id> [--transaction <trx_id2> ...]`
+   `upcx-blocklog [--blocks-dir <blocks_dir>] [--state-history-dir <state_hist_dir>] --prune-transactions --block-num <block_num> --transaction <trx_id> [--transaction <trx_id2> ...]`
 
-   If the operation is *successful*:
-   * The [`eosio-blocklog`](../../../10_utilities/eosio-blocklog.md) utility terminates silently with a zero error code (no error).
-   * The following fields are updated within the pruned transaction from the block logs:
-      * The `prunable_data["prunable_data"][0]` field is set from 0 to 1.
-      * The `signatures` field is set to an empty array.
-      * The `context_free_data` field is set to an empty array.
-      * The `packed_context_free_data` field, if any, is removed.
+   If the operation is _successful_:
 
-   If the operaton is *unsuccessful*:
-   * The [`eosio-blocklog`](../../../10_utilities/eosio-blocklog.md) utility outputs an error to `stderr` and terminates with a non-zero error code (indicating an error).
+   - The [`upcx-blocklog`](../../../10_utilities/upcx-blocklog.md) utility terminates silently with a zero error code (no error).
+   - The following fields are updated within the pruned transaction from the block logs:
+     - The `prunable_data["prunable_data"][0]` field is set from 0 to 1.
+     - The `signatures` field is set to an empty array.
+     - The `context_free_data` field is set to an empty array.
+     - The `packed_context_free_data` field, if any, is removed.
+
+   If the operaton is _unsuccessful_:
+
+   - The [`upcx-blocklog`](../../../10_utilities/upcx-blocklog.md) utility outputs an error to `stderr` and terminates with a non-zero error code (indicating an error).
 
 ## Notes
 
 Some additional considerations are in order:
 
-* You can pass multiple transactions to [`eosio-blocklog`](../../../10_utilities/eosio-blocklog.md) if they are within the same block.
-* You can use [`eosio-blocklog`](../../../10_utilities/eosio-blocklog.md) to display the block that contains the pruned transactions.
+- You can pass multiple transactions to [`upcx-blocklog`](../../../10_utilities/upcx-blocklog.md) if they are within the same block.
+- You can use [`upcx-blocklog`](../../../10_utilities/upcx-blocklog.md) to display the block that contains the pruned transactions.
 
 ## Example
 
@@ -113,10 +115,7 @@ Refer to the following transaction sample with context-free data:
       "signatures": [
         "SIG_K1_K3AJXEMFH99KScLFC1cnLA3WDnVK7WRsS8BtafHfP4VWmfQXXwX21KATVVtrCqopkcve6V8noc5bS4BJkwgSsonpfpWEJi"
       ],
-      "context_free_data": [
-        "a1b2c3",
-        "1a2b3c"
-      ]
+      "context_free_data": ["a1b2c3", "1a2b3c"]
     }
   },
   "block_time": "2020-09-06T02:00:47.000",
@@ -165,12 +164,7 @@ Refer to the following transaction sample with context-free data:
         "act_digest": "b8871e8f3c79b02804a2ad28acb015f503e7f6e56f35565e5fa37b6767da1aa5",
         "global_sequence": 157,
         "recv_sequence": 3,
-        "auth_sequence": [
-          [
-            "payloadless",
-            3
-          ]
-        ],
+        "auth_sequence": [["payloadless", 3]],
         "code_sequence": 1,
         "abi_sequence": 1
       },
@@ -210,11 +204,11 @@ Using the above transaction to recreate the steps above:
 1. Locate the transaction ID: `1b9a9c53f9b692d3382bcc19c0c21eb22207e2f51a30fe88dabbb45376b6ff23`.
 2. Locate the block number: `119`.
 3. Find the blocks directory and state history directory (if applicable), e.g. `<blocks_dir>` and `<state_hist_dir>`.
-4. Launch the [`eosio-blocklog`](../../../10_utilities/eosio-blocklog.md) utility as follows:
+4. Launch the [`upcx-blocklog`](../../../10_utilities/upcx-blocklog.md) utility as follows:
 
-   `eosio-blocklog --blocks-dir <blocks_dir> --state-history-dir <state_hist_dir> --prune-transactions --block-num 119 --transaction 1b9a9c53f9b692d3382bcc19c0c21eb22207e2f51a30fe88dabbb45376b6ff23`
+   `upcx-blocklog --blocks-dir <blocks_dir> --state-history-dir <state_hist_dir> --prune-transactions --block-num 119 --transaction 1b9a9c53f9b692d3382bcc19c0c21eb22207e2f51a30fe88dabbb45376b6ff23`
 
-If *successful*, the utility returns silently. If *unsuccessful*, it outputs an error to `stderr`.
+If _successful_, the utility returns silently. If _unsuccessful_, it outputs an error to `stderr`.
 
 ### Transaction sample (after)
 
@@ -322,12 +316,7 @@ After retrieving the transaction a second time, the pruned transaction looks as 
         "act_digest": "b8871e8f3c79b02804a2ad28acb015f503e7f6e56f35565e5fa37b6767da1aa5",
         "global_sequence": 157,
         "recv_sequence": 3,
-        "auth_sequence": [
-          [
-            "payloadless",
-            3
-          ]
-        ],
+        "auth_sequence": [["payloadless", 3]],
         "code_sequence": 1,
         "abi_sequence": 1
       },
@@ -363,14 +352,15 @@ After retrieving the transaction a second time, the pruned transaction looks as 
 ### Remarks
 
 Notice the following modified fields within the pruned transaction:
-   * The `prunable_data["prunable_data"][0]` field is 1.
-   * The `signatures` field now contains an empty array.
-   * The `context_free_data` field contains an empty array.
-   * The `packed_context_free_data` field is removed.
+
+- The `prunable_data["prunable_data"][0]` field is 1.
+- The `signatures` field now contains an empty array.
+- The `context_free_data` field contains an empty array.
+- The `packed_context_free_data` field is removed.
 
 ## Next Steps
 
 The following actions are available after you complete the procedure:
 
-* Verify that the pruned transaction indeed contains pruned context-free data.
-* Display the block that contains the pruned transaction from the block logs.
+- Verify that the pruned transaction indeed contains pruned context-free data.
+- Display the block that contains the pruned transaction from the block logs.

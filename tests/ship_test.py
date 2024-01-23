@@ -50,11 +50,11 @@ walletPort=TestHelper.DEFAULT_WALLET_PORT
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killUpcxInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
-ClientName="cleos"
+WalletdName=Utils.UpcxWalletName
+ClientName="clupcx"
 shipTempDir=None
 
 try:
@@ -64,16 +64,16 @@ try:
     cluster.killall(allInstances=killAll)
     cluster.cleanup()
     Print("Stand up cluster")
-    specificExtraNodeosArgs={}
+    specificExtraNodupcxArgs={}
     # non-producing nodes are at the end of the cluster's nodes, so reserving the last one for state_history_plugin
     shipNodeNum = totalNodes - 1
-    specificExtraNodeosArgs[shipNodeNum]="--plugin eosio::state_history_plugin --disable-replay-opts --sync-fetch-span 200 --plugin eosio::net_api_plugin "
+    specificExtraNodupcxArgs[shipNodeNum]="--plugin upcx::state_history_plugin --disable-replay-opts --sync-fetch-span 200 --plugin upcx::net_api_plugin "
 
     if cluster.launch(pnodes=totalProducerNodes,
                       totalNodes=totalNodes, totalProducers=totalProducers,
-                      useBiosBootFile=False, specificExtraNodeosArgs=specificExtraNodeosArgs) is False:
+                      useBiosBootFile=False, specificExtraNodupcxArgs=specificExtraNodupcxArgs) is False:
         Utils.cmdError("launcher")
-        Utils.errorExit("Failed to stand up eos cluster.")
+        Utils.errorExit("Failed to stand up upcx cluster.")
 
     # ***   identify each node (producers and non-producing node)   ***
 
@@ -113,7 +113,7 @@ try:
         out.close()
         err.close()
 
-    Print("Shutdown state_history_plugin nodeos")
+    Print("Shutdown state_history_plugin nodupcx")
     shipNode.kill(signal.SIGTERM)
 
     files = None
@@ -201,7 +201,7 @@ try:
 
     testSuccessful = True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killUpcxInstances=killUpcxInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
     if shipTempDir is not None:
         if testSuccessful and not keepLogs:
             shutil.rmtree(shipTempDir, ignore_errors=True)

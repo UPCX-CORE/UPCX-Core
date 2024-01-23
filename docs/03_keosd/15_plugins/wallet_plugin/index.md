@@ -9,10 +9,10 @@ The `wallet_plugin` adds access to wallet functionality from a node.
 
 ```sh
 # config.ini
-plugin = eosio::wallet_plugin
+plugin = upcx::wallet_plugin
 
 # command-line
-nodeos ... --plugin eosio::wallet_plugin
+nodupcx ... --plugin upcx::wallet_plugin
 ```
 
 ## Options
@@ -21,19 +21,19 @@ None
 
 ## Dependencies
 
-* [`wallet_plugin`](../wallet_plugin/index.md)
-* [`http_plugin`](../http_plugin/index.md)
+- [`wallet_plugin`](../wallet_plugin/index.md)
+- [`http_plugin`](../http_plugin/index.md)
 
 ### Load Dependency Examples
 
 ```sh
 # config.ini
-plugin = eosio::wallet_plugin
+plugin = upcx::wallet_plugin
 [options]
-plugin = eosio::http_plugin
+plugin = upcx::http_plugin
 [options]
 
 # command-line
-nodeos ... --plugin eosio::wallet_plugin [options]  \
-           --plugin eosio::http_plugin [options]
+nodupcx ... --plugin upcx::wallet_plugin [options]  \
+           --plugin upcx::http_plugin [options]
 ```

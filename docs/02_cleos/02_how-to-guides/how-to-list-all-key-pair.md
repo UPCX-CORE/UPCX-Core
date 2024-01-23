@@ -4,29 +4,29 @@ List all key pairs
 
 ## Before you begin
 
-* Install the currently supported version of `cleos`
+- Install the currently supported version of `clupcx`
 
-* Understand the following:
-  * What is a public and private key pair
+- Understand the following:
+  - What is a public and private key pair
 
 ## Steps
 
 Unlock your wallet
 
 ```sh
-cleos wallet unlock
+clupcx wallet unlock
 ```
 
 List all public keys:
 
 ```sh
-cleos wallet keys
+clupcx wallet keys
 ```
 
 List all private keys:
 
 ```sh
-cleos wallet private_keys
+clupcx wallet private_keys
 
 ```
 

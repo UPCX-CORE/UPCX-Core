@@ -1,7 +1,6 @@
-
 ## Overview
 
-The `resource_monitor_plugin` monitors space usage in the computing system where `nodeos` is running. Specifically, every `resource-monitor-interval-seconds` seconds,
+The `resource_monitor_plugin` monitors space usage in the computing system where `nodupcx` is running. Specifically, every `resource-monitor-interval-seconds` seconds,
 it measures the individual space used by each of the file systems mounted
 by `data-dir`, `state-dir`, `blocks-log-dir`, `snapshots-dir`,
 `state-history-dir`, and `trace-dir`.
@@ -10,28 +9,30 @@ specified by `resource-monitor-space-threshold`, a warning containing the file s
 path and percentage of space has used is printed out.
 When space usage exceeds the threshold,
 if `resource-monitor-not-shutdown-on-threshold-exceeded` is not set,
-`nodeos` gracefully shuts down; if `resource-monitor-not-shutdown-on-threshold-exceeded` is set, `nodeos` prints out warnings periodically
+`nodupcx` gracefully shuts down; if `resource-monitor-not-shutdown-on-threshold-exceeded` is set, `nodupcx` prints out warnings periodically
 until space usage goes under the threshold.
 
 `resource_monitor_plugin` is always loaded.
+
 ## Usage
 
 ```console
 # config.ini
-plugin = eosio::resource_monitor_plugin
+plugin = upcx::resource_monitor_plugin
 [options]
 ```
+
 ```sh
 # command-line
-nodeos ... --plugin eosio::resource_monitor_plugin [options]
+nodupcx ... --plugin upcx::resource_monitor_plugin [options]
 ```
 
 ## Configuration Options
 
-These can be specified from both the `nodeos` command-line or the `config.ini` file:
+These can be specified from both the `nodupcx` command-line or the `config.ini` file:
 
 ```console
-Config Options for eosio::resource_monitor_plugin:
+Config Options for upcx::resource_monitor_plugin:
 
   --resource-monitor-interval-seconds arg (=2)
                                         Time in seconds between two consecutive checks
@@ -46,9 +47,9 @@ Config Options for eosio::resource_monitor_plugin:
                                         a warning will be continuously printed out.
                                         The value should be between 6 and 99.
   --resource-monitor-not-shutdown-on-threshold-exceeded
-                                        A switch used to indicate `nodeos` will "not"
+                                        A switch used to indicate `nodupcx` will "not"
                                         shutdown when threshold is exceeded. When not
-                                        set, `nodeos` will shutdown.
+                                        set, `nodupcx` will shutdown.
   --resource-monitor-warning-interval arg (=30)
                                         Number of monitor intervals between which a
                                         warning is displayed.  For example, if
@@ -57,10 +58,10 @@ Config Options for eosio::resource_monitor_plugin:
                                         a warning will be displayed every 20 seconds,
                                         even though the space usage is checked every
                                         2 seconds.  This is used to throttle the
-                                        number of warnings in the `nodeos` log file.
+                                        number of warnings in the `nodupcx` log file.
                                         Should be between 1 and 450.
 ```
 
 ## Plugin Dependencies
 
-* None
+- None

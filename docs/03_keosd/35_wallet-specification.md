@@ -1,10 +1,10 @@
 ---
-content_title: EOS Wallet Specification
+content_title: UPCX Wallet Specification
 ---
 
-## EOS Wallet Import Format (WIF)
+## UPCX Wallet Import Format (WIF)
 
-Wallet Import Format is an encoding for a private EDSA key.  EOS uses the same version, checksum, and encoding scheme as the Bitcoin WIF addresses and should be compatible with existing libraries [1].
+Wallet Import Format is an encoding for a private EDSA key. UPCX uses the same version, checksum, and encoding scheme as the Bitcoin WIF addresses and should be compatible with existing libraries [1].
 
 This is an example of a WIF Private Key:
 
@@ -14,29 +14,29 @@ This is an example of a WIF Private Key:
 
 This encoding is good for:
 
-* Copy and Pasting private keys (ensures the entire key is copied)
-* Including keys in text or user editable file formats
-* Shortening the key-length
+- Copy and Pasting private keys (ensures the entire key is copied)
+- Including keys in text or user editable file formats
+- Shortening the key-length
 
 This encoding is not good for:
 
-* Writing keys down by hand (even a single upper / lowercase mistake can cause a major problem)
-* Binary or computer storage where code handles the key and data is already checked
+- Writing keys down by hand (even a single upper / lowercase mistake can cause a major problem)
+- Binary or computer storage where code handles the key and data is already checked
 
 Considerations:
 
-* If a key could be written down or re-keyed, the BIP39 Mnemonic Code standard is a better option to use.
-* It is a good idea to always label a WIF key using the word "Private" or "Private Key".
+- If a key could be written down or re-keyed, the BIP39 Mnemonic Code standard is a better option to use.
+- It is a good idea to always label a WIF key using the word "Private" or "Private Key".
 
 ## Private key to WIF
 
-1. A fake private key of all zeros is used.  This is 32 bytes long (shown here as hex).
+1. A fake private key of all zeros is used. This is 32 bytes long (shown here as hex).
 
 ```
 0000000000000000000000000000000000000000000000000000000000000000
 ```
 
-2. Add a 0x80 byte in front.  This byte represents the Bitcoin mainnet.  EOS uses the same version byte.  When encoded the version byte helps to identify this as a private key.  Unlike Bitcoin, EOS always uses compressed public keys (derived from a private key) and therefore does not suffix the private key with a 0x01 byte.
+2. Add a 0x80 byte in front. This byte represents the Bitcoin mainnet. UPCX uses the same version byte. When encoded the version byte helps to identify this as a private key. Unlike Bitcoin, UPCX always uses compressed public keys (derived from a private key) and therefore does not suffix the private key with a 0x01 byte.
 
 ```
 800000000000000000000000000000000000000000000000000000000000000000
@@ -128,7 +128,7 @@ ce145d282834c009c24410812a60588c1085b63d65a7effc2e0a5e3a2e21b236
 
 ## [Base58check](https://www.npmjs.com/package/base58check)
 
-Base58Check is a JavaScript implementation of this algorithm and may be used to encode and decode EOS WIF private keys.
+Base58Check is a JavaScript implementation of this algorithm and may be used to encode and decode UPCX WIF private keys.
 
 ```sh
 base58check = require('base58check')

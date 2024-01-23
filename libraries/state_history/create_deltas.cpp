@@ -1,10 +1,10 @@
-#include <eosio/state_history/create_deltas.hpp>
-#include <eosio/state_history/rocksdb_receiver.hpp>
-#include <eosio/state_history/serialization.hpp>
-#include <eosio/chain/backing_store/db_combined.hpp>
+#include <upcx/state_history/create_deltas.hpp>
+#include <upcx/state_history/rocksdb_receiver.hpp>
+#include <upcx/state_history/serialization.hpp>
+#include <upcx/chain/backing_store/db_combined.hpp>
 #include <b1/session/rocks_session.hpp>
 
-namespace eosio {
+namespace upcx {
 namespace state_history {
 
 template <typename T>
@@ -70,7 +70,7 @@ std::vector<table_delta> create_deltas(const chainbase::database& db, bool full_
       if (obj)
          return *obj;
       auto it = removed_table_id.find(tid);
-      EOS_ASSERT(it != removed_table_id.end(), chain::plugin_exception, "can not found table id ${tid}", ("tid", tid));
+      UPCX_ASSERT(it != removed_table_id.end(), chain::plugin_exception, "can not found table id ${tid}", ("tid", tid));
       return *it->second;
    };
 
@@ -143,7 +143,7 @@ std::vector<table_delta> create_deltas(const chainbase::database& db, bool full_
    return deltas;
 }
 
-std::vector<table_delta> create_deltas_rocksdb(const chainbase::database& db, const eosio::chain::kv_undo_stack_ptr &kv_undo_stack, bool full_snapshot) {
+std::vector<table_delta> create_deltas_rocksdb(const chainbase::database& db, const upcx::chain::kv_undo_stack_ptr &kv_undo_stack, bool full_snapshot) {
    std::vector<table_delta> deltas;
 
    if(full_snapshot) {
@@ -151,7 +151,7 @@ std::vector<table_delta> create_deltas_rocksdb(const chainbase::database& db, co
       rocksdb_receiver_whole_db kv_receiver(deltas, db);
       chain::backing_store::rocksdb_contract_kv_table_writer kv_writer(kv_receiver);
 
-      auto begin_key = eosio::session::shared_bytes(&chain::backing_store::rocksdb_contract_kv_prefix, 1);
+      auto begin_key = upcx::session::shared_bytes(&chain::backing_store::rocksdb_contract_kv_prefix, 1);
       auto end_key = begin_key.next();
       chain::backing_store::walk_rocksdb_entries_with_prefix(kv_undo_stack, begin_key, end_key, kv_writer);
 
@@ -161,16 +161,16 @@ std::vector<table_delta> create_deltas_rocksdb(const chainbase::database& db, co
       table_collector table_collector_receiver(db_receiver);
       chain::backing_store::rocksdb_contract_db_table_writer writer(table_collector_receiver);
 
-      begin_key = eosio::session::shared_bytes(&chain::backing_store::rocksdb_contract_db_prefix, 1);
+      begin_key = upcx::session::shared_bytes(&chain::backing_store::rocksdb_contract_db_prefix, 1);
       end_key = begin_key.next();
       chain::backing_store::walk_rocksdb_entries_with_prefix(kv_undo_stack, begin_key, end_key, writer);
    } else {
-      auto* session = std::visit(eosio::session::overloaded{
-        [](eosio::chain::kv_undo_stack_ptr::element_type::session_type* session){
+      auto* session = std::visit(upcx::session::overloaded{
+        [](upcx::chain::kv_undo_stack_ptr::element_type::session_type* session){
           return session;
         }, [](auto*){
-          EOS_ASSERT(false, eosio::chain::chain_exception, "undo_stack is empty");
-          static eosio::chain::kv_undo_stack_ptr::element_type::session_type* invalid = nullptr;
+          UPCX_ASSERT(false, upcx::chain::chain_exception, "undo_stack is empty");
+          static upcx::chain::kv_undo_stack_ptr::element_type::session_type* invalid = nullptr;
           return invalid;
         }}, kv_undo_stack->top().holder());
         
@@ -210,4 +210,4 @@ std::vector<table_delta> create_deltas(const chain::combined_database& db, bool 
 }
 
 } // namespace state_history
-} // namespace eosio
+} // namespace upcx

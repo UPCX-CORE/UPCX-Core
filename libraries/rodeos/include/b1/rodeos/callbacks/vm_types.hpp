@@ -2,20 +2,20 @@
 
 #include <fc/exception/exception.hpp>
 
-#include <eosio/vm/backend.hpp>
+#include <upcx/vm/backend.hpp>
 
-namespace b1::rodeos {
+namespace b1::rodupcx {
 
-using wasm_size_t = eosio::vm::wasm_size_t;
-
-template <typename T, std::size_t Align = alignof(T)>
-using legacy_ptr = eosio::vm::argument_proxy<T*, Align>;
+using wasm_size_t = upcx::vm::wasm_size_t;
 
 template <typename T, std::size_t Align = alignof(T)>
-using legacy_span = eosio::vm::argument_proxy<eosio::vm::span<T>, Align>;
+using legacy_ptr = upcx::vm::argument_proxy<T*, Align>;
 
-struct null_terminated_ptr : eosio::vm::span<const char> {
-   using base_type = eosio::vm::span<const char>;
+template <typename T, std::size_t Align = alignof(T)>
+using legacy_span = upcx::vm::argument_proxy<upcx::vm::span<T>, Align>;
+
+struct null_terminated_ptr : upcx::vm::span<const char> {
+   using base_type = upcx::vm::span<const char>;
    null_terminated_ptr(const char* ptr) : base_type(ptr, strlen(ptr)) {}
 };
 
@@ -37,9 +37,9 @@ inline size_t legacy_copy_to_wasm(char* dest, size_t dest_size, const char* src,
    return copy_size;
 }
 
-template <typename Host, typename Execution_Interface = eosio::vm::execution_interface>
-struct type_converter : eosio::vm::type_converter<Host, Execution_Interface> {
-   using base_type = eosio::vm::type_converter<Host, Execution_Interface>;
+template <typename Host, typename Execution_Interface = upcx::vm::execution_interface>
+struct type_converter : upcx::vm::type_converter<Host, Execution_Interface> {
+   using base_type = upcx::vm::type_converter<Host, Execution_Interface>;
    using base_type::base_type;
    using base_type::from_wasm;
 
@@ -54,12 +54,12 @@ struct type_converter : eosio::vm::type_converter<Host, Execution_Interface> {
    }
 
    template <typename T>
-   auto from_wasm(void* ptr) const -> std::enable_if_t<std::is_pointer_v<T>, eosio::vm::argument_proxy<T>> {
+   auto from_wasm(void* ptr) const -> std::enable_if_t<std::is_pointer_v<T>, upcx::vm::argument_proxy<T>> {
       this->template validate_pointer<std::remove_pointer_t<T>>(ptr, 1);
       return { ptr };
    }
 
-   EOS_VM_FROM_WASM(null_terminated_ptr, (const void* ptr)) {
+   UPCX_VM_FROM_WASM(null_terminated_ptr, (const void* ptr)) {
       this->validate_null_terminated_pointer(ptr);
       return { static_cast<const char*>(ptr) };
    }
@@ -67,7 +67,7 @@ struct type_converter : eosio::vm::type_converter<Host, Execution_Interface> {
 
 template <typename Cls>
 using registered_host_functions =
-      eosio::vm::registered_host_functions<Cls, eosio::vm::execution_interface,
-                                           type_converter<Cls, eosio::vm::execution_interface>>;
+      upcx::vm::registered_host_functions<Cls, upcx::vm::execution_interface,
+                                           type_converter<Cls, upcx::vm::execution_interface>>;
 
-} // namespace b1::rodeos
+} // namespace b1::rodupcx

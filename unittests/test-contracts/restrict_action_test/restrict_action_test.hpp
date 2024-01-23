@@ -1,30 +1,30 @@
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <upcx/upcx.hpp>
 
-class [[eosio::contract]] restrict_action_test : public eosio::contract {
+class [[upcx::contract]] restrict_action_test : public upcx::contract {
 public:
-   using eosio::contract::contract;
+   using upcx::contract::contract;
 
-   [[eosio::action]]
+   [[upcx::action]]
    void noop( );
 
-   [[eosio::action]]
-   void sendinline( eosio::name authorizer );
+   [[upcx::action]]
+   void sendinline( upcx::name authorizer );
 
-   [[eosio::action]]
-   void senddefer( eosio::name authorizer, uint32_t senderid );
+   [[upcx::action]]
+   void senddefer( upcx::name authorizer, uint32_t senderid );
 
 
-   [[eosio::action]]
-   void notifyinline( eosio::name acctonotify, eosio::name authorizer );
+   [[upcx::action]]
+   void notifyinline( upcx::name acctonotify, upcx::name authorizer );
 
-   [[eosio::action]]
-   void notifydefer( eosio::name acctonotify, eosio::name authorizer, uint32_t senderid );
+   [[upcx::action]]
+   void notifydefer( upcx::name acctonotify, upcx::name authorizer, uint32_t senderid );
 
-   [[eosio::on_notify("testacc::notifyinline")]]
-   void on_notify_inline( eosio::name acctonotify, eosio::name authorizer );
+   [[upcx::on_notify("testacc::notifyinline")]]
+   void on_notify_inline( upcx::name acctonotify, upcx::name authorizer );
 
-   [[eosio::on_notify("testacc::notifydefer")]]
-   void on_notify_defer( eosio::name acctonotify, eosio::name authorizer, uint32_t senderid );
+   [[upcx::on_notify("testacc::notifydefer")]]
+   void on_notify_defer( upcx::name acctonotify, upcx::name authorizer, uint32_t senderid );
 };

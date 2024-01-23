@@ -1,5 +1,5 @@
-#include <eosio/trace_api/compressed_file.hpp>
-#include <eosio/trace_api/cmd_registration.hpp>
+#include <upcx/trace_api/compressed_file.hpp>
+#include <upcx/trace_api/cmd_registration.hpp>
 
 #include <iostream>
 
@@ -7,7 +7,7 @@
 #include <boost/filesystem.hpp>
 #include <fc/exception/exception.hpp>
 
-using namespace eosio::trace_api;
+using namespace upcx::trace_api;
 namespace bpo = boost::program_options;
 namespace bfs = boost::filesystem;
 

@@ -1,9 +1,9 @@
- #include <eosio/eosio.hpp>
- #include <eosio/print.hpp>
+ #include <upcx/upcx.hpp>
+ #include <upcx/print.hpp>
 
 #include "test_api.hpp"
 
-using namespace eosio::internal_use_do_not_use;
+using namespace upcx::internal_use_do_not_use;
 
 void test_print::test_prints_l() {
   char ab[] = { 'a', 'b' };
@@ -60,25 +60,25 @@ void test_print::test_printui128() {
 }
 
 void test_print::test_printn() {
-   printn(eosio::name{"1"}.value);
-   printn(eosio::name{"5"}.value);
-   printn(eosio::name{"a"}.value);
-   printn(eosio::name{"z"}.value);
+   printn(upcx::name{"1"}.value);
+   printn(upcx::name{"5"}.value);
+   printn(upcx::name{"a"}.value);
+   printn(upcx::name{"z"}.value);
 
-   printn(eosio::name{"abc"}.value);
-   printn(eosio::name{"123"}.value);
+   printn(upcx::name{"abc"}.value);
+   printn(upcx::name{"123"}.value);
 
-   printn(eosio::name{"abc.123"}.value);
-   printn(eosio::name{"123.abc"}.value);
+   printn(upcx::name{"abc.123"}.value);
+   printn(upcx::name{"123.abc"}.value);
 
-   printn(eosio::name{"12345abcdefgj"}.value);
-   printn(eosio::name{"ijklmnopqrstj"}.value);
-   printn(eosio::name{"vwxyz.12345aj"}.value);
+   printn(upcx::name{"12345abcdefgj"}.value);
+   printn(upcx::name{"ijklmnopqrstj"}.value);
+   printn(upcx::name{"vwxyz.12345aj"}.value);
 
-   printn(eosio::name{"111111111111j"}.value);
-   printn(eosio::name{"555555555555j"}.value);
-   printn(eosio::name{"aaaaaaaaaaaaj"}.value);
-   printn(eosio::name{"zzzzzzzzzzzzj"}.value);
+   printn(upcx::name{"111111111111j"}.value);
+   printn(upcx::name{"555555555555j"}.value);
+   printn(upcx::name{"aaaaaaaaaaaaj"}.value);
+   printn(upcx::name{"zzzzzzzzzzzzj"}.value);
 }
 
 
@@ -120,7 +120,7 @@ void test_print::test_printqf() {
 
 void test_print::test_print_simple() {
     const std::string cvalue = "cvalue";
-    eosio::print(cvalue);
+    upcx::print(cvalue);
     std::string value = "value";
-    eosio::print(std::move(value));
+    upcx::print(std::move(value));
 }

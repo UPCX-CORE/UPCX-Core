@@ -1,10 +1,10 @@
 #pragma once
-#include <eosio/blockvault_client_plugin/blockvault.hpp>
-#include <eosio/chain/block_timestamp.hpp>
+#include <upcx/blockvault_client_plugin/blockvault.hpp>
+#include <upcx/chain/block_timestamp.hpp>
 #include <stdint.h>
 #include <string_view>
 
-namespace eosio {
+namespace upcx {
 namespace blockvault {
 
 class backend {
@@ -26,4 +26,4 @@ class backend {
 };
 
 } // namespace blockvault
-} // namespace eosio
+} // namespace upcx

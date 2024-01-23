@@ -13,8 +13,8 @@ import math
 import re
 
 ###############################################################
-# nodeos_producer_watermark_test
-# --dump-error-details <Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
+# nodupcx_producer_watermark_test
+# --dump-error-details <Upon error print etc/upcx/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
 def isValidBlockProducer(prodsActive, blockNum, node):
@@ -49,9 +49,9 @@ def setProds(sharedProdKey):
 
     setProdsStr += ' ] }'
     Utils.Print("setprods: %s" % (setProdsStr))
-    opts="--permission eosio@active"
+    opts="--permission upcx@active"
     # pylint: disable=redefined-variable-type
-    trans=cluster.biosNode.pushMessage("eosio", "setprods", setProdsStr, opts)
+    trans=cluster.biosNode.pushMessage("upcx", "setprods", setProdsStr, opts)
     if trans is None or not trans[0]:
         Utils.Print("ERROR: Failed to set producer with cmd %s" % (setProdsStr))
 
@@ -166,11 +166,11 @@ walletPort=args.wallet_port
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killUpcxInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
-ClientName="cleos"
+WalletdName=Utils.UpcxWalletName
+ClientName="clupcx"
 
 try:
     assert(totalNodes == 3)
@@ -183,7 +183,7 @@ try:
     Print("Stand up cluster")
     if cluster.launch(prodCount=prodCount, onlyBios=False, pnodes=totalNodes, totalNodes=totalNodes, totalProducers=totalNodes, useBiosBootFile=False, onlySetProds=True, sharedProducers=1) is False:
         Utils.cmdError("launcher")
-        Utils.errorExit("Failed to stand up eos cluster.")
+        Utils.errorExit("Failed to stand up upcx cluster.")
 
     Print("Validating system accounts after bootstrap")
     cluster.validateAccounts(None)
@@ -208,7 +208,7 @@ try:
     while tries > 0:
         node.infoValid = False
         info = node.getInfo()
-        if node.infoValid and node.lastRetrievedHeadBlockProducer != "eosio":
+        if node.infoValid and node.lastRetrievedHeadBlockProducer != "upcx":
             break
         time.sleep(1)
         tries = tries-1
@@ -252,6 +252,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killUpcxInstances=killUpcxInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

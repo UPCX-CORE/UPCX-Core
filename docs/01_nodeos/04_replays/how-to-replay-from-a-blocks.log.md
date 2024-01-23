@@ -6,20 +6,20 @@ Once you have obtained a copy of the `blocks.log` file which you wish to replay 
 
 The table below sumarizes the actions you should take for each of the files enumerated above:
 
-Folder name             | File name          | Action
------------------------ | ------------------ | ------
-data/blocks             | blocks.index       | Remove
-data/blocks             | blocks.log         | Replace this file with the `blocks.log` you want to replay
-data/state              | fork_db.dat        | Remove
-data/blocks/reversible  | shared_memory.bin  | Remove
-data/blocks/reversible  | shared_memory.meta | Remove
+| Folder name            | File name          | Action                                                     |
+| ---------------------- | ------------------ | ---------------------------------------------------------- |
+| data/blocks            | blocks.index       | Remove                                                     |
+| data/blocks            | blocks.log         | Replace this file with the `blocks.log` you want to replay |
+| data/state             | fork_db.dat        | Remove                                                     |
+| data/blocks/reversible | shared_memory.bin  | Remove                                                     |
+| data/blocks/reversible | shared_memory.meta | Remove                                                     |
 
 You can use `blocks-dir = "blocks"` in the `config.ini` file, or use the `--blocks-dir` command line option, to specify where to find the `blocks.log` file to replay.
 
 ```sh
-nodeos --replay-blockchain \
-  --plugin eosio::producer_plugin  \
-  --plugin eosio::chain_api_plugin \
-  --plugin eosio::http_plugin      \
-  >> nodeos.log 2>&1 &
+nodupcx --replay-blockchain \
+  --plugin upcx::producer_plugin  \
+  --plugin upcx::chain_api_plugin \
+  --plugin upcx::http_plugin      \
+  >> nodupcx.log 2>&1 &
 ```

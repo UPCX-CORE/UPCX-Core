@@ -1,24 +1,29 @@
 ## Description
+
 Retrieves a transaction from the blockchain
 
 ## Positional Parameters
+
 `id`` _TEXT_ - ID of the transaction to retrieve
 
 ## Options
-` -b,--block-hint` UINT        the block number this transaction may be in
+
+` -b,--block-hint` UINT the block number this transaction may be in
 
 **Command**
 
 ```sh
-cleos get transaction
+clupcx get transaction
 ```
+
 **Output**
 
 ## Example
 
 ```sh
-cleos get transaction eb4b94b72718a369af09eb2e7885b3f494dd1d8a20278a6634611d5edd76b703
+clupcx get transaction eb4b94b72718a369af09eb2e7885b3f494dd1d8a20278a6634611d5edd76b703
 ```
+
 ```json
 {
   "transaction_id": "eb4b94b72718a369af09eb2e7885b3f494dd1d8a20278a6634611d5edd76b703",
@@ -26,17 +31,16 @@ cleos get transaction eb4b94b72718a369af09eb2e7885b3f494dd1d8a20278a6634611d5edd
     "refBlockNum": 2206,
     "refBlockPrefix": 221394282,
     "expiration": "2017-09-05T08:03:58",
-    "scope": [
-      "inita",
-      "tester"
-    ],
+    "scope": ["inita", "tester"],
     "signatures": [
       "1f22e64240e1e479eee6ccbbd79a29f1a6eb6020384b4cca1a958e7c708d3e562009ae6e60afac96f9a3b89d729a50cd5a7b5a7a647540ba1678831bf970e83312"
     ],
-    "messages": [{
-        "code": "eos",
+    "messages": [
+      {
+        "code": "upcx",
         "type": "transfer",
-        "authorization": [{
+        "authorization": [
+          {
             "account": "inita",
             "permission": "active"
           }
@@ -50,15 +54,18 @@ cleos get transaction eb4b94b72718a369af09eb2e7885b3f494dd1d8a20278a6634611d5edd
         "hex_data": "000000008040934b00000000c84267a1e80300000000000000"
       }
     ],
-    "output": [{
-        "notify": [{
+    "output": [
+      {
+        "notify": [
+          {
             "name": "tester",
             "output": {
               "notify": [],
               "sync_transactions": [],
               "async_transactions": []
             }
-          },{
+          },
+          {
             "name": "inita",
             "output": {
               "notify": [],

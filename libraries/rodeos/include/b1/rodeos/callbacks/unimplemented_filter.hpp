@@ -1,8 +1,8 @@
 #pragma once
 
-#include <b1/rodeos/callbacks/vm_types.hpp>
+#include <b1/rodupcx/callbacks/vm_types.hpp>
 
-namespace b1::rodeos {
+namespace b1::rodupcx {
 
 template <typename Derived>
 struct unimplemented_filter_callbacks {
@@ -21,4 +21,4 @@ struct unimplemented_filter_callbacks {
    }
 }; // unimplemented_filter_callbacks
 
-} // namespace b1::rodeos
+} // namespace b1::rodupcx

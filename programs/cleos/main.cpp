@@ -1,23 +1,23 @@
 /**
-  @defgroup eosclienttool
+  @defgroup upcxclienttool
 
-  @section intro Introduction to cleos
+  @section intro Introduction to clupcx
 
-  `cleos` is a command line tool that interfaces with the REST api exposed by @ref nodeos. In order to use `cleos` you will need to
-  have a local copy of `nodeos` running and configured to load the 'eosio::chain_api_plugin'.
+  `clupcx` is a command line tool that interfaces with the REST api exposed by @ref nodupcx. In order to use `clupcx` you will need to
+  have a local copy of `nodupcx` running and configured to load the 'upcx::chain_api_plugin'.
 
-   cleos contains documentation for all of its commands. For a list of all commands known to cleos, simply run it with no arguments:
+   clupcx contains documentation for all of its commands. For a list of all commands known to clupcx, simply run it with no arguments:
 ```
-$ ./cleos
-Command Line Interface to EOSIO Client
-Usage: programs/cleos/cleos [OPTIONS] SUBCOMMAND
+$ ./clupcx
+Command Line Interface to UPCX Client
+Usage: programs/clupcx/clupcx [OPTIONS] SUBCOMMAND
 
 Options:
   -h,--help                   Print this help message and exit
   -u,--url TEXT=http://localhost:8888/
-                              the http/https URL where nodeos is running
+                              the http/https URL where nodupcx is running
   --wallet-url TEXT=http://localhost:8888/
-                              the http/https URL where keosd is running
+                              the http/https URL where kupcxd is running
   -r,--header                 pass specific HTTP header, repeat this option to pass multiple headers
   -n,--no-verify              don't verify peer certificate when using HTTPS
   -v,--verbose                output verbose errors and action output
@@ -37,17 +37,17 @@ Subcommands:
 ```
 To get help with any particular subcommand, run it with no arguments as well:
 ```
-$ ./cleos create
+$ ./clupcx create
 Create various items, on and off the blockchain
-Usage: ./cleos create SUBCOMMAND
+Usage: ./clupcx create SUBCOMMAND
 
 Subcommands:
   key                         Create a new keypair and print the public and private keys
   account                     Create a new account on the blockchain (assumes system contract does not restrict RAM usage)
 
-$ ./cleos create account
+$ ./clupcx create account
 Create a new account on the blockchain (assumes system contract does not restrict RAM usage)
-Usage: ./cleos create account [OPTIONS] creator name OwnerKey ActiveKey
+Usage: ./clupcx create account [OPTIONS] creator name OwnerKey ActiveKey
 
 Positionals:
   creator TEXT                The name of the account creating the new account
@@ -78,14 +78,14 @@ Options:
 #include <fc/variant_object.hpp>
 #include <fc/static_variant.hpp>
 
-#include <eosio/chain/name.hpp>
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/wast_to_wasm.hpp>
-#include <eosio/chain/trace.hpp>
-#include <eosio/chain_plugin/chain_plugin.hpp>
-#include <eosio/chain/contract_types.hpp>
+#include <upcx/chain/name.hpp>
+#include <upcx/chain/config.hpp>
+#include <upcx/chain/wast_to_wasm.hpp>
+#include <upcx/chain/trace.hpp>
+#include <upcx/chain_plugin/chain_plugin.hpp>
+#include <upcx/chain/contract_types.hpp>
 
-#include <eosio/version/version.hpp>
+#include <upcx/version/version.hpp>
 
 #pragma push_macro("N")
 #undef N
@@ -122,17 +122,17 @@ Options:
 #include "httpc.hpp"
 
 using namespace std;
-using namespace eosio;
-using namespace eosio::chain;
-using namespace eosio::client::help;
-using namespace eosio::client::http;
-using namespace eosio::client::localize;
-using namespace eosio::client::config;
+using namespace upcx;
+using namespace upcx::chain;
+using namespace upcx::client::help;
+using namespace upcx::client::http;
+using namespace upcx::client::localize;
+using namespace upcx::client::config;
 using namespace boost::filesystem;
 
 FC_DECLARE_EXCEPTION( explained_exception, 9000000, "explained exception, see error log" );
 FC_DECLARE_EXCEPTION( localized_exception, 10000000, "an error occured" );
-#define EOSC_ASSERT( TEST, ... ) \
+#define UPCXC_ASSERT( TEST, ... ) \
   FC_EXPAND_MACRO( \
     FC_MULTILINE_MACRO_BEGIN \
       if( UNLIKELY(!(TEST)) ) \
@@ -143,7 +143,7 @@ FC_DECLARE_EXCEPTION( localized_exception, 10000000, "an error occured" );
     FC_MULTILINE_MACRO_END \
   )
 
-//copy pasta from keosd's main.cpp
+//copy pasta from kupcxd's main.cpp
 bfs::path determine_home_directory()
 {
    bfs::path home;
@@ -165,7 +165,7 @@ std::string clean_output( std::string str ) {
 }
 
 string url = "http://127.0.0.1:8888/";
-string default_wallet_url = "unix://" + (determine_home_directory() / "eosio-wallet" / (string(key_store_executable_name) + ".sock")).string();
+string default_wallet_url = "unix://" + (determine_home_directory() / "upcx-wallet" / (string(key_store_executable_name) + ".sock")).string();
 string wallet_url; //to be set to default_wallet_url in main
 bool no_verify = false;
 vector<string> headers;
@@ -182,7 +182,7 @@ bool   tx_use_old_rpc = false;
 string tx_json_save_file;
 bool   print_request = false;
 bool   print_response = false;
-bool   no_auto_keosd = false;
+bool   no_auto_kupcxd = false;
 bool   verbose = false;
 
 uint8_t  tx_max_cpu_usage = 0;
@@ -192,7 +192,7 @@ uint32_t delaysec = 0;
 
 vector<string> tx_permission;
 
-eosio::client::http::http_context context;
+upcx::client::http::http_context context;
 
 enum class tx_compression_type {
    none,
@@ -247,7 +247,7 @@ void add_standard_transaction_options(CLI::App* cmd, string default_permission =
 }
 
 bool is_public_key_str(const std::string& potential_key_str) {
-   return boost::istarts_with(potential_key_str, "EOS") || boost::istarts_with(potential_key_str, "PUB_R1") ||  boost::istarts_with(potential_key_str, "PUB_K1") ||  boost::istarts_with(potential_key_str, "PUB_WA");
+   return boost::istarts_with(potential_key_str, "UPCX") || boost::istarts_with(potential_key_str, "PUB_R1") ||  boost::istarts_with(potential_key_str, "PUB_K1") ||  boost::istarts_with(potential_key_str, "PUB_WA");
 }
 
 class signing_keys_option {
@@ -263,16 +263,16 @@ public:
          if (is_public_key_str(public_key_json)) {
             try {
                signing_keys.push_back(public_key_type(public_key_json));
-            } EOS_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", public_key_json))
+            } UPCX_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", public_key_json))
          } else {
             fc::variant json_keys;
             try {
                json_keys = fc::json::from_string(public_key_json, fc::json::parse_type::relaxed_parser);
-            } EOS_RETHROW_EXCEPTIONS(json_parse_exception, "Fail to parse JSON from string: ${string}", ("string", public_key_json));
+            } UPCX_RETHROW_EXCEPTIONS(json_parse_exception, "Fail to parse JSON from string: ${string}", ("string", public_key_json));
             try {
                std::vector<public_key_type> keys = json_keys.template as<std::vector<public_key_type>>();
                signing_keys = std::move(keys);
-            } EOS_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key array format '${data}'",
+            } UPCX_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key array format '${data}'",
                                      ("data", fc::json::to_string(json_keys, fc::time_point::maximum())))
          }
       }
@@ -314,8 +314,8 @@ fc::variant call( const std::string& url,
                   const std::string& path,
                   const T& v ) {
    try {
-      auto sp = std::make_unique<eosio::client::http::connection_param>(context, parse_url(url) + path, no_verify ? false : true, headers);
-      return eosio::client::http::do_http_call(*sp, fc::variant(v), print_request, print_response );
+      auto sp = std::make_unique<upcx::client::http::connection_param>(context, parse_url(url) + path, no_verify ? false : true, headers);
+      return upcx::client::http::do_http_call(*sp, fc::variant(v), print_request, print_response );
    }
    catch(boost::system::system_error& e) {
       if(url == ::url)
@@ -334,8 +334,8 @@ template<>
 fc::variant call( const std::string& url,
                   const std::string& path) { return call( url, path, fc::variant() ); }
 
-eosio::chain_apis::read_only::get_info_results get_info() {
-   return call(url, get_info_func).as<eosio::chain_apis::read_only::get_info_results>();
+upcx::chain_apis::read_only::get_info_results get_info() {
+   return call(url, get_info_func).as<upcx::chain_apis::read_only::get_info_results>();
 }
 
 string generate_nonce_string() {
@@ -413,7 +413,7 @@ fc::variant push_transaction( signed_transaction& trx, const std::vector<public_
             ref_block = call(get_block_func, fc::mutable_variant_object("block_num_or_id", tx_ref_block_num_or_id));
             ref_block_id = ref_block["id"].as<block_id_type>();
          }
-      } EOS_RETHROW_EXCEPTIONS(invalid_ref_block_exception, "Invalid reference block num or id: ${block_num_or_id}", ("block_num_or_id", tx_ref_block_num_or_id));
+      } UPCX_RETHROW_EXCEPTIONS(invalid_ref_block_exception, "Invalid reference block num or id: ${block_num_or_id}", ("block_num_or_id", tx_ref_block_num_or_id));
       trx.set_reference_block(ref_block_id);
 
       if (tx_force_unique) {
@@ -501,7 +501,7 @@ void print_action( const fc::variant& at ) {
    auto console = at["console"].as_string();
 
    /*
-   if( code == "eosio" && func == "setcode" )
+   if( code == "upcx" && func == "setcode" )
       args = args.substr(40)+"...";
    if( name(code) == config::system_account_name && func == "setabi" )
       args = args.substr(40)+"...";
@@ -544,12 +544,12 @@ fc::variant json_from_file_or_string(const string& file_or_str, fc::json::parse_
    if ( !regex_search(file_or_str, r) && fc::is_regular_file(file_or_str) ) {
       try {
          return fc::json::from_file(file_or_str, ptype);
-      } EOS_RETHROW_EXCEPTIONS(json_parse_exception, "Fail to parse JSON from file: ${file}", ("file", file_or_str));
+      } UPCX_RETHROW_EXCEPTIONS(json_parse_exception, "Fail to parse JSON from file: ${file}", ("file", file_or_str));
 
    } else {
       try {
          return fc::json::from_string(file_or_str, ptype);
-      } EOS_RETHROW_EXCEPTIONS(json_parse_exception, "Fail to parse JSON from string: ${string}", ("string", file_or_str));
+      } UPCX_RETHROW_EXCEPTIONS(json_parse_exception, "Fail to parse JSON from string: ${string}", ("string", file_or_str));
    }
 }
 
@@ -624,7 +624,7 @@ void send_actions(std::vector<chain::action>&& actions, const std::vector<public
    std::ofstream out;
    if (tx_json_save_file.length()) {
       out.open(tx_json_save_file);
-      EOSC_ASSERT(!out.fail(), "ERROR: Failed to create file \"${p}\"", ("p", tx_json_save_file));
+      UPCXC_ASSERT(!out.fail(), "ERROR: Failed to create file \"${p}\"", ("p", tx_json_save_file));
    }
    auto result = push_actions( move(actions), signing_keys);
 
@@ -652,7 +652,7 @@ chain::permission_level to_permission_level(const std::string& s) {
 chain::action create_newaccount(const name& creator, const name& newaccount, authority owner, authority active) {
    return action {
       get_account_permissions(tx_permission, {creator,config::active_name}),
-      eosio::chain::newaccount{
+      upcx::chain::newaccount{
          .creator      = creator,
          .name         = newaccount,
          .owner        = owner,
@@ -774,7 +774,7 @@ authority parse_json_authority(const std::string& authorityJsonOrFile) {
    fc::variant authority_var = json_from_file_or_string(authorityJsonOrFile);
    try {
       return authority_var.as<authority>();
-   } EOS_RETHROW_EXCEPTIONS(authority_type_exception, "Invalid authority format '${data}'",
+   } UPCX_RETHROW_EXCEPTIONS(authority_type_exception, "Invalid authority format '${data}'",
                             ("data", fc::json::to_string(authority_var, fc::time_point::maximum())))
 }
 
@@ -782,18 +782,18 @@ authority parse_json_authority_or_key(const std::string& authorityJsonOrFile) {
    if (is_public_key_str(authorityJsonOrFile)) {
       try {
          return authority(public_key_type(authorityJsonOrFile));
-      } EOS_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", authorityJsonOrFile))
+      } UPCX_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", authorityJsonOrFile))
    } else {
       auto result = parse_json_authority(authorityJsonOrFile);
-      EOS_ASSERT( eosio::chain::validate(result), authority_type_exception, "Authority failed validation! ensure that keys, accounts, and waits are sorted and that the threshold is valid and satisfiable!");
+      UPCX_ASSERT( upcx::chain::validate(result), authority_type_exception, "Authority failed validation! ensure that keys, accounts, and waits are sorted and that the threshold is valid and satisfiable!");
       return result;
    }
 }
 
 asset to_asset( account_name code, const string& s ) {
-   static map< pair<account_name, eosio::chain::symbol_code>, eosio::chain::symbol> cache;
+   static map< pair<account_name, upcx::chain::symbol_code>, upcx::chain::symbol> cache;
    auto a = asset::from_string( s );
-   eosio::chain::symbol_code sym = a.get_symbol().to_symbol_code();
+   upcx::chain::symbol_code sym = a.get_symbol().to_symbol_code();
    auto it = cache.find( make_pair(code, sym) );
    auto sym_str = a.symbol_name();
    if ( it == cache.end() ) {
@@ -804,11 +804,11 @@ asset to_asset( account_name code, const string& s ) {
       auto obj = json.get_object();
       auto obj_it = obj.find( sym_str );
       if (obj_it != obj.end()) {
-         auto result = obj_it->value().as<eosio::chain_apis::read_only::get_currency_stats_result>();
+         auto result = obj_it->value().as<upcx::chain_apis::read_only::get_currency_stats_result>();
          auto p = cache.emplace( make_pair( code, sym ), result.max_supply.get_symbol() );
          it = p.first;
       } else {
-         EOS_THROW(symbol_type_exception, "Symbol ${s} is not supported by token contract ${c}", ("s", sym_str)("c", code));
+         UPCX_THROW(symbol_type_exception, "Symbol ${s} is not supported by token contract ${c}", ("s", sym_str)("c", code));
       }
    }
    auto expected_symbol = it->second;
@@ -816,13 +816,13 @@ asset to_asset( account_name code, const string& s ) {
       auto factor = expected_symbol.precision() / a.precision();
       a = asset( a.get_amount() * factor, expected_symbol );
    } else if ( a.decimals() > expected_symbol.decimals() ) {
-      EOS_THROW(symbol_type_exception, "Too many decimal digits in ${a}, only ${d} supported", ("a", a)("d", expected_symbol.decimals()));
+      UPCX_THROW(symbol_type_exception, "Too many decimal digits in ${a}, only ${d} supported", ("a", a)("d", expected_symbol.decimals()));
    } // else precision matches
    return a;
 }
 
 inline asset to_asset( const string& s ) {
-   return to_asset( "eosio.token"_n, s );
+   return to_asset( "upcx.token"_n, s );
 }
 
 struct set_account_permission_subcommand {
@@ -839,14 +839,14 @@ struct set_account_permission_subcommand {
       permissions->add_option("permission", permission, localized("The permission name to set/delete an authority for"))->required();
       permissions->add_option("authority", authority_json_or_file, localized("[delete] NULL, [create/update] public key, JSON string or filename defining the authority, [code] contract name"));
       permissions->add_option("parent", parent, localized("[create] The permission name of this parents permission, defaults to 'active'"));
-      permissions->add_flag("--add-code", add_code, localized("[code] add '${code}' permission to specified permission authority", ("code", name(config::eosio_code_name))));
-      permissions->add_flag("--remove-code", remove_code, localized("[code] remove '${code}' permission from specified permission authority", ("code", name(config::eosio_code_name))));
+      permissions->add_flag("--add-code", add_code, localized("[code] add '${code}' permission to specified permission authority", ("code", name(config::upcx_code_name))));
+      permissions->add_flag("--remove-code", remove_code, localized("[code] remove '${code}' permission from specified permission authority", ("code", name(config::upcx_code_name))));
 
       add_standard_transaction_options(permissions, "account@active");
 
       permissions->callback([this] {
-         EOSC_ASSERT( !(add_code && remove_code), "ERROR: Either --add-code or --remove-code can be set" );
-         EOSC_ASSERT( (add_code ^ remove_code) || !authority_json_or_file.empty(), "ERROR: authority should be specified unless add or remove code permission" );
+         UPCXC_ASSERT( !(add_code && remove_code), "ERROR: Either --add-code or --remove-code can be set" );
+         UPCXC_ASSERT( (add_code ^ remove_code) || !authority_json_or_file.empty(), "ERROR: authority should be specified unless add or remove code permission" );
 
          authority auth;
 
@@ -860,7 +860,7 @@ struct set_account_permission_subcommand {
 
          if ( need_parent || need_auth ) {
             fc::variant json = call(get_account_func, fc::mutable_variant_object("account_name", account));
-            auto res = json.as<eosio::chain_apis::read_only::get_account_results>();
+            auto res = json.as<upcx::chain_apis::read_only::get_account_results>();
             auto itr = std::find_if(res.permissions.begin(), res.permissions.end(), [&](const auto& perm) {
                return perm.perm_name == name(permission);
             });
@@ -877,7 +877,7 @@ struct set_account_permission_subcommand {
 
             if ( need_auth ) {
                auto actor = (authority_json_or_file.empty()) ? name(account) : name(authority_json_or_file);
-               auto code_name = config::eosio_code_name;
+               auto code_name = config::upcx_code_name;
 
                if ( itr != res.permissions.end() ) {
                   // fetch existing authority
@@ -1011,10 +1011,10 @@ void try_local_port(uint32_t duration) {
    }
 }
 
-void ensure_keosd_running(CLI::App* app) {
-    if (no_auto_keosd)
+void ensure_kupcxd_running(CLI::App* app) {
+    if (no_auto_kupcxd)
         return;
-    // get, version, net, convert do not require keosd
+    // get, version, net, convert do not require kupcxd
     if (tx_skip_sign || app->got_subcommand("get") || app->got_subcommand("version") || app->got_subcommand("net") || app->got_subcommand("convert"))
         return;
     if (app->get_subcommand("create")->got_subcommand("key")) // create key does not require wallet
@@ -1033,12 +1033,12 @@ void ensure_keosd_running(CLI::App* app) {
 
     boost::filesystem::path binPath = boost::dll::program_location();
     binPath.remove_filename();
-    // This extra check is necessary when running cleos like this: ./cleos ...
+    // This extra check is necessary when running clupcx like this: ./clupcx ...
     if (binPath.filename_is_dot())
         binPath.remove_filename();
-    binPath.append(key_store_executable_name); // if cleos and keosd are in the same installation directory
+    binPath.append(key_store_executable_name); // if clupcx and kupcxd are in the same installation directory
     if (!boost::filesystem::exists(binPath)) {
-        binPath.remove_filename().remove_filename().append("keosd").append(key_store_executable_name);
+        binPath.remove_filename().remove_filename().append("kupcxd").append(key_store_executable_name);
     }
 
     if (boost::filesystem::exists(binPath)) {
@@ -1053,13 +1053,13 @@ void ensure_keosd_running(CLI::App* app) {
         pargs.push_back("--unix-socket-path");
         pargs.push_back(string(key_store_executable_name) + ".sock");
 
-        ::boost::process::child keos(binPath, pargs,
+        ::boost::process::child kupcx(binPath, pargs,
                                      bp::std_in.close(),
                                      bp::std_out > bp::null,
                                      bp::std_err > bp::null);
-        if (keos.running()) {
+        if (kupcx.running()) {
             std::cerr << binPath << " launched" << std::endl;
-            keos.detach();
+            kupcx.detach();
             try_local_port(2000);
         } else {
             std::cerr << "No wallet service listening on " << wallet_url << ". Failed to launch " << binPath << std::endl;
@@ -1097,7 +1097,7 @@ struct register_producer_subcommand {
          public_key_type producer_key;
          try {
             producer_key = public_key_type(producer_key_str);
-         } EOS_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid producer public key: ${public_key}", ("public_key", producer_key_str))
+         } UPCX_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid producer public key: ${public_key}", ("public_key", producer_key_str))
 
          auto regprod_var = regproducer_variant(name(producer_str), producer_key, url, loc );
          auto accountPermissions = get_account_permissions(tx_permission, {name(producer_str), config::active_name});
@@ -1115,7 +1115,7 @@ struct create_account_subcommand {
    string stake_cpu;
    uint32_t buy_ram_bytes_in_kbytes = 0;
    uint32_t buy_ram_bytes = 0;
-   string buy_ram_eos;
+   string buy_ram_upcx;
    bool transfer = false;
    bool simple = false;
 
@@ -1139,7 +1139,7 @@ struct create_account_subcommand {
                                    (localized("The amount of RAM bytes to purchase for the new account in kibibytes (KiB)")));
          createAccount->add_option("--buy-ram-bytes", buy_ram_bytes,
                                    (localized("The amount of RAM bytes to purchase for the new account in bytes")));
-         createAccount->add_option("--buy-ram", buy_ram_eos,
+         createAccount->add_option("--buy-ram", buy_ram_upcx,
                                    (localized("The amount of RAM bytes to purchase for the new account in tokens")));
          createAccount->add_flag("--transfer", transfer,
                                  (localized("Transfer voting power and right to unstake tokens to receiver")));
@@ -1152,15 +1152,15 @@ struct create_account_subcommand {
             if( owner_key_str.find('{') != string::npos ) {
                try{
                   owner = parse_json_authority_or_key(owner_key_str);
-               } EOS_RETHROW_EXCEPTIONS( explained_exception, "Invalid owner authority: ${authority}", ("authority", owner_key_str) )
+               } UPCX_RETHROW_EXCEPTIONS( explained_exception, "Invalid owner authority: ${authority}", ("authority", owner_key_str) )
             } else if( owner_key_str.find('@') != string::npos ) {
                try {
                   owner = authority(to_permission_level(owner_key_str));
-               } EOS_RETHROW_EXCEPTIONS( explained_exception, "Invalid owner permission level: ${permission}", ("permission", owner_key_str) )
+               } UPCX_RETHROW_EXCEPTIONS( explained_exception, "Invalid owner permission level: ${permission}", ("permission", owner_key_str) )
             } else {
                try {
                   owner = authority(public_key_type(owner_key_str));
-               } EOS_RETHROW_EXCEPTIONS( public_key_type_exception, "Invalid owner public key: ${public_key}", ("public_key", owner_key_str) );
+               } UPCX_RETHROW_EXCEPTIONS( public_key_type_exception, "Invalid owner public key: ${public_key}", ("public_key", owner_key_str) );
             }
 
             if( active_key_str.empty() ) {
@@ -1168,22 +1168,22 @@ struct create_account_subcommand {
             } else if ( active_key_str.find('{') != string::npos ) {
                try{
                   active = parse_json_authority_or_key(active_key_str);
-               } EOS_RETHROW_EXCEPTIONS( explained_exception, "Invalid active authority: ${authority}", ("authority", owner_key_str) )
+               } UPCX_RETHROW_EXCEPTIONS( explained_exception, "Invalid active authority: ${authority}", ("authority", owner_key_str) )
             }else if( active_key_str.find('@') != string::npos ) {
                try {
                   active = authority(to_permission_level(active_key_str));
-               } EOS_RETHROW_EXCEPTIONS( explained_exception, "Invalid active permission level: ${permission}", ("permission", active_key_str) )
+               } UPCX_RETHROW_EXCEPTIONS( explained_exception, "Invalid active permission level: ${permission}", ("permission", active_key_str) )
             } else {
                try {
                   active = authority(public_key_type(active_key_str));
-               } EOS_RETHROW_EXCEPTIONS( public_key_type_exception, "Invalid active public key: ${public_key}", ("public_key", active_key_str) );
+               } UPCX_RETHROW_EXCEPTIONS( public_key_type_exception, "Invalid active public key: ${public_key}", ("public_key", active_key_str) );
             }
 
             auto create = create_newaccount(name(creator), name(account_name), owner, active);
             if (!simple) {
-               EOSC_ASSERT( buy_ram_eos.size() || buy_ram_bytes_in_kbytes || buy_ram_bytes, "ERROR: One of --buy-ram, --buy-ram-kbytes or --buy-ram-bytes should have non-zero value" );
-               EOSC_ASSERT( !buy_ram_bytes_in_kbytes || !buy_ram_bytes, "ERROR: --buy-ram-kbytes and --buy-ram-bytes cannot be set at the same time" );
-               action buyram = !buy_ram_eos.empty() ? create_buyram(name(creator), name(account_name), to_asset(buy_ram_eos))
+               UPCXC_ASSERT( buy_ram_upcx.size() || buy_ram_bytes_in_kbytes || buy_ram_bytes, "ERROR: One of --buy-ram, --buy-ram-kbytes or --buy-ram-bytes should have non-zero value" );
+               UPCXC_ASSERT( !buy_ram_bytes_in_kbytes || !buy_ram_bytes, "ERROR: --buy-ram-kbytes and --buy-ram-bytes cannot be set at the same time" );
+               action buyram = !buy_ram_upcx.empty() ? create_buyram(name(creator), name(account_name), to_asset(buy_ram_upcx))
                   : create_buyrambytes(name(creator), name(account_name), (buy_ram_bytes_in_kbytes) ? (buy_ram_bytes_in_kbytes * 1024) : buy_ram_bytes);
                auto net = to_asset(stake_net);
                auto cpu = to_asset(stake_cpu);
@@ -1281,21 +1281,21 @@ struct approve_producer_subcommand {
                                ("table_key", "owner")
                                ("lower_bound", name(voter).to_uint64_t())
                                ("upper_bound", name(voter).to_uint64_t() + 1)
-                               // Less than ideal upper_bound usage preserved so cleos can still work with old buggy nodeos versions
-                               // Change to voter.value when cleos no longer needs to support nodeos versions older than 1.5.0
+                               // Less than ideal upper_bound usage preserved so clupcx can still work with old buggy nodupcx versions
+                               // Change to voter.value when clupcx no longer needs to support nodupcx versions older than 1.5.0
                                ("limit", 1)
             );
-            auto res = result.as<eosio::chain_apis::read_only::get_table_rows_result>();
-            // Condition in if statement below can simply be res.rows.empty() when cleos no longer needs to support nodeos versions older than 1.5.0
+            auto res = result.as<upcx::chain_apis::read_only::get_table_rows_result>();
+            // Condition in if statement below can simply be res.rows.empty() when clupcx no longer needs to support nodupcx versions older than 1.5.0
             // Although since this subcommand will actually change the voter's vote, it is probably better to just keep this check to protect
             //  against future potential chain_plugin bugs.
             if( res.rows.empty() || res.rows[0].get_object()["owner"].as_string() != name(voter).to_string() ) {
                std::cerr << "Voter info not found for account " << voter << std::endl;
                return;
             }
-            EOS_ASSERT( 1 == res.rows.size(), multiple_voter_info, "More than one voter_info for account" );
+            UPCX_ASSERT( 1 == res.rows.size(), multiple_voter_info, "More than one voter_info for account" );
             auto prod_vars = res.rows[0]["producers"].get_array();
-            vector<eosio::name> prods;
+            vector<upcx::name> prods;
             for ( auto& x : prod_vars ) {
                prods.push_back( name(x.as_string()) );
             }
@@ -1334,21 +1334,21 @@ struct unapprove_producer_subcommand {
                                ("table_key", "owner")
                                ("lower_bound", name(voter).to_uint64_t())
                                ("upper_bound", name(voter).to_uint64_t() + 1)
-                               // Less than ideal upper_bound usage preserved so cleos can still work with old buggy nodeos versions
-                               // Change to voter.value when cleos no longer needs to support nodeos versions older than 1.5.0
+                               // Less than ideal upper_bound usage preserved so clupcx can still work with old buggy nodupcx versions
+                               // Change to voter.value when clupcx no longer needs to support nodupcx versions older than 1.5.0
                                ("limit", 1)
             );
-            auto res = result.as<eosio::chain_apis::read_only::get_table_rows_result>();
-            // Condition in if statement below can simply be res.rows.empty() when cleos no longer needs to support nodeos versions older than 1.5.0
+            auto res = result.as<upcx::chain_apis::read_only::get_table_rows_result>();
+            // Condition in if statement below can simply be res.rows.empty() when clupcx no longer needs to support nodupcx versions older than 1.5.0
             // Although since this subcommand will actually change the voter's vote, it is probably better to just keep this check to protect
             //  against future potential chain_plugin bugs.
             if( res.rows.empty() || res.rows[0].get_object()["owner"].as_string() != name(voter).to_string() ) {
                std::cerr << "Voter info not found for account " << voter << std::endl;
                return;
             }
-            EOS_ASSERT( 1 == res.rows.size(), multiple_voter_info, "More than one voter_info for account" );
+            UPCX_ASSERT( 1 == res.rows.size(), multiple_voter_info, "More than one voter_info for account" );
             auto prod_vars = res.rows[0]["producers"].get_array();
-            vector<eosio::name> prods;
+            vector<upcx::name> prods;
             for ( auto& x : prod_vars ) {
                prods.push_back( name(x.as_string()) );
             }
@@ -1385,7 +1385,7 @@ struct list_producers_subcommand {
             std::cout << fc::json::to_pretty_string(rawResult) << std::endl;
             return;
          }
-         auto result = rawResult.as<eosio::chain_apis::read_only::get_producers_result>();
+         auto result = rawResult.as<upcx::chain_apis::read_only::get_producers_result>();
          if ( result.rows.empty() ) {
             std::cout << "No producers found" << std::endl;
             return;
@@ -1502,7 +1502,7 @@ struct get_transaction_id_subcommand {
             } else {
                std::cerr << "file/string does not represent a transaction" << std::endl;
             }
-         } EOS_RETHROW_EXCEPTIONS(transaction_type_exception, "Fail to parse transaction JSON '${data}'", ("data",trx_to_check))
+         } UPCX_RETHROW_EXCEPTIONS(transaction_type_exception, "Fail to parse transaction JSON '${data}'", ("data",trx_to_check))
       });
    }
 };
@@ -1537,7 +1537,7 @@ struct delegate_bandwidth_subcommand {
                   ("transfer", transfer);
          auto accountPermissions = get_account_permissions(tx_permission, {name(from_str), config::active_name});
          std::vector<chain::action> acts{create_action(accountPermissions, config::system_account_name, "delegatebw"_n, act_payload)};
-         EOSC_ASSERT( !(buy_ram_amount.size()) || !buy_ram_bytes, "ERROR: --buyram and --buy-ram-bytes cannot be set at the same time" );
+         UPCXC_ASSERT( !(buy_ram_amount.size()) || !buy_ram_bytes, "ERROR: --buyram and --buy-ram-bytes cannot be set at the same time" );
          if (buy_ram_amount.size()) {
             acts.push_back( create_buyram(name(from_str), name(receiver_str), to_asset(buy_ram_amount)) );
          } else if (buy_ram_bytes) {
@@ -1611,15 +1611,15 @@ struct bidname_info_subcommand {
                                ("table", "namebids")
                                ("lower_bound", name(newname).to_uint64_t())
                                ("upper_bound", name(newname).to_uint64_t() + 1)
-                               // Less than ideal upper_bound usage preserved so cleos can still work with old buggy nodeos versions
-                               // Change to newname.value when cleos no longer needs to support nodeos versions older than 1.5.0
+                               // Less than ideal upper_bound usage preserved so clupcx can still work with old buggy nodupcx versions
+                               // Change to newname.value when clupcx no longer needs to support nodupcx versions older than 1.5.0
                                ("limit", 1));
          if ( print_json ) {
             std::cout << fc::json::to_pretty_string(rawResult) << std::endl;
             return;
          }
-         auto result = rawResult.as<eosio::chain_apis::read_only::get_table_rows_result>();
-         // Condition in if statement below can simply be res.rows.empty() when cleos no longer needs to support nodeos versions older than 1.5.0
+         auto result = rawResult.as<upcx::chain_apis::read_only::get_table_rows_result>();
+         // Condition in if statement below can simply be res.rows.empty() when clupcx no longer needs to support nodupcx versions older than 1.5.0
          if( result.rows.empty() || result.rows[0].get_object()["newname"].as_string() != name(newname).to_string() ) {
             std::cout << "No bidname record found" << std::endl;
             return;
@@ -1657,7 +1657,7 @@ struct list_bw_subcommand {
                                ("table", "delband")
             );
             if (!print_json) {
-               auto res = result.as<eosio::chain_apis::read_only::get_table_rows_result>();
+               auto res = result.as<upcx::chain_apis::read_only::get_table_rows_result>();
                if ( !res.rows.empty() ) {
                   std::cout << std::setw(13) << std::left << "Receiver" << std::setw(21) << std::left << "Net bandwidth"
                             << std::setw(21) << std::left << "CPU bandwidth" << std::endl;
@@ -1693,7 +1693,7 @@ struct buyram_subcommand {
       buyram->add_flag("--bytes,-b", bytes, localized("The amount to buy in bytes"));
       add_standard_transaction_options_plus_signing(buyram, "payer@active");
       buyram->callback([this] {
-         EOSC_ASSERT( !kbytes || !bytes, "ERROR: --kbytes and --bytes cannot be set at the same time" );
+         UPCXC_ASSERT( !kbytes || !bytes, "ERROR: --kbytes and --bytes cannot be set at the same time" );
          if (kbytes || bytes) {
             send_actions( { create_buyrambytes(name(from_str), name(receiver_str), fc::to_uint64(amount) * ((kbytes) ? 1024ull : 1ull)) }, signing_keys_opt.get_keys());
          } else {
@@ -2208,7 +2208,7 @@ void get_account( const string& accountName, const string& coresym, bool json_fo
       json = call(get_account_func, fc::mutable_variant_object("account_name", accountName)("expected_core_symbol", symbol::from_string(coresym)));
    }
 
-   auto res = json.as<eosio::chain_apis::read_only::get_account_results>();
+   auto res = json.as<upcx::chain_apis::read_only::get_account_results>();
    if (!json_format) {
       asset staked;
       asset unstaking;
@@ -2228,7 +2228,7 @@ void get_account( const string& accountName, const string& coresym, bool json_fo
       std::cout << "permissions: " << std::endl;
       unordered_map<name, vector<name>/*children*/> tree;
       vector<name> roots; //we don't have multiple roots, but we can easily handle them here, so let's do it just in case
-      unordered_map<name, eosio::chain_apis::permission> cache;
+      unordered_map<name, upcx::chain_apis::permission> cache;
       for ( auto& perm : res.permissions ) {
          if ( perm.parent ) {
             tree[perm.parent].push_back( perm.perm_name );
@@ -2307,7 +2307,7 @@ void get_account( const string& accountName, const string& coresym, bool json_fo
          auto net_total = to_asset(res.total_resources.get_object()["net_weight"].as_string());
 
          if( net_total.get_symbol() != unstaking.get_symbol() ) {
-            // Core symbol of nodeos responding to the request is different than core symbol built into cleos
+            // Core symbol of nodupcx responding to the request is different than core symbol built into clupcx
             unstaking = asset( 0, net_total.get_symbol() ); // Correct core symbol for unstaking asset.
             staked = asset( 0, net_total.get_symbol() ); // Correct core symbol for staked asset.
          }
@@ -2422,7 +2422,7 @@ void get_account( const string& accountName, const string& coresym, bool json_fo
             std::cout << "unstaking tokens:" << std::endl;
             std::cout << indent << std::left << std::setw(25) << "time of unstake request:" << std::right << std::setw(20) << string(request_time);
             if( now >= refund_time ) {
-               std::cout << " (available to claim now with 'eosio::refund' action)\n";
+               std::cout << " (available to claim now with 'upcx::refund' action)\n";
             } else {
                std::cout << " (funds will be available in " << to_pretty_time( (refund_time - now).count(), 0 ) << ")\n";
             }
@@ -2498,10 +2498,10 @@ CLI::callback_t header_opt_callback = [](CLI::results_t res) {
 int main( int argc, char** argv ) {
 
    fc::logger::get(DEFAULT_LOGGER).set_log_level(fc::log_level::debug);
-   context = eosio::client::http::create_http_context();
+   context = upcx::client::http::create_http_context();
    wallet_url = default_wallet_url;
 
-   CLI::App app{"Command Line Interface to EOSIO Client"};
+   CLI::App app{"Command Line Interface to UPCX Client"};
    app.require_subcommand();
    // Hide obsolete options by putting them into a group with an empty name.
    app.add_option( "-H,--host", obsoleted_option_host_port, localized("The host where ${n} is running", ("n", node_executable_name)) )->group("");
@@ -2514,8 +2514,8 @@ int main( int argc, char** argv ) {
 
    app.add_option( "-r,--header", header_opt_callback, localized("Pass specific HTTP header; repeat this option to pass multiple headers"));
    app.add_flag( "-n,--no-verify", no_verify, localized("Don't verify peer certificate when using HTTPS"));
-   app.add_flag( "--no-auto-" + string(key_store_executable_name), no_auto_keosd, localized("Don't automatically launch a ${k} if one is not currently running", ("k", key_store_executable_name)));
-   app.parse_complete_callback([&app]{ ensure_keosd_running(&app);});
+   app.add_flag( "--no-auto-" + string(key_store_executable_name), no_auto_kupcxd, localized("Don't automatically launch a ${k} if one is not currently running", ("k", key_store_executable_name)));
+   app.parse_complete_callback([&app]{ ensure_kupcxd_running(&app);});
 
    app.add_flag( "-v,--verbose", verbose, localized("Output verbose errors and action console output"));
    app.add_flag("--print-request", print_request, localized("Print HTTP request to STDERR"));
@@ -2525,11 +2525,11 @@ int main( int argc, char** argv ) {
    version->require_subcommand();
 
    version->add_subcommand("client", localized("Retrieve basic version information of the client"))->callback([] {
-      std::cout << eosio::version::version_client() << '\n';
+      std::cout << upcx::version::version_client() << '\n';
    });
 
    version->add_subcommand("full", localized("Retrieve full version information of the client"))->callback([] {
-     std::cout << eosio::version::version_full() << '\n';
+     std::cout << upcx::version::version_full() << '\n';
    });
 
    // Create subcommand
@@ -2582,14 +2582,14 @@ int main( int argc, char** argv ) {
          signed_transaction trx;
          try {
             abi_serializer::from_variant( trx_var, trx, abi_serializer_resolver, abi_serializer::create_yield_function( abi_serializer_max_time ) );
-         } EOS_RETHROW_EXCEPTIONS( transaction_type_exception, "Invalid transaction format: '${data}'",
+         } UPCX_RETHROW_EXCEPTIONS( transaction_type_exception, "Invalid transaction format: '${data}'",
                                    ("data", fc::json::to_string(trx_var, fc::time_point::maximum())))
          std::cout << fc::json::to_pretty_string( packed_transaction_v0( trx, packed_transaction_v0::compression_type::none )) << std::endl;
       } else {
          try {
             signed_transaction trx = trx_var.as<signed_transaction>();
             std::cout << fc::json::to_pretty_string( fc::variant( packed_transaction_v0( trx, packed_transaction_v0::compression_type::none ))) << std::endl;
-         } EOS_RETHROW_EXCEPTIONS( transaction_type_exception, "Fail to convert transaction, --pack-action-data likely needed" )
+         } UPCX_RETHROW_EXCEPTIONS( transaction_type_exception, "Fail to convert transaction, --pack-action-data likely needed" )
       }
    });
 
@@ -2604,7 +2604,7 @@ int main( int argc, char** argv ) {
       packed_transaction_v0 packed_trx;
       try {
          fc::from_variant<packed_transaction_v0>( packed_trx_var, packed_trx );
-      } EOS_RETHROW_EXCEPTIONS( transaction_type_exception, "Invalid packed transaction format: '${data}'",
+      } UPCX_RETHROW_EXCEPTIONS( transaction_type_exception, "Invalid packed transaction format: '${data}'",
                                 ("data", fc::json::to_string(packed_trx_var, fc::time_point::maximum())))
       const signed_transaction& strx = packed_trx.get_signed_transaction();
       fc::variant trx_var;
@@ -2629,7 +2629,7 @@ int main( int argc, char** argv ) {
       bytes packed_action_data_string;
       try {
          packed_action_data_string = variant_to_bin(name(unpacked_action_data_account_string), name(unpacked_action_data_name_string), unpacked_action_data_json);
-      } EOS_RETHROW_EXCEPTIONS(transaction_type_exception, "Fail to parse unpacked action data JSON")
+      } UPCX_RETHROW_EXCEPTIONS(transaction_type_exception, "Fail to parse unpacked action data JSON")
       std::cout << fc::to_hex(packed_action_data_string.data(), packed_action_data_string.size()) << std::endl;
    });
 
@@ -2642,7 +2642,7 @@ int main( int argc, char** argv ) {
    unpack_action_data->add_option("name", packed_action_data_name_string, localized("The name of the function that's called by this action"))->required();
    unpack_action_data->add_option("packed_action_data", packed_action_data_string, localized("The action data expressed as packed hex string"))->required();
    unpack_action_data->callback([&] {
-      EOS_ASSERT( packed_action_data_string.size() >= 2, transaction_type_exception, "No packed_action_data found" );
+      UPCX_ASSERT( packed_action_data_string.size() >= 2, transaction_type_exception, "No packed_action_data found" );
       vector<char> packed_action_data_blob(packed_action_data_string.size()/2);
       fc::from_hex(packed_action_data_string, packed_action_data_blob.data(), packed_action_data_blob.size());
       fc::variant unpacked_action_data_json = bin_to_variant(name(packed_action_data_account_string), name(packed_action_data_name_string), packed_action_data_blob);
@@ -2666,7 +2666,7 @@ int main( int argc, char** argv ) {
       signed_transaction trx;
       try {
         abi_serializer::from_variant( trx_var, trx, abi_serializer_resolver_empty, abi_serializer::create_yield_function( abi_serializer_max_time ) );
-      } EOS_RETHROW_EXCEPTIONS(transaction_type_exception, "Invalid transaction format: '${data}'",
+      } UPCX_RETHROW_EXCEPTIONS(transaction_type_exception, "Invalid transaction format: '${data}'",
                                ("data", fc::json::to_string(trx_var, fc::time_point::maximum())))
 
       std::optional<chain_id_type> chain_id;
@@ -2703,7 +2703,7 @@ int main( int argc, char** argv ) {
    getBlock->add_flag("--header-state", get_bhs, localized("Get block header state from fork database instead") );
    getBlock->add_flag("--info", get_binfo, localized("Get block info from the blockchain by block num only") );
    getBlock->callback([&blockArg, &get_bhs, &get_binfo] {
-      EOSC_ASSERT( !(get_bhs && get_binfo), "ERROR: Either --header-state or --info can be set" );
+      UPCXC_ASSERT( !(get_bhs && get_binfo), "ERROR: Either --header-state or --info can be set" );
       if (get_binfo) {
          std::optional<int64_t> block_num;
          try {
@@ -2711,7 +2711,7 @@ int main( int argc, char** argv ) {
          } catch (...) {
             // error is handled in assertion below
          }
-         EOSC_ASSERT( block_num && (*block_num > 0), "Invalid block num: ${block_num}", ("block_num", blockArg) );
+         UPCXC_ASSERT( block_num && (*block_num > 0), "Invalid block num: ${block_num}", ("block_num", blockArg) );
          const auto arg = fc::variant_object("block_num", static_cast<uint32_t>(*block_num));
          std::cout << fc::json::to_pretty_string(call(get_block_info_func, arg)) << std::endl;
       } else {
@@ -2764,7 +2764,7 @@ int main( int argc, char** argv ) {
             abi = fc::json::to_pretty_string(abi_d);
       }
       catch(chain::missing_chain_api_plugin_exception&) {
-         //see if this is an old nodeos that doesn't support get_raw_code_and_abi
+         //see if this is an old nodupcx that doesn't support get_raw_code_and_abi
          const auto old_result = call(get_code_func, fc::mutable_variant_object("account_name", accountName)("code_as_wasm",code_as_wasm));
          code_hash = old_result["code_hash"].as_string();
          if(code_as_wasm) {
@@ -2980,7 +2980,7 @@ int main( int argc, char** argv ) {
       public_key_type public_key;
       try {
          public_key = public_key_type(public_key_str);
-      } EOS_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", public_key_str))
+      } UPCX_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", public_key_str))
       auto arg = fc::mutable_variant_object( "public_key", public_key);
       std::cout << fc::json::to_pretty_string(call(get_key_accounts_func, arg)) << std::endl;
    });
@@ -3371,7 +3371,7 @@ int main( int argc, char** argv ) {
 
         std::cerr << localized(("Reading WASM from " + wasmPath + "...").c_str()) << std::endl;
         fc::read_file_contents(wasmPath, wasm);
-        EOS_ASSERT( !wasm.empty(), wasm_file_not_found, "no wasm file found ${f}", ("f", wasmPath) );
+        UPCX_ASSERT( !wasm.empty(), wasm_file_not_found, "no wasm file found ${f}", ("f", wasmPath) );
 
         const string binary_wasm_header("\x00\x61\x73\x6d\x01\x00\x00\x00", 8);
         if(wasm.compare(0, 8, binary_wasm_header))
@@ -3425,7 +3425,7 @@ int main( int argc, char** argv ) {
            abiPath = (cpath / abiPath).generic_string();
         }
 
-        EOS_ASSERT( fc::exists( abiPath ), abi_file_not_found, "no abi file found ${f}", ("f", abiPath)  );
+        UPCX_ASSERT( fc::exists( abiPath ), abi_file_not_found, "no abi file found ${f}", ("f", abiPath)  );
 
         abi_bytes = fc::raw::pack(fc::json::from_file(abiPath).as<abi_def>());
       } else {
@@ -3439,7 +3439,7 @@ int main( int argc, char** argv ) {
       if (!duplicate) {
          try {
             actions.emplace_back( create_setabi(name(account), abi_bytes) );
-         } EOS_RETHROW_EXCEPTIONS(abi_type_exception,  "Fail to parse ABI JSON")
+         } UPCX_RETHROW_EXCEPTIONS(abi_type_exception,  "Fail to parse ABI JSON")
          if ( shouldSend ) {
             std::cerr << localized("Setting ABI...") << std::endl;
             if( tx_compression == tx_compression_type::default_compression )
@@ -3455,7 +3455,7 @@ int main( int argc, char** argv ) {
    add_standard_transaction_options_plus_signing(codeSubcommand, "account@active");
    add_standard_transaction_options_plus_signing(abiSubcommand, "account@active");
    contractSubcommand->callback([&] {
-      if(!contract_clear) EOS_ASSERT( !contractPath.empty(), contract_exception, " contract-dir is null ", ("f", contractPath) );
+      if(!contract_clear) UPCX_ASSERT( !contractPath.empty(), contract_exception, " contract-dir is null ", ("f", contractPath) );
       shouldSend = false;
       set_code_callback();
       set_abi_callback();
@@ -3484,7 +3484,7 @@ int main( int argc, char** argv ) {
    auto setActionPermission = set_action_permission_subcommand(setAction);
 
    // Transfer subcommand
-   string con = "eosio.token";
+   string con = "upcx.token";
    string sender;
    string recipient;
    string amount;
@@ -3561,8 +3561,8 @@ int main( int argc, char** argv ) {
    createWallet->add_option("-f,--file", password_file, localized("Name of file to write wallet password output to. (Must be set, unless \"--to-console\" is passed"));
    createWallet->add_flag( "--to-console", print_console, localized("Print password to console."));
    createWallet->callback([&wallet_name, &password_file, &print_console] {
-      EOSC_ASSERT( !password_file.empty() ^ print_console, "ERROR: Either indicate a file using \"--file\" or pass \"--to-console\"" );
-      EOSC_ASSERT( password_file.empty() || !std::ofstream(password_file.c_str()).fail(), "ERROR: Failed to create file in specified path" );
+      UPCXC_ASSERT( !password_file.empty() ^ print_console, "ERROR: Either indicate a file using \"--file\" or pass \"--to-console\"" );
+      UPCXC_ASSERT( password_file.empty() || !std::ofstream(password_file.c_str()).fail(), "ERROR: Failed to create file in specified path" );
 
       const auto& v = call(wallet_url, wallet_create, wallet_name);
       std::cout << localized("Creating wallet: ${wallet_name}", ("wallet_name", wallet_name)) << std::endl;
@@ -3632,7 +3632,7 @@ int main( int argc, char** argv ) {
       try {
          wallet_key = private_key_type( wallet_key_str );
       } catch (...) {
-         EOS_THROW(private_key_type_exception, "Invalid private key")
+         UPCX_THROW(private_key_type_exception, "Invalid private key")
       }
       public_key_type pubkey = wallet_key.get_public_key();
 
@@ -3653,7 +3653,7 @@ int main( int argc, char** argv ) {
       try {
          pubkey = public_key_type( wallet_rm_key_str );
       } catch (...) {
-         EOS_THROW(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", wallet_rm_key_str))
+         UPCX_THROW(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", wallet_rm_key_str))
       }
       fc::variants vs = {fc::variant(wallet_name), fc::variant(wallet_pw), fc::variant(wallet_rm_key_str)};
       call(wallet_url, wallet_remove_key, vs);
@@ -3698,10 +3698,10 @@ int main( int argc, char** argv ) {
       std::cout << fc::json::to_pretty_string(v) << std::endl;
    });
 
-   auto stopKeosd = wallet->add_subcommand("stop", localized("Stop ${k}.", ("k", key_store_executable_name)));
-   stopKeosd->callback([] {
-      const auto& v = call(wallet_url, keosd_stop);
-      if ( !v.is_object() || v.get_object().size() != 0 ) { //on success keosd responds with empty object
+   auto stopKupcxd = wallet->add_subcommand("stop", localized("Stop ${k}.", ("k", key_store_executable_name)));
+   stopKupcxd->callback([] {
+      const auto& v = call(wallet_url, kupcxd_stop);
+      if ( !v.is_object() || v.get_object().size() != 0 ) { //on success kupcxd responds with empty object
          std::cerr << fc::json::to_pretty_string(v) << std::endl;
       } else {
          std::cout << "OK" << std::endl;
@@ -3726,7 +3726,7 @@ int main( int argc, char** argv ) {
 
    sign->callback([&] {
 
-      EOSC_ASSERT( str_private_key.empty() || str_public_key.empty(), "ERROR: Either -k/--private-key or --public-key or none of them can be set" );
+      UPCXC_ASSERT( str_private_key.empty() || str_public_key.empty(), "ERROR: Either -k/--private-key or --public-key or none of them can be set" );
       fc::variant trx_var = json_from_file_or_string(trx_json_to_sign);
 
       // If transaction was packed, unpack it before signing 
@@ -3737,7 +3737,7 @@ int main( int argc, char** argv ) {
             packed_transaction_v0 packed_trx;
             try {
               fc::from_variant<packed_transaction_v0>( trx_var, packed_trx );
-            } EOS_RETHROW_EXCEPTIONS( transaction_type_exception, "Invalid packed transaction format: '${data}'",
+            } UPCX_RETHROW_EXCEPTIONS( transaction_type_exception, "Invalid packed transaction format: '${data}'",
                                 ("data", fc::json::to_string(trx_var, fc::time_point::maximum())))
            const signed_transaction& strx = packed_trx.get_signed_transaction();
            trx_var = strx;
@@ -3748,7 +3748,7 @@ int main( int argc, char** argv ) {
       signed_transaction trx;
       try {
         abi_serializer::from_variant( trx_var, trx, abi_serializer_resolver_empty, abi_serializer::create_yield_function( abi_serializer_max_time ) );
-      } EOS_RETHROW_EXCEPTIONS(transaction_type_exception, "Invalid transaction format: '${data}'",
+      } UPCX_RETHROW_EXCEPTIONS(transaction_type_exception, "Invalid transaction format: '${data}'",
                                ("data", fc::json::to_string(trx_var, fc::time_point::maximum())))
 
       std::optional<chain_id_type> chain_id;
@@ -3765,7 +3765,7 @@ int main( int argc, char** argv ) {
          public_key_type pub_key;
          try {
             pub_key = public_key_type(str_public_key);
-         } EOS_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", str_public_key))
+         } UPCX_RETHROW_EXCEPTIONS(public_key_type_exception, "Invalid public key: ${public_key}", ("public_key", str_public_key))
          fc::variant keys_var(flat_set<public_key_type>{ pub_key });
          sign_transaction(trx, keys_var, *chain_id);
       } else {
@@ -3778,7 +3778,7 @@ int main( int argc, char** argv ) {
          private_key_type priv_key;
          try {
             priv_key = private_key_type(str_private_key);
-         } EOS_RETHROW_EXCEPTIONS(private_key_type_exception, "Invalid private key")
+         } UPCX_RETHROW_EXCEPTIONS(private_key_type_exception, "Invalid private key")
          trx.sign(priv_key, *chain_id);
       }
 
@@ -3894,26 +3894,26 @@ int main( int argc, char** argv ) {
       transaction proposed_trx;
       try {
          proposed_trx = trx_var.as<transaction>();
-      } EOS_RETHROW_EXCEPTIONS(transaction_type_exception, "Invalid transaction format: '${data}'",
+      } UPCX_RETHROW_EXCEPTIONS(transaction_type_exception, "Invalid transaction format: '${data}'",
                                ("data", fc::json::to_string(trx_var, fc::time_point::maximum())))
       bytes proposed_trx_serialized = variant_to_bin( name(proposed_contract), name(proposed_action), trx_var );
 
       vector<permission_level> reqperm;
       try {
          reqperm = requested_perm_var.as<vector<permission_level>>();
-      } EOS_RETHROW_EXCEPTIONS(transaction_type_exception, "Wrong requested permissions format: '${data}'", ("data",requested_perm_var));
+      } UPCX_RETHROW_EXCEPTIONS(transaction_type_exception, "Wrong requested permissions format: '${data}'", ("data",requested_perm_var));
 
       vector<permission_level> trxperm;
       try {
          trxperm = transaction_perm_var.as<vector<permission_level>>();
-      } EOS_RETHROW_EXCEPTIONS(transaction_type_exception, "Wrong transaction permissions format: '${data}'", ("data",transaction_perm_var));
+      } UPCX_RETHROW_EXCEPTIONS(transaction_type_exception, "Wrong transaction permissions format: '${data}'", ("data",transaction_perm_var));
 
       auto accountPermissions = get_account_permissions(tx_permission);
       if (accountPermissions.empty()) {
          if (!proposer.empty()) {
             accountPermissions = vector<permission_level>{{name(proposer), config::active_name}};
          } else {
-            EOS_THROW(missing_auth_exception, "Authority is not provided (either by multisig parameter <proposer> or -p)");
+            UPCX_THROW(missing_auth_exception, "Authority is not provided (either by multisig parameter <proposer> or -p)");
          }
       }
       if (proposer.empty()) {
@@ -3938,7 +3938,7 @@ int main( int argc, char** argv ) {
          ("requested", requested_perm_var)
          ("trx", trx_var);
 
-      send_actions({chain::action{accountPermissions, "eosio.msig"_n, "propose"_n, variant_to_bin( "eosio.msig"_n, "propose"_n, args ) }}, signing_keys_opt.get_keys());
+      send_actions({chain::action{accountPermissions, "upcx.msig"_n, "propose"_n, variant_to_bin( "upcx.msig"_n, "propose"_n, args ) }}, signing_keys_opt.get_keys());
    });
 
    //multisig propose transaction
@@ -3958,7 +3958,7 @@ int main( int argc, char** argv ) {
          if (!proposer.empty()) {
             accountPermissions = vector<permission_level>{{name(proposer), config::active_name}};
          } else {
-            EOS_THROW(missing_auth_exception, "Authority is not provided (either by multisig parameter <proposer> or -p)");
+            UPCX_THROW(missing_auth_exception, "Authority is not provided (either by multisig parameter <proposer> or -p)");
          }
       }
       if (proposer.empty()) {
@@ -3971,7 +3971,7 @@ int main( int argc, char** argv ) {
          ("requested", requested_perm_var)
          ("trx", trx_var);
 
-      send_actions({chain::action{accountPermissions, "eosio.msig"_n, "propose"_n, variant_to_bin( "eosio.msig"_n, "propose"_n, args ) }}, signing_keys_opt.get_keys());
+      send_actions({chain::action{accountPermissions, "upcx.msig"_n, "propose"_n, variant_to_bin( "upcx.msig"_n, "propose"_n, args ) }}, signing_keys_opt.get_keys());
    });
 
 
@@ -3984,20 +3984,20 @@ int main( int argc, char** argv ) {
 
    review->callback([&] {
       const auto result1 = call(get_table_func, fc::mutable_variant_object("json", true)
-                                 ("code", "eosio.msig")
+                                 ("code", "upcx.msig")
                                  ("scope", proposer)
                                  ("table", "proposal")
                                  ("table_key", "")
                                  ("lower_bound", name(proposal_name).to_uint64_t())
                                  ("upper_bound", name(proposal_name).to_uint64_t() + 1)
-                                 // Less than ideal upper_bound usage preserved so cleos can still work with old buggy nodeos versions
-                                 // Change to name(proposal_name).value when cleos no longer needs to support nodeos versions older than 1.5.0
+                                 // Less than ideal upper_bound usage preserved so clupcx can still work with old buggy nodupcx versions
+                                 // Change to name(proposal_name).value when clupcx no longer needs to support nodupcx versions older than 1.5.0
                                  ("limit", 1)
                            );
       //std::cout << fc::json::to_pretty_string(result) << std::endl;
 
       const auto& rows1 = result1.get_object()["rows"].get_array();
-      // Condition in if statement below can simply be rows.empty() when cleos no longer needs to support nodeos versions older than 1.5.0
+      // Condition in if statement below can simply be rows.empty() when clupcx no longer needs to support nodupcx versions older than 1.5.0
       if( rows1.empty() || rows1[0].get_object()["proposal_name"] != proposal_name ) {
          std::cerr << "Proposal not found" << std::endl;
          return;
@@ -4012,7 +4012,7 @@ int main( int argc, char** argv ) {
       };
 
       std::map<permission_level, std::pair<fc::time_point, approval_status>>                               all_approvals;
-      std::map<eosio::account_name, std::pair<fc::time_point, vector<decltype(all_approvals)::iterator>>>  provided_approvers;
+      std::map<upcx::account_name, std::pair<fc::time_point, vector<decltype(all_approvals)::iterator>>>  provided_approvers;
 
       bool new_multisig = true;
       if( show_approvals_in_multisig_review ) {
@@ -4020,14 +4020,14 @@ int main( int argc, char** argv ) {
 
          try {
             const auto& result2 = call(get_table_func, fc::mutable_variant_object("json", true)
-                                       ("code", "eosio.msig")
+                                       ("code", "upcx.msig")
                                        ("scope", proposer)
                                        ("table", "approvals2")
                                        ("table_key", "")
                                        ("lower_bound", name(proposal_name).to_uint64_t())
                                        ("upper_bound", name(proposal_name).to_uint64_t() + 1)
-                                       // Less than ideal upper_bound usage preserved so cleos can still work with old buggy nodeos versions
-                                       // Change to name(proposal_name).value when cleos no longer needs to support nodeos versions older than 1.5.0
+                                       // Less than ideal upper_bound usage preserved so clupcx can still work with old buggy nodupcx versions
+                                       // Change to name(proposal_name).value when clupcx no longer needs to support nodupcx versions older than 1.5.0
                                        ("limit", 1)
                                  );
             rows2 = result2.get_object()["rows"].get_array();
@@ -4052,14 +4052,14 @@ int main( int argc, char** argv ) {
             }
          } else {
             const auto result3 = call(get_table_func, fc::mutable_variant_object("json", true)
-                                       ("code", "eosio.msig")
+                                       ("code", "upcx.msig")
                                        ("scope", proposer)
                                        ("table", "approvals")
                                        ("table_key", "")
                                        ("lower_bound", name(proposal_name).to_uint64_t())
                                        ("upper_bound", name(proposal_name).to_uint64_t() + 1)
-                                       // Less than ideal upper_bound usage preserved so cleos can still work with old buggy nodeos versions
-                                       // Change to name(proposal_name).value when cleos no longer needs to support nodeos versions older than 1.5.0
+                                       // Less than ideal upper_bound usage preserved so clupcx can still work with old buggy nodupcx versions
+                                       // Change to name(proposal_name).value when clupcx no longer needs to support nodupcx versions older than 1.5.0
                                        ("limit", 1)
                                  );
             const auto& rows3 = result3.get_object()["rows"].get_array();
@@ -4085,18 +4085,18 @@ int main( int argc, char** argv ) {
          if( new_multisig ) {
             for( auto& a : provided_approvers ) {
                const auto result4 = call(get_table_func, fc::mutable_variant_object("json", true)
-                                          ("code", "eosio.msig")
-                                          ("scope", "eosio.msig")
+                                          ("code", "upcx.msig")
+                                          ("scope", "upcx.msig")
                                           ("table", "invals")
                                           ("table_key", "")
                                           ("lower_bound", a.first.to_uint64_t())
                                           ("upper_bound", a.first.to_uint64_t() + 1)
-                                          // Less than ideal upper_bound usage preserved so cleos can still work with old buggy nodeos versions
-                                          // Change to name(proposal_name).value when cleos no longer needs to support nodeos versions older than 1.5.0
+                                          // Less than ideal upper_bound usage preserved so clupcx can still work with old buggy nodupcx versions
+                                          // Change to name(proposal_name).value when clupcx no longer needs to support nodupcx versions older than 1.5.0
                                           ("limit", 1)
                                     );
                const auto& rows4 = result4.get_object()["rows"].get_array();
-               if( rows4.empty() || rows4[0].get_object()["account"].as<eosio::name>() != a.first ) {
+               if( rows4.empty() || rows4[0].get_object()["account"].as<upcx::name>() != a.first ) {
                   continue;
                }
 
@@ -4188,7 +4188,7 @@ int main( int argc, char** argv ) {
       }
 
       auto accountPermissions = get_account_permissions(tx_permission, {name(proposer), config::active_name});
-      send_actions({chain::action{accountPermissions, "eosio.msig"_n, name(action), variant_to_bin( "eosio.msig"_n, name(action), args ) }}, signing_keys_opt.get_keys());
+      send_actions({chain::action{accountPermissions, "upcx.msig"_n, name(action), variant_to_bin( "upcx.msig"_n, name(action), args ) }}, signing_keys_opt.get_keys());
    };
 
    // multisig approve
@@ -4218,7 +4218,7 @@ int main( int argc, char** argv ) {
          ("account", invalidator);
 
       auto accountPermissions = get_account_permissions(tx_permission, {name(invalidator), config::active_name});
-      send_actions({chain::action{accountPermissions, "eosio.msig"_n, "invalidate"_n, variant_to_bin( "eosio.msig"_n, "invalidate"_n, args ) }}, signing_keys_opt.get_keys());
+      send_actions({chain::action{accountPermissions, "upcx.msig"_n, "invalidate"_n, variant_to_bin( "upcx.msig"_n, "invalidate"_n, args ) }}, signing_keys_opt.get_keys());
    });
 
    // multisig cancel
@@ -4234,7 +4234,7 @@ int main( int argc, char** argv ) {
          if (!canceler.empty()) {
             accountPermissions = vector<permission_level>{{name(canceler), config::active_name}};
          } else {
-            EOS_THROW(missing_auth_exception, "Authority is not provided (either by multisig parameter <canceler> or -p)");
+            UPCX_THROW(missing_auth_exception, "Authority is not provided (either by multisig parameter <canceler> or -p)");
          }
       }
       if (canceler.empty()) {
@@ -4245,7 +4245,7 @@ int main( int argc, char** argv ) {
          ("proposal_name", proposal_name)
          ("canceler", canceler);
 
-      send_actions({chain::action{accountPermissions, "eosio.msig"_n, "cancel"_n, variant_to_bin( "eosio.msig"_n, "cancel"_n, args ) }}, signing_keys_opt.get_keys());
+      send_actions({chain::action{accountPermissions, "upcx.msig"_n, "cancel"_n, variant_to_bin( "upcx.msig"_n, "cancel"_n, args ) }}, signing_keys_opt.get_keys());
       }
    );
 
@@ -4262,7 +4262,7 @@ int main( int argc, char** argv ) {
          if (!executer.empty()) {
             accountPermissions = vector<permission_level>{{name(executer), config::active_name}};
          } else {
-            EOS_THROW(missing_auth_exception, "Authority is not provided (either by multisig parameter <executer> or -p)");
+            UPCX_THROW(missing_auth_exception, "Authority is not provided (either by multisig parameter <executer> or -p)");
          }
       }
       if (executer.empty()) {
@@ -4274,7 +4274,7 @@ int main( int argc, char** argv ) {
          ("proposal_name", proposal_name)
          ("executer", executer);
 
-      send_actions({chain::action{accountPermissions, "eosio.msig"_n, "exec"_n, variant_to_bin( "eosio.msig"_n, "exec"_n, args ) }}, signing_keys_opt.get_keys());
+      send_actions({chain::action{accountPermissions, "upcx.msig"_n, "exec"_n, variant_to_bin( "upcx.msig"_n, "exec"_n, args ) }}, signing_keys_opt.get_keys());
       }
    );
 
@@ -4283,7 +4283,7 @@ int main( int argc, char** argv ) {
    wrap->require_subcommand();
 
    // wrap exec
-   string wrap_con = "eosio.wrap";
+   string wrap_con = "upcx.wrap";
    executer = "";
    string trx_to_exec;
    auto wrap_exec = wrap->add_subcommand("exec", localized("Execute a transaction while bypassing authorization checks"));
@@ -4308,7 +4308,7 @@ int main( int argc, char** argv ) {
    });
 
    // system subcommand
-   auto system = app.add_subcommand("system", localized("Send eosio.system contract action to the blockchain."));
+   auto system = app.add_subcommand("system", localized("Send upcx.system contract action to the blockchain."));
    system->require_subcommand();
 
    auto createAccountSystem = create_account_subcommand( system, false /*simple*/ );

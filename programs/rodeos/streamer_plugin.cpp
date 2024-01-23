@@ -5,9 +5,9 @@
 #include "streams/rabbitmq.hpp"
 #include "streams/stream.hpp"
 
-#include <abieos.hpp>
-#include <eosio/abi.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <abiupcx.hpp>
+#include <upcx/abi.hpp>
+#include <upcx/chain/exceptions.hpp>
 #include <fc/exception/exception.hpp>
 #include <memory>
 
@@ -60,15 +60,15 @@ void streamer_plugin::plugin_initialize(const variables_map& options) {
 
 void streamer_plugin::plugin_startup() {
    cloner_plugin* cloner = app().find_plugin<cloner_plugin>();
-   EOS_ASSERT( cloner, eosio::chain::plugin_config_exception, "cloner_plugin not found" );
+   UPCX_ASSERT( cloner, upcx::chain::plugin_config_exception, "cloner_plugin not found" );
    cloner->set_streamer([this](const char* data, uint64_t data_size) { stream_data(data, data_size); });
 }
 
 void streamer_plugin::plugin_shutdown() {}
 
 void streamer_plugin::stream_data(const char* data, uint64_t data_size) {
-   eosio::input_stream bin(data, data_size);
-   stream_wrapper      res = eosio::from_bin<stream_wrapper>(bin);
+   upcx::input_stream bin(data, data_size);
+   stream_wrapper      res = upcx::from_bin<stream_wrapper>(bin);
    const auto&         sw  = std::get<stream_wrapper_v0>(res);
    publish_to_streams(sw);
 }

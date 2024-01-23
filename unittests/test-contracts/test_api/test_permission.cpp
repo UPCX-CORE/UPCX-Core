@@ -1,32 +1,32 @@
 #include <limits>
 
-#include <eosio/action.hpp>
-#include <eosio/eosio.hpp>
-#include <eosio/permission.hpp>
-#include <eosio/print.hpp>
-#include <eosio/serialize.hpp>
+#include <upcx/action.hpp>
+#include <upcx/upcx.hpp>
+#include <upcx/permission.hpp>
+#include <upcx/print.hpp>
+#include <upcx/serialize.hpp>
 
 #include "test_api.hpp"
 
 
 
 struct check_auth_msg {
-   eosio::name                    account;
-   eosio::name                    permission;
-   std::vector<eosio::public_key> pubkeys;
+   upcx::name                    account;
+   upcx::name                    permission;
+   std::vector<upcx::public_key> pubkeys;
 
-   EOSLIB_SERIALIZE( check_auth_msg, (account)(permission)(pubkeys)  )
+   UPCXLIB_SERIALIZE( check_auth_msg, (account)(permission)(pubkeys)  )
 };
 
 void test_permission::check_authorization( uint64_t receiver, uint64_t code, uint64_t action ) {
    (void)code;
    (void)action;
-   using namespace eosio;
+   using namespace upcx;
 
    auto self = receiver;
    auto params = unpack_action_data<check_auth_msg>();
    auto packed_pubkeys = pack(params.pubkeys);
-   int64_t res64 = eosio::check_permission_authorization( params.account,
+   int64_t res64 = upcx::check_permission_authorization( params.account,
                                                      params.permission,
                                                      packed_pubkeys.data(), packed_pubkeys.size(),
                                                      (const char*)0,        0,
@@ -42,31 +42,31 @@ void test_permission::check_authorization( uint64_t receiver, uint64_t code, uin
 }
 
 struct test_permission_last_used_msg {
-   eosio::name account;
-   eosio::name permission;
+   upcx::name account;
+   upcx::name permission;
    int64_t     last_used_time;
 
-   EOSLIB_SERIALIZE( test_permission_last_used_msg, (account)(permission)(last_used_time) )
+   UPCXLIB_SERIALIZE( test_permission_last_used_msg, (account)(permission)(last_used_time) )
 };
 
 void test_permission::test_permission_last_used( uint64_t /* receiver */, uint64_t code, uint64_t action ) {
    (void)code;
    (void)action;
-   using namespace eosio;
+   using namespace upcx;
 
    auto params = unpack_action_data<test_permission_last_used_msg>();
 
    time_point msec{ microseconds{params.last_used_time}};
-   eosio_assert( eosio::get_permission_last_used(params.account, params.permission) == msec, "unexpected last used permission time" );
+   upcx_assert( upcx::get_permission_last_used(params.account, params.permission) == msec, "unexpected last used permission time" );
 }
 
 void test_permission::test_account_creation_time( uint64_t /* receiver */, uint64_t code, uint64_t action ) {
    (void)code;
    (void)action;
-   using namespace eosio;
+   using namespace upcx;
 
    auto params = unpack_action_data<test_permission_last_used_msg>();
 
    time_point msec{ microseconds{params.last_used_time}};
-   eosio_assert( eosio::get_account_creation_time(params.account) == msec, "unexpected account creation time" );
+   upcx_assert( upcx::get_account_creation_time(params.account) == msec, "unexpected account creation time" );
 }

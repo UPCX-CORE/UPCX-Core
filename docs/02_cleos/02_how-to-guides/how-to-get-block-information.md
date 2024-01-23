@@ -6,14 +6,14 @@ Query infomation about a block.
 
 Make sure to meet the following requirements:
 
-* Familiarize with the [`cleos get block`](../03_command-reference/get/block.md) command and its parameters.
-* Install the currently supported version of `cleos`.
+- Familiarize with the [`clupcx get block`](../03_command-reference/get/block.md) command and its parameters.
+- Install the currently supported version of `clupcx`.
 
 [[info | Note]]
-| `cleos` is bundled with the EOSIO software. [Installing EOSIO](../../00_install/index.md) will also install `cleos`.
+| `clupcx` is bundled with the UPCX software. [Installing UPCX](../../00_install/index.md) will also install `clupcx`.
 
-* Understand what a [block](https://developers.eos.io/welcome/v2.1/glossary/index/#block) is and its role in the blockchain.
-* Understand the [block lifecycle](https://developers.eos.io/welcome/v2.1/protocol-guides/consensus_protocol/#5-block-lifecycle) in the EOSIO consensus protocol.
+- Understand what a [block](https://developers.upcx.io/welcome/v2.1/glossary/index/#block) is and its role in the blockchain.
+- Understand the [block lifecycle](https://developers.upcx.io/welcome/v2.1/protocol-guides/consensus_protocol/#5-block-lifecycle) in the UPCX consensus protocol.
 
 ## Steps
 
@@ -22,20 +22,21 @@ Perform the step below:
 Retrieve full or partial information about a block:
 
 ```sh
-cleos get block [--info] <block_number_or_id>
+clupcx get block [--info] <block_number_or_id>
 ```
 
 Where `block_number_or_id` is the specified block number or block ID and `--info` is an optional parameter to retrieve a partial subset of the block information.
 
 Some examples are provided below:
 
-* Query the testnet to retrieve full block information about block number `48351112` or block ID `02e1c7888a92206573ae38d00e09366c7ba7bc54cd8b7996506f7d2a619c43ba`:
+- Query the testnet to retrieve full block information about block number `48351112` or block ID `02e1c7888a92206573ae38d00e09366c7ba7bc54cd8b7996506f7d2a619c43ba`:
 
 **Example Output**
 
 ```sh
-cleos -u https://api.testnet.eos.io get block 48351112
+clupcx -u https://api.testnet.upcx.io get block 48351112
 ```
+
 ```json
 {
   "timestamp": "2021-01-28T17:58:59.500",
@@ -54,13 +55,14 @@ cleos -u https://api.testnet.eos.io get block 48351112
 }
 ```
 
-* Query the testnet to retrieve full block information about block ID `02e1c7888a92206573ae38d00e09366c7ba7bc54cd8b7996506f7d2a619c43ba`:
+- Query the testnet to retrieve full block information about block ID `02e1c7888a92206573ae38d00e09366c7ba7bc54cd8b7996506f7d2a619c43ba`:
 
 **Example Output**
 
 ```sh
-cleos -u https://api.testnet.eos.io get block 02e1c7888a92206573ae38d00e09366c7ba7bc54cd8b7996506f7d2a619c43ba
+clupcx -u https://api.testnet.upcx.io get block 02e1c7888a92206573ae38d00e09366c7ba7bc54cd8b7996506f7d2a619c43ba
 ```
+
 ```json
 {
   "timestamp": "2021-01-28T17:58:59.500",
@@ -79,13 +81,14 @@ cleos -u https://api.testnet.eos.io get block 02e1c7888a92206573ae38d00e09366c7b
 }
 ```
 
-* Query the local chain to retrieve partial block information about block number `1`:
+- Query the local chain to retrieve partial block information about block number `1`:
 
 **Example Output**
 
 ```sh
-cleos get block --info 1
+clupcx get block --info 1
 ```
+
 ```json
 {
   "block_num": 1,

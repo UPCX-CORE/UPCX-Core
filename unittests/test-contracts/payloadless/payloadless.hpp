@@ -1,11 +1,11 @@
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <upcx/upcx.hpp>
 
-class [[eosio::contract]] payloadless : public eosio::contract {
+class [[upcx::contract]] payloadless : public upcx::contract {
 public:
-   using eosio::contract::contract;
+   using upcx::contract::contract;
 
-   [[eosio::action]]
+   [[upcx::action]]
    void doit();
 };

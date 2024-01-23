@@ -1,12 +1,12 @@
 #pragma once
 
-#include <b1/rodeos/callbacks/action.hpp>
-#include <b1/rodeos/callbacks/console.hpp>
-#include <b1/rodeos/callbacks/kv.hpp>
-#include <b1/rodeos/callbacks/query.hpp>
-#include <eosio/ship_protocol.hpp>
+#include <b1/rodupcx/callbacks/action.hpp>
+#include <b1/rodupcx/callbacks/console.hpp>
+#include <b1/rodupcx/callbacks/kv.hpp>
+#include <b1/rodupcx/callbacks/query.hpp>
+#include <upcx/ship_protocol.hpp>
 
-namespace b1::rodeos::wasm_ql {
+namespace b1::rodupcx::wasm_ql {
 
 class backend_cache;
 
@@ -28,7 +28,7 @@ struct shared_state {
 
 struct thread_state : action_state, console_state, query_state {
    std::shared_ptr<const shared_state> shared = {};
-   eosio::vm::wasm_allocator           wa     = {};
+   upcx::vm::wasm_allocator           wa     = {};
 };
 
 class thread_state_cache {
@@ -68,9 +68,9 @@ const std::vector<char>& query_get_required_keys(wasm_ql::thread_state& thread_s
 const std::vector<char>& query_send_transaction(wasm_ql::thread_state&   thread_state,
                                                 const std::vector<char>& contract_kv_prefix, std::string_view body,
                                                 bool return_trace_on_except);
-eosio::ship_protocol::transaction_trace_v0
+upcx::ship_protocol::transaction_trace_v0
 query_send_transaction(wasm_ql::thread_state& thread_state, const std::vector<char>& contract_kv_prefix,
-                       const eosio::ship_protocol::packed_transaction& trx, const rocksdb::Snapshot* snapshot,
+                       const upcx::ship_protocol::packed_transaction& trx, const rocksdb::Snapshot* snapshot,
                        std::vector<std::vector<char>>& memory, bool return_trace_on_except);
 
-} // namespace b1::rodeos::wasm_ql
+} // namespace b1::rodupcx::wasm_ql

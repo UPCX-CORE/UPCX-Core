@@ -1,11 +1,11 @@
 ---
-content_title: Nodeos Common Setups
+content_title: Nodupcx Common Setups
 ---
 
-`Nodeos` generally runs in two modes:
+`Nodupcx` generally runs in two modes:
 
- * [Producing Node](00_producing-node.md)
- * [Non-Producing Node](01_non-producing-node.md)
+- [Producing Node](00_producing-node.md)
+- [Non-Producing Node](01_non-producing-node.md)
 
 `Producing Nodes` are configured for block production. They connect to the peer-to-peer network and actively produce new blocks. Loose transactions are also validated and relayed. On mainnet, `Producing Nodes` only produce blocks if their assigned block producer is part of an active schedule.
 

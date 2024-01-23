@@ -1,13 +1,13 @@
-#include <eosio/test_control_api_plugin/test_control_api_plugin.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <upcx/test_control_api_plugin/test_control_api_plugin.hpp>
+#include <upcx/chain/exceptions.hpp>
 
 #include <fc/io/json.hpp>
 
-namespace eosio {
+namespace upcx {
 
 static appbase::abstract_plugin& _test_control_api_plugin = app().register_plugin<test_control_api_plugin>();
 
-using namespace eosio;
+using namespace upcx;
 
 class test_control_api_plugin_impl {
 public:

@@ -1,14 +1,14 @@
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <upcx/upcx.hpp>
 
-class [[eosio::contract]] asserter : public eosio::contract {
+class [[upcx::contract]] asserter : public upcx::contract {
 public:
-   using eosio::contract::contract;
+   using upcx::contract::contract;
 
-   [[eosio::action]]
+   [[upcx::action]]
    void procassert( int8_t condition, std::string message );
 
-   [[eosio::action]]
+   [[upcx::action]]
    void provereset();
 };

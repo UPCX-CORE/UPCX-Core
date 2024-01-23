@@ -1,8 +1,8 @@
 #pragma once
 
-#include <b1/rodeos/callbacks/vm_types.hpp>
+#include <b1/rodupcx/callbacks/vm_types.hpp>
 
-namespace b1::rodeos {
+namespace b1::rodupcx {
 
 template <typename Derived>
 struct unimplemented_callbacks {
@@ -19,8 +19,8 @@ struct unimplemented_callbacks {
    int64_t set_proposed_producers(int, int) { return unimplemented<int64_t>("set_proposed_producers"); }
    int     get_blockchain_parameters_packed(int, int) { return unimplemented<int>("get_blockchain_parameters_packed"); }
    void set_blockchain_parameters_packed(int, int) { return unimplemented<void>("set_blockchain_parameters_packed"); }
-   uint32_t get_parameters_packed(eosio::vm::span<const char>, eosio::vm::span<char>) const { return unimplemented<uint32_t>("get_parameters_packed"); }
-   void set_parameters_packed( eosio::vm::span<const char> ) { return unimplemented<uint32_t>("set_parameters_packed"); }
+   uint32_t get_parameters_packed(upcx::vm::span<const char>, upcx::vm::span<char>) const { return unimplemented<uint32_t>("get_parameters_packed"); }
+   void set_parameters_packed( upcx::vm::span<const char> ) { return unimplemented<uint32_t>("set_parameters_packed"); }
 
    int  is_privileged(int64_t) { return unimplemented<int>("is_privileged"); }
    void set_privileged(int64_t, int) { return unimplemented<void>("set_privileged"); }
@@ -109,8 +109,8 @@ struct unimplemented_callbacks {
    int64_t get_sender() { return unimplemented<int64_t>("get_sender"); }
 
    // context_free_system_api
-   void eosio_assert_code(int, int64_t) { return unimplemented<void>("eosio_assert_code"); }
-   void eosio_exit(int) { return unimplemented<void>("eosio_exit"); }
+   void upcx_assert_code(int, int64_t) { return unimplemented<void>("upcx_assert_code"); }
+   void upcx_exit(int) { return unimplemented<void>("upcx_exit"); }
 
    // authorization_api
    void require_recipient(int64_t) { return unimplemented<void>("require_recipient"); }
@@ -213,8 +213,8 @@ struct unimplemented_callbacks {
       Rft::template add<&Derived::get_sender>("env", "get_sender");
 
       // context_free_system_api
-      Rft::template add<&Derived::eosio_assert_code>("env", "eosio_assert_code");
-      Rft::template add<&Derived::eosio_exit>("env", "eosio_exit");
+      Rft::template add<&Derived::upcx_assert_code>("env", "upcx_assert_code");
+      Rft::template add<&Derived::upcx_exit>("env", "upcx_exit");
 
       // authorization_api
       Rft::template add<&Derived::require_recipient>("env", "require_recipient");
@@ -242,4 +242,4 @@ struct unimplemented_callbacks {
    } // register_callbacks()
 };   // unimplemented_callbacks
 
-} // namespace b1::rodeos
+} // namespace b1::rodupcx

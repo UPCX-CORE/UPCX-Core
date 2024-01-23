@@ -6,9 +6,9 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   contact:
-    url: https://eos.io
+    url: https://upcx.io
 servers:
-  - url: '{protocol}://{host}:{port}/v1/'
+  - url: "{protocol}://{host}:{port}/v1/"
     variables:
       protocol:
         enum:
@@ -35,7 +35,7 @@ paths:
               type: object
               properties: {}
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:

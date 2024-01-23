@@ -1,12 +1,12 @@
 #include "wasm_ql_plugin.hpp"
 #include "wasm_ql_http.hpp"
 
-#include <b1/rodeos/wasm_ql.hpp>
+#include <b1/rodupcx/wasm_ql.hpp>
 #include <fc/exception/exception.hpp>
 #include <fc/log/logger.hpp>
 
 using namespace appbase;
-using namespace b1::rodeos;
+using namespace b1::rodupcx;
 using namespace std::literals;
 
 using wasm_ql_plugin = b1::wasm_ql_plugin;

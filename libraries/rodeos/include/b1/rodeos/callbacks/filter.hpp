@@ -1,8 +1,8 @@
 #pragma once
 
-#include <b1/rodeos/callbacks/vm_types.hpp>
+#include <b1/rodupcx/callbacks/vm_types.hpp>
 
-namespace b1::rodeos {
+namespace b1::rodupcx {
 
 struct filter_callback_state {
    std::function<void(const char* data, uint64_t size)> push_data;
@@ -12,7 +12,7 @@ template <typename Derived>
 struct filter_callbacks {
    Derived& derived() { return static_cast<Derived&>(*this); }
 
-   void push_data(eosio::vm::span<const char> data) {
+   void push_data(upcx::vm::span<const char> data) {
       derived().get_filter_callback_state().push_data(data.data(), data.size());
    }
 
@@ -23,4 +23,4 @@ struct filter_callbacks {
    }
 }; // query_callbacks
 
-} // namespace b1::rodeos
+} // namespace b1::rodupcx

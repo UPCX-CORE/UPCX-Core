@@ -1,22 +1,22 @@
 ## Description
 
-Lists opened wallets, * = unlocked
+Lists opened wallets, \* = unlocked
 
 ## Positionals
+
 None
 
 ## Options
+
 None
 
 ## Usage
 
-
 ```sh
-cleos wallet list
+clupcx wallet list
 ```
 
 ## Outputs
-
 
 ```console
 Wallets:

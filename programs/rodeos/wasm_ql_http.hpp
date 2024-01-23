@@ -1,7 +1,7 @@
 #pragma once
-#include <b1/rodeos/wasm_ql.hpp>
+#include <b1/rodupcx/wasm_ql.hpp>
 
-namespace b1::rodeos::wasm_ql {
+namespace b1::rodupcx::wasm_ql {
 
 struct http_config {
    uint32_t    num_threads      = {};
@@ -22,4 +22,4 @@ struct http_server {
    virtual void stop() = 0;
 };
 
-} // namespace b1::rodeos::wasm_ql
+} // namespace b1::rodupcx::wasm_ql

@@ -1,9 +1,9 @@
-#include <eosio/se-helpers/se-helpers.hpp>
+#include <upcx/se-helpers/se-helpers.hpp>
 
 #include <fc/fwd_impl.hpp>
 #include <fc/scoped_exit.hpp>
 
-namespace eosio::secure_enclave {
+namespace upcx::secure_enclave {
 
 static std::string string_for_cferror(CFErrorRef error) {
    CFStringRef errorString = CFCopyDescription(error);

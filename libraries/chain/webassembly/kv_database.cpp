@@ -1,7 +1,7 @@
-#include <eosio/chain/webassembly/interface.hpp>
-#include <eosio/chain/apply_context.hpp>
+#include <upcx/chain/webassembly/interface.hpp>
+#include <upcx/chain/apply_context.hpp>
 
-namespace eosio { namespace chain { namespace webassembly {
+namespace upcx { namespace chain { namespace webassembly {
    int64_t  interface::kv_erase(uint64_t contract, span<const char> key) {
       return context.kv_erase(contract, key.data(), key.size());
    }
@@ -61,4 +61,4 @@ namespace eosio { namespace chain { namespace webassembly {
    int32_t  interface::kv_it_value(uint32_t itr, uint32_t offset, span<char> dest, uint32_t* actual_size) {
       return context.kv_it_value(itr, offset, dest.data(), dest.size(), *actual_size);
    }
-}}} // ns eosio::chain::webassembly
+}}} // ns upcx::chain::webassembly

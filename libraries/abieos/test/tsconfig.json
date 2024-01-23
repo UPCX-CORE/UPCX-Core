@@ -1,14 +1,14 @@
 {
-    "compilerOptions": {
-        "module": "es2015",
-        "target": "es2017",
-        "outDir": "dist",
-        "sourceMap": true,
-        "noImplicitAny": true,
-    },
-    "include": [
-        "src/*.ts",
-        "../external/eosjs2/src/eosjs2-numeric.ts",
-        "../external/eosjs2/src/eosjs2-serialize.ts"
-    ]
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es2017",
+    "outDir": "dist",
+    "sourceMap": true,
+    "noImplicitAny": true
+  },
+  "include": [
+    "src/*.ts",
+    "../external/upcxjs2/src/upcxjs2-numeric.ts",
+    "../external/upcxjs2/src/upcxjs2-serialize.ts"
+  ]
 }

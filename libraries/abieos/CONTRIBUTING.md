@@ -1,4 +1,4 @@
-# Contributing to abieos
+# Contributing to abiupcx
 
 Interested in contributing? That's awesome! Here are some guidelines to get started quickly and easily:
 
@@ -6,7 +6,7 @@ Interested in contributing? That's awesome! Here are some guidelines to get star
   - [Bug Reports](#bug-reports)
   - [Feature Requests](#feature-requests)
   - [Change Requests](#change-requests)
-- [Working on abieos](#working-on-abieos)
+- [Working on abiupcx](#working-on-abiupcx)
   - [Feature Branches](#feature-branches)
   - [Submitting Pull Requests](#submitting-pull-requests)
   - [Testing and Quality Assurance](#testing-and-quality-assurance)
@@ -16,13 +16,13 @@ Interested in contributing? That's awesome! Here are some guidelines to get star
 
 ## Reporting An Issue
 
-If you're about to raise an issue because you think you've found a problem with abieos, or you'd like to make a request for a new feature in the codebase, or any other reason… please read this first.
+If you're about to raise an issue because you think you've found a problem with abiupcx, or you'd like to make a request for a new feature in the codebase, or any other reason… please read this first.
 
 The GitHub issue tracker is the preferred channel for [bug reports](#bug-reports), [feature requests](#feature-requests), and [submitting pull requests](#submitting-pull-requests), but please respect the following restrictions:
 
-* Please **search for existing issues**. Help us keep duplicate issues to a minimum by checking to see if someone has already reported your problem or requested your idea.
+- Please **search for existing issues**. Help us keep duplicate issues to a minimum by checking to see if someone has already reported your problem or requested your idea.
 
-* Please **be civil**. Keep the discussion on topic and respect the opinions of others. See also our [Contributor Code of Conduct](#conduct).
+- Please **be civil**. Keep the discussion on topic and respect the opinions of others. See also our [Contributor Code of Conduct](#conduct).
 
 ### Bug Reports
 
@@ -34,12 +34,12 @@ Guidelines for bug reports:
    reported.
 
 1. **Check if the issue has been fixed** &mdash; look for [closed issues in the
-   current milestone](https://github.com/EOSIO/abieos/issues?q=is%3Aissue+is%3Aclosed) or try to reproduce it
+   current milestone](https://github.com/UPCX/abiupcx/issues?q=is%3Aissue+is%3Aclosed) or try to reproduce it
    using the latest `develop` branch.
 
 A good bug report shouldn't leave others needing to chase you up for more information. Be sure to include the details of your environment and relevant tests that demonstrate the failure.
 
-[Report a bug](https://github.com/EOSIO/abieos/issues/new?title=Bug%3A)
+[Report a bug](https://github.com/UPCX/abiupcx/issues/new?title=Bug%3A)
 
 ### Feature Requests
 
@@ -47,19 +47,19 @@ Feature requests are welcome. Before you submit one be sure to have:
 
 1. **Use the GitHub search** and check the feature hasn't already been requested.
 1. Take a moment to think about whether your idea fits with the scope and aims of the project.
-1. Remember, it's up to *you* to make a strong case to convince the project's leaders of the merits of this feature. Please provide as much detail and context as possible, this means explaining the use case and why it is likely to be common.
+1. Remember, it's up to _you_ to make a strong case to convince the project's leaders of the merits of this feature. Please provide as much detail and context as possible, this means explaining the use case and why it is likely to be common.
 
 ### Change Requests
 
-Change requests cover both architectural and functional changes to how abieos works. If you have an idea for a new or different dependency, a refactor, or an improvement to a feature, etc - please be sure to:
+Change requests cover both architectural and functional changes to how abiupcx works. If you have an idea for a new or different dependency, a refactor, or an improvement to a feature, etc - please be sure to:
 
 1. **Use the GitHub search** and check someone else didn't get there first
 1. Take a moment to think about the best way to make a case for, and explain what you're thinking. Are you sure this shouldn't really be
-   a [bug report](#bug-reports) or a [feature request](#feature-requests)?  Is it really one idea or is it many? What's the context? What problem are you solving? Why is what you are suggesting better than what's already there?
+   a [bug report](#bug-reports) or a [feature request](#feature-requests)? Is it really one idea or is it many? What's the context? What problem are you solving? Why is what you are suggesting better than what's already there?
 
-## Working on abieos
+## Working on abiupcx
 
-Code contributions are welcome and encouraged! If you are looking for a good place to start, check out the [good first issue](https://github.com/EOSIO/abieos/labels/good%20first%20issue) label in GitHub issues.
+Code contributions are welcome and encouraged! If you are looking for a good place to start, check out the [good first issue](https://github.com/UPCX/abiupcx/labels/good%20first%20issue) label in GitHub issues.
 
 Also, please follow these guidelines when submitting code:
 
@@ -67,8 +67,8 @@ Also, please follow these guidelines when submitting code:
 
 To get it out of the way:
 
-- **[develop](https://github.com/EOSIO/abieos/tree/develop)** is the development branch. All work on the next release happens here so you should generally branch off `develop`. Do **NOT** use this branch for a production site.
-- **[master](https://github.com/EOSIO/abieos/tree/master)** contains the latest release of abieos. This branch may be used in production. Do **NOT** use this branch to work on abieos's source.
+- **[develop](https://github.com/UPCX/abiupcx/tree/develop)** is the development branch. All work on the next release happens here so you should generally branch off `develop`. Do **NOT** use this branch for a production site.
+- **[master](https://github.com/UPCX/abiupcx/tree/master)** contains the latest release of abiupcx. This branch may be used in production. Do **NOT** use this branch to work on abiupcx's source.
 
 ### Submitting Pull Requests
 
@@ -78,13 +78,14 @@ Pull requests are awesome. If you're looking to raise a PR for something which d
 
 Never underestimate just how useful quality assurance is. If you're looking to get involved with the code base and don't know where to start, checking out and testing a pull request is one of the most useful things you could do.
 
-Essentially, [check out the latest develop branch](#working-on-abieos), take it for a spin, and if you find anything odd, please follow the [bug report guidelines](#bug-reports) and let us know!
+Essentially, [check out the latest develop branch](#working-on-abiupcx), take it for a spin, and if you find anything odd, please follow the [bug report guidelines](#bug-reports) and let us know!
 
 ## Conduct
 
 While contributing, please be respectful and constructive, so that participation in our project is a positive experience for everyone.
 
 Examples of behavior that contributes to creating a positive environment include:
+
 - Using welcoming and inclusive language
 - Being respectful of differing viewpoints and experiences
 - Gracefully accepting constructive criticism
@@ -92,6 +93,7 @@ Examples of behavior that contributes to creating a positive environment include
 - Showing empathy towards other community members
 
 Examples of unacceptable behavior include:
+
 - The use of sexualized language or imagery and unwelcome sexual attention or advances
 - Trolling, insulting/derogatory comments, and personal or political attacks
 - Public or private harassment
@@ -100,7 +102,7 @@ Examples of unacceptable behavior include:
 
 ## Contributor License & Acknowledgments
 
-Whenever you make a contribution to this project, you license your contribution under the same terms as set out in LICENSE, and you represent and warrant that you have the right to license your contribution under those terms.  Whenever you make a contribution to this project, you also certify in the terms of the Developer’s Certificate of Origin set out below:
+Whenever you make a contribution to this project, you license your contribution under the same terms as set out in LICENSE, and you represent and warrant that you have the right to license your contribution under those terms. Whenever you make a contribution to this project, you also certify in the terms of the Developer’s Certificate of Origin set out below:
 
 ```
 Developer Certificate of Origin
@@ -144,5 +146,5 @@ By making a contribution to this project, I certify that:
 
 ## References
 
-* Overall CONTRIB adapted from https://github.com/mathjax/MathJax/blob/master/CONTRIBUTING.md
-* Conduct section adapted from the Contributor Covenant, version 1.4, available at https://www.contributor-covenant.org/version/1/4/code-of-conduct.html
+- Overall CONTRIB adapted from https://github.com/mathjax/MathJax/blob/master/CONTRIBUTING.md
+- Conduct section adapted from the Contributor Covenant, version 1.4, available at https://www.contributor-covenant.org/version/1/4/code-of-conduct.html

@@ -1,6 +1,6 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
-    "version": "eosio::abi/1.2",
+    "____comment": "This file was generated with upcx-abigen. DO NOT EDIT ",
+    "version": "upcx::abi/1.2",
     "types": [],
     "structs": [
         {
@@ -281,13 +281,13 @@
                     "type": "pair_string_string"
                 },
                 "firstname": {
-                    "type": "non_unique<eosio::name, std::string>"
+                    "type": "non_unique<upcx::name, std::string>"
                 },
                 "lastname": {
-                    "type": "non_unique<eosio::name, std::string>"
+                    "type": "non_unique<upcx::name, std::string>"
                 },
                 "persid": {
-                    "type": "non_unique<eosio::name, std::string>"
+                    "type": "non_unique<upcx::name, std::string>"
                 },
                 "address": {
                     "type": "tuple_name_string_string_string_string"

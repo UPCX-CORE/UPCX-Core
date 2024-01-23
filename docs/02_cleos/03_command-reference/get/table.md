@@ -3,6 +3,7 @@
 Retrieves the contents of a database table
 
 ## Positional Parameters
+
 `account` _TEXT_ - The account who owns the table where the smart contract was deployed
 
 `scope` _TEXT_ - The scope within the contract in which the table is found
@@ -10,6 +11,7 @@ Retrieves the contents of a database table
 `table` _TEXT_ - The name of the table as specified by the contract abi
 
 ## Options
+
 `-l,--limit` _UINT_ - The maximum number of rows to return
 
 `-k,--key` _TEXT_ - (Deprecated) The name of the key to index by as defined by the abi, defaults to primary key
@@ -31,14 +33,17 @@ Retrieves the contents of a database table
 `--show-payer` - Show RAM payer
 
 ## Example
-Get the data from the accounts table for the eosio.token contract, for user eosio,
+
+Get the data from the accounts table for the upcx.token contract, for user upcx,
 
 ```sh
-cleos get table eosio.token eosio accounts
+clupcx get table upcx.token upcx accounts
 ```
+
 ```json
 {
-  "rows": [{
+  "rows": [
+    {
       "balance": "999999920.0000 SYS"
     }
   ],

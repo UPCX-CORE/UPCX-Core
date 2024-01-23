@@ -19,15 +19,15 @@ import os
 import shutil
 
 ###############################################################
-# rodeos_test.py
+# rodupcx_test.py
 #
-# rodeos integration test 
+# rodupcx integration test 
 # 
 # This test creates a producer node with state history plugin and a 
-# rodeos process with a test filter to connect to the producer. Pushes 
-# a few transactions to the producer and query rodeos get_block endpoint
+# rodupcx process with a test filter to connect to the producer. Pushes 
+# a few transactions to the producer and query rodupcx get_block endpoint
 # to see if it sees one of the block containing the pushed transaction. 
-# Lastly, it verifies if rodeos get_info endpoint returns a head_block_num. 
+# Lastly, it verifies if rodupcx get_info endpoint returns a head_block_num. 
 #
 ###############################################################
 
@@ -37,7 +37,7 @@ Utils.Debug = args.v
 killAll=args.clean_run
 dumpErrorDetails=args.dump_error_details
 dontKill=args.leave_running
-killEosInstances=not dontKill
+killUpcxInstances=not dontKill
 killWallet=not dontKill
 keepLogs=args.keep_logs
 stateHistoryEndpoint = "127.0.0.1:8080"
@@ -96,38 +96,38 @@ testSuccessful = False
 with open(loggingFile, "w") as textFile:
         print(logging,file=textFile)
 
-class Rodeos:
+class Rodupcx:
     def __init__(self, stateHistoryEndpoint, filterName, filterWasm):
-        self.rodeosDir = os.path.join(os.getcwd(), 'var/lib/rodeos')
-        shutil.rmtree(self.rodeosDir, ignore_errors=True)
-        os.makedirs(self.rodeosDir, exist_ok=True)
+        self.rodupcxDir = os.path.join(os.getcwd(), 'var/lib/rodupcx')
+        shutil.rmtree(self.rodupcxDir, ignore_errors=True)
+        os.makedirs(self.rodupcxDir, exist_ok=True)
         self.stateHistoryEndpoint = stateHistoryEndpoint
         self.filterName = filterName
         self.filterWasm = filterWasm
-        self.rodeos = None
-        self.rodeosStdout = None
-        self.rodeosStderr = None
+        self.rodupcx = None
+        self.rodupcxStdout = None
+        self.rodupcxStderr = None
         self.keepLogs = keepLogs
 
     def __enter__(self):
         self.endpoint = "http://127.0.0.1:8880/"
-        self.rodeosStdout = open(os.path.join(self.rodeosDir, "stdout.out"), "w")
-        self.rodeosStderr = open(os.path.join(self.rodeosDir, "stderr.out"), "w")
-        self.rodeos = subprocess.Popen(['./programs/rodeos/rodeos', '--rdb-database', os.path.join(self.rodeosDir,'rocksdb'), '--data-dir', os.path.join(self.rodeosDir,'data'),
+        self.rodupcxStdout = open(os.path.join(self.rodupcxDir, "stdout.out"), "w")
+        self.rodupcxStderr = open(os.path.join(self.rodupcxDir, "stderr.out"), "w")
+        self.rodupcx = subprocess.Popen(['./programs/rodupcx/rodupcx', '--rdb-database', os.path.join(self.rodupcxDir,'rocksdb'), '--data-dir', os.path.join(self.rodupcxDir,'data'),
                                '--clone-connect-to',  self.stateHistoryEndpoint , '--filter-name', self.filterName , '--filter-wasm', self.filterWasm ],
-                stdout=self.rodeosStdout, 
-                stderr=self.rodeosStderr)
+                stdout=self.rodupcxStdout, 
+                stderr=self.rodupcxStderr)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if self.rodeos is not None:
-            self.rodeos.kill()
-        if self.rodeosStdout is not None:
-            self.rodeosStdout.close()
-        if self.rodeosStderr is not None:
-            self.rodeosStderr.close()
+        if self.rodupcx is not None:
+            self.rodupcx.kill()
+        if self.rodupcxStdout is not None:
+            self.rodupcxStdout.close()
+        if self.rodupcxStderr is not None:
+            self.rodupcxStderr.close()
         if testSuccessful and not keepLogs:
-            shutil.rmtree(self.rodeosDir, ignore_errors=True)
+            shutil.rmtree(self.rodupcxDir, ignore_errors=True)
 
     def waitTillReady(self):
         Utils.waitForTruth(lambda:  Utils.runCmdArrReturnStr(['curl', '-H', 'Accept: application/json', self.endpoint + 'v1/chain/get_info'], silentErrors=True) != "" , timeout=30)
@@ -140,7 +140,7 @@ class Rodeos:
         return Utils.runCmdArrReturnJson(['curl', '-H', 'Accept: application/json', self.endpoint + 'v1/chain/get_info'])
 
 
-rodeos = None
+rodupcx = None
 try:
     TestHelper.printSystemInfo("BEGIN")
     cluster.killall(allInstances=killAll)
@@ -153,9 +153,9 @@ try:
         totalNodes=1,
         useBiosBootFile=False,
         loadSystemContract=False,
-        specificExtraNodeosArgs={
-            0: ("--plugin eosio::state_history_plugin --trace-history --chain-state-history --disable-replay-opts --state-history-stride 20 --max-retained-history-files 3 " 
-                "--state-history-endpoint {} --plugin eosio::net_api_plugin --wasm-runtime eos-vm-jit -l logging.json").format(stateHistoryEndpoint)})
+        specificExtraNodupcxArgs={
+            0: ("--plugin upcx::state_history_plugin --trace-history --chain-state-history --disable-replay-opts --state-history-stride 20 --max-retained-history-files 3 " 
+                "--state-history-endpoint {} --plugin upcx::net_api_plugin --wasm-runtime upcx-vm-jit -l logging.json").format(stateHistoryEndpoint)})
 
     producerNodeIndex = 0
     producerNode = cluster.getNode(producerNodeIndex)
@@ -163,9 +163,9 @@ try:
     # Create a transaction to create an account
     Utils.Print("create a new account payloadless from the producer node")
     payloadlessAcc = Account("payloadless")
-    payloadlessAcc.ownerPublicKey = "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
-    payloadlessAcc.activePublicKey = "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
-    producerNode.createAccount(payloadlessAcc, cluster.eosioAccount)
+    payloadlessAcc.ownerPublicKey = "UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
+    payloadlessAcc.activePublicKey = "UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
+    producerNode.createAccount(payloadlessAcc, cluster.upcxAccount)
 
 
     contractDir="unittests/test-contracts/payloadless"
@@ -182,7 +182,7 @@ try:
     } 
 
     cmd = "push transaction '{}' -p payloadless".format(json.dumps(trx))
-    trans = producerNode.processCleosCmd(cmd, cmd, silentErrors=False)
+    trans = producerNode.processClupcxCmd(cmd, cmd, silentErrors=False)
     assert trans, "Failed to push transaction with context free data"
     
     cfTrxBlockNum = int(trans["processed"]["block_num"])
@@ -192,29 +192,29 @@ try:
     producerNode.waitForIrreversibleBlock(cfTrxBlockNum, timeout=30) 
     
     Utils.Print("verify the account payloadless from producer node")
-    trans = producerNode.getEosAccount("payloadless", exitOnError=False)
+    trans = producerNode.getUpcxAccount("payloadless", exitOnError=False)
     assert trans["account_name"], "Failed to get the account payloadless"
 
     Utils.Print("verify the context free transaction from producer node")
     trans_from_full = producerNode.getTransaction(cfTrxId)
     assert trans_from_full, "Failed to get the transaction with context free data from the producer node"
 
-    with Rodeos(stateHistoryEndpoint, 'test.filter', './tests/test_filter.wasm') as rodeos:
-        rodeos.waitTillReady()
+    with Rodupcx(stateHistoryEndpoint, 'test.filter', './tests/test_filter.wasm') as rodupcx:
+        rodupcx.waitTillReady()
         head_block_num = 0
-        Utils.Print("Verify rodeos get_info endpoint works")
+        Utils.Print("Verify rodupcx get_info endpoint works")
         while head_block_num < cfTrxBlockNum:
-            response = rodeos.get_info()
-            assert 'head_block_num' in response, "Redeos response does not contain head_block_num, response body = {}".format(json.dumps(response))
+            response = rodupcx.get_info()
+            assert 'head_block_num' in response, "Redupcx response does not contain head_block_num, response body = {}".format(json.dumps(response))
             head_block_num = int(response['head_block_num'])
             time.sleep(1)
         
-        response = rodeos.get_block(cfTrxBlockNum)
-        assert response["block_num"] == cfTrxBlockNum, "Rodeos responds with wrong block"
+        response = rodupcx.get_block(cfTrxBlockNum)
+        assert response["block_num"] == cfTrxBlockNum, "Rodupcx responds with wrong block"
     
     testSuccessful = True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killUpcxInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
     
 exitCode = 0 if testSuccessful else 1
 exit(exitCode)

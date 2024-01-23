@@ -1,13 +1,13 @@
 ---
-content_title: Keosd Troubleshooting
+content_title: Kupcxd Troubleshooting
 ---
 
-## How to solve the error "Failed to lock access to wallet directory; is another `keosd` running"?
+## How to solve the error "Failed to lock access to wallet directory; is another `kupcxd` running"?
 
-Since `cleos` may auto-launch an instance of `keosd`, it is possible to end up with multiple instances of `keosd` running. That can cause unexpected behavior or the error message above.
+Since `clupcx` may auto-launch an instance of `kupcxd`, it is possible to end up with multiple instances of `kupcxd` running. That can cause unexpected behavior or the error message above.
 
-To fix this issue, you can terminate all running `keosd` instances and restart `keosd`. The following command will find and terminate all instances of `keosd` running on the system:
+To fix this issue, you can terminate all running `kupcxd` instances and restart `kupcxd`. The following command will find and terminate all instances of `kupcxd` running on the system:
 
 ```sh
-pkill keosd
+pkill kupcxd
 ```

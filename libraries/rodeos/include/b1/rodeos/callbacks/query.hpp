@@ -1,13 +1,13 @@
 #pragma once
 
-#include <b1/rodeos/callbacks/basic.hpp>
-#include <b1/rodeos/get_state_row.hpp>
+#include <b1/rodupcx/callbacks/basic.hpp>
+#include <b1/rodupcx/get_state_row.hpp>
 
-namespace b1::rodeos {
+namespace b1::rodupcx {
 
 struct query_state {
    uint32_t                          block_num;
-   std::optional<rodeos::block_info> block_info;
+   std::optional<rodupcx::block_info> block_info;
 };
 
 template <typename Derived>
@@ -18,9 +18,9 @@ struct query_callbacks {
       auto& state = derived().get_state();
       if (state.block_info)
          return;
-      auto info = get_state_row<rodeos::block_info>(
+      auto info = get_state_row<rodupcx::block_info>(
             derived().get_db_view_state().kv_state.view,
-            std::make_tuple(eosio::name{ "block.info" }, eosio::name{ "primary" }, state.block_num));
+            std::make_tuple(upcx::name{ "block.info" }, upcx::name{ "primary" }, state.block_num));
       if (!info)
          throw std::runtime_error("database is missing block.info for block " + std::to_string(state.block_num));
       state.block_info = info->second;
@@ -42,4 +42,4 @@ struct query_callbacks {
    }
 }; // query_callbacks
 
-} // namespace b1::rodeos
+} // namespace b1::rodupcx

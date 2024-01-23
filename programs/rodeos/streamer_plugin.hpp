@@ -2,17 +2,17 @@
 
 #pragma once
 #include <appbase/application.hpp>
-#include <eosio/abi.hpp>
+#include <upcx/abi.hpp>
 
 #include "cloner_plugin.hpp"
 
 namespace b1 {
 
 struct stream_wrapper_v0 {
-   eosio::name       route;
+   upcx::name       route;
    std::vector<char> data;
 };
-EOSIO_REFLECT(stream_wrapper_v0, route, data);
+UPCX_REFLECT(stream_wrapper_v0, route, data);
 using stream_wrapper = std::variant<stream_wrapper_v0>;
 
 class streamer_plugin : public appbase::plugin<streamer_plugin> {

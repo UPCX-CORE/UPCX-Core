@@ -1,7 +1,7 @@
 #include <boost/test/unit_test.hpp>
-#include <eosio/chain/name.hpp>
+#include <upcx/chain/name.hpp>
 
-using namespace eosio::chain;
+using namespace upcx::chain;
 
 BOOST_AUTO_TEST_SUITE(name_test)
 
@@ -116,17 +116,17 @@ try {
    BOOST_TEST( name{""}.to_string() == "" );
    BOOST_TEST( name{"e"}.to_string() == "e" );
    BOOST_TEST( name{"eo"}.to_string() == "eo" );
-   BOOST_TEST( name{"eos"}.to_string() == "eos" );
-   BOOST_TEST( name{"eosi"}.to_string() == "eosi" );
-   BOOST_TEST( name{"eosio"}.to_string() == "eosio" );
-   BOOST_TEST( name{"eosioa"}.to_string() == "eosioa" );
-   BOOST_TEST( name{"eosioac"}.to_string() == "eosioac" );
-   BOOST_TEST( name{"eosioacc"}.to_string() == "eosioacc" );
-   BOOST_TEST( name{"eosioacco"}.to_string() == "eosioacco" );
-   BOOST_TEST( name{"eosioaccou"}.to_string() == "eosioaccou" );
-   BOOST_TEST( name{"eosioaccoun"}.to_string() == "eosioaccoun" );
-   BOOST_TEST( name{"eosioaccount"}.to_string() == "eosioaccount" );
-   BOOST_TEST( name{"eosioaccountj"}.to_string() == "eosioaccountj" );
+   BOOST_TEST( name{"upcx"}.to_string() == "upcx" );
+   BOOST_TEST( name{"upcxi"}.to_string() == "upcxi" );
+   BOOST_TEST( name{"upcx"}.to_string() == "upcx" );
+   BOOST_TEST( name{"upcxa"}.to_string() == "upcxa" );
+   BOOST_TEST( name{"upcxac"}.to_string() == "upcxac" );
+   BOOST_TEST( name{"upcxacc"}.to_string() == "upcxacc" );
+   BOOST_TEST( name{"upcxacco"}.to_string() == "upcxacco" );
+   BOOST_TEST( name{"upcxaccou"}.to_string() == "upcxaccou" );
+   BOOST_TEST( name{"upcxaccoun"}.to_string() == "upcxaccoun" );
+   BOOST_TEST( name{"upcxaccount"}.to_string() == "upcxaccount" );
+   BOOST_TEST( name{"upcxaccountj"}.to_string() == "upcxaccountj" );
 
 } FC_LOG_AND_RETHROW() }
 

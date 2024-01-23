@@ -1,20 +1,21 @@
 ---
-content_title: EOSIO Overview
+content_title: UPCX Overview
 ---
 
-EOSIO is the next-generation blockchain platform for creating and deploying smart contracts and distributed applications. EOSIO comes with a number of programs. The primary ones included in EOSIO are the following:
+UPCX is the next-generation blockchain platform for creating and deploying smart contracts and distributed applications. UPCX comes with a number of programs. The primary ones included in UPCX are the following:
 
-* [Nodeos](01_nodeos/index.md) (node + eos = nodeos)  - Core service daemon that runs a node for block production, API endpoints, or local development.
-* [Cleos](02_cleos/index.md) (cli + eos = cleos) - Command line interface to interact with the blockchain (via `nodeos`) and manage wallets (via `keosd`).
-* [Keosd](03_keosd/index.md) (key + eos = keosd) - Component that manages EOSIO keys in wallets and provides a secure enclave for digital signing.
+- [Nodupcx](01_nodupcx/index.md) (node + upcx = nodupcx) - Core service daemon that runs a node for block production, API endpoints, or local development.
+- [Clupcx](02_clupcx/index.md) (cli + upcx = clupcx) - Command line interface to interact with the blockchain (via `nodupcx`) and manage wallets (via `kupcxd`).
+- [Kupcxd](03_kupcxd/index.md) (key + upcx = kupcxd) - Component that manages UPCX keys in wallets and provides a secure enclave for digital signing.
 
 The basic relationship between these components is illustrated in the diagram below.
 
-![EOSIO components](eosio_components.png)
+![UPCX components](upcx_components.png)
 
-Additional EOSIO Resources:
-* [EOSIO Utilities](10_utilities/index.md) - Utilities that complement the EOSIO software.
-* [Upgrade Guides](20_upgrade-guides/index.md) - EOSIO version/protocol upgrade guides.
+Additional UPCX Resources:
+
+- [UPCX Utilities](10_utilities/index.md) - Utilities that complement the UPCX software.
+- [Upgrade Guides](20_upgrade-guides/index.md) - UPCX version/protocol upgrade guides.
 
 [[info | What's Next?]]
-| [Install the EOSIO Software](00_install/index.md) before exploring the sections above.
+| [Install the UPCX Software](00_install/index.md) before exploring the sections above.

@@ -1,5 +1,5 @@
 ---
-content_title: Keosd How-to Guides
+content_title: Kupcxd How-to Guides
 ---
 
-* [How to attach a YubiHSM hard wallet](how-to-attach-a-yubihsm-hard-wallet.md)
+- [How to attach a YubiHSM hard wallet](how-to-attach-a-yubihsm-hard-wallet.md)

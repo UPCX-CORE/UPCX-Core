@@ -1,3 +1,3 @@
 ---
-link: https://github.com/EOSIO/eos/issues/7597
+link: https://github.com/UPCX/upcx/issues/7597
 ---

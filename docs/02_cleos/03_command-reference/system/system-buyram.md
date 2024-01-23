@@ -1,27 +1,32 @@
-
 ## Command
-cleos system buyram [OPTIONS] payer receiver amount
+
+clupcx system buyram [OPTIONS] payer receiver amount
 
 **Where**
-* [OPTIONS] = See Options in Command Usage section below.
-* payer = The account paying for RAM. 
-* receiver = The account receiving bought RAM.
-* amount = The amount of EOS to pay for RAM
+
+- [OPTIONS] = See Options in Command Usage section below.
+- payer = The account paying for RAM.
+- receiver = The account receiving bought RAM.
+- amount = The amount of UPCX to pay for RAM
 
 **Note**: The arguments and options enclosed in square brackets are optional.
 
 ## Description
-Use this command to buy RAM for a blockchain account on EOSIO.
+
+Use this command to buy RAM for a blockchain account on UPCX.
 
 ## Command Usage
-The following information shows the different positionals and options you can use with the `cleos system buyram` command:
+
+The following information shows the different positionals and options you can use with the `clupcx system buyram` command:
 
 ### Positionals:
+
 - `payer` _TEXT_ - The account paying for RAM
 - `receiver` _TEXT_ - The account receiving bought RAM
-- `amount` _TEXT_ - The amount of EOS to pay for RAM
+- `amount` _TEXT_ - The amount of UPCX to pay for RAM
 
 ### Options
+
 - `-h,--help` - Print this help message and exit
 - `-k,--kbytes` - Buyram in number of kibibytes (KiB)
 - `-b,--bytes` - Buyram in number of bytes
@@ -40,7 +45,9 @@ The following information shows the different positionals and options you can us
 - `--delay-sec` _UINT_ - Set the delay_sec seconds, defaults to 0s
 
 ## Requirements
-For the prerequisites to run this command see the Before you Begin section of [How to Buy Ram](../02_how-to-guides/how-to-buy-ram.md)  
+
+For the prerequisites to run this command see the Before you Begin section of [How to Buy Ram](../02_how-to-guides/how-to-buy-ram.md)
 
 ## Examples
-* [How to Buy Ram](../02_how-to-guides/how-to-buy-ram.md)
+
+- [How to Buy Ram](../02_how-to-guides/how-to-buy-ram.md)

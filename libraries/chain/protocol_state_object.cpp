@@ -1,6 +1,6 @@
-#include <eosio/chain/protocol_state_object.hpp>
+#include <upcx/chain/protocol_state_object.hpp>
 
-namespace eosio { namespace chain {
+namespace upcx { namespace chain {
 
    namespace detail {
 

@@ -1,6 +1,6 @@
-#include <eosio/chain/producer_schedule.hpp>
+#include <upcx/chain/producer_schedule.hpp>
 
-namespace eosio { namespace chain {
+namespace upcx { namespace chain {
 
 fc::variant producer_authority::get_abi_variant() const {
       auto authority_variant = std::visit([](const auto& a){
@@ -20,4 +20,4 @@ fc::variant producer_authority::get_abi_variant() const {
             ("authority", std::move(authority_variant));
 }
 
-} } /// eosio::chain
+} } /// upcx::chain

@@ -4,15 +4,15 @@ Query infomation of a table
 
 ## Before you begin
 
-* Install the currently supported version of `cleos`
+- Install the currently supported version of `clupcx`
 
-* Understand the following:
-  * What is an account
-  * What is a table
-  * What is a scope of table
+- Understand the following:
+  - What is an account
+  - What is a table
+  - What is a scope of table
 
 ## Steps
 
 ```sh
-cleos get table ACCOUNT SCOPE TABLE
+clupcx get table ACCOUNT SCOPE TABLE
 ```

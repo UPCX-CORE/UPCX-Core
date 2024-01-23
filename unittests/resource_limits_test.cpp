@@ -1,17 +1,17 @@
 #include <algorithm>
 
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/resource_limits.hpp>
-#include <eosio/chain/config.hpp>
-#include <eosio/testing/chainbase_fixture.hpp>
-#include <eosio/testing/tester.hpp>
+#include <upcx/chain/config.hpp>
+#include <upcx/chain/resource_limits.hpp>
+#include <upcx/chain/config.hpp>
+#include <upcx/testing/chainbase_fixture.hpp>
+#include <upcx/testing/tester.hpp>
 #include "fork_test_utilities.hpp"
 
 #include <boost/test/unit_test.hpp>
 
-using namespace eosio::chain::resource_limits;
-using namespace eosio::testing;
-using namespace eosio::chain;
+using namespace upcx::chain::resource_limits;
+using namespace upcx::testing;
+using namespace upcx::chain;
 
 class resource_limits_fixture: private chainbase_fixture<1024*1024>, public resource_limits_manager
 {
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_SUITE(resource_limits_test)
       // this is enough iterations for the average to reach/exceed the target (triggering congestion handling) and then the iterations to contract down to the min
       // subtracting 1 for the iteration that pulls double duty as reaching/exceeding the target and starting congestion handling
       const uint64_t expected_contract_iterations =
-              expected_exponential_average_iterations(0, EOS_PERCENT(config::default_max_block_cpu_usage, config::default_target_block_cpu_usage_pct), config::default_max_block_cpu_usage, config::block_cpu_usage_average_window_ms / config::block_interval_ms ) +
+              expected_exponential_average_iterations(0, UPCX_PERCENT(config::default_max_block_cpu_usage, config::default_target_block_cpu_usage_pct), config::default_max_block_cpu_usage, config::block_cpu_usage_average_window_ms / config::block_interval_ms ) +
               expected_elastic_iterations( desired_virtual_limit, config::default_max_block_cpu_usage, 99, 100 ) - 1;
 
       const account_name account(1);
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_SUITE(resource_limits_test)
       // this is enough iterations for the average to reach/exceed the target (triggering congestion handling) and then the iterations to contract down to the min
       // subtracting 1 for the iteration that pulls double duty as reaching/exceeding the target and starting congestion handling
       const uint64_t expected_contract_iterations =
-              expected_exponential_average_iterations(0, EOS_PERCENT(config::default_max_block_net_usage, config::default_target_block_net_usage_pct), config::default_max_block_net_usage, config::block_size_average_window_ms / config::block_interval_ms ) +
+              expected_exponential_average_iterations(0, UPCX_PERCENT(config::default_max_block_net_usage, config::default_target_block_net_usage_pct), config::default_max_block_net_usage, config::block_size_average_window_ms / config::block_interval_ms ) +
               expected_elastic_iterations( desired_virtual_limit, config::default_max_block_net_usage, 99, 100 ) - 1;
 
       const account_name account(1);
@@ -348,8 +348,8 @@ BOOST_AUTO_TEST_SUITE(resource_limits_test)
 
       const account_name cpu_test_account("cpuacc");
       const account_name net_test_account("netacc");
-      constexpr uint32_t net_window = eosio::chain::config::account_net_usage_average_window_ms / eosio::chain::config::block_interval_ms;
-      constexpr uint32_t cpu_window = eosio::chain::config::account_cpu_usage_average_window_ms / eosio::chain::config::block_interval_ms;
+      constexpr uint32_t net_window = upcx::chain::config::account_net_usage_average_window_ms / upcx::chain::config::block_interval_ms;
+      constexpr uint32_t cpu_window = upcx::chain::config::account_cpu_usage_average_window_ms / upcx::chain::config::block_interval_ms;
 
       constexpr int64_t unlimited = -1;
 
@@ -482,7 +482,7 @@ BOOST_AUTO_TEST_SUITE(resource_limits_test)
          trigger_block->transactions.back().net_usage_words.value = 2*((reqauth_net_usage_delta + 7)/8); // double the NET bill
 
          // Re-calculate the transaction merkle
-         eosio::chain::deque<digest_type> trx_digests;
+         upcx::chain::deque<digest_type> trx_digests;
          const auto& trxs = trigger_block->transactions;
          for( const auto& a : trxs )
             trx_digests.emplace_back( a.digest() );
@@ -524,7 +524,7 @@ BOOST_AUTO_TEST_SUITE(resource_limits_test)
          trigger_block->transactions.back().net_usage_words.value = ((reqauth_net_usage_delta + 7)/8)/2; // half the original NET bill
 
          // Re-calculate the transaction merkle
-         eosio::chain::deque<digest_type> trx_digests;
+         upcx::chain::deque<digest_type> trx_digests;
          const auto& trxs = trigger_block->transactions;
          for( const auto& a : trxs )
             trx_digests.emplace_back( a.digest() );

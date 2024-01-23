@@ -16,7 +16,7 @@ import math
 import re
 
 ###############################################################
-# nodeos_startup_catchup
+# nodupcx_startup_catchup
 #
 #  Test configures a producing node and <--txn-plugins count> non-producing nodes with the
 #  txn_test_gen_plugin.  Each non-producing node starts generating transactions and sending them
@@ -55,11 +55,11 @@ totalNodes=startedNonProdNodes+pnodes+catchupCount
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killUpcxInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
-ClientName="cleos"
+WalletdName=Utils.UpcxWalletName
+ClientName="clupcx"
 
 try:
     TestHelper.printSystemInfo("BEGIN")
@@ -67,14 +67,14 @@ try:
 
     cluster.killall(allInstances=killAll)
     cluster.cleanup()
-    specificExtraNodeosArgs={}
+    specificExtraNodupcxArgs={}
     txnGenNodeNum=pnodes  # next node after producer nodes
     for nodeNum in range(txnGenNodeNum, txnGenNodeNum+startedNonProdNodes):
-        specificExtraNodeosArgs[nodeNum]="--plugin eosio::txn_test_gen_plugin --txn-test-gen-account-prefix txntestacct"
+        specificExtraNodupcxArgs[nodeNum]="--plugin upcx::txn_test_gen_plugin --txn-test-gen-account-prefix txntestacct"
     Print("Stand up cluster")
     if cluster.launch(prodCount=prodCount, onlyBios=False, pnodes=pnodes, totalNodes=totalNodes, totalProducers=pnodes*prodCount,
-                      useBiosBootFile=False, specificExtraNodeosArgs=specificExtraNodeosArgs, unstartedNodes=catchupCount, loadSystemContract=False) is False:
-        Utils.errorExit("Failed to stand up eos cluster.")
+                      useBiosBootFile=False, specificExtraNodupcxArgs=specificExtraNodupcxArgs, unstartedNodes=catchupCount, loadSystemContract=False) is False:
+        Utils.errorExit("Failed to stand up upcx cluster.")
 
     Print("Validating system accounts after bootstrap")
     cluster.validateAccounts(None)
@@ -85,7 +85,7 @@ try:
         txnGenNodes.append(cluster.getNode(nodeNum))
 
     Print("Create accounts for generated txns")
-    txnGenNodes[0].txnGenCreateTestAccounts(cluster.eosioAccount.name, cluster.eosioAccount.activePrivateKey)
+    txnGenNodes[0].txnGenCreateTestAccounts(cluster.upcxAccount.name, cluster.upcxAccount.activePrivateKey)
 
     def lib(node):
         return node.getBlockNum(BlockType.lib)
@@ -190,6 +190,6 @@ try:
     testSuccessful=True
 
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killUpcxInstances=killUpcxInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

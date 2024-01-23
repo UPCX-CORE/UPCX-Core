@@ -1,10 +1,10 @@
 #define BOOST_TEST_MODULE account_query_db
-#include <eosio/chain/permission_object.hpp>
+#include <upcx/chain/permission_object.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <eosio/testing/tester.hpp>
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/block_state.hpp>
-#include <eosio/chain_plugin/account_query_db.hpp>
+#include <upcx/testing/tester.hpp>
+#include <upcx/chain/types.hpp>
+#include <upcx/chain/block_state.hpp>
+#include <upcx/chain_plugin/account_query_db.hpp>
 
 #ifdef NON_VALIDATING_TEST
 #define TESTER tester
@@ -12,10 +12,10 @@
 #define TESTER validating_tester
 #endif
 
-using namespace eosio;
-using namespace eosio::chain;
-using namespace eosio::testing;
-using namespace eosio::chain_apis;
+using namespace upcx;
+using namespace upcx::chain;
+using namespace upcx::testing;
+using namespace upcx::chain_apis;
 
 using params  = account_query_db::get_accounts_by_authorizers_params;
 using results = account_query_db::get_accounts_by_authorizers_result;

@@ -1,40 +1,40 @@
 ---
-content_title: Cleos
+content_title: Clupcx
 ---
 
 ## Introduction
 
-`cleos` is a command line tool that interfaces with the REST API exposed by `nodeos`. Developers can also use `cleos` to deploy and test EOSIO smart contracts.
+`clupcx` is a command line tool that interfaces with the REST API exposed by `nodupcx`. Developers can also use `clupcx` to deploy and test UPCX smart contracts.
 
 ## Installation
 
-`cleos` is distributed as part of the [EOSIO software suite](https://github.com/EOSIO/eos/blob/master/README.md). To install `cleos` just visit the [EOSIO Software Installation](../00_install/index.md) section.
+`clupcx` is distributed as part of the [UPCX software suite](https://github.com/UPCX/upcx/blob/master/README.md). To install `clupcx` just visit the [UPCX Software Installation](../00_install/index.md) section.
 
-## Using Cleos
+## Using Clupcx
 
-To use `cleos`, you need the end point (IP address and port number) of a running `nodeos` instance. Also, the `nodeos` instance must be configured to load the `eosio::chain_api_plugin` when launched. This allows `nodeos` to respond to the RPC requests coming from `cleos`.
+To use `clupcx`, you need the end point (IP address and port number) of a running `nodupcx` instance. Also, the `nodupcx` instance must be configured to load the `upcx::chain_api_plugin` when launched. This allows `nodupcx` to respond to the RPC requests coming from `clupcx`.
 
-### Cleos Commands
+### Clupcx Commands
 
-For a list of all `cleos` commands, run:
+For a list of all `clupcx` commands, run:
 
 ```sh
-cleos --help
+clupcx --help
 ```
 
 ```console
-Command Line Interface to EOSIO Client
-Usage: cleos [OPTIONS] SUBCOMMAND
+Command Line Interface to UPCX Client
+Usage: clupcx [OPTIONS] SUBCOMMAND
 
 Options:
   -h,--help                   Print this help message and exit
   -u,--url TEXT=http://127.0.0.1:8888/
-                              the http/https URL where nodeos is running
-  --wallet-url TEXT=unix:///Users/username/eosio-wallet/keosd.sock
-                              the http/https URL where keosd is running
+                              the http/https URL where nodupcx is running
+  --wallet-url TEXT=unix:///Users/username/upcx-wallet/kupcxd.sock
+                              the http/https URL where kupcxd is running
   -r,--header                 pass specific HTTP header; repeat this option to pass multiple headers
   -n,--no-verify              don't verify peer certificate when using HTTPS
-  --no-auto-keosd             don't automatically launch a keosd if one is not currently running
+  --no-auto-kupcxd             don't automatically launch a kupcxd if one is not currently running
   -v,--verbose                output verbose errors and action console output
   --print-request             print HTTP request to STDERR
   --print-response            print HTTP response to STDERR
@@ -53,20 +53,20 @@ Subcommands:
   push                        Push arbitrary transactions to the blockchain
   multisig                    Multisig contract commands
   wrap                        Wrap contract commands
-  system                      Send eosio.system contract action to the blockchain.
+  system                      Send upcx.system contract action to the blockchain.
 ```
 
-### Cleos Subcommands
+### Clupcx Subcommands
 
-To get help with any particular subcommand, run `cleos SUBCOMMAND --help`. For instance:
+To get help with any particular subcommand, run `clupcx SUBCOMMAND --help`. For instance:
 
 ```sh
-cleos create --help
+clupcx create --help
 ```
 
 ```console
 Create various items, on and off the blockchain
-Usage: cleos create SUBCOMMAND
+Usage: clupcx create SUBCOMMAND
 
 Subcommands:
   key                         Create a new keypair and print the public and private keys
@@ -74,15 +74,15 @@ Subcommands:
                               (assumes system contract does not restrict RAM usage)
 ```
 
-`cleos` can also provide usage help for subcommands within subcommands. For instance:
+`clupcx` can also provide usage help for subcommands within subcommands. For instance:
 
 ```sh
-cleos create account --help
+clupcx create account --help
 ```
 
 ```console
 Create a new account on the blockchain (assumes system contract does not restrict RAM usage)
-Usage: cleos create account [OPTIONS] creator name OwnerKey [ActiveKey]
+Usage: clupcx create account [OPTIONS] creator name OwnerKey [ActiveKey]
 
 Positionals:
   creator TEXT                The name of the account creating the new account (required)
@@ -107,12 +107,12 @@ Options:
   --delay-sec UINT            set the delay_sec seconds, defaults to 0s
 ```
 
-## Cleos Example
+## Clupcx Example
 
-The following `cleos` command creates a local wallet named `mywallet` and displays the password to the screen:
+The following `clupcx` command creates a local wallet named `mywallet` and displays the password to the screen:
 
 ```sh
-cleos wallet create -n mywallet --to-console
+clupcx wallet create -n mywallet --to-console
 ```
 
 ```console

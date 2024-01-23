@@ -1,5 +1,5 @@
-#include <eosio/reflection.hpp>
-#include <eosio/for_each_field.hpp>
+#include <upcx/reflection.hpp>
+#include <upcx/for_each_field.hpp>
 #include <cstdio>
 
 int error_count;
@@ -16,13 +16,13 @@ void report_error(const char* assertion, const char* file, int line) {
 struct fn {
    int test(int i) { return i * 2; }
 };
-EOSIO_REFLECT(fn, test);
+UPCX_REFLECT(fn, test);
 
 int main() {
    int counter = 0;
-   eosio::for_each_field<fn>([&](const char* name, auto method) { ++counter; });
+   upcx::for_each_field<fn>([&](const char* name, auto method) { ++counter; });
    CHECK(counter == 0);
-   eosio::for_each_method<fn>([&](const char* name, int (fn::*m)(int)) { CHECK(m == &fn::test); ++counter; });
+   upcx::for_each_method<fn>([&](const char* name, int (fn::*m)(int)) { CHECK(m == &fn::test); ++counter; });
    CHECK(counter == 1);
    if(error_count) return 1;
 }

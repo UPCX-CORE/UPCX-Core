@@ -1,10 +1,10 @@
 #pragma once
 
-#include <b1/rodeos/callbacks/vm_types.hpp>
+#include <b1/rodupcx/callbacks/vm_types.hpp>
 #include <compiler_builtins.hpp>
 #include <softfloat.hpp>
 
-namespace b1::rodeos {
+namespace b1::rodupcx {
 
 template <typename Derived>
 struct compiler_builtins_callbacks {
@@ -318,4 +318,4 @@ struct compiler_builtins_callbacks {
    }
 };
 
-} // namespace b1::rodeos
+} // namespace b1::rodupcx

@@ -4,17 +4,17 @@ Query infomation of a transaction
 
 ## Before you begin
 
-* Install the currently supported version of `cleos`
+- Install the currently supported version of `clupcx`
 
-* Understand the following:
+- Understand the following:
 
-  * What is a transaction
+  - What is a transaction
 
 ## Steps
 
 ```sh
-cleos get transaction id
+clupcx get transaction id
 ```
 
 [[info]]
-| Be aware that you need to connect to a `nodeos` instance that enables history API plugin to query transaction information.
+| Be aware that you need to connect to a `nodupcx` instance that enables history API plugin to query transaction information.

@@ -12,7 +12,7 @@ import math
 import re
 
 ###############################################################
-# nodeos_voting_test
+# nodupcx_voting_test
 #
 # This test sets up multiple producing nodes, each with multiple producers per node. Different combinations of producers
 # are voted into the production schedule and the block production is analyzed to determine if the correct producers are
@@ -161,11 +161,11 @@ walletPort=args.wallet_port
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killUpcxInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
-ClientName="cleos"
+WalletdName=Utils.UpcxWalletName
+ClientName="clupcx"
 
 try:
     TestHelper.printSystemInfo("BEGIN")
@@ -176,7 +176,7 @@ try:
     Print("Stand up cluster")
     if cluster.launch(prodCount=prodCount, onlyBios=False, pnodes=totalNodes, totalNodes=totalNodes, totalProducers=totalNodes*21, useBiosBootFile=False) is False:
         Utils.cmdError("launcher")
-        Utils.errorExit("Failed to stand up eos cluster.")
+        Utils.errorExit("Failed to stand up upcx cluster.")
 
     Print("Validating system accounts after bootstrap")
     cluster.validateAccounts(None)
@@ -193,7 +193,7 @@ try:
     testWalletName="test"
 
     Print("Creating wallet \"%s\"." % (testWalletName))
-    testWallet=walletMgr.create(testWalletName, [cluster.eosioAccount,accounts[0],accounts[1],accounts[2],accounts[3],accounts[4]])
+    testWallet=walletMgr.create(testWalletName, [cluster.upcxAccount,accounts[0],accounts[1],accounts[2],accounts[3],accounts[4]])
 
     for _, account in cluster.defProducerAccounts.items():
         walletMgr.importKey(account, testWallet, ignoreDupKeyWarning=True)
@@ -212,13 +212,13 @@ try:
     node3=cluster.getNode(3)
 
     node=node0
-    # create accounts via eosio as otherwise a bid is needed
+    # create accounts via upcx as otherwise a bid is needed
     for account in accounts:
-        Print("Create new account %s via %s" % (account.name, cluster.eosioAccount.name))
-        trans=node.createInitializeAccount(account, cluster.eosioAccount, stakedDeposit=0, waitForTransBlock=False, stakeNet=1000, stakeCPU=1000, buyRAM=1000, exitOnError=True)
+        Print("Create new account %s via %s" % (account.name, cluster.upcxAccount.name))
+        trans=node.createInitializeAccount(account, cluster.upcxAccount, stakedDeposit=0, waitForTransBlock=False, stakeNet=1000, stakeCPU=1000, buyRAM=1000, exitOnError=True)
         transferAmount="100000000.0000 {0}".format(CORE_SYMBOL)
-        Print("Transfer funds %s from account %s to %s" % (transferAmount, cluster.eosioAccount.name, account.name))
-        node.transferFunds(cluster.eosioAccount, account, transferAmount, "test transfer")
+        Print("Transfer funds %s from account %s to %s" % (transferAmount, cluster.upcxAccount.name, account.name))
+        node.transferFunds(cluster.upcxAccount, account, transferAmount, "test transfer")
         trans=node.delegatebw(account, 20000000.0000, 20000000.0000, waitForTransBlock=True, exitOnError=True)
 
     # containers for tracking producers
@@ -252,6 +252,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killUpcxInstances=killUpcxInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

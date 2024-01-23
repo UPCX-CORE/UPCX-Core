@@ -1,25 +1,25 @@
 ## Goal
 
-Query infomation of an EOSIO account
+Query infomation of an UPCX account
 
 ## Before you begin
 
-* Install the currently supported version of `cleos`
+- Install the currently supported version of `clupcx`
 
 [[info | Note]]
-| The cleos tool is bundled with the EOSIO software. [Installing EOSIO](../../00_install/index.md) will also install the cleos tool. 
+| The clupcx tool is bundled with the UPCX software. [Installing UPCX](../../00_install/index.md) will also install the clupcx tool.
 
-* Acquire functional understanding of [EOSIO Accounts and Permissions](https://developers.eos.io/welcome/v2.1/protocol/accounts_and_permissions)
-
+- Acquire functional understanding of [UPCX Accounts and Permissions](https://developers.upcx.io/welcome/v2.1/protocol/accounts_and_permissions)
 
 ## Steps
 
 Execute the command below:
 
 ```sh
-cleos get account ACCOUNT_NAME
+clupcx get account ACCOUNT_NAME
 ```
-Where ACCOUNT_NAME = name of the existing account in the EOSIO blockchain.
+
+Where ACCOUNT_NAME = name of the existing account in the UPCX blockchain.
 
 **Example Output**
 
@@ -27,8 +27,8 @@ Where ACCOUNT_NAME = name of the existing account in the EOSIO blockchain.
 created: 2018-06-01T12:00:00.000
 privileged: true
 permissions:
-     owner     1:    1 EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
-        active     1:    1 EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+     owner     1:    1 UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+        active     1:    1 UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 memory:
      quota:       unlimited  used:     3.004 KiB
 
@@ -44,4 +44,4 @@ cpu bandwidth:
 ```
 
 [[info | Account Fields]]
-| Depending on the EOSIO network you are connected, you might see different fields associated with an account. That depends on which system contract has been deployed on the network.
+| Depending on the UPCX network you are connected, you might see different fields associated with an account. That depends on which system contract has been deployed on the network.

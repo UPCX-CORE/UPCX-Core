@@ -5,13 +5,13 @@ link_text: Deep-mind Logger Integration
 
 ## Overview
 
-The `Deep-mind logger` is part of the `dfuse` [platform]([https://dfuse.io/](https://dfuse.io/)) which is a highly scalable and performant [open-source]([https://github.com/dfuse-io/dfuse-eosio/tree/master](https://github.com/dfuse-io/dfuse-eosio/tree/master)) platform for searching and processing blockchain data.
+The `Deep-mind logger` is part of the `dfuse` [platform](<[https://dfuse.io/](https://dfuse.io/)>) which is a highly scalable and performant [open-source](<[https://github.com/dfuse-io/dfuse-upcx/tree/master](https://github.com/dfuse-io/dfuse-upcx/tree/master)>) platform for searching and processing blockchain data.
 
 ### How To Enable Deep-mind Logger
 
-EOSIO integrates the `nodeos` core service daemon with `deep-mind logger`. To benefit from full `deep-mind` logging functionality you must start your `nodeos` instance with the flag `--deep-mind`. After the start you can observe in the `nodeos` console output the informative details outputs created by the `deep-mind` logger. They distinguish themselves from the default `nodeos` output lines because they start with the `DMLOG` keyword.
+UPCX integrates the `nodupcx` core service daemon with `deep-mind logger`. To benefit from full `deep-mind` logging functionality you must start your `nodupcx` instance with the flag `--deep-mind`. After the start you can observe in the `nodupcx` console output the informative details outputs created by the `deep-mind` logger. They distinguish themselves from the default `nodupcx` output lines because they start with the `DMLOG` keyword.
 
-Examples of `deep-mind` log lines as you would see them in the `nodeos` output console:
+Examples of `deep-mind` log lines as you would see them in the `nodupcx` output console:
 
 ```console
 DMLOG START_BLOCK 30515
@@ -20,7 +20,7 @@ DMLOG TRX_OP CREATE onblock 308f77bf49ab4ddde74d37c7310c0742e253319d9da57ebe51eb
 
 DMLOG CREATION_OP ROOT 0
 
-DMLOG RLIMIT_OP ACCOUNT_USAGE UPD {"owner":"eosio","net_usage":{"last_ordinal":1316982371,"value_ex":0,"consumed":0},"cpu_usage":{"last_ordinal":1316982371,"value_ex":24855,"consumed":101},"ram_usage":27083}
+DMLOG RLIMIT_OP ACCOUNT_USAGE UPD {"owner":"upcx","net_usage":{"last_ordinal":1316982371,"value_ex":0,"consumed":0},"cpu_usage":{"last_ordinal":1316982371,"value_ex":24855,"consumed":101},"ram_usage":27083}
 
 DMLOG APPLIED_TRANSACTION 30515 {"id":"308f77bf49ab4ddde74d37c7310c0742e253319d9da57ebe51eb7b35f1ffe174","block_num":30515,"block_time":"2020-11-12T10:13:05.500",...}
 

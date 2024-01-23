@@ -3,15 +3,15 @@ content_title: Shell Scripts
 ---
 
 [[info | Did you know?]]
-| Shell scripts automate the process of building, installing, testing, and uninstalling the EOSIO software and dependencies.
+| Shell scripts automate the process of building, installing, testing, and uninstalling the UPCX software and dependencies.
 
-To build EOSIO from the source code using shell scripts, visit the sections below:
+To build UPCX from the source code using shell scripts, visit the sections below:
 
-1. [Download EOSIO Source](01_download-eosio-source.md)
-2. [Build EOSIO Binaries](02_build-eosio-binaries.md)
-3. [Install EOSIO Binaries](03_install-eosio-binaries.md)
-4. [Test EOSIO Binaries](04_test-eosio-binaries.md)
-5. [Uninstall EOSIO](05_uninstall-eosio.md)
+1. [Download UPCX Source](01_download-upcx-source.md)
+2. [Build UPCX Binaries](02_build-upcx-binaries.md)
+3. [Install UPCX Binaries](03_install-upcx-binaries.md)
+4. [Test UPCX Binaries](04_test-upcx-binaries.md)
+5. [Uninstall UPCX](05_uninstall-upcx.md)
 
-[[info | Building EOSIO is for Advanced Developers]]
-| If you are new to EOSIO, it is recommended that you install the [EOSIO Prebuilt Binaries](../../00_install-prebuilt-binaries.md) instead of building from source.
+[[info | Building UPCX is for Advanced Developers]]
+| If you are new to UPCX, it is recommended that you install the [UPCX Prebuilt Binaries](../../00_install-prebuilt-binaries.md) instead of building from source.

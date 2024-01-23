@@ -1,27 +1,27 @@
 ---
-content_title: Nodeos
+content_title: Nodupcx
 ---
 
 ## Introduction
 
-`nodeos` is the core service daemon that runs on every EOSIO node. It can be configured to process smart contracts, validate transactions, produce blocks containing valid transactions, and confirm blocks to record them on the blockchain.
+`nodupcx` is the core service daemon that runs on every UPCX node. It can be configured to process smart contracts, validate transactions, produce blocks containing valid transactions, and confirm blocks to record them on the blockchain.
 
 ## Installation
 
-`nodeos` is distributed as part of the [EOSIO software suite](https://github.com/EOSIO/eos/blob/master/README.md). To install `nodeos`, visit the [EOSIO Software Installation](../00_install/index.md) section.
+`nodupcx` is distributed as part of the [UPCX software suite](https://github.com/UPCX/upcx/blob/master/README.md). To install `nodupcx`, visit the [UPCX Software Installation](../00_install/index.md) section.
 
 ## Explore
 
-Navigate the sections below to configure and use `nodeos`.
+Navigate the sections below to configure and use `nodupcx`.
 
-* [Usage](02_usage/index.md) - Configuring and using `nodeos`, node setups/environments.
-* [Plugins](03_plugins/index.md) - Using plugins, plugin options, mandatory vs. optional.
-* [Replays](04_replays/index.md) - Replaying the chain from a snapshot or a blocks.log file.
-* [RPC APIs](05_rpc_apis/index.md) - Remote Procedure Call API reference for plugin HTTP endpoints.
-* [Logging](06_logging/index.md) - Logging config/usage, loggers, appenders, logging levels.
-* [Concepts](07_concepts/index.md) - `nodeos` concepts, explainers, implementation aspects.
-* [Troubleshooting](08_troubleshooting/index.md) - Common `nodeos` troubleshooting questions.
-* [Deprecation Notices](https://github.com/EOSIO/eos/issues/7597) - Lists `nodeos` deprecated functionality.
+- [Usage](02_usage/index.md) - Configuring and using `nodupcx`, node setups/environments.
+- [Plugins](03_plugins/index.md) - Using plugins, plugin options, mandatory vs. optional.
+- [Replays](04_replays/index.md) - Replaying the chain from a snapshot or a blocks.log file.
+- [RPC APIs](05_rpc_apis/index.md) - Remote Procedure Call API reference for plugin HTTP endpoints.
+- [Logging](06_logging/index.md) - Logging config/usage, loggers, appenders, logging levels.
+- [Concepts](07_concepts/index.md) - `nodupcx` concepts, explainers, implementation aspects.
+- [Troubleshooting](08_troubleshooting/index.md) - Common `nodupcx` troubleshooting questions.
+- [Deprecation Notices](https://github.com/UPCX/upcx/issues/7597) - Lists `nodupcx` deprecated functionality.
 
 [[info | Access Node]]
-| A local or remote EOSIO access node running `nodeos` is required for a client application or smart contract to interact with the blockchain.
+| A local or remote UPCX access node running `nodupcx` is required for a client application or smart contract to interact with the blockchain.

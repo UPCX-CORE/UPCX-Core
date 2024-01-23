@@ -1,13 +1,13 @@
 #pragma once
 
-#include <eosio/name.hpp>
+#include <upcx/name.hpp>
 
-namespace b1::rodeos {
+namespace b1::rodupcx {
 
-// kv database which stores rodeos state, including a mirror of nodeos state
-inline constexpr eosio::name state_database{ "eosio.state" };
+// kv database which stores rodupcx state, including a mirror of nodupcx state
+inline constexpr upcx::name state_database{ "upcx.state" };
 
 // account within state_database which stores state
-inline constexpr eosio::name state_account{ "state" };
+inline constexpr upcx::name state_account{ "state" };
 
-} // namespace b1::rodeos
+} // namespace b1::rodupcx

@@ -1,50 +1,58 @@
-
 ## Command
-cleos get account [OPTIONS] name [core-symbol]
+
+clupcx get account [OPTIONS] name [core-symbol]
 
 **Where**
-* [OPTIONS] = See Options in Command Usage section below.
+
+- [OPTIONS] = See Options in Command Usage section below.
 
 **Note**: The arguments and options enclosed in square brackets are optional.
 
 ## Description
+
 Retrieve an account from the blockchain
 
 ## Command Usage
-The following information shows the different positionals and options you can use with the `cleos create key` command:
+
+The following information shows the different positionals and options you can use with the `clupcx create key` command:
 
 ### Positionals:
+
 - `name` _TEXT_ - The name of the account to retrieve
 - `core-symbol` _TEXT_ - The expected core symbol of the chain you are querying - OPTIONAL
 
 ### Options
+
 - `-h,--help` Print this help message and exit
 - `-j,--json` - Output in JSON format
 
 ## Requirements
-* Install the currently supported version of `cleos.`
-[[info | Note]] 
-| The `cleos` tool is bundled with the EOSIO software. [Installing EOSIO](../../00_install/index.md) will install the `cleos` and `keosd` command line tools. 
-* You have access to an EOSIO blockchain.
+
+- Install the currently supported version of `clupcx.`
+  [[info | Note]]
+  | The `clupcx` tool is bundled with the UPCX software. [Installing UPCX](../../00_install/index.md) will install the `clupcx` and `kupcxd` command line tools.
+- You have access to an UPCX blockchain.
 
 ## Examples
 
-1. Get formatted data for user **eosio**
+1. Get formatted data for user **upcx**
 
 ```shell
-cleos get account eosio
+clupcx get account upcx
 ```
+
 **Where**
-`eosio` = The name of the account.
+`upcx` = The name of the account.
 
 **Example Output**
+
 ```console
 privileged: true
-permissions: 
-     owner     1:    1 EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
-        active     1:    1 EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
-memory: 
-     quota:        -1 bytes  used:      1.22 Mb   
+permissions:
+     owner     1:    1 UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+        active     1:    1 UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+memory:
+     quota:        -1 bytes  used:      1.22 Mb
 
 net bandwidth: (averaged over 3 days)
      used:                -1 bytes
@@ -53,21 +61,23 @@ net bandwidth: (averaged over 3 days)
 
 cpu bandwidth: (averaged over 3 days)
      used:                -1 us
-     available:           -1 us   
-     limit:               -1 us   
+     available:           -1 us
+     limit:               -1 us
 
 producers:     <not voted>
 ```
-2. Get JSON data for user **eosio**
+
+2. Get JSON data for user **upcx**
 
 ```sh
-cleos get account eosio --json
+clupcx get account upcx --json
 ```
+
 **Example Output**
 
 ```json
 {
-  "account_name": "eosio",
+  "account_name": "upcx",
   "privileged": true,
   "last_code_update": "2018-05-23T18:00:25.500",
   "created": "2018-03-02T12:00:00.000",
@@ -85,26 +95,30 @@ cleos get account eosio --json
     "max": -1
   },
   "ram_usage": 1279625,
-  "permissions": [{
+  "permissions": [
+    {
       "perm_name": "active",
       "parent": "owner",
       "required_auth": {
         "threshold": 1,
-        "keys": [{
-            "key": "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV",
+        "keys": [
+          {
+            "key": "UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV",
             "weight": 1
           }
         ],
         "accounts": [],
         "waits": []
       }
-    },{
+    },
+    {
       "perm_name": "owner",
       "parent": "",
       "required_auth": {
         "threshold": 1,
-        "keys": [{
-            "key": "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV",
+        "keys": [
+          {
+            "key": "UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV",
             "weight": 1
           }
         ],
@@ -116,7 +130,7 @@ cleos get account eosio --json
   "total_resources": null,
   "delegated_bandwidth": null,
   "voter_info": {
-    "owner": "eosio",
+    "owner": "upcx",
     "proxy": "",
     "producers": [],
     "staked": 0,
@@ -131,4 +145,5 @@ cleos get account eosio --json
 ```
 
 ## See Also
-- [Accounts and Permissions](https://developers.eos.io/welcome/v2.1/protocol/accounts_and_permissions) protocol document.
+
+- [Accounts and Permissions](https://developers.upcx.io/welcome/v2.1/protocol/accounts_and_permissions) protocol document.

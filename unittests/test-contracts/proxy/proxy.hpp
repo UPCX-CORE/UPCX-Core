@@ -1,50 +1,50 @@
 #pragma once
 
-#include <eosio/eosio.hpp>
-#include <eosio/singleton.hpp>
-#include <eosio/asset.hpp>
+#include <upcx/upcx.hpp>
+#include <upcx/singleton.hpp>
+#include <upcx/asset.hpp>
 
-// Extacted from eosio.token contract:
-namespace eosio {
-   class [[eosio::contract("eosio.token")]] token : public eosio::contract {
+// Extacted from upcx.token contract:
+namespace upcx {
+   class [[upcx::contract("upcx.token")]] token : public upcx::contract {
    public:
-      using eosio::contract::contract;
+      using upcx::contract::contract;
 
-      [[eosio::action]]
-      void transfer( eosio::name        from,
-                     eosio::name        to,
-                     eosio::asset       quantity,
+      [[upcx::action]]
+      void transfer( upcx::name        from,
+                     upcx::name        to,
+                     upcx::asset       quantity,
                      const std::string& memo );
-      using transfer_action = eosio::action_wrapper<"transfer"_n, &token::transfer>;
+      using transfer_action = upcx::action_wrapper<"transfer"_n, &token::transfer>;
    };
 }
 
 // This contract:
-class [[eosio::contract]] proxy : public eosio::contract {
+class [[upcx::contract]] proxy : public upcx::contract {
 public:
-   proxy( eosio::name self, eosio::name first_receiver, eosio::datastream<const char*> ds );
+   proxy( upcx::name self, upcx::name first_receiver, upcx::datastream<const char*> ds );
 
-   [[eosio::action]]
-   void setowner( eosio::name owner, uint32_t delay );
+   [[upcx::action]]
+   void setowner( upcx::name owner, uint32_t delay );
 
-   [[eosio::on_notify("eosio.token::transfer")]]
-   void on_transfer( eosio::name        from,
-                     eosio::name        to,
-                     eosio::asset       quantity,
+   [[upcx::on_notify("upcx.token::transfer")]]
+   void on_transfer( upcx::name        from,
+                     upcx::name        to,
+                     upcx::asset       quantity,
                      const std::string& memo );
 
-   [[eosio::on_notify("eosio::onerror")]]
-   void on_error( uint128_t sender_id, eosio::ignore<std::vector<char>> sent_trx );
+   [[upcx::on_notify("upcx::onerror")]]
+   void on_error( uint128_t sender_id, upcx::ignore<std::vector<char>> sent_trx );
 
-   struct [[eosio::table]] config {
-      eosio::name owner;
+   struct [[upcx::table]] config {
+      upcx::name owner;
       uint32_t    delay   = 0;
       uint32_t    next_id = 0;
 
-      EOSLIB_SERIALIZE( config, (owner)(delay)(next_id) )
+      UPCXLIB_SERIALIZE( config, (owner)(delay)(next_id) )
    };
 
-   using config_singleton = eosio::singleton< "config"_n,  config >;
+   using config_singleton = upcx::singleton< "config"_n,  config >;
 
 protected:
    config_singleton _config;

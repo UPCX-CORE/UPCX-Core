@@ -3,77 +3,94 @@ content_title: Install Prebuilt Binaries
 ---
 
 [[info | Previous Builds]]
-| If you have previously installed EOSIO from source using shell scripts, you must first run the [Uninstall Script](01_build-from-source/01_shell-scripts/05_uninstall-eosio.md) before installing any prebuilt binaries on the same OS.
+| If you have previously installed UPCX from source using shell scripts, you must first run the [Uninstall Script](01_build-from-source/01_shell-scripts/05_uninstall-upcx.md) before installing any prebuilt binaries on the same OS.
 
 ## Prebuilt Binaries
 
-Prebuilt EOSIO software packages are available for the operating systems below. Find and follow the instructions for your OS:
+Prebuilt UPCX software packages are available for the operating systems below. Find and follow the instructions for your OS:
 
 ### Mac OS X:
 
 #### Mac OS X Brew Install
+
 ```sh
-brew tap eosio/eosio
-brew install eosio
+brew tap upcx/upcx
+brew install upcx
 ```
+
 #### Mac OS X Brew Uninstall
+
 ```sh
-brew remove eosio
+brew remove upcx
 ```
 
 ### Ubuntu Linux:
+
 #### Ubuntu 20.04 Package Install
+
 ```sh
-wget https://github.com/eosio/eos/releases/download/v2.1.0/eosio_2.1.0-1-ubuntu-20.04_amd64.deb
-sudo apt install ./eosio_2.1.0-1-ubuntu-20.04_amd64.deb
+wget https://github.com/upcx/upcx/releases/download/v2.1.0/upcx_2.1.0-1-ubuntu-20.04_amd64.deb
+sudo apt install ./upcx_2.1.0-1-ubuntu-20.04_amd64.deb
 ```
+
 #### Ubuntu 18.04 Package Install
+
 ```sh
-wget https://github.com/eosio/eos/releases/download/v2.1.0/eosio_2.1.0-1-ubuntu-18.04_amd64.deb
-sudo apt install ./eosio_2.1.0-1-ubuntu-18.04_amd64.deb
+wget https://github.com/upcx/upcx/releases/download/v2.1.0/upcx_2.1.0-1-ubuntu-18.04_amd64.deb
+sudo apt install ./upcx_2.1.0-1-ubuntu-18.04_amd64.deb
 ```
+
 #### Ubuntu 16.04 Package Install
+
 ```sh
-wget https://github.com/eosio/eos/releases/download/v2.1.0/eosio_2.1.0-1-ubuntu-16.04_amd64.deb
-sudo apt install ./eosio_2.1.0-1-ubuntu-16.04_amd64.deb
+wget https://github.com/upcx/upcx/releases/download/v2.1.0/upcx_2.1.0-1-ubuntu-16.04_amd64.deb
+sudo apt install ./upcx_2.1.0-1-ubuntu-16.04_amd64.deb
 ```
+
 #### Ubuntu Package Uninstall
+
 ```sh
-sudo apt remove eosio
+sudo apt remove upcx
 ```
 
 ### RPM-based (CentOS, Amazon Linux, etc.):
 
 #### RPM Package Install CentOS 7
+
 ```sh
-wget https://github.com/eosio/eos/releases/download/v2.1.0/eosio-2.1.0-1.el7.x86_64.rpm
-sudo yum install ./eosio-2.1.0-1.el7.x86_64.rpm
+wget https://github.com/upcx/upcx/releases/download/v2.1.0/upcx-2.1.0-1.el7.x86_64.rpm
+sudo yum install ./upcx-2.1.0-1.el7.x86_64.rpm
 ```
+
 #### RPM Package Install CentOS 8
+
 ```sh
-wget https://github.com/eosio/eos/releases/download/v2.1.0/eosio-2.1.0-1.el8.x86_64.rpm
-sudo yum install ./eosio-2.1.0-1.el8.x86_64.rpm
+wget https://github.com/upcx/upcx/releases/download/v2.1.0/upcx-2.1.0-1.el8.x86_64.rpm
+sudo yum install ./upcx-2.1.0-1.el8.x86_64.rpm
 ```
+
 #### RPM Package Uninstall
+
 ```sh
-sudo yum remove eosio
+sudo yum remove upcx
 ```
 
-## Location of EOSIO binaries
+## Location of UPCX binaries
 
-After installing the prebuilt packages, the actual EOSIO binaries will be located under:
-* `/usr/opt/eosio/<version-string>/bin` (Linux-based); or
-* `/usr/local/Cellar/eosio/<version-string>/bin` (MacOS)
+After installing the prebuilt packages, the actual UPCX binaries will be located under:
 
-where `version-string` is the EOSIO version that was installed.
+- `/usr/opt/upcx/<version-string>/bin` (Linux-based); or
+- `/usr/local/Cellar/upcx/<version-string>/bin` (MacOS)
 
-Also, soft links for each EOSIO program (`nodeos`, `cleos`, `keosd`, etc.) will be created under `usr/bin` or `usr/local/bin` to allow them to be executed from any directory.
+where `version-string` is the UPCX version that was installed.
+
+Also, soft links for each UPCX program (`nodupcx`, `clupcx`, `kupcxd`, etc.) will be created under `usr/bin` or `usr/local/bin` to allow them to be executed from any directory.
 
 ## Previous Versions
 
-To install previous versions of the EOSIO prebuilt binaries:
+To install previous versions of the UPCX prebuilt binaries:
 
-1. Browse to https://github.com/EOSIO/eos/tags and select the actual version of the EOSIO software you need to install.
+1. Browse to https://github.com/UPCX/upcx/tags and select the actual version of the UPCX software you need to install.
 
 2. Scroll down past the `Release Notes` and download the package or archive that you need for your OS.
 

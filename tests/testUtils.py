@@ -112,24 +112,24 @@ class Utils:
     Debug=False
     FNull = open(os.devnull, 'w')
 
-    EosClientPath="programs/cleos/cleos"
-    MiscEosClientArgs="--no-auto-keosd"
+    UpcxClientPath="programs/clupcx/clupcx"
+    MiscUpcxClientArgs="--no-auto-kupcxd"
 
-    EosWalletName="keosd"
-    EosWalletPath="programs/keosd/"+ EosWalletName
+    UpcxWalletName="kupcxd"
+    UpcxWalletPath="programs/kupcxd/"+ UpcxWalletName
 
-    EosServerName="nodeos"
-    EosServerPath="programs/nodeos/"+ EosServerName
+    UpcxServerName="nodupcx"
+    UpcxServerPath="programs/nodupcx/"+ UpcxServerName
 
-    EosLauncherPath="programs/eosio-launcher/eosio-launcher"
+    UpcxLauncherPath="programs/upcx-launcher/upcx-launcher"
     ShuttingDown=False
 
-    EosBlockLogPath="programs/eosio-blocklog/eosio-blocklog"
+    UpcxBlockLogPath="programs/upcx-blocklog/upcx-blocklog"
 
     FileDivider="================================================================="
     DataRoot="var"
     DataDir="%s/lib/" % (DataRoot)
-    ConfigDir="etc/eosio/"
+    ConfigDir="etc/upcx/"
 
     TimeFmt='%Y-%m-%dT%H:%M:%S.%f'
 
@@ -434,7 +434,7 @@ class Utils:
         else:
             unhandledEnumType(blockLogAction)
 
-        cmd="%s --blocks-dir %s --as-json-array %s%s%s%s %s" % (Utils.EosBlockLogPath, blockLogLocation, outputFileStr, firstStr, lastStr, blockLogActionStr, extraArgs)
+        cmd="%s --blocks-dir %s --as-json-array %s%s%s%s %s" % (Utils.UpcxBlockLogPath, blockLogLocation, outputFileStr, firstStr, lastStr, blockLogActionStr, extraArgs)
         if Utils.Debug: Utils.Print("cmd: %s" % (cmd))
         rtn=None
         try:

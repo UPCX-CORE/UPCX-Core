@@ -1,4 +1,4 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiupcx/LICENSE.txt
 
 #include "fuzzer.hpp"
 #include <stdio.h>
@@ -28,24 +28,24 @@ extern "C" int LLVMFuzzerTestOneInput(const char* pos, size_t size) {
     if (!abi || !type || !data)
         return 0;
 
-    auto context = abieos_create();
+    auto context = abiupcx_create();
     bool ok;
     if (header.abi_is_bin)
-        ok = abieos_set_abi_bin(context, header.contract, abi, header.abi_size);
+        ok = abiupcx_set_abi_bin(context, header.contract, abi, header.abi_size);
     else
-        ok = abieos_set_abi(context, header.contract, abi);
+        ok = abiupcx_set_abi(context, header.contract, abi);
 
     if (ok) {
         if (header.operation == fuzzer_json_to_bin) {
-            abieos_json_to_bin(context, header.contract, type, data);
-            // printf("%s\n", abieos_get_bin_hex(context));
-            abieos_json_to_bin_reorderable(context, header.contract, type, data);
-            // printf("%s\n", abieos_get_bin_hex(context));
+            abiupcx_json_to_bin(context, header.contract, type, data);
+            // printf("%s\n", abiupcx_get_bin_hex(context));
+            abiupcx_json_to_bin_reorderable(context, header.contract, type, data);
+            // printf("%s\n", abiupcx_get_bin_hex(context));
         } else {
-            abieos_bin_to_json(context, header.contract, type, data, end - data);
+            abiupcx_bin_to_json(context, header.contract, type, data, end - data);
         }
     }
 
-    abieos_destroy(context);
+    abiupcx_destroy(context);
     return 0;
 }

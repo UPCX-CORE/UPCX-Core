@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <fc/crypto/public_key.hpp>
-#include <eosio/se-helpers/se-helpers.hpp>
+#include <upcx/se-helpers/se-helpers.hpp>
 
 #include "config.hpp"
 
@@ -19,7 +19,7 @@ std::istream& operator>>(std::istream& in, fc::crypto::public_key& c) {
 }
 
 int main(int argc, char** argv) {
-   using namespace eosio::nodeos_sectl::config;
+   using namespace upcx::nodupcx_sectl::config;
    bpo::options_description cli(node_executable_name + "-sectl command line options");
 
    bool help = false, list = false, create = false;
@@ -66,25 +66,25 @@ int main(int argc, char** argv) {
       return 1;
    }
 
-   if(!eosio::secure_enclave::application_signed()) {
+   if(!upcx::secure_enclave::application_signed()) {
       std::cerr << node_executable_name <<  "-sectl is not signed so it is unable to managed Secure Enclave keys" << std::endl;
       return 1;
    }
-   if(!eosio::secure_enclave::hardware_supports_secure_enclave()) {
+   if(!upcx::secure_enclave::hardware_supports_secure_enclave()) {
       std::cerr << "This device does not appear to have a Secure Enclave" << std::endl;
       return 1;
    }
 
    if(create)
-      std::cout << eosio::secure_enclave::create_key().public_key().to_string() << std::endl;
+      std::cout << upcx::secure_enclave::create_key().public_key().to_string() << std::endl;
 
-   std::set<eosio::secure_enclave::secure_enclave_key> allkeys = eosio::secure_enclave::get_all_keys();
+   std::set<upcx::secure_enclave::secure_enclave_key> allkeys = upcx::secure_enclave::get_all_keys();
 
    if(key_to_delete != fc::crypto::public_key()) {
       auto it = allkeys.begin();
       for(; it != allkeys.end(); ++it) {
          if(it->public_key() == key_to_delete) {
-            eosio::secure_enclave::delete_key(std::move(allkeys.extract(it).value()));
+            upcx::secure_enclave::delete_key(std::move(allkeys.extract(it).value()));
             break;
          }
       }

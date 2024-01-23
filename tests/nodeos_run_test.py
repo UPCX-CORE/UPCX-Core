@@ -14,9 +14,9 @@ import json
 import os
 
 ###############################################################
-# nodeos_run_test
+# nodupcx_run_test
 #
-# General test that tests a wide range of general use actions around nodeos and keosd
+# General test that tests a wide range of general use actions around nodupcx and kupcxd
 #
 ###############################################################
 
@@ -48,12 +48,12 @@ localTest=True if server == TestHelper.LOCAL_HOST else False
 cluster=Cluster(host=server, port=port, walletd=True, defproduceraPrvtKey=defproduceraPrvtKey, defproducerbPrvtKey=defproducerbPrvtKey)
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killUpcxInstances=not dontKill
 killWallet=not dontKill
 dontBootstrap=sanityTest # intent is to limit the scope of the sanity test to just verifying that nodes can be started
 
-WalletdName=Utils.EosWalletName
-ClientName="cleos"
+WalletdName=Utils.UpcxWalletName
+ClientName="clupcx"
 timeout = .5 * 12 * 2 + 60 # time for finalization with 1 producer + 60 seconds padding
 Utils.setIrreversibleTimeout(timeout)
 
@@ -67,22 +67,22 @@ try:
         cluster.killall(allInstances=killAll)
         cluster.cleanup()
         Print("Stand up cluster")
-        specificExtraNodeosArgs={ 0 : " --backing-store=chainbase",
+        specificExtraNodupcxArgs={ 0 : " --backing-store=chainbase",
                                   1 : " --backing-store=rocksdb" }
-        if cluster.launch(totalNodes=3, prodCount=prodCount, onlyBios=onlyBios, dontBootstrap=dontBootstrap, specificExtraNodeosArgs=specificExtraNodeosArgs) is False:
+        if cluster.launch(totalNodes=3, prodCount=prodCount, onlyBios=onlyBios, dontBootstrap=dontBootstrap, specificExtraNodupcxArgs=specificExtraNodupcxArgs) is False:
             cmdError("launcher")
-            errorExit("Failed to stand up eos cluster.")
+            errorExit("Failed to stand up upcx cluster.")
     else:
         Print("Collecting cluster info.")
         cluster.initializeNodes(defproduceraPrvtKey=defproduceraPrvtKey, defproducerbPrvtKey=defproducerbPrvtKey)
-        killEosInstances=False
+        killUpcxInstances=False
         Print("Stand up %s" % (WalletdName))
         walletMgr.killall(allInstances=killAll)
         walletMgr.cleanup()
         print("Stand up walletd")
         if walletMgr.launch() is False:
             cmdError("%s" % (WalletdName))
-            errorExit("Failed to stand up eos walletd.")
+            errorExit("Failed to stand up upcx walletd.")
 
     if sanityTest:
         testSuccessful=True
@@ -123,7 +123,7 @@ try:
     Print("Creating wallet \"%s\"." % (testWalletName))
     walletAccounts=[cluster.defproduceraAccount,cluster.defproducerbAccount]
     if not dontLaunch:
-        walletAccounts.append(cluster.eosioAccount)
+        walletAccounts.append(cluster.upcxAccount)
     testWallet=walletMgr.create(testWalletName, walletAccounts)
 
     Print("Wallet \"%s\" password=%s." % (testWalletName, testWallet.password.encode("utf-8")))
@@ -237,7 +237,7 @@ try:
 
     expectedAmount=transferAmount
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(testeraAccount.name)
+    actualAmount=node.getAccountUpcxBalanceStr(testeraAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -249,7 +249,7 @@ try:
 
     expectedAmount="97.5421 {0}".format(CORE_SYMBOL)
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(testeraAccount.name)
+    actualAmount=node.getAccountUpcxBalanceStr(testeraAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -276,7 +276,7 @@ try:
 
     expectedAmount="98.0311 {0}".format(CORE_SYMBOL) # 5000 initial deposit
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(currencyAccount.name)
+    actualAmount=node.getAccountUpcxBalanceStr(currencyAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -320,9 +320,9 @@ try:
     if hashNum != 0:
         errorExit("FAILURE - get code currency1111 failed", raw=True)
 
-    contractDir="unittests/contracts/eosio.token"
-    wasmFile="eosio.token.wasm"
-    abiFile="eosio.token.abi"
+    contractDir="unittests/contracts/upcx.token"
+    wasmFile="upcx.token.wasm"
+    abiFile="upcx.token.abi"
     Print("Publish contract")
     trans=node.publishContract(currencyAccount, contractDir, wasmFile, abiFile, waitForTransBlock=True)
     if trans is None:
@@ -616,16 +616,16 @@ try:
         errorExit("FAILURE - Wrong currency1111 balance (expectedgma=%s, actual=%s)" % (str(expected), str(actual)), raw=True)
 
     Print("---- Test for signing transaction ----")
-    testeraAccountAmountBeforeTrx=node.getAccountEosBalanceStr(testeraAccount.name)
-    currencyAccountAmountBeforeTrx=node.getAccountEosBalanceStr(currencyAccount.name)
+    testeraAccountAmountBeforeTrx=node.getAccountUpcxBalanceStr(testeraAccount.name)
+    currencyAccountAmountBeforeTrx=node.getAccountUpcxBalanceStr(currencyAccount.name)
 
     xferAmount="1.2345 {0}".format(CORE_SYMBOL)
     unsignedTrxRet = node.transferFunds(currencyAccount, testeraAccount, xferAmount, "unsigned trx", False, False, True, False, False, True, None, True)
     unsignedTrxJsonFile = "unsigned_trx_file"
     with open(unsignedTrxJsonFile, 'w') as outfile:
         json.dump(unsignedTrxRet, outfile)
-    testeraAccountAmountAftrTrx=node.getAccountEosBalanceStr(testeraAccount.name)
-    currencyAccountAmountAftrTrx=node.getAccountEosBalanceStr(currencyAccount.name)
+    testeraAccountAmountAftrTrx=node.getAccountUpcxBalanceStr(testeraAccount.name)
+    currencyAccountAmountAftrTrx=node.getAccountUpcxBalanceStr(currencyAccount.name)
     try:
         assert(testeraAccountAmountBeforeTrx == testeraAccountAmountAftrTrx)
         assert(currencyAccountAmountBeforeTrx == currencyAccountAmountAftrTrx)
@@ -634,11 +634,11 @@ try:
         raise
 
     signCmd = "sign --public-key {0} {1} -p".format(currencyAccount.activePublicKey, unsignedTrxJsonFile)
-    node.processCleosCmd(signCmd, "Sign and push a transaction", False, True)
+    node.processClupcxCmd(signCmd, "Sign and push a transaction", False, True)
     os.remove(unsignedTrxJsonFile)
 
-    testeraAccountAmountAfterSign=node.getAccountEosBalanceStr(testeraAccount.name)
-    currencyAccountAmountAfterSign=node.getAccountEosBalanceStr(currencyAccount.name)
+    testeraAccountAmountAfterSign=node.getAccountUpcxBalanceStr(testeraAccount.name)
+    currencyAccountAmountAfterSign=node.getAccountUpcxBalanceStr(currencyAccount.name)
     try:
         assert(Utils.addAmount(testeraAccountAmountAftrTrx, xferAmount) == testeraAccountAmountAfterSign)
         assert(Utils.deduceAmount(currencyAccountAmountAftrTrx, xferAmount) == currencyAccountAmountAfterSign)
@@ -686,7 +686,7 @@ try:
         errorExit("Failed to unlock wallet %s" % (defproduceraWallet.name))
 
     Print("Get account defproducera")
-    account=node.getEosAccount(defproduceraAccount.name, exitOnError=True)
+    account=node.getUpcxAccount(defproduceraAccount.name, exitOnError=True)
 
     Print("Unlocking wallet \"%s\"." % (defproduceraWallet.name))
     if not walletMgr.unlockWallet(testWallet):
@@ -694,7 +694,7 @@ try:
         errorExit("Failed to unlock wallet %s" % (testWallet.name))
 
     Print("Verify non-JSON call works")
-    rawAccount=node.getEosAccount(defproduceraAccount.name, exitOnError=True, returnType=ReturnType.raw)
+    rawAccount=node.getUpcxAccount(defproduceraAccount.name, exitOnError=True, returnType=ReturnType.raw)
     coreLiquidBalance=account['core_liquid_balance']
     match=re.search(r'\bliquid:\s*%s\s' % (coreLiquidBalance), rawAccount, re.MULTILINE | re.DOTALL)
     assert match is not None, "did not find the core liquid balance (\"liquid:\") of {} in \"{}\"".format(coreLiquidBalance, rawAccount)
@@ -736,6 +736,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killUpcxInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exit(0)

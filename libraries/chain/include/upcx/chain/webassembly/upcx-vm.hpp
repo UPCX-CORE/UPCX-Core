@@ -1,0 +1,57 @@
+#pragma once
+
+#include <upcx/chain/webassembly/common.hpp>
+#include <upcx/chain/webassembly/runtime_interface.hpp>
+#include <upcx/chain/exceptions.hpp>
+#include <upcx/chain/apply_context.hpp>
+#include <upcx/chain/wasm_config.hpp>
+#include <upcx/chain/whitelisted_intrinsics.hpp>
+#include <softfloat_types.h>
+
+//upcx-vm includes
+#include <upcx/vm/backend.hpp>
+
+namespace upcx { namespace chain { namespace webassembly { namespace upcx_vm_runtime {
+
+struct apply_options;
+
+}}
+
+template <typename Impl>
+using upcx_vm_backend_t = upcx::vm::backend<upcx_vm_host_functions_t, Impl, webassembly::upcx_vm_runtime::apply_options>;
+
+template <typename Options>
+using upcx_vm_null_backend_t = upcx::vm::backend<upcx_vm_host_functions_t, upcx::vm::null_backend, Options>;
+
+namespace webassembly { namespace upcx_vm_runtime {
+
+using namespace fc;
+using namespace upcx::vm;
+
+void validate(const bytes& code, const whitelisted_intrinsics_type& intrinsics );
+
+void validate(const bytes& code, const wasm_config& cfg, const whitelisted_intrinsics_type& intrinsics );
+
+struct apply_options;
+
+template<typename Backend>
+class upcx_vm_runtime : public upcx::chain::wasm_runtime_interface {
+   public:
+      upcx_vm_runtime();
+      bool inject_module(IR::Module&) override;
+      std::unique_ptr<wasm_instantiated_module_interface> instantiate_module(const char* code_bytes, size_t code_size, std::vector<uint8_t>,
+                                                                             const digest_type& code_hash, const uint8_t& vm_type, const uint8_t& vm_version) override;
+
+      void immediately_exit_currently_running_module() override;
+
+   private:
+      // todo: managing this will get more complicated with sync calls;
+      //       immediately_exit_currently_running_module() should probably
+      //       move from wasm_runtime_interface to wasm_instantiated_module_interface.
+      upcx_vm_backend_t<Backend>* _bkend = nullptr;  // non owning pointer to allow for immediate exit
+
+   template<typename Impl>
+   friend class upcx_vm_instantiated_module;
+};
+
+}}}}// upcx::chain::webassembly::upcx_vm_runtime

@@ -1,9 +1,9 @@
-#include <eosio/test_control_plugin/test_control_plugin.hpp>
+#include <upcx/test_control_plugin/test_control_plugin.hpp>
 #include <atomic>
 
 namespace fc { class variant; }
 
-namespace eosio {
+namespace upcx {
 
 static appbase::abstract_plugin& _test_control_plugin = app().register_plugin<test_control_plugin>();
 
@@ -136,4 +136,4 @@ read_write::kill_node_on_producer_results read_write::kill_node_on_producer(cons
 
 } // namespace test_control_apis
 
-} // namespace eosio
+} // namespace upcx

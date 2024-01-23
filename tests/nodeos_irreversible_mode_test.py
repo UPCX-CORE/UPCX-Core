@@ -16,7 +16,7 @@ import subprocess
 import shutil
 
 ###############################################################
-# nodeos_irreversible_mode_test
+# nodupcx_irreversible_mode_test
 #
 # Many smaller tests centered around irreversible mode
 #
@@ -35,7 +35,7 @@ Utils.Debug = args.v
 killAll=args.clean_run
 dumpErrorDetails=args.dump_error_details
 dontKill=args.leave_running
-killEosInstances=not dontKill
+killUpcxInstances=not dontKill
 killWallet=not dontKill
 keepLogs=args.keep_logs
 
@@ -159,11 +159,11 @@ try:
       pnodes=1,
       useBiosBootFile=False,
       topo="mesh",
-      specificExtraNodeosArgs={
+      specificExtraNodupcxArgs={
          0:"--enable-stale-production",
          4:"--read-mode irreversible",
          6:"--read-mode irreversible",
-         9:"--plugin eosio::producer_api_plugin"})
+         9:"--plugin upcx::producer_api_plugin"})
 
    producingNodeId = 0
    producingNode = cluster.getNode(producingNodeId)
@@ -395,7 +395,7 @@ try:
    testSuccessful = testSuccessful and executeTest(9, switchToSpecModeWithIrrModeSnapshot)
 
 finally:
-   TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+   TestHelper.shutdown(cluster, walletMgr, testSuccessful, killUpcxInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
    # Print test result
    for msg in testResultMsgs:
       Print(msg)

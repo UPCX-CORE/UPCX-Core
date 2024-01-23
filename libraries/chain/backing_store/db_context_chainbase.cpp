@@ -1,8 +1,8 @@
-#include <eosio/chain/apply_context.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/backing_store/db_context.hpp>
+#include <upcx/chain/apply_context.hpp>
+#include <upcx/chain/exceptions.hpp>
+#include <upcx/chain/backing_store/db_context.hpp>
 
-namespace eosio { namespace chain { namespace backing_store {
+namespace upcx { namespace chain { namespace backing_store {
 
    struct db_context_chainbase : db_context {
       db_context_chainbase(apply_context& context, name receiver)
@@ -294,4 +294,4 @@ namespace eosio { namespace chain { namespace backing_store {
       return std::make_unique<db_context_chainbase>(context, receiver);
    }
 
-}}} // namespace eosio::chain::backing_store
+}}} // namespace upcx::chain::backing_store

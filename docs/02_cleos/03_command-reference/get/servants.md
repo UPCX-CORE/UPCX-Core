@@ -1,17 +1,19 @@
 ## Description
-Retrieve accounts which are servants of a given account 
+
+Retrieve accounts which are servants of a given account
 
 ## Info
 
 **Command**
 
 ```sh
-cleos get servants
+clupcx get servants
 ```
+
 **Output**
 
 ```console
-Usage: cleos get servants account
+Usage: clupcx get servants account
 
 Positionals:
   account TEXT                The name of the controlling account
@@ -20,15 +22,13 @@ Positionals:
 ## Command
 
 ```sh
-cleos get servants inita
+clupcx get servants inita
 ```
 
 ## Output
 
 ```json
 {
-  "controlled_accounts": [
-    "tester"
-  ]
+  "controlled_accounts": ["tester"]
 }
 ```

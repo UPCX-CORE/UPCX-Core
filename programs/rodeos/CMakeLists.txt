@@ -1,5 +1,5 @@
 file(GLOB HEADERS *.hpp streams/*.hpp)
-add_executable( ${RODEOS_EXECUTABLE_NAME}
+add_executable( ${RODUPCX_EXECUTABLE_NAME}
   cloner_plugin.cpp
   streamer_plugin.cpp
   main.cpp
@@ -19,30 +19,30 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../.git)
     execute_process(
       COMMAND ${GIT_EXECUTABLE} rev-parse --short=8 HEAD
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../.."
-      OUTPUT_VARIABLE "rodeos_BUILD_VERSION"
+      OUTPUT_VARIABLE "rodupcx_BUILD_VERSION"
       ERROR_QUIET
       OUTPUT_STRIP_TRAILING_WHITESPACE)
-    message(STATUS "Git commit revision: ${rodeos_BUILD_VERSION}")
+    message(STATUS "Git commit revision: ${rodupcx_BUILD_VERSION}")
   else()
-    set(rodeos_BUILD_VERSION 0)
+    set(rodupcx_BUILD_VERSION 0)
   endif()
 else()
-  set(rodeos_BUILD_VERSION 0)
+  set(rodupcx_BUILD_VERSION 0)
 endif()
 
 configure_file(config.hpp.in config.hpp ESCAPE_QUOTES)
 
-target_include_directories(${RODEOS_EXECUTABLE_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../libraries/abieos/src
+target_include_directories(${RODUPCX_EXECUTABLE_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../libraries/abiupcx/src
   ${CMAKE_CURRENT_SOURCE_DIR}/../../libraries/amqp-cpp/include)
 
-target_link_libraries( ${RODEOS_EXECUTABLE_NAME}
+target_link_libraries( ${RODUPCX_EXECUTABLE_NAME}
         PRIVATE appbase version
-        PRIVATE rodeos_lib fc amqpcpp ${CMAKE_DL_LIBS} ${PLATFORM_SPECIFIC_LIBS})
+        PRIVATE rodupcx_lib fc amqpcpp ${CMAKE_DL_LIBS} ${PLATFORM_SPECIFIC_LIBS})
 
 add_subdirectory(tests)
 
-copy_bin( ${RODEOS_EXECUTABLE_NAME} )
+copy_bin( ${RODUPCX_EXECUTABLE_NAME} )
 install( TARGETS
-   ${RODEOS_EXECUTABLE_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT base
+   ${RODUPCX_EXECUTABLE_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR} COMPONENT base
 )

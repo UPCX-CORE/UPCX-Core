@@ -3,12 +3,13 @@ content_title: Logging Levels
 ---
 
 There are six available logging levels:
+
 - all
 - debug
 - info
 - warn
 - error
-- off  
+- off
 
 Sample `logging.json`:
 
@@ -67,7 +68,7 @@ Sample `logging.json`:
       "args": {
         "endpoint": "http://127.0.0.1:9411",
         "path": "/api/v2/spans",
-        "service_name": "nodeos",
+        "service_name": "nodupcx",
         "timeout_us": 200000
       },
       "enabled": true

@@ -1,9 +1,9 @@
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/eosio/chain/core_symbol.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/include/eosio/chain/core_symbol.hpp)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/upcx/chain/core_symbol.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/include/upcx/chain/core_symbol.hpp)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/genesis_state_root_key.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/genesis_state_root_key.cpp)
 
-file(GLOB HEADERS "include/eosio/chain/*.hpp"
-                  "include/eosio/chain/webassembly/*.hpp"
-                  "${CMAKE_CURRENT_BINARY_DIR}/include/eosio/chain/core_symbol.hpp" )
+file(GLOB HEADERS "include/upcx/chain/*.hpp"
+                  "include/upcx/chain/webassembly/*.hpp"
+                  "${CMAKE_CURRENT_BINARY_DIR}/include/upcx/chain/core_symbol.hpp" )
 
 if(APPLE AND UNIX)
    set(PLATFORM_TIMER_IMPL platform_timer_macos.cpp)
@@ -17,40 +17,40 @@ else()
    endif()
 endif()
 
-if("eos-vm-oc" IN_LIST EOSIO_WASM_RUNTIMES)
+if("upcx-vm-oc" IN_LIST UPCX_WASM_RUNTIMES)
    enable_language(ASM)
-   set(CHAIN_EOSVMOC_SOURCES webassembly/runtimes/eos-vm-oc/code_cache.cpp
-                             webassembly/runtimes/eos-vm-oc/executor.cpp
-                             webassembly/runtimes/eos-vm-oc/memory.cpp
-                             webassembly/runtimes/eos-vm-oc/intrinsic.cpp
-                             webassembly/runtimes/eos-vm-oc/LLVMJIT.cpp
-                             webassembly/runtimes/eos-vm-oc/LLVMEmitIR.cpp
-                             webassembly/runtimes/eos-vm-oc/compile_monitor.cpp
-                             webassembly/runtimes/eos-vm-oc/compile_trampoline.cpp
-                             webassembly/runtimes/eos-vm-oc/ipc_helpers.cpp
-                             webassembly/runtimes/eos-vm-oc/gs_seg_helpers.c
-                             webassembly/runtimes/eos-vm-oc/stack.cpp
-                             webassembly/runtimes/eos-vm-oc/switch_stack_linux.s
-                             webassembly/runtimes/eos-vm-oc.cpp
-                             webassembly/runtimes/eos-vm-oc/default_real_main.cpp)
+   set(CHAIN_UPCXVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/code_cache.cpp
+                             webassembly/runtimes/upcx-vm-oc/executor.cpp
+                             webassembly/runtimes/upcx-vm-oc/memory.cpp
+                             webassembly/runtimes/upcx-vm-oc/intrinsic.cpp
+                             webassembly/runtimes/upcx-vm-oc/LLVMJIT.cpp
+                             webassembly/runtimes/upcx-vm-oc/LLVMEmitIR.cpp
+                             webassembly/runtimes/upcx-vm-oc/compile_monitor.cpp
+                             webassembly/runtimes/upcx-vm-oc/compile_trampoline.cpp
+                             webassembly/runtimes/upcx-vm-oc/ipc_helpers.cpp
+                             webassembly/runtimes/upcx-vm-oc/gs_seg_helpers.c
+                             webassembly/runtimes/upcx-vm-oc/stack.cpp
+                             webassembly/runtimes/upcx-vm-oc/switch_stack_linux.s
+                             webassembly/runtimes/upcx-vm-oc.cpp
+                             webassembly/runtimes/upcx-vm-oc/default_real_main.cpp)
 
    if(LLVM_VERSION VERSION_LESS 7.1 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
       enable_language(ASM-LLVMWAR)
-      list(APPEND CHAIN_EOSVMOC_SOURCES webassembly/runtimes/eos-vm-oc/llvmWARshim.llvmwar)
+      list(APPEND CHAIN_UPCXVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/llvmWARshim.llvmwar)
    else()
-      list(APPEND CHAIN_EOSVMOC_SOURCES webassembly/runtimes/eos-vm-oc/llvmWARshim.cpp)
+      list(APPEND CHAIN_UPCXVMOC_SOURCES webassembly/runtimes/upcx-vm-oc/llvmWARshim.cpp)
    endif()
 
    llvm_map_components_to_libnames(LLVM_LIBS support core passes mcjit native orcjit)
    include_directories(${LLVM_INCLUDE_DIRS})
    add_definitions(${LLVM_DEFINITIONS})
 
-   option(EOSVMOC_ENABLE_DEVELOPER_OPTIONS "enable developer options for EOS VM OC" OFF)
+   option(UPCXVMOC_ENABLE_DEVELOPER_OPTIONS "enable developer options for UPCX VM OC" OFF)
 endif()
 
-if("eos-vm" IN_LIST EOSIO_WASM_RUNTIMES OR "eos-vm-jit" IN_LIST EOSIO_WASM_RUNTIMES)
-   set(CHAIN_EOSVM_SOURCES "webassembly/runtimes/eos-vm.cpp")
-   set(CHAIN_EOSVM_LIBRARIES eos-vm)
+if("upcx-vm" IN_LIST UPCX_WASM_RUNTIMES OR "upcx-vm-jit" IN_LIST UPCX_WASM_RUNTIMES)
+   set(CHAIN_UPCXVM_SOURCES "webassembly/runtimes/upcx-vm.cpp")
+   set(CHAIN_UPCXVM_LIBRARIES upcx-vm)
 endif()
 
 set(CHAIN_WEBASSEMBLY_SOURCES
@@ -74,7 +74,7 @@ set(CHAIN_WEBASSEMBLY_SOURCES
 )
 
 ## SORT .cpp by most likely to change / break compile
-add_library( eosio_chain
+add_library( upcx_chain
              merkle.cpp
              name.cpp
              transaction.cpp
@@ -89,9 +89,9 @@ add_library( eosio_chain
              resource_limits.cpp
              block_log.cpp
              transaction_context.cpp
-             eosio_contract.cpp
-             eosio_contract_abi.cpp
-             eosio_contract_abi_bin.cpp
+             upcx_contract.cpp
+             upcx_contract_abi.cpp
+             upcx_contract_abi_bin.cpp
              chain_config.cpp
              chain_id_type.cpp
              genesis_state.cpp
@@ -99,16 +99,16 @@ add_library( eosio_chain
 
               wast_to_wasm.cpp
               wasm_interface.cpp
-              wasm_eosio_validation.cpp
-              wasm_eosio_injection.cpp
+              wasm_upcx_validation.cpp
+              wasm_upcx_injection.cpp
               wasm_config.cpp
               apply_context.cpp
               abi_serializer.cpp
               asset.cpp
               snapshot.cpp
 
-             ${CHAIN_EOSVMOC_SOURCES}
-             ${CHAIN_EOSVM_SOURCES}
+             ${CHAIN_UPCXVMOC_SOURCES}
+             ${CHAIN_UPCXVM_SOURCES}
              ${CHAIN_WEBASSEMBLY_SOURCES}
 
              authority.cpp
@@ -132,47 +132,47 @@ add_library( eosio_chain
              ${HEADERS}
              )
 
-target_link_libraries( eosio_chain fc chainbase Logging IR WAST WASM Runtime
-                       softfloat builtins rocksdb ${CHAIN_EOSVM_LIBRARIES} ${LLVM_LIBS} ${CHAIN_RT_LINKAGE}
+target_link_libraries( upcx_chain fc chainbase Logging IR WAST WASM Runtime
+                       softfloat builtins rocksdb ${CHAIN_UPCXVM_LIBRARIES} ${LLVM_LIBS} ${CHAIN_RT_LINKAGE}
                      )
-target_include_directories( eosio_chain
+target_include_directories( upcx_chain
                             PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_BINARY_DIR}/include"
                                    "${CMAKE_CURRENT_SOURCE_DIR}/../wasm-jit/Include"
-                                   "${CMAKE_CURRENT_SOURCE_DIR}/libraries/eos-vm/include"
+                                   "${CMAKE_CURRENT_SOURCE_DIR}/libraries/upcx-vm/include"
                                    "${CMAKE_CURRENT_SOURCE_DIR}/../rocksdb/include"
                                    "${CMAKE_CURRENT_SOURCE_DIR}/../chain_kv/include"
                             )
 
-add_library(eosio_chain_wrap INTERFACE )
-target_link_libraries(eosio_chain_wrap INTERFACE eosio_chain)
+add_library(upcx_chain_wrap INTERFACE )
+target_link_libraries(upcx_chain_wrap INTERFACE upcx_chain)
 
-if("eos-vm-oc" IN_LIST EOSIO_WASM_RUNTIMES)
-   target_link_libraries(eosio_chain_wrap INTERFACE "-Wl,-wrap=main")
+if("upcx-vm-oc" IN_LIST UPCX_WASM_RUNTIMES)
+   target_link_libraries(upcx_chain_wrap INTERFACE "-Wl,-wrap=main")
 endif()
 
-foreach(RUNTIME ${EOSIO_WASM_RUNTIMES})
+foreach(RUNTIME ${UPCX_WASM_RUNTIMES})
    string(TOUPPER "${RUNTIME}" RUNTIMEUC)
    string(REPLACE "-" "_" RUNTIMEUC ${RUNTIMEUC})
-   target_compile_definitions(eosio_chain PUBLIC "EOSIO_${RUNTIMEUC}_RUNTIME_ENABLED")
+   target_compile_definitions(upcx_chain PUBLIC "UPCX_${RUNTIMEUC}_RUNTIME_ENABLED")
 endforeach()
 
-if(EOSVMOC_ENABLE_DEVELOPER_OPTIONS)
-   message(WARNING "EOS VM OC Developer Options are enabled; these are NOT supported")
-   target_compile_definitions(eosio_chain PUBLIC EOSIO_EOS_VM_OC_DEVELOPER)
+if(UPCXVMOC_ENABLE_DEVELOPER_OPTIONS)
+   message(WARNING "UPCX VM OC Developer Options are enabled; these are NOT supported")
+   target_compile_definitions(upcx_chain PUBLIC UPCX_UPCX_VM_OC_DEVELOPER)
 endif()
 
 add_subdirectory ( backing_store/tests )
 
-install( TARGETS eosio_chain
+install( TARGETS upcx_chain
    RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
    LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
    ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
 )
-install( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/eosio/chain/
-      DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/eosio/chain
+install( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/upcx/chain/
+      DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/upcx/chain
       FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h" EXCLUDE
 )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/eosio/chain/core_symbol.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/eosio/chain)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/upcx/chain/core_symbol.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/upcx/chain)
 #if(MSVC)
 #  set_source_files_properties( db_init.cpp db_block.cpp database.cpp block_log.cpp PROPERTIES COMPILE_FLAGS "/bigobj" )
 #endif(MSVC)

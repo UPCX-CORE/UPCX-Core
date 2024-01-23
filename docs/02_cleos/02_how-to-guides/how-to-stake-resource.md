@@ -1,24 +1,24 @@
 ## Overview
 
-This how-to guide provides instructions on how to stake resources, NET and/or CPU, for your account using the `cleos` CLI tool.
+This how-to guide provides instructions on how to stake resources, NET and/or CPU, for your account using the `clupcx` CLI tool.
 
 ## Before you begin
 
-* Install the currently supported version of `cleos`.
+- Install the currently supported version of `clupcx`.
 
-* Ensure the [reference system contracts](https://developers.eos.io/manuals/eosio.contracts/v1.9/build-and-deploy) are deployed and used to manage system resources.
+- Ensure the [reference system contracts](https://developers.upcx.io/manuals/upcx.contracts/v1.9/build-and-deploy) are deployed and used to manage system resources.
 
-* Understand the following:
-  * What an [account](https://developers.eos.io/welcome/v2.1/glossary/index/#account) is.
-  * What [NET bandwidth](https://developers.eos.io/manuals/eosio.contracts/v1.9/key-concepts/net) is.
-  * What [CPU bandwidth](https://developers.eos.io/manuals/eosio.contracts/v1.9/key-concepts/cpu) is.
-  * The [`delegatebw` cleos sub-command](https://developers.eos.io/manuals/eos/v2.1/cleos/command-reference/system/system-delegatebw).
+- Understand the following:
+  - What an [account](https://developers.upcx.io/welcome/v2.1/glossary/index/#account) is.
+  - What [NET bandwidth](https://developers.upcx.io/manuals/upcx.contracts/v1.9/key-concepts/net) is.
+  - What [CPU bandwidth](https://developers.upcx.io/manuals/upcx.contracts/v1.9/key-concepts/cpu) is.
+  - The [`delegatebw` clupcx sub-command](https://developers.upcx.io/manuals/upcx/v2.1/clupcx/command-reference/system/system-delegatebw).
 
 ## Command Reference
 
-See the following reference guides for command line usage and related options for the `cleos` command:
+See the following reference guides for command line usage and related options for the `clupcx` command:
 
-* The [`delegatebw` cleos sub-command](https://developers.eos.io/manuals/eos/v2.1/cleos/command-reference/system/system-delegatebw).
+- The [`delegatebw` clupcx sub-command](https://developers.upcx.io/manuals/upcx/v2.1/clupcx/command-reference/system/system-delegatebw).
 
 ## Procedure
 
@@ -33,24 +33,24 @@ The following steps show:
 Run the following command to stake `0.01 SYS` of NET bandwidth for `alice` account from `bob` account:
 
 ```sh
-cleos system delegatebw alice bob "0.01 SYS" "0 SYS"
+clupcx system delegatebw alice bob "0.01 SYS" "0 SYS"
 ```
 
 Where:
 
-* `alice` = the account for which the NET bandwidth is staked.
-* `bob` = the account that pays the `0.01 SYS` for the NET bandwidth staked.
-* `0.01 SYS` = the amount of `SYS` tokens allocated to stake NET bandwidth.
-* `0 SYS` = the amount of `SYS` tokens allocated to stake CPU bandwidth.
+- `alice` = the account for which the NET bandwidth is staked.
+- `bob` = the account that pays the `0.01 SYS` for the NET bandwidth staked.
+- `0.01 SYS` = the amount of `SYS` tokens allocated to stake NET bandwidth.
+- `0 SYS` = the amount of `SYS` tokens allocated to stake CPU bandwidth.
 
 Example output:
 
 ```console
 executed transaction: 5487afafd67bf459a20fcc2dbc5d0c2f0d1f10e33123eaaa07088046fd18e3ae  192 bytes  503 us
-#         eosio <= eosio::delegatebw            {"from":"bob","receiver":"alice","stake_net_quantity":"0.01 SYS","stake_cpu_quanti...
-#   eosio.token <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 EOS","memo":"stake bandwidth"}
-#  alice <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
-#   eosio.stake <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
+#         upcx <= upcx::delegatebw            {"from":"bob","receiver":"alice","stake_net_quantity":"0.01 SYS","stake_cpu_quanti...
+#   upcx.token <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 UPCX","memo":"stake bandwidth"}
+#  alice <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
+#   upcx.stake <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
 ```
 
 ### 2. Stake CPU bandwidth
@@ -58,24 +58,24 @@ executed transaction: 5487afafd67bf459a20fcc2dbc5d0c2f0d1f10e33123eaaa07088046fd
 Run the following command to stake `0.01 SYS` of CPU bandwidth for `alice` account from `bob` account:
 
 ```sh
-cleos system delegatebw alice bob "0 SYS" "0.01 SYS"
+clupcx system delegatebw alice bob "0 SYS" "0.01 SYS"
 ```
 
 Where:
 
-* `alice` = the account for which the CPU bandwidth is staked.
-* `bob` = the account that pays the `0.01 SYS` for the CPU bandwidth staked.
-* `0 SYS` = the amount of `SYS` tokens allocated to stake NET bandwidth.
-* `0.01 SYS` = the amount `SYS` tokens allocated to stake CPU bandwidth.
+- `alice` = the account for which the CPU bandwidth is staked.
+- `bob` = the account that pays the `0.01 SYS` for the CPU bandwidth staked.
+- `0 SYS` = the amount of `SYS` tokens allocated to stake NET bandwidth.
+- `0.01 SYS` = the amount `SYS` tokens allocated to stake CPU bandwidth.
 
 Example output:
 
 ```console
 executed transaction: 5487afafd67bf459a20fcc2dbc5d0c2f0d1f10e33123eaaa07088046fd18e3ae  192 bytes  503 us
-#         eosio <= eosio::delegatebw            {"from":"bob","receiver":"alice","stake_net_quantity":"0.0000 SYS","stake_cpu_quanti...
-#   eosio.token <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 EOS","memo":"stake bandwidth"}
-#  alice <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
-#   eosio.stake <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
+#         upcx <= upcx::delegatebw            {"from":"bob","receiver":"alice","stake_net_quantity":"0.0000 SYS","stake_cpu_quanti...
+#   upcx.token <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 UPCX","memo":"stake bandwidth"}
+#  alice <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
+#   upcx.stake <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
 ```
 
 ### 3. Stake NET and CPU bandwidth
@@ -83,24 +83,24 @@ executed transaction: 5487afafd67bf459a20fcc2dbc5d0c2f0d1f10e33123eaaa07088046fd
 Run the following command to stake `0.01 SYS` of NET and `0.02 SYS` of CPU bandwidth for `alice` account from `bob` account:
 
 ```sh
-cleos system delegatebw alice bob "0.01 SYS" "0.02 SYS"
+clupcx system delegatebw alice bob "0.01 SYS" "0.02 SYS"
 ```
 
 Where:
 
-* `alice` = the account for which the NET and CPU bandwidth is staked.
-* `bob` = the account that pays `0.01 SYS` for the NET and `0.02 SYS` for the CPU bandwidth staked.
-* `0.01 SYS` = the amount of `SYS` tokens allocated to stake NET bandwidth.
-* `0.02 SYS` = the amount of `SYS` tokens allocated to stake CPU bandwidth.
+- `alice` = the account for which the NET and CPU bandwidth is staked.
+- `bob` = the account that pays `0.01 SYS` for the NET and `0.02 SYS` for the CPU bandwidth staked.
+- `0.01 SYS` = the amount of `SYS` tokens allocated to stake NET bandwidth.
+- `0.02 SYS` = the amount of `SYS` tokens allocated to stake CPU bandwidth.
 
 Example output:
 
 ```console
 executed transaction: 5487afafd67bf459a20fcc2dbc5d0c2f0d1f10e33123eaaa07088046fd18e3ae  192 bytes  503 us
-#         eosio <= eosio::delegatebw            {"from":"bob","receiver":"alice","stake_net_quantity":"0.01 SYS","stake_cpu_quanti...
-#   eosio.token <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 EOS","memo":"stake bandwidth"}
-#  alice <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
-#   eosio.stake <= eosio.token::transfer        {"from":"bob","to":"eosio.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
+#         upcx <= upcx::delegatebw            {"from":"bob","receiver":"alice","stake_net_quantity":"0.01 SYS","stake_cpu_quanti...
+#   upcx.token <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 UPCX","memo":"stake bandwidth"}
+#  alice <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
+#   upcx.stake <= upcx.token::transfer        {"from":"bob","to":"upcx.stake","quantity":"0.01 SYS","memo":"stake bandwidth"}
 ```
 
 [[info|An account can stake to itself]]

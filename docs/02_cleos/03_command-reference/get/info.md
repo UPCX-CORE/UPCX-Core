@@ -3,17 +3,20 @@
 Gets current blockchain information
 
 ## Position Parameters
-This command does not accept any parameters. 
+
+This command does not accept any parameters.
+
 ## Options
-- `-h` - --help                   Print this help message and exit
+
+- `-h` - --help Print this help message and exit
+
 ## Example
 
-
 ```sh
-cleos get info
+clupcx get info
 ```
 
-This command simply returns the current blockchain state information. 
+This command simply returns the current blockchain state information.
 
 ```json
 {

@@ -48,7 +48,7 @@ cmake_dependent_option(ENABLE_SPEC_TESTS "enable wasm spec tests" ON "ENABLE_TES
 cmake_dependent_option(ENABLE_FUZZ_TESTS "enable fuzz testing" OFF "ENABLE_TESTS" ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
-include(UpcxVMBuildUtils)
+include(EosVMBuildUtils)
 
 # ##################################################################################################
 # Create the upcx-vm library.

@@ -6,6 +6,7 @@
 *.wast
 *.wast.hpp
 *.s
+!libraries/chain/webassembly/runtimes/upcx-vm-oc/*.s
 *.dot
 *.abi.hpp
 *.cmake

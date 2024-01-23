@@ -1,6 +1,0 @@
-add_subdirectory( nodupcx )
-add_subdirectory( clupcx )
-add_subdirectory( kupcxd )
-add_subdirectory( upcxio-launcher )
-add_subdirectory( upcxio-blocklog )
-add_subdirectory( nodupcx-sectl )

@@ -1,7 +1,0 @@
-#include <upcxio/chain/genesis_state.hpp>
-
-namespace upcxio { namespace chain {
-
-const string genesis_state::upcxio_root_key = "${UPCXIO_ROOT_KEY}";
-
-} } // namespace upcxio::chain

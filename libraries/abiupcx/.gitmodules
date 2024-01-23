@@ -1,6 +1,3 @@
 [submodule "external/rapidjson"]
 	path = external/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
-[submodule "external/upcxjs_"]
-	path = external/upcxjs
-	url = https://github.com/UPCX/upcxjs.git

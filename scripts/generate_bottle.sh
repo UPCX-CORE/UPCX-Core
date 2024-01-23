@@ -31,7 +31,7 @@ export SSUBPREFIX
 
 hash=`openssl dgst -sha256 ${NAME}.tar.gz | awk 'NF>1{print $NF}'`
 
-echo "class Upcxio < Formula
+echo "class Upcx < Formula
 
    homepage \"${URL}\"
    revision 0

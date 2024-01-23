@@ -3,7 +3,7 @@ if(UPCX_ROOT STREQUAL "" OR NOT UPCX_ROOT)
 endif()
 list(APPEND CMAKE_MODULE_PATH ${UPCX_ROOT}/lib/cmake/upcx)
 list(APPEND CMAKE_MODULE_PATH ${UPCX_ROOT}/lib64/cmake/upcx)
-include(UpcxioTester)
+include(UpcxTester)
 
 function(EXTRACT_MAJOR_MINOR_FROM_VERSION version success major minor)
    string(REGEX REPLACE "^([0-9]+)\\..+$" "\\1" _major "${version}")

@@ -1,5 +1,5 @@
 cmake_minimum_required( VERSION 3.5 )
-message(STATUS "Setting up Upcxio Tester @VERSION_FULL@ at @UPCX_ROOT_DIR@")
+message(STATUS "Setting up Upcx Tester @VERSION_FULL@ at @UPCX_ROOT_DIR@")
 
 SET(CMAKE_INSTALL_RPATH "${HOME}/lib;${HOME}/lib64")
 

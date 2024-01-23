@@ -71,7 +71,7 @@ endif()
 if(CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT WIN32)
    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" AND "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
       list(APPEND UPCX_WASM_RUNTIMES upcx-vm-oc)
-      # UPCX VM OC requires LLVM, but move the check up here to a central location so that the UpcxioTester.cmakes
+      # UPCX VM OC requires LLVM, but move the check up here to a central location so that the UpcxTester.cmakes
       # can be created with the exact version found
       find_package(LLVM REQUIRED CONFIG)
      if(LLVM_VERSION_MAJOR VERSION_LESS 7 OR LLVM_VERSION_MAJOR VERSION_GREATER_EQUAL 12)
@@ -207,13 +207,13 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version.hpp DESTINATION ${CMAKE_INSTAL
 
 set(UPCX_ROOT_DIR ${CMAKE_BINARY_DIR})
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/upcx-config.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/upcx/upcx-config.cmake @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/UpcxioTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/upcx/UpcxioTester.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/UpcxTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/upcx/UpcxTester.cmake @ONLY)
 
 set(UPCX_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/upcx-config.cmake.in ${CMAKE_BINARY_DIR}/modules/upcx-config.cmake @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/modules/upcx-config.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/upcx)
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/UpcxioTester.cmake.in ${CMAKE_BINARY_DIR}/modules/UpcxioTester.cmake @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/modules/UpcxioTester.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/upcx)
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/UpcxTester.cmake.in ${CMAKE_BINARY_DIR}/modules/UpcxTester.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/modules/UpcxTester.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/upcx)
 
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE
                ${CMAKE_BINARY_DIR}/licenses/upcx/LICENSE COPYONLY)

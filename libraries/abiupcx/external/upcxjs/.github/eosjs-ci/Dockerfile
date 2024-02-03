@@ -14,8 +14,8 @@ RUN if [ "$CDTBRANCH" = "release_1.7.x" ]; then \
  git clone https://github.com/upcx/tropical-example-web-app \
  && mkdir -p /root/contracts/upcx.bios_v1.8.3 && mv ./tropical-example-web-app/upcx/contracts/upcx.bios-v1.8.3/* /root/contracts/upcx.bios_v1.8.3/ \
 
- && git clone https://github.com/upcx/eos \
- && cd eos \
+ && git clone https://github.com/upcx/upcx \
+ && cd upcx \
  && git checkout v2.0.12 \
  && mkdir -p /root/contracts/upcx.bios/ && mv ./unittests/contracts/upcx.bios/* /root/contracts/upcx.bios/ \
  && mkdir -p /root/contracts/upcx.system/ && mv ./unittests/contracts/upcx.system/* /root/contracts/upcx.system/ \
@@ -24,8 +24,8 @@ RUN if [ "$CDTBRANCH" = "release_1.7.x" ]; then \
  ; fi
 
 RUN if [ "$CDTBRANCH" = "release_1.8.x" ] || [ "$CDTBRANCH" = "develop" ]; then \
- git clone https://github.com/upcx/eos \
- && cd eos \
+ git clone https://github.com/upcx/upcx \
+ && cd upcx \
  && git checkout develop \
  && mkdir -p /root/contracts/upcx.bios/ && mv ./contracts/contracts/upcx.bios/bin/* /root/contracts/upcx.bios/ \
  && mkdir -p /root/contracts/upcx.boot/ && mv ./contracts/contracts/upcx.boot/bin/* /root/contracts/upcx.boot/ \
@@ -68,7 +68,7 @@ RUN cd cfhello \
 
 FROM upcx/upcx:${UPCXBRANCH}
 ARG UPCXBRANCH
-ENTRYPOINT ["nodeos", "--data-dir", "/root/.local/share", "-e", "-p", "upcx", "--replay-blockchain", "--plugin", "upcx::producer_plugin", "--plugin", "upcx::producer_api_plugin", "--plugin", "upcx::chain_api_plugin", "--plugin", "upcx::trace_api_plugin", "--trace-no-abis", "--plugin", "upcx::db_size_api_plugin", "--plugin", "upcx::http_plugin", "--http-server-address=0.0.0.0:8888", "--access-control-allow-origin=*", "--contracts-console", "--http-validate-host=false", "--enable-account-queries=true", "--verbose-http-errors", "--max-transaction-time=100"]
+ENTRYPOINT ["nodupcx", "--data-dir", "/root/.local/share", "-e", "-p", "upcx", "--replay-blockchain", "--plugin", "upcx::producer_plugin", "--plugin", "upcx::producer_api_plugin", "--plugin", "upcx::chain_api_plugin", "--plugin", "upcx::trace_api_plugin", "--trace-no-abis", "--plugin", "upcx::db_size_api_plugin", "--plugin", "upcx::http_plugin", "--http-server-address=0.0.0.0:8888", "--access-control-allow-origin=*", "--contracts-console", "--http-validate-host=false", "--enable-account-queries=true", "--verbose-http-errors", "--max-transaction-time=100"]
 WORKDIR /root
 RUN mkdir -p "/opt/upcx/bin/contracts"
 COPY --from=contracts /root/contracts /opt/upcx/bin/contracts/

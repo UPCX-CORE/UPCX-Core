@@ -1,6 +1,6 @@
 When a call to the chain_api is performed and fails, it will result in an RPCError object being generated which contains information on why the transaction failed.
 
-The RPCError object will contain a concise error message, for instance 'Invalid transaction'. However additional details can be found in the `details` field and the `json` field. The `json` field holds the complete json response from nodeos. The `details` field specifically holds the error object in the `json` field. The data content of the `json` and `details` vary depending on the endpoint is used to call nodeos. Use the `details` field to quickly find error information.
+The RPCError object will contain a concise error message, for instance 'Invalid transaction'. However additional details can be found in the `details` field and the `json` field. The `json` field holds the complete json response from nodupcx. The `details` field specifically holds the error object in the `json` field. The data content of the `json` and `details` vary depending on the endpoint is used to call nodupcx. Use the `details` field to quickly find error information.
 
 In the `details` and `json` examples below, you can see that the error message may not contain enough information to discern what caused the action to fail. The error message contains `upcx_assert_message` assertion failure. Looking further at the details you can see an `overdrawn balance` message.
 
@@ -24,7 +24,7 @@ RpcError: upcx_assert_message assertion failure
                     line: 14,
                     method: 'upcx_assert',
                     hostname: '',
-                    thread_name: 'nodeos',
+                    thread_name: 'nodupcx',
                     timestamp: '2021-06-16T05:26:03.665'
                 },
                 format: 'assertion failure with message: ${s}',
@@ -37,7 +37,7 @@ RpcError: upcx_assert_message assertion failure
                     line: 143,
                     method: 'exec_one',
                     hostname: '',
-                    thread_name: 'nodeos',
+                    thread_name: 'nodupcx',
                     timestamp: '2021-06-16T05:26:03.665'
                 },
                 format: 'pending console output: ${console}',

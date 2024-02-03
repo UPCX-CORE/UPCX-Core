@@ -75,8 +75,8 @@ describe("Serialize", () => {
       expectExceptionThrown(asset);
     });
 
-    it('should not be able to push invalid lowercase symbol "10.000 eos"', () => {
-      const asset = "10.000 eos";
+    it('should not be able to push invalid lowercase symbol "10.000 upcx"', () => {
+      const asset = "10.000 upcx";
 
       expectExceptionThrown(asset);
     });

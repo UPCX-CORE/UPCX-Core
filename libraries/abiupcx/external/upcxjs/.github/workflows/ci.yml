@@ -72,7 +72,7 @@ jobs:
           git commit package.json yarn.lock -m "Updating package.json and yarn.lock" || echo "Nothing to commit"
           git push origin ${GITHUB_REF#refs/*/}
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.2.x
 
         ports:

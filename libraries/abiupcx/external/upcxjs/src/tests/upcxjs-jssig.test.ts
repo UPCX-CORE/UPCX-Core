@@ -112,8 +112,8 @@ describe("JsSignatureProvider", () => {
 
       const sig: Signature = Signature.fromString(signOutput.signatures[0]);
       const ellipticSig: ec.Signature = sig.toElliptic();
-      const eosSig = Signature.fromElliptic(ellipticSig, KeyType.k1);
-      expect(sig).toEqual(eosSig);
+      const upcxSig = Signature.fromElliptic(ellipticSig, KeyType.k1);
+      expect(sig).toEqual(upcxSig);
     });
 
     it("verify a transaction", async () => {
@@ -302,8 +302,8 @@ describe("JsSignatureProvider", () => {
 
       const sig: Signature = Signature.fromString(signOutput.signatures[0]);
       const ellipticSig: ec.Signature = sig.toElliptic();
-      const eosSig = Signature.fromElliptic(ellipticSig, KeyType.r1);
-      expect(sig).toEqual(eosSig);
+      const upcxSig = Signature.fromElliptic(ellipticSig, KeyType.r1);
+      expect(sig).toEqual(upcxSig);
     });
 
     it("verify a transaction", async () => {

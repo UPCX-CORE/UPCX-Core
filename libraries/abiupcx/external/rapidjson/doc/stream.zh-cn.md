@@ -12,7 +12,7 @@
 
 `StringStream` 是最基本的输入流，它表示一个完整的、只读的、存储于内存的 JSON。它在 `rapidjson/rapidjson.h` 中定义。
 
-~~~~~~~~~~cpp
+```cpp
 #include "rapidjson/document.h" // 会包含 "rapidjson/rapidjson.h"
 
 using namespace rapidjson;
@@ -23,16 +23,16 @@ StringStream s(json);
 
 Document d;
 d.ParseStream(s);
-~~~~~~~~~~
+```
 
 由于这是非常常用的用法，RapidJSON 提供 `Document::Parse(const char*)` 去做完全相同的事情：
 
-~~~~~~~~~~cpp
+```cpp
 // ...
 const char json[] = "[1, 2, 3, 4]";
 Document d;
 d.Parse(json);
-~~~~~~~~~~
+```
 
 需要注意，`StringStream` 是 `GenericStringStream<UTF8<> >` 的 typedef，使用者可用其他编码类去代表流所使用的字符集。
 
@@ -40,7 +40,7 @@ d.Parse(json);
 
 `StringBuffer` 是一个简单的输出流。它分配一个内存缓冲区，供写入整个 JSON。可使用 `GetString()` 来获取该缓冲区。
 
-~~~~~~~~~~cpp
+```cpp
 #include "rapidjson/stringbuffer.h"
 #include <rapidjson/writer.h>
 
@@ -49,14 +49,14 @@ Writer<StringBuffer> writer(buffer);
 d.Accept(writer);
 
 const char* output = buffer.GetString();
-~~~~~~~~~~
+```
 
 当缓冲区满溢，它将自动增加容量。缺省容量是 256 个字符（UTF8 是 256 字节，UTF16 是 512 字节等）。使用者能自行提供分配器及初始容量。
 
-~~~~~~~~~~cpp
+```cpp
 StringBuffer buffer1(0, 1024); // 使用它的分配器，初始大小 = 1024
 StringBuffer buffer2(allocator, 1024);
-~~~~~~~~~~
+```
 
 如无设置分配器，`StringBuffer` 会自行实例化一个内部分配器。
 
@@ -72,7 +72,7 @@ StringBuffer buffer2(allocator, 1024);
 
 `FileReadStream` 通过 `FILE` 指针读取文件。使用者需要提供一个缓冲区。
 
-~~~~~~~~~~cpp
+```cpp
 #include "rapidjson/filereadstream.h"
 #include <cstdio>
 
@@ -87,7 +87,7 @@ Document d;
 d.ParseStream(is);
 
 fclose(fp);
-~~~~~~~~~~
+```
 
 与 `StringStreams` 不一样，`FileReadStream` 是一个字节流。它不处理编码。若文件并非 UTF-8 编码，可以把字节流用 `EncodedInputStream` 包装。我们很快会讨论这个问题。
 
@@ -97,7 +97,7 @@ fclose(fp);
 
 `FileWriteStream` 是一个含缓冲功能的输出流。它的用法与 `FileReadStream` 非常相似。
 
-~~~~~~~~~~cpp
+```cpp
 #include "rapidjson/filewritestream.h"
 #include <rapidjson/writer.h>
 #include <cstdio>
@@ -117,7 +117,7 @@ Writer<FileWriteStream> writer(os);
 d.Accept(writer);
 
 fclose(fp);
-~~~~~~~~~~
+```
 
 它也可以把输出导向 `stdout`。
 
@@ -129,7 +129,7 @@ fclose(fp);
 
 `IStreamWrapper` 把任何继承自 `std::istream` 的类（如 `std::istringstream`、`std::stringstream`、`std::ifstream`、`std::fstream`）包装成 RapidJSON 的输入流。
 
-~~~cpp
+```cpp
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <fstream>
@@ -142,7 +142,7 @@ IStreamWrapper isw(ifs);
 
 Document d;
 d.ParseStream(isw);
-~~~
+```
 
 对于继承自 `std::wistream` 的类，则使用 `WIStreamWrapper`。
 
@@ -150,7 +150,7 @@ d.ParseStream(isw);
 
 相似地，`OStreamWrapper` 把任何继承自 `std::ostream` 的类（如 `std::ostringstream`、`std::stringstream`、`std::ofstream`、`std::fstream`）包装成 RapidJSON 的输出流。
 
-~~~cpp
+```cpp
 #include <rapidjson/document.h>
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
@@ -169,7 +169,7 @@ OStreamWrapper osw(ofs);
 
 Writer<OStreamWrapper> writer(osw);
 d.Accept(writer);
-~~~
+```
 
 对于继承自 `std::wistream` 的类，则使用 `WIStreamWrapper`。
 
@@ -189,7 +189,7 @@ d.Accept(writer);
 
 `EncodedInputStream` 含两个模板参数。第一个是 `Encoding` 类型，例如定义于 `rapidjson/encodings.h` 的 `UTF8`、`UTF16LE`。第二个参数是被包装的流的类型。
 
-~~~~~~~~~~cpp
+```cpp
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"   // FileReadStream
 #include "rapidjson/encodedstream.h"    // EncodedInputStream
@@ -204,23 +204,23 @@ FileReadStream bis(fp, readBuffer, sizeof(readBuffer));
 
 EncodedInputStream<UTF16LE<>, FileReadStream> eis(bis);  // 用 eis 包装 bis
 
-Document d; // Document 为 GenericDocument<UTF8<> > 
+Document d; // Document 为 GenericDocument<UTF8<> >
 d.ParseStream<0, UTF16LE<> >(eis);  // 把 UTF-16LE 文件解析至内存中的 UTF-8
 
 fclose(fp);
-~~~~~~~~~~
+```
 
 ## EncodedOutputStream {#EncodedOutputStream}
 
 `EncodedOutputStream` 也是相似的，但它的构造函数有一个 `bool putBOM` 参数，用于控制是否在输出字节流写入 BOM。
 
-~~~~~~~~~~cpp
+```cpp
 #include "rapidjson/filewritestream.h"  // FileWriteStream
 #include "rapidjson/encodedstream.h"    // EncodedOutputStream
 #include <rapidjson/writer.h>
 #include <cstdio>
 
-Document d;         // Document 为 GenericDocument<UTF8<> > 
+Document d;         // Document 为 GenericDocument<UTF8<> >
 // ...
 
 FILE* fp = fopen("output_utf32le.json", "wb"); // 非 Windows 平台使用 "w"
@@ -229,13 +229,13 @@ char writeBuffer[256];
 FileWriteStream bos(fp, writeBuffer, sizeof(writeBuffer));
 
 typedef EncodedOutputStream<UTF32LE<>, FileWriteStream> OutputStream;
-OutputStream eos(bos, true);   // 写入 BOM
+OutputStream upcx(bos, true);   // 写入 BOM
 
-Writer<OutputStream, UTF8<>, UTF32LE<>> writer(eos);
+Writer<OutputStream, UTF8<>, UTF32LE<>> writer(upcx);
 d.Accept(writer);   // 这里从内存的 UTF-8 生成 UTF32-LE 文件
 
 fclose(fp);
-~~~~~~~~~~
+```
 
 ## AutoUTFInputStream {#AutoUTFInputStream}
 
@@ -243,7 +243,7 @@ fclose(fp);
 
 由于字符（编码单元／code unit）可能是 8 位、16 位或 32 位，`AutoUTFInputStream` 需要一个能至少储存 32 位的字符类型。我们可以使用 `unsigned` 作为模板参数：
 
-~~~~~~~~~~cpp
+```cpp
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"   // FileReadStream
 #include "rapidjson/encodedstream.h"    // AutoUTFInputStream
@@ -258,11 +258,11 @@ FileReadStream bis(fp, readBuffer, sizeof(readBuffer));
 
 AutoUTFInputStream<unsigned, FileReadStream> eis(bis);  // 用 eis 包装 bis
 
-Document d;         // Document 为 GenericDocument<UTF8<> > 
+Document d;         // Document 为 GenericDocument<UTF8<> >
 d.ParseStream<0, AutoUTF<unsigned> >(eis); // 把任何 UTF 编码的文件解析至内存中的 UTF-8
 
 fclose(fp);
-~~~~~~~~~~
+```
 
 当要指定流的编码，可使用上面例子中 `ParseStream()` 的参数 `AutoUTF<CharType>`。
 
@@ -272,7 +272,7 @@ fclose(fp);
 
 相似地，要在运行时选择输出的编码，我们可使用 `AutoUTFOutputStream`。这个类本身并非「自动」。你需要在运行时指定 UTF 类型，以及是否写入 BOM。
 
-~~~~~~~~~~cpp
+```cpp
 using namespace rapidjson;
 
 void WriteJSONFile(FILE* fp, UTFType type, bool putBOM, const Document& d) {
@@ -280,12 +280,12 @@ void WriteJSONFile(FILE* fp, UTFType type, bool putBOM, const Document& d) {
     FileWriteStream bos(fp, writeBuffer, sizeof(writeBuffer));
 
     typedef AutoUTFOutputStream<unsigned, FileWriteStream> OutputStream;
-    OutputStream eos(bos, type, putBOM);
-    
+    OutputStream upcx(bos, type, putBOM);
+
     Writer<OutputStream, UTF8<>, AutoUTF<> > writer;
     d.Accept(writer);
 }
-~~~~~~~~~~
+```
 
 `AutoUTFInputStream`／`AutoUTFOutputStream` 是比 `EncodedInputStream`／`EncodedOutputStream` 方便。但前者会产生一点运行期额外开销。
 
@@ -295,7 +295,7 @@ void WriteJSONFile(FILE* fp, UTFType type, bool putBOM, const Document& d) {
 
 RapidJSON 利用模板结合不同的类型。只要一个类包含所有所需的接口，就可以作为一个流。流的接合定义在 `rapidjson/rapidjson.h` 的注释里：
 
-~~~~~~~~~~cpp
+```cpp
 concept Stream {
     typename Ch;    //!< 流的字符类型
 
@@ -324,17 +324,17 @@ concept Stream {
     //! \return 已写入的字符数量。
     size_t PutEnd(Ch* begin);
 }
-~~~~~~~~~~
+```
 
 输入流必须实现 `Peek()`、`Take()` 及 `Tell()`。
 输出流必须实现 `Put()` 及 `Flush()`。
-`PutBegin()` 及 `PutEnd()` 是特殊的接口，仅用于原位（*in situ*）解析。一般的流不需实现它们。然而，即使接口不需用于某些流，仍然需要提供空实现，否则会产生编译错误。
+`PutBegin()` 及 `PutEnd()` 是特殊的接口，仅用于原位（_in situ_）解析。一般的流不需实现它们。然而，即使接口不需用于某些流，仍然需要提供空实现，否则会产生编译错误。
 
 ## 例子：istream 的包装类 {#ExampleIStreamWrapper}
 
 以下的简单例子是 `std::istream` 的包装类，它只需现 3 个函数。
 
-~~~~~~~~~~cpp
+```cpp
 class MyIStreamWrapper {
 public:
     typedef char Ch;
@@ -365,18 +365,18 @@ private:
 
     std::istream& is_;
 };
-~~~~~~~~~~
+```
 
 使用者能用它来包装 `std::stringstream`、`std::ifstream` 的实例。
 
-~~~~~~~~~~cpp
+```cpp
 const char* json = "[1,2,3,4]";
 std::stringstream ss(json);
 MyIStreamWrapper is(ss);
 
 Document d;
 d.ParseStream(is);
-~~~~~~~~~~
+```
 
 但要注意，由于标准库的内部开销问，此实现的性能可能不如 RapidJSON 的内存／文件流。
 
@@ -384,7 +384,7 @@ d.ParseStream(is);
 
 以下的例子是 `std::istream` 的包装类，它只需实现 2 个函数。
 
-~~~~~~~~~~cpp
+```cpp
 class MyOStreamWrapper {
 public:
     typedef char Ch;
@@ -407,11 +407,11 @@ private:
 
     std::ostream& os_;
 };
-~~~~~~~~~~
+```
 
 使用者能用它来包装 `std::stringstream`、`std::ofstream` 的实例。
 
-~~~~~~~~~~cpp
+```cpp
 Document d;
 // ...
 
@@ -420,7 +420,7 @@ MyOStreamWrapper os(ss);
 
 Writer<MyOStreamWrapper> writer(os);
 d.Accept(writer);
-~~~~~~~~~~
+```
 
 但要注意，由于标准库的内部开销问，此实现的性能可能不如 RapidJSON 的内存／文件流。
 

@@ -6,7 +6,7 @@ on:
 
 jobs:
   integration-test-release_22_0_x-release_2_0_x:
-    name: Integration Test - upcxjs release/22.0.x with nodeos release/2.0.x
+    name: Integration Test - upcxjs release/22.0.x with nodupcx release/2.0.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -50,10 +50,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.0.x-upcxjs-release_22.0.x-coverage
+          name: nodupcx-release_2.0.x-upcxjs-release_22.0.x-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.0.x
 
         ports:
@@ -61,7 +61,7 @@ jobs:
           - 9876:9876
 
   integration-test-release_22_0_x-release_2_1_x:
-    name: Integration Test - upcxjs release/22.0.x with nodeos release/2.1.x
+    name: Integration Test - upcxjs release/22.0.x with nodupcx release/2.1.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -109,10 +109,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.1.x-upcxjs-release_22.0.x-coverage
+          name: nodupcx-release_2.1.x-upcxjs-release_22.0.x-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.1.x
 
         ports:
@@ -120,7 +120,7 @@ jobs:
           - 9876:9876
 
   integration-test-release_22_0_x-release_2_2_x:
-    name: Integration Test - upcxjs release/22.0.x with nodeos release/2.2.x
+    name: Integration Test - upcxjs release/22.0.x with nodupcx release/2.2.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -164,10 +164,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.2.x-upcxjs-release_22.0.x-coverage
+          name: nodupcx-release_2.2.x-upcxjs-release_22.0.x-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.2.x
 
         ports:
@@ -175,7 +175,7 @@ jobs:
           - 9876:9876
 
   integration-test-release_22_0_x-develop:
-    name: Integration Test - upcxjs release/22.0.x with nodeos develop
+    name: Integration Test - upcxjs release/22.0.x with nodupcx develop
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -219,10 +219,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-develop-upcxjs-release_22.0.x-coverage
+          name: nodupcx-develop-upcxjs-release_22.0.x-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:develop
 
         ports:
@@ -230,7 +230,7 @@ jobs:
           - 9876:9876
 
   integration-test-release_22_1_x-release_2_0_x:
-    name: Integration Test - upcxjs release/22.1.x with nodeos release/2.0.x
+    name: Integration Test - upcxjs release/22.1.x with nodupcx release/2.0.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -274,10 +274,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.0.x-upcxjs-release_22.1.x-coverage
+          name: nodupcx-release_2.0.x-upcxjs-release_22.1.x-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.0.x
 
         ports:
@@ -285,7 +285,7 @@ jobs:
           - 9876:9876
 
   integration-test-release_22_1_x-release_2_1_x:
-    name: Integration Test - upcxjs release/22.1.x with nodeos release/2.1.x
+    name: Integration Test - upcxjs release/22.1.x with nodupcx release/2.1.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -329,10 +329,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.1.x-upcxjs-release_22.1.x-coverage
+          name: nodupcx-release_2.1.x-upcxjs-release_22.1.x-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.1.x
 
         ports:
@@ -340,7 +340,7 @@ jobs:
           - 9876:9876
 
   integration-test-release_22_1_x-release_2_2_x:
-    name: Integration Test - upcxjs release/22.1.x with nodeos release/2.2.x
+    name: Integration Test - upcxjs release/22.1.x with nodupcx release/2.2.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -388,10 +388,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.2.x-upcxjs-release_22.1.x-coverage
+          name: nodupcx-release_2.2.x-upcxjs-release_22.1.x-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.2.x
 
         ports:
@@ -399,7 +399,7 @@ jobs:
           - 9876:9876
 
   integration-test-release_22_1_x-develop:
-    name: Integration Test - upcxjs release/22.1.x with nodeos develop
+    name: Integration Test - upcxjs release/22.1.x with nodupcx develop
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -443,10 +443,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-develop-upcxjs-release_22.1.x-coverage
+          name: nodupcx-develop-upcxjs-release_22.1.x-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:develop
 
         ports:
@@ -454,7 +454,7 @@ jobs:
           - 9876:9876
 
   integration-test-develop-release_2_0_x:
-    name: Integration Test - upcxjs develop with nodeos release/2.0.x
+    name: Integration Test - upcxjs develop with nodupcx release/2.0.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -498,10 +498,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.0.x-upcxjs-develop-coverage
+          name: nodupcx-release_2.0.x-upcxjs-develop-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.0.x
 
         ports:
@@ -509,7 +509,7 @@ jobs:
           - 9876:9876
 
   integration-test-develop-release_2_1_x:
-    name: Integration Test - upcxjs develop with nodeos release/2.1.x
+    name: Integration Test - upcxjs develop with nodupcx release/2.1.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -553,10 +553,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.1.x-upcxjs-develop-coverage
+          name: nodupcx-release_2.1.x-upcxjs-develop-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.1.x
 
         ports:
@@ -564,7 +564,7 @@ jobs:
           - 9876:9876
 
   integration-test-develop-release_2_2_x:
-    name: Integration Test - upcxjs develop with nodeos release/2.2.x
+    name: Integration Test - upcxjs develop with nodupcx release/2.2.x
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -608,10 +608,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-release_2.2.x-upcxjs-develop-coverage
+          name: nodupcx-release_2.2.x-upcxjs-develop-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.2.x
 
         ports:
@@ -619,7 +619,7 @@ jobs:
           - 9876:9876
 
   integration-test-develop-develop:
-    name: Integration Test - upcxjs develop with nodeos develop
+    name: Integration Test - upcxjs develop with nodupcx develop
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -667,10 +667,10 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: nodeos-develop-upcxjs-develop-coverage
+          name: nodupcx-develop-upcxjs-develop-coverage
           path: coverage/merged-report
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:develop
 
         ports:

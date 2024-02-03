@@ -37,12 +37,12 @@ function start_wallet {
   echo "Starting the wallet"
   rm -rf $WALLET_DIR
   mkdir -p $WALLET_DIR
-  nohup keosd --unlock-timeout 999999999 --wallet-dir $WALLET_DIR --http-server-address 127.0.0.1:8900 2>&1 &
+  nohup kupcxd --unlock-timeout 999999999 --wallet-dir $WALLET_DIR --http-server-address 127.0.0.1:8900 2>&1 &
   sleep 1s
-  wallet_password=$(cleos wallet create --to-console | awk 'FNR > 3 { print $1 }' | tr -d '"')
+  wallet_password=$(clupcx wallet create --to-console | awk 'FNR > 3 { print $1 }' | tr -d '"')
   echo $wallet_password > "$CONFIG_DIR"/keys/default_wallet_password.txt
 
-  cleos wallet import --private-key $SYSTEM_ACCOUNT_PRIVATE_KEY
+  clupcx wallet import --private-key $SYSTEM_ACCOUNT_PRIVATE_KEY
 }
 
 function post_preactivate {
@@ -51,7 +51,7 @@ function post_preactivate {
 
 # $1 feature disgest to activate
 function activate_feature {
-  cleos push action upcx activate '["'"$1"'"]' -p upcx
+  clupcx push action upcx activate '["'"$1"'"]' -p upcx
   if [ $? -ne 0 ]; then
     exit 1
   fi
@@ -65,7 +65,7 @@ function setcode {
   retry_count="4"
 
   while [ $retry_count -gt 0 ]; do
-    cleos set code $1 $2 -p $1@active
+    clupcx set code $1 $2 -p $1@active
     if [ $? -eq 0 ]; then
       break
     fi
@@ -88,7 +88,7 @@ function setabi {
   retry_count="4"
 
   while [ $retry_count -gt 0 ]; do
-    cleos set abi $1 $2 -p $1@active
+    clupcx set abi $1 $2 -p $1@active
     if [ $? -eq 0 ]; then
       break
     fi
@@ -111,7 +111,7 @@ mkdir -p $BLOCKCHAIN_DATA_DIR
 mkdir -p $BLOCKCHAIN_CONFIG_DIR
 
 echo "Starting the chain for setup"
-nodeos -e -p upcx \
+nodupcx -e -p upcx \
   --data-dir $BLOCKCHAIN_DATA_DIR \
   --config-dir $BLOCKCHAIN_CONFIG_DIR \
   --http-validate-host=false \
@@ -146,25 +146,25 @@ echo "Creating accounts and deploying contracts"
 start_wallet
 
 sleep 1s
-cleos wallet import --private-key $EXAMPLE_ACCOUNT_PRIVATE_KEY
-cleos wallet import --private-key $R1_EXAMPLE_ACCOUNT_PRIVATE_KEY
-cleos wallet import --private-key $CFHELLO_PRIVATE_KEY
-cleos wallet import --private-key $CFACTOR_PRIVATE_KEY
-cleos create account upcx upcx.bpay $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.msig $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.names $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.ram $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.ramfee $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.saving $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.stake $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.vpay $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.rex $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx upcx.token $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx returnvalue $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx readonly $EXAMPLE_ACCOUNT_PUBLIC_KEY
-cleos create account upcx todo $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account upcx cfhello $CFHELLO_PUBLIC_KEY
-cleos create account cfhello cfactor $CFACTOR_PUBLIC_KEY
+clupcx wallet import --private-key $EXAMPLE_ACCOUNT_PRIVATE_KEY
+clupcx wallet import --private-key $R1_EXAMPLE_ACCOUNT_PRIVATE_KEY
+clupcx wallet import --private-key $CFHELLO_PRIVATE_KEY
+clupcx wallet import --private-key $CFACTOR_PRIVATE_KEY
+clupcx create account upcx upcx.bpay $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.msig $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.names $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.ram $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.ramfee $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.saving $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.stake $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.vpay $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.rex $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx upcx.token $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx returnvalue $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx readonly $EXAMPLE_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx todo $SYSTEM_ACCOUNT_PUBLIC_KEY
+clupcx create account upcx cfhello $CFHELLO_PUBLIC_KEY
+clupcx create account cfhello cfactor $CFACTOR_PUBLIC_KEY
 
 # preactivate concensus upgrades
 post_preactivate
@@ -218,8 +218,8 @@ if [ $UPCXBRANCH = "release_2.1.x" ] || [ $UPCXBRANCH = "release_2.2.x" ] || [ $
   setcode upcx $CONTRACTS_DIR/upcx.bios/upcx.bios.wasm
 
   sleep 1s
-  cleos push action upcx setkvparams '[{"max_key_size":1024, "max_value_size":4096, "max_iterators":1024}]' -p upcx@active
-  cleos push action upcx setpparams '["01110000400100000000"]' -p upcx@active
+  clupcx push action upcx setkvparams '[{"max_key_size":1024, "max_value_size":4096, "max_iterators":1024}]' -p upcx@active
+  clupcx push action upcx setpparams '["01110000400100000000"]' -p upcx@active
 
   sleep 1s
   setabi todo $CONTRACTS_DIR/kv_todo/kv_todo.abi
@@ -253,23 +253,23 @@ setabi upcx.token $CONTRACTS_DIR/upcx.token/upcx.token.abi
 setcode upcx.token $CONTRACTS_DIR/upcx.token/upcx.token.wasm
 
 sleep 1s
-cleos push action upcx.token create '["upcx", "10000000000.0000 SYS"]' -p upcx.token
-cleos push action upcx.token issue '["upcx", "5000000000.0000 SYS", "Half of available supply"]' -p upcx
+clupcx push action upcx.token create '["upcx", "10000000000.0000 SYS"]' -p upcx.token
+clupcx push action upcx.token issue '["upcx", "5000000000.0000 SYS", "Half of available supply"]' -p upcx
 
-cleos push action upcx init '["0", "4,SYS"]' -p upcx@active
+clupcx push action upcx init '["0", "4,SYS"]' -p upcx@active
 
-cleos system newaccount upcx --transfer bob $EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
-cleos system newaccount upcx --transfer alice $EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
-cleos system newaccount upcx --transfer bobr1 $R1_EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
-cleos system newaccount upcx --transfer alicer1 $R1_EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
+clupcx system newaccount upcx --transfer bob $EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
+clupcx system newaccount upcx --transfer alice $EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
+clupcx system newaccount upcx --transfer bobr1 $R1_EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
+clupcx system newaccount upcx --transfer alicer1 $R1_EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
 
 if [ $UPCXBRANCH = "develop" ]; then
-  cleos system newaccount upcx --transfer nestcontn2kv $SYSTEM_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 7000000
-  cleos system newaccount upcx --transfer nestcontnmi $SYSTEM_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 7000000
+  clupcx system newaccount upcx --transfer nestcontn2kv $SYSTEM_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 7000000
+  clupcx system newaccount upcx --transfer nestcontnmi $SYSTEM_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 7000000
 
   sleep 1s
-  cleos push action upcx setpriv '["nestcontn2kv", 1]' -p upcx
-  cleos push action upcx setpriv '["nestcontnmi", 1]' -p upcx
+  clupcx push action upcx setpriv '["nestcontn2kv", 1]' -p upcx
+  clupcx push action upcx setpriv '["nestcontnmi", 1]' -p upcx
 
   sleep 1s
   setabi nestcontn2kv $CONTRACTS_DIR/nested_container_kv/nested_container_kv.abi
@@ -281,24 +281,24 @@ if [ $UPCXBRANCH = "develop" ]; then
 fi
 
 sleep 1s
-cleos push action upcx.token transfer '["upcx", "bob", "1000.0000 SYS", "memo"]' -p upcx
-cleos push action upcx.token transfer '["upcx", "alice", "1000.0000 SYS", "memo"]' -p upcx
-cleos push action upcx.token transfer '["upcx", "bobr1", "1000.0000 SYS", "memo"]' -p upcx
-cleos push action upcx.token transfer '["upcx", "alicer1", "1000.0000 SYS", "memo"]' -p upcx
+clupcx push action upcx.token transfer '["upcx", "bob", "1000.0000 SYS", "memo"]' -p upcx
+clupcx push action upcx.token transfer '["upcx", "alice", "1000.0000 SYS", "memo"]' -p upcx
+clupcx push action upcx.token transfer '["upcx", "bobr1", "1000.0000 SYS", "memo"]' -p upcx
+clupcx push action upcx.token transfer '["upcx", "alicer1", "1000.0000 SYS", "memo"]' -p upcx
 
 if [ $UPCXBRANCH = "release_2.1.x" ] || [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then
-  cleos push action todo upsert '["bf581bee-9f2c-447b-94ad-78e4984b6f51", "todo", "Write Hello World Contract", false]' -p todo@active
-  cleos push action todo upsert '["b7b0d09d-a82b-44d9-b067-3bae2d02917e", "todo", "Start Blockchain", false]' -p todo@active
-  cleos push action todo upsert '["ac8acfe7-cd4e-4d22-8400-218b697a4517", "todo", "Deploy Hello World Contract", false]' -p todo@active
+  clupcx push action todo upsert '["bf581bee-9f2c-447b-94ad-78e4984b6f51", "todo", "Write Hello World Contract", false]' -p todo@active
+  clupcx push action todo upsert '["b7b0d09d-a82b-44d9-b067-3bae2d02917e", "todo", "Start Blockchain", false]' -p todo@active
+  clupcx push action todo upsert '["ac8acfe7-cd4e-4d22-8400-218b697a4517", "todo", "Deploy Hello World Contract", false]' -p todo@active
 fi
 
 if [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then
-  cleos push action readonly setup '[]' -p readonly@active
+  clupcx push action readonly setup '[]' -p readonly@active
 fi
 
 echo "All done initializing the blockchain"
 
-echo "Shut down Nodeos, sleeping for 2 seconds to allow time for at least 4 blocks to be created after deploying contracts"
+echo "Shut down Nodupcx, sleeping for 2 seconds to allow time for at least 4 blocks to be created after deploying contracts"
 sleep 2s
 kill %1
 fg %1

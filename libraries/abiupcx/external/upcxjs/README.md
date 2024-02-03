@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/upcx/upcxjs/workflows/CI/badge.svg?branch=master)](https://github.com/upcx/upcxjs/actions) [![npm version](https://badge.fury.io/js/upcxjs.svg)](https://badge.fury.io/js/upcxjs) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![npm](https://img.shields.io/npm/dw/upcxjs.svg)
 
-Javascript API for integration with upcx-based blockchains using [upcx RPC API](https://developers.eos.io/upcx-nodeos/reference).
+Javascript API for integration with upcx-based blockchains using [upcx RPC API](https://developers.upcx.io/upcx-nodupcx/reference).
 
 Documentation can be found [here](https://upcx.github.io/upcxjs)
 

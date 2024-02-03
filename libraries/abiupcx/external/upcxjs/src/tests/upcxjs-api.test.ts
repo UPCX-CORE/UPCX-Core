@@ -17,7 +17,7 @@ const transaction = {
   context_free_actions: [] as Action[],
   actions: [
     {
-      account: "testeostoken",
+      account: "testupcxtoken",
       name: "transfer",
       authorization: [
         {
@@ -35,7 +35,7 @@ const transaction = {
         06120736563757265206675747572652e`,
     },
     {
-      account: "testeostoken",
+      account: "testupcxtoken",
       name: "transfer",
       authorization: [
         {
@@ -67,13 +67,13 @@ const serializedTx = [
 const deserializedTx = {
   actions: [
     {
-      account: "testeostoken",
+      account: "testupcxtoken",
       authorization: [{ actor: "thegazelle", permission: "active" }],
       data: "",
       name: "transfer",
     },
     {
-      account: "testeostoken",
+      account: "testupcxtoken",
       authorization: [{ actor: "thegazelle", permission: "active" }],
       data: "",
       name: "transfer",
@@ -91,13 +91,13 @@ const deserializedTx = {
 
 const serializedActions = [
   {
-    account: "testeostoken",
+    account: "testupcxtoken",
     authorization: [{ actor: "thegazelle", permission: "active" }],
     data: "00808A517DC354CB6012F557656CA4BA102700000000000004454F530000000014466F72206120736563757265206675747572652E", // eslint-disable-line
     name: "transfer",
   },
   {
-    account: "testeostoken",
+    account: "testupcxtoken",
     authorization: [{ actor: "thegazelle", permission: "active" }],
     data: "00808A517DC354CB6012F557656CA4BA204E00000000000004454F530000000028466F722061207365636F6E64207365637572652066757475726520286D756C746976657273653F29", // eslint-disable-line
     name: "transfer",
@@ -106,7 +106,7 @@ const serializedActions = [
 
 const deserializedActions = [
   {
-    account: "testeostoken",
+    account: "testupcxtoken",
     authorization: [{ actor: "thegazelle", permission: "active" }],
     data: {
       from: "thegazelle",
@@ -117,7 +117,7 @@ const deserializedActions = [
     name: "transfer",
   },
   {
-    account: "testeostoken",
+    account: "testupcxtoken",
     authorization: [{ actor: "thegazelle", permission: "active" }],
     data: {
       from: "thegazelle",
@@ -137,7 +137,7 @@ describe("upcxjs-api", () => {
     json: async () => {
       if (input === "/v1/chain/get_raw_abi") {
         return {
-          account_name: "testeostoken",
+          account_name: "testupcxtoken",
           abi: "DmVvc2lvOjphYmkvMS4wAQxhY2NvdW50X25hbWUEbmFtZQUIdHJhbnNmZXIABARmcm9tDGFjY291bnRfbmFtZQJ0bwxhY2NvdW50X25hbWUIcXVhbnRpdHkFYXNzZXQEbWVtbwZzdHJpbmcGY3JlYXRlAAIGaXNzdWVyDGFjY291bnRfbmFtZQ5tYXhpbXVtX3N1cHBseQVhc3NldAVpc3N1ZQADAnRvDGFjY291bnRfbmFtZQhxdWFudGl0eQVhc3NldARtZW1vBnN0cmluZwdhY2NvdW50AAEHYmFsYW5jZQVhc3NldA5jdXJyZW5jeV9zdGF0cwADBnN1cHBseQVhc3NldAptYXhfc3VwcGx5BWFzc2V0Bmlzc3VlcgxhY2NvdW50X25hbWUDAAAAVy08zc0IdHJhbnNmZXLnBSMjIFRyYW5zZmVyIFRlcm1zICYgQ29uZGl0aW9ucwoKSSwge3tmcm9tfX0sIGNlcnRpZnkgdGhlIGZvbGxvd2luZyB0byBiZSB0cnVlIHRvIHRoZSBiZXN0IG9mIG15IGtub3dsZWRnZToKCjEuIEkgY2VydGlmeSB0aGF0IHt7cXVhbnRpdHl9fSBpcyBub3QgdGhlIHByb2NlZWRzIG9mIGZyYXVkdWxlbnQgb3IgdmlvbGVudCBhY3Rpdml0aWVzLgoyLiBJIGNlcnRpZnkgdGhhdCwgdG8gdGhlIGJlc3Qgb2YgbXkga25vd2xlZGdlLCB7e3RvfX0gaXMgbm90IHN1cHBvcnRpbmcgaW5pdGlhdGlvbiBvZiB2aW9sZW5jZSBhZ2FpbnN0IG90aGVycy4KMy4gSSBoYXZlIGRpc2Nsb3NlZCBhbnkgY29udHJhY3R1YWwgdGVybXMgJiBjb25kaXRpb25zIHdpdGggcmVzcGVjdCB0byB7e3F1YW50aXR5fX0gdG8ge3t0b319LgoKSSB1bmRlcnN0YW5kIHRoYXQgZnVuZHMgdHJhbnNmZXJzIGFyZSBub3QgcmV2ZXJzaWJsZSBhZnRlciB0aGUge3t0cmFuc2FjdGlvbi5kZWxheX19IHNlY29uZHMgb3Igb3RoZXIgZGVsYXkgYXMgY29uZmlndXJlZCBieSB7e2Zyb219fSdzIHBlcm1pc3Npb25zLgoKSWYgdGhpcyBhY3Rpb24gZmFpbHMgdG8gYmUgaXJyZXZlcnNpYmx5IGNvbmZpcm1lZCBhZnRlciByZWNlaXZpbmcgZ29vZHMgb3Igc2VydmljZXMgZnJvbSAne3t0b319JywgSSBhZ3JlZSB0byBlaXRoZXIgcmV0dXJuIHRoZSBnb29kcyBvciBzZXJ2aWNlcyBvciByZXNlbmQge3txdWFudGl0eX19IGluIGEgdGltZWx5IG1hbm5lci4KAAAAAAClMXYFaXNzdWUAAAAAAKhs1EUGY3JlYXRlAAIAAAA4T00RMgNpNjQBCGN1cnJlbmN5AQZ1aW50NjQHYWNjb3VudAAAAAAAkE3GA2k2NAEIY3VycmVuY3kBBnVpbnQ2NA5jdXJyZW5jeV9zdGF0cwAAAA===", // eslint-disable-line
         };
       }
@@ -167,7 +167,7 @@ describe("upcxjs-api", () => {
   });
 
   it("getAbi returns an abi", async () => {
-    const response = await api.getAbi("testeostoken");
+    const response = await api.getAbi("testupcxtoken");
     expect(response).toBeTruthy();
   });
 
@@ -177,7 +177,7 @@ describe("upcxjs-api", () => {
   });
 
   it("getContract returns a contract", async () => {
-    const response = await api.getContract("testeostoken");
+    const response = await api.getContract("testupcxtoken");
     expect(response.actions).toBeTruthy();
   });
 
@@ -205,25 +205,25 @@ describe("upcxjs-api", () => {
   });
 
   it("rawAbiToJson returns correct Json from raw Abi", async () => {
-    const expected = await api.getAbi("testeostoken");
-    const response = await rpc.getRawAbi("testeostoken");
+    const expected = await api.getAbi("testupcxtoken");
+    const response = await rpc.getRawAbi("testupcxtoken");
     const actual = api.rawAbiToJson(response.abi);
 
     expect(actual).toEqual(expected);
   });
 
   it("jsonToRawAbi returns correct raw Abi from Json", async () => {
-    const response = await rpc.getRawAbi("testeostoken");
+    const response = await rpc.getRawAbi("testupcxtoken");
     const expected = response.abi;
-    const jsonAbi = await api.getAbi("testeostoken");
+    const jsonAbi = await api.getAbi("testupcxtoken");
     const actual = api.jsonToRawAbi(jsonAbi);
 
     expect(actual).toEqual(expected);
   });
 
   it("confirms jsonToRawAbi and rawAbiToJson are reciprocal", async () => {
-    const expectedJsonAbi = await api.getAbi("testeostoken");
-    const response = await rpc.getRawAbi("testeostoken");
+    const expectedJsonAbi = await api.getAbi("testupcxtoken");
+    const response = await rpc.getRawAbi("testupcxtoken");
     const expectedRawAbi = response.abi;
     const jsonAbi = api.rawAbiToJson(api.jsonToRawAbi(expectedJsonAbi));
     const rawAbi = api.jsonToRawAbi(api.rawAbiToJson(expectedRawAbi));
@@ -268,7 +268,7 @@ describe("upcxjs-api", () => {
     it("errors if abi is not cached", () => {
       const abiCheck = () => {
         api
-          .with("testeostoken")
+          .with("testupcxtoken")
           .as("bob")
           .transfer(
             "thegazelle",
@@ -283,10 +283,10 @@ describe("upcxjs-api", () => {
     });
 
     it("generates a valid serialized action using api.with()", async () => {
-      await api.getAbi("testeostoken");
+      await api.getAbi("testupcxtoken");
 
       const serializedAction = api
-        .with("testeostoken")
+        .with("testupcxtoken")
         .as("thegazelle")
         .transfer(
           "thegazelle",
@@ -298,11 +298,11 @@ describe("upcxjs-api", () => {
     });
 
     it("generates a valid serialized action using tx.with()", async () => {
-      await api.getAbi("testeostoken");
+      await api.getAbi("testupcxtoken");
 
       const tx = api.buildTransaction();
       const serializedAction = tx
-        .with("testeostoken")
+        .with("testupcxtoken")
         .as("thegazelle")
         .transfer(
           "thegazelle",
@@ -317,7 +317,7 @@ describe("upcxjs-api", () => {
       const response = await api.serializeActions(transaction.actions);
 
       const firstAction = api
-        .with("testeostoken")
+        .with("testupcxtoken")
         .as("thegazelle")
         .transfer(
           "thegazelle",
@@ -327,7 +327,7 @@ describe("upcxjs-api", () => {
         );
 
       const secondAction = api
-        .with("testeostoken")
+        .with("testupcxtoken")
         .as("thegazelle")
         .transfer(
           "thegazelle",
@@ -340,10 +340,10 @@ describe("upcxjs-api", () => {
     });
 
     it("generates the same serialized data using the longer authorization", async () => {
-      await api.getAbi("testeostoken");
+      await api.getAbi("testupcxtoken");
 
       const firstSerializedAction = api
-        .with("testeostoken")
+        .with("testupcxtoken")
         .as("thegazelle")
         .transfer(
           "thegazelle",
@@ -352,7 +352,7 @@ describe("upcxjs-api", () => {
           "For a secure future."
         );
       const secondSerializedAction = api
-        .with("testeostoken")
+        .with("testupcxtoken")
         .as([{ actor: "thegazelle", permission: "active" }])
         .transfer(
           "thegazelle",

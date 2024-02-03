@@ -658,7 +658,7 @@ export class SerialBuffer {
 
 /** Is this a supported ABI version? */
 export const supportedAbiVersion = (version: string): boolean => {
-  return version.startsWith("eosio::abi/1.");
+  return version.startsWith("upcx::abi/1.");
 };
 
 const checkDateParse = (date: string): number => {

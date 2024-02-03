@@ -1,31 +1,31 @@
 #!/usr/bin/env bash
-EOS_BRANCH=$1
-echo $EOS_BRANCH
+UPCX_BRANCH=$1
+echo $UPCX_BRANCH
 
 set -m
 
 # CAUTION: Never use these development keys for a production account!
 # Doing so will most certainly result in the loss of access to your account, these private keys are publicly known.
 SYSTEM_ACCOUNT_PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
-SYSTEM_ACCOUNT_PUBLIC_KEY="EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
+SYSTEM_ACCOUNT_PUBLIC_KEY="UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
 
 EXAMPLE_ACCOUNT_PRIVATE_KEY="5JuH9fCXmU3xbj8nRmhPZaVrxxXrdPaRmZLW1cznNTmTQR2Kg5Z"
-EXAMPLE_ACCOUNT_PUBLIC_KEY="EOS7bxrQUTbQ4mqcoefhWPz1aFieN4fA9RQAiozRz7FrUChHZ7Rb8"
+EXAMPLE_ACCOUNT_PUBLIC_KEY="UPCX7bxrQUTbQ4mqcoefhWPz1aFieN4fA9RQAiozRz7FrUChHZ7Rb8"
 
 R1_EXAMPLE_ACCOUNT_PRIVATE_KEY="PVT_R1_GrfEfbv5at9kbeHcGagQmvbFLdm6jqEpgE1wsGbrfbZNjpVgT"
 R1_EXAMPLE_ACCOUNT_PUBLIC_KEY="PUB_R1_4ztaVy8L9zbmzTdpfq5GcaFYwGwXTNmN3qW7qcgHMmfUZhpzQQ"
 
 CFHELLO_PRIVATE_KEY="5KYjzAywvTnkSDDyvCBoXAiEsjtDEMRzJ3yrXRhyF6VDs9b5RBj"
-CFHELLO_PUBLIC_KEY="EOS6nVrBASwwviMy3CntKsb1cD5Ai2gRZnyrxJDqypL3JLL7KCKrK"
+CFHELLO_PUBLIC_KEY="UPCX6nVrBASwwviMy3CntKsb1cD5Ai2gRZnyrxJDqypL3JLL7KCKrK"
 
 CFACTOR_PRIVATE_KEY="5K8Sm2bB2b7ZC8tJMefrk1GFa4jgtHxxHRcjX49maMk9AEwq8hN"
-CFACTOR_PUBLIC_KEY="EOS8Gyj8LpmSXxGVkGCd1rrroV9K5wtouCuwwABpyVKQno6LbSV3C"
+CFACTOR_PUBLIC_KEY="UPCX8Gyj8LpmSXxGVkGCd1rrroV9K5wtouCuwwABpyVKQno6LbSV3C"
 
 ROOT_DIR="/opt"
-CONTRACTS_DIR="$ROOT_DIR/eosio/bin/contracts"
+CONTRACTS_DIR="$ROOT_DIR/upcx/bin/contracts"
 BLOCKCHAIN_DATA_DIR=/root/.local/share
-BLOCKCHAIN_CONFIG_DIR=/opt/eosio/bin/config-dir
-WALLET_DIR="/root/eosio-wallet/"
+BLOCKCHAIN_CONFIG_DIR=/opt/upcx/bin/config-dir
+WALLET_DIR="/root/upcx-wallet/"
 
 mkdir -p $ROOT_DIR/bin
 
@@ -51,7 +51,7 @@ function post_preactivate {
 
 # $1 feature disgest to activate
 function activate_feature {
-  cleos push action eosio activate '["'"$1"'"]' -p eosio
+  cleos push action upcx activate '["'"$1"'"]' -p upcx
   if [ $? -ne 0 ]; then
     exit 1
   fi
@@ -111,16 +111,16 @@ mkdir -p $BLOCKCHAIN_DATA_DIR
 mkdir -p $BLOCKCHAIN_CONFIG_DIR
 
 echo "Starting the chain for setup"
-nodeos -e -p eosio \
+nodeos -e -p upcx \
   --data-dir $BLOCKCHAIN_DATA_DIR \
   --config-dir $BLOCKCHAIN_CONFIG_DIR \
   --http-validate-host=false \
-  --plugin eosio::producer_api_plugin \
-  --plugin eosio::chain_api_plugin \
-  --plugin eosio::trace_api_plugin \
+  --plugin upcx::producer_api_plugin \
+  --plugin upcx::chain_api_plugin \
+  --plugin upcx::trace_api_plugin \
   --trace-no-abis \
-  --plugin eosio::db_size_api_plugin \
-  --plugin eosio::http_plugin \
+  --plugin upcx::db_size_api_plugin \
+  --plugin upcx::http_plugin \
   --http-server-address=0.0.0.0:8888 \
   --access-control-allow-origin=* \
   --contracts-console \
@@ -150,49 +150,49 @@ cleos wallet import --private-key $EXAMPLE_ACCOUNT_PRIVATE_KEY
 cleos wallet import --private-key $R1_EXAMPLE_ACCOUNT_PRIVATE_KEY
 cleos wallet import --private-key $CFHELLO_PRIVATE_KEY
 cleos wallet import --private-key $CFACTOR_PRIVATE_KEY
-cleos create account eosio eosio.bpay $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.msig $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.names $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.ram $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.ramfee $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.saving $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.stake $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.vpay $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.rex $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio eosio.token $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio returnvalue $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio readonly $EXAMPLE_ACCOUNT_PUBLIC_KEY
-cleos create account eosio todo $SYSTEM_ACCOUNT_PUBLIC_KEY
-cleos create account eosio cfhello $CFHELLO_PUBLIC_KEY
+cleos create account upcx upcx.bpay $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.msig $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.names $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.ram $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.ramfee $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.saving $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.stake $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.vpay $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.rex $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx upcx.token $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx returnvalue $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx readonly $EXAMPLE_ACCOUNT_PUBLIC_KEY
+cleos create account upcx todo $SYSTEM_ACCOUNT_PUBLIC_KEY
+cleos create account upcx cfhello $CFHELLO_PUBLIC_KEY
 cleos create account cfhello cfactor $CFACTOR_PUBLIC_KEY
 
 # preactivate concensus upgrades
 post_preactivate
 
-if [ $EOSBRANCH = "release_2.0.x" ]; then
+if [ $UPCXBRANCH = "release_2.0.x" ]; then
   sleep 1s
-  setabi eosio $CONTRACTS_DIR/eosio.bios_v1.8.3/eosio.bios.abi
-  setcode eosio $CONTRACTS_DIR/eosio.bios_v1.8.3/eosio.bios.wasm
+  setabi upcx $CONTRACTS_DIR/upcx.bios_v1.8.3/upcx.bios.abi
+  setcode upcx $CONTRACTS_DIR/upcx.bios_v1.8.3/upcx.bios.wasm
 
   sleep 1s
   activate_feature "299dcb6af692324b899b39f16d5a530a33062804e41f09dc97e9f156b4476707"
 
   sleep 1s
-  setabi eosio $CONTRACTS_DIR/eosio.bios/eosio.bios.abi
-  setcode eosio $CONTRACTS_DIR/eosio.bios/eosio.bios.wasm
+  setabi upcx $CONTRACTS_DIR/upcx.bios/upcx.bios.abi
+  setcode upcx $CONTRACTS_DIR/upcx.bios/upcx.bios.wasm
 
   sleep 1s
 fi
 
-if [ $EOSBRANCH = "release_2.1.x" ] || [ $EOSBRANCH = "release_2.2.x" ] || [ $EOSBRANCH = "develop" ]; then
+if [ $UPCXBRANCH = "release_2.1.x" ] || [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then
   sleep 1s
-  setabi eosio $CONTRACTS_DIR/eosio.boot/eosio.boot.abi
-  setcode eosio $CONTRACTS_DIR/eosio.boot/eosio.boot.wasm
+  setabi upcx $CONTRACTS_DIR/upcx.boot/upcx.boot.abi
+  setcode upcx $CONTRACTS_DIR/upcx.boot/upcx.boot.wasm
   sleep 1s
   activate_feature "299dcb6af692324b899b39f16d5a530a33062804e41f09dc97e9f156b4476707"
 fi
 
-if [ $EOSBRANCH = "release_2.1.x" ] || [ $EOSBRANCH = "release_2.2.x" ] || [ $EOSBRANCH = "develop" ]; then
+if [ $UPCXBRANCH = "release_2.1.x" ] || [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then
   activate_feature "825ee6288fb1373eab1b5187ec2f04f6eacb39cb3a97f356a07c91622dd61d16"
   activate_feature "c3a6138c5061cf291310887c0b5c71fcaffeab90d5deb50d3b9e687cead45071"
   activate_feature "bf61537fd21c61a60e542a5d66c3f6a78da0589336868307f94a82bccea84e88"
@@ -208,18 +208,18 @@ activate_feature "e0fb64b1085cc5538970158d05a009c24e276fb94e1a0bf6a528b48fbc4ff5
 activate_feature "ef43112c6543b88db2283a2e077278c315ae2c84719a8b25f25cc88565fbea99"
 activate_feature "4a90c00d55454dc5b059055ca213579c6ea856967712a56017487886a4d4cc0f"
 activate_feature "1a99a59d87e06e09ec5b028a9cbb7749b4a5ad8819004365d02dc4379a8b7241"
-if [ $EOSBRANCH = "release_2.2.x" ] || [ $EOSBRANCH = "develop" ]; then 
+if [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then 
   activate_feature "808c49387292c34ccb3970e00b08a690b6b3370c1cbcec46d46c19d5dfafab03"
 fi
 
-if [ $EOSBRANCH = "release_2.1.x" ] || [ $EOSBRANCH = "release_2.2.x" ] || [ $EOSBRANCH = "develop" ]; then
+if [ $UPCXBRANCH = "release_2.1.x" ] || [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then
   sleep 1s
-  setabi eosio $CONTRACTS_DIR/eosio.bios/eosio.bios.abi
-  setcode eosio $CONTRACTS_DIR/eosio.bios/eosio.bios.wasm
+  setabi upcx $CONTRACTS_DIR/upcx.bios/upcx.bios.abi
+  setcode upcx $CONTRACTS_DIR/upcx.bios/upcx.bios.wasm
 
   sleep 1s
-  cleos push action eosio setkvparams '[{"max_key_size":1024, "max_value_size":4096, "max_iterators":1024}]' -p eosio@active
-  cleos push action eosio setpparams '["01110000400100000000"]' -p eosio@active
+  cleos push action upcx setkvparams '[{"max_key_size":1024, "max_value_size":4096, "max_iterators":1024}]' -p upcx@active
+  cleos push action upcx setpparams '["01110000400100000000"]' -p upcx@active
 
   sleep 1s
   setabi todo $CONTRACTS_DIR/kv_todo/kv_todo.abi
@@ -234,42 +234,42 @@ sleep 1s
 setabi cfhello $CONTRACTS_DIR/cfhello/cfhello.abi
 setcode cfhello $CONTRACTS_DIR/cfhello/cfhello.wasm
 
-if [ $EOSBRANCH = "release_2.2.x" ] || [ $EOSBRANCH = "develop" ]; then
+if [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then
   sleep 1s
   setabi readonly $CONTRACTS_DIR/read_only_query_tests/read_only_query_tests.abi
   setcode readonly $CONTRACTS_DIR/read_only_query_tests/read_only_query_tests.wasm
 fi
 
 sleep 1s
-setabi eosio.msig $CONTRACTS_DIR/eosio.msig/eosio.msig.abi
-setcode eosio.msig $CONTRACTS_DIR/eosio.msig/eosio.msig.wasm
+setabi upcx.msig $CONTRACTS_DIR/upcx.msig/upcx.msig.abi
+setcode upcx.msig $CONTRACTS_DIR/upcx.msig/upcx.msig.wasm
 
 sleep 1s
-setabi eosio $CONTRACTS_DIR/eosio.system/eosio.system.abi
-setcode eosio $CONTRACTS_DIR/eosio.system/eosio.system.wasm
+setabi upcx $CONTRACTS_DIR/upcx.system/upcx.system.abi
+setcode upcx $CONTRACTS_DIR/upcx.system/upcx.system.wasm
 
 sleep 1s
-setabi eosio.token $CONTRACTS_DIR/eosio.token/eosio.token.abi
-setcode eosio.token $CONTRACTS_DIR/eosio.token/eosio.token.wasm
+setabi upcx.token $CONTRACTS_DIR/upcx.token/upcx.token.abi
+setcode upcx.token $CONTRACTS_DIR/upcx.token/upcx.token.wasm
 
 sleep 1s
-cleos push action eosio.token create '["eosio", "10000000000.0000 SYS"]' -p eosio.token
-cleos push action eosio.token issue '["eosio", "5000000000.0000 SYS", "Half of available supply"]' -p eosio
+cleos push action upcx.token create '["upcx", "10000000000.0000 SYS"]' -p upcx.token
+cleos push action upcx.token issue '["upcx", "5000000000.0000 SYS", "Half of available supply"]' -p upcx
 
-cleos push action eosio init '["0", "4,SYS"]' -p eosio@active
+cleos push action upcx init '["0", "4,SYS"]' -p upcx@active
 
-cleos system newaccount eosio --transfer bob $EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
-cleos system newaccount eosio --transfer alice $EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
-cleos system newaccount eosio --transfer bobr1 $R1_EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
-cleos system newaccount eosio --transfer alicer1 $R1_EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
+cleos system newaccount upcx --transfer bob $EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
+cleos system newaccount upcx --transfer alice $EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
+cleos system newaccount upcx --transfer bobr1 $R1_EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
+cleos system newaccount upcx --transfer alicer1 $R1_EXAMPLE_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 8192
 
-if [ $EOSBRANCH = "develop" ]; then
-  cleos system newaccount eosio --transfer nestcontn2kv $SYSTEM_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 7000000
-  cleos system newaccount eosio --transfer nestcontnmi $SYSTEM_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 7000000
+if [ $UPCXBRANCH = "develop" ]; then
+  cleos system newaccount upcx --transfer nestcontn2kv $SYSTEM_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 7000000
+  cleos system newaccount upcx --transfer nestcontnmi $SYSTEM_ACCOUNT_PUBLIC_KEY --stake-net "10000.0000 SYS" --stake-cpu "10000.0000 SYS" --buy-ram-kbytes 7000000
 
   sleep 1s
-  cleos push action eosio setpriv '["nestcontn2kv", 1]' -p eosio
-  cleos push action eosio setpriv '["nestcontnmi", 1]' -p eosio
+  cleos push action upcx setpriv '["nestcontn2kv", 1]' -p upcx
+  cleos push action upcx setpriv '["nestcontnmi", 1]' -p upcx
 
   sleep 1s
   setabi nestcontn2kv $CONTRACTS_DIR/nested_container_kv/nested_container_kv.abi
@@ -281,18 +281,18 @@ if [ $EOSBRANCH = "develop" ]; then
 fi
 
 sleep 1s
-cleos push action eosio.token transfer '["eosio", "bob", "1000.0000 SYS", "memo"]' -p eosio
-cleos push action eosio.token transfer '["eosio", "alice", "1000.0000 SYS", "memo"]' -p eosio
-cleos push action eosio.token transfer '["eosio", "bobr1", "1000.0000 SYS", "memo"]' -p eosio
-cleos push action eosio.token transfer '["eosio", "alicer1", "1000.0000 SYS", "memo"]' -p eosio
+cleos push action upcx.token transfer '["upcx", "bob", "1000.0000 SYS", "memo"]' -p upcx
+cleos push action upcx.token transfer '["upcx", "alice", "1000.0000 SYS", "memo"]' -p upcx
+cleos push action upcx.token transfer '["upcx", "bobr1", "1000.0000 SYS", "memo"]' -p upcx
+cleos push action upcx.token transfer '["upcx", "alicer1", "1000.0000 SYS", "memo"]' -p upcx
 
-if [ $EOSBRANCH = "release_2.1.x" ] || [ $EOSBRANCH = "release_2.2.x" ] || [ $EOSBRANCH = "develop" ]; then
+if [ $UPCXBRANCH = "release_2.1.x" ] || [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then
   cleos push action todo upsert '["bf581bee-9f2c-447b-94ad-78e4984b6f51", "todo", "Write Hello World Contract", false]' -p todo@active
   cleos push action todo upsert '["b7b0d09d-a82b-44d9-b067-3bae2d02917e", "todo", "Start Blockchain", false]' -p todo@active
   cleos push action todo upsert '["ac8acfe7-cd4e-4d22-8400-218b697a4517", "todo", "Deploy Hello World Contract", false]' -p todo@active
 fi
 
-if [ $EOSBRANCH = "release_2.2.x" ] || [ $EOSBRANCH = "develop" ]; then
+if [ $UPCXBRANCH = "release_2.2.x" ] || [ $UPCXBRANCH = "develop" ]; then
   cleos push action readonly setup '[]' -p readonly@active
 fi
 

@@ -13,7 +13,7 @@ import { constructElliptic, PublicKey } from "./upcxjs-key-conversions";
 export class Signature {
   constructor(private signature: Key, private ec: EC) {}
 
-  /** Instantiate Signature from an EOSIO-format Signature */
+  /** Instantiate Signature from an upcx-format Signature */
   public static fromString(sig: string, ec?: EC): Signature {
     const signature = stringToSignature(sig);
     if (!ec) {
@@ -30,16 +30,16 @@ export class Signature {
   ): Signature {
     const r = ellipticSig.r.toArray("be", 32);
     const s = ellipticSig.s.toArray("be", 32);
-    let eosioRecoveryParam;
+    let upcxRecoveryParam;
     if (keyType === KeyType.k1 || keyType === KeyType.r1) {
-      eosioRecoveryParam = ellipticSig.recoveryParam + 27;
+      upcxRecoveryParam = ellipticSig.recoveryParam + 27;
       if (ellipticSig.recoveryParam <= 3) {
-        eosioRecoveryParam += 4;
+        upcxRecoveryParam += 4;
       }
     } else if (keyType === KeyType.wa) {
-      eosioRecoveryParam = ellipticSig.recoveryParam;
+      upcxRecoveryParam = ellipticSig.recoveryParam;
     }
-    const sigData = new Uint8Array([eosioRecoveryParam].concat(r, s));
+    const sigData = new Uint8Array([upcxRecoveryParam].concat(r, s));
     if (!ec) {
       ec = constructElliptic(keyType);
     }
@@ -82,7 +82,7 @@ export class Signature {
     return { r, s, recoveryParam };
   }
 
-  /** Export Signature as EOSIO-format Signature */
+  /** Export Signature as upcx-format Signature */
   public toString(): string {
     return signatureToString(this.signature);
   }

@@ -73,7 +73,7 @@ jobs:
 
     services:
       nodeos:
-        image: eosio/upcxjs-ci:release_2.2.x
+        image: upcx/upcxjs-ci:release_2.2.x
 
         ports:
           - 8888:8888
@@ -126,7 +126,7 @@ jobs:
 
     services:
       nodeos:
-        image: eosio/upcxjs-ci:release_2.2.x
+        image: upcx/upcxjs-ci:release_2.2.x
 
         ports:
           - 8888:8888

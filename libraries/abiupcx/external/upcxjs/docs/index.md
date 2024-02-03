@@ -2,7 +2,7 @@
 content_title: upcxjs
 ---
 
-`upcxjs` is a Javascript library which provides an API for integrating with EOSIO-based blockchains using the [EOSIO Nodeos RPC API](https://developers.eos.io/eosio-nodeos/reference). The documentation for `upcxjs` is structured in the following way:
+`upcxjs` is a Javascript library which provides an API for integrating with upcx-based blockchains using the [upcx Nodeos RPC API](https://developers.eos.io/upcx-nodeos/reference). The documentation for `upcxjs` is structured in the following way:
 
 - [Installation](02_installation.md) explains how to install `upcxjs` using `npm` or `yarn`.
 - [Basic Usage](basic-usage/) provides information related to importing `upcxjs` in various Javascript environments. The [basic-usage](basic-usage/index.md) document specifically provides brief explanations of the components provided by `upcxjs` as well as their typical use cases.

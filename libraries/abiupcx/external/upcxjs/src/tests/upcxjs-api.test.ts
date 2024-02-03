@@ -28,7 +28,7 @@ const transaction = {
       data: {
         from: "thegazelle",
         to: "remasteryoda",
-        quantity: "1.0000 EOS",
+        quantity: "1.0000 UPCX",
         memo: "For a secure future.",
       },
       hex_data: `00808a517dc354cb6012f557656ca4ba102700000000000004454f530000000014466f722
@@ -46,7 +46,7 @@ const transaction = {
       data: {
         from: "thegazelle",
         to: "remasteryoda",
-        quantity: "2.0000 EOS",
+        quantity: "2.0000 UPCX",
         memo: "For a second secure future (multiverse?)",
       },
       hex_data: `00808a517dc354cb6012f557656ca4ba204e00000000000004454f530000000028466f722061207365636f6e642073656
@@ -111,7 +111,7 @@ const deserializedActions = [
     data: {
       from: "thegazelle",
       memo: "For a secure future.",
-      quantity: "1.0000 EOS",
+      quantity: "1.0000 UPCX",
       to: "remasteryoda",
     },
     name: "transfer",
@@ -122,7 +122,7 @@ const deserializedActions = [
     data: {
       from: "thegazelle",
       memo: "For a second secure future (multiverse?)",
-      quantity: "2.0000 EOS",
+      quantity: "2.0000 UPCX",
       to: "remasteryoda",
     },
     name: "transfer",
@@ -273,7 +273,7 @@ describe("upcxjs-api", () => {
           .transfer(
             "thegazelle",
             "remasteryoda",
-            "1.0000 EOS",
+            "1.0000 UPCX",
             "For a secure future."
           );
       };
@@ -291,7 +291,7 @@ describe("upcxjs-api", () => {
         .transfer(
           "thegazelle",
           "remasteryoda",
-          "1.0000 EOS",
+          "1.0000 UPCX",
           "For a secure future."
         );
       expect(serializedAction).toEqual(serializedActions[0]);
@@ -307,7 +307,7 @@ describe("upcxjs-api", () => {
         .transfer(
           "thegazelle",
           "remasteryoda",
-          "2.0000 EOS",
+          "2.0000 UPCX",
           "For a second secure future (multiverse?)"
         );
       expect(serializedAction).toEqual(serializedActions[1]);
@@ -322,7 +322,7 @@ describe("upcxjs-api", () => {
         .transfer(
           "thegazelle",
           "remasteryoda",
-          "1.0000 EOS",
+          "1.0000 UPCX",
           "For a secure future."
         );
 
@@ -332,7 +332,7 @@ describe("upcxjs-api", () => {
         .transfer(
           "thegazelle",
           "remasteryoda",
-          "2.0000 EOS",
+          "2.0000 UPCX",
           "For a second secure future (multiverse?)"
         );
 
@@ -348,7 +348,7 @@ describe("upcxjs-api", () => {
         .transfer(
           "thegazelle",
           "remasteryoda",
-          "1.0000 EOS",
+          "1.0000 UPCX",
           "For a secure future."
         );
       const secondSerializedAction = api
@@ -357,7 +357,7 @@ describe("upcxjs-api", () => {
         .transfer(
           "thegazelle",
           "remasteryoda",
-          "1.0000 EOS",
+          "1.0000 UPCX",
           "For a secure future."
         );
 
@@ -371,7 +371,7 @@ describe("upcxjs-api", () => {
         ref_block_prefix: 1309445478,
         actions: [
           {
-            account: "eosio.token",
+            account: "upcx.token",
             name: "transfer",
             authorization: [
               {

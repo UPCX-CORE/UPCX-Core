@@ -34,7 +34,7 @@ export class PrivateKey {
     );
   }
 
-  /** Instantiate private key from an EOSIO-format private key */
+  /** Instantiate private key from an upcx-format private key */
   public static fromString(keyString: string, ec?: EC): PrivateKey {
     const privateKey = stringToPrivateKey(keyString);
     if (!ec) {
@@ -52,7 +52,7 @@ export class PrivateKey {
     return privateKeyToLegacyString(this.key);
   }
 
-  /** Export private key as EOSIO-format private key */
+  /** Export private key as upcx-format private key */
   public toString(): string {
     return privateKeyToString(this.key);
   }

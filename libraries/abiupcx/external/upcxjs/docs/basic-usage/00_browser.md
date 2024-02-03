@@ -28,7 +28,7 @@ To cache ABIs and reduce network usage, reuse the `api` object for all transacti
         {
           actions: [
             {
-              account: "eosio.token",
+              account: "upcx.token",
               name: "transfer",
               authorization: [
                 {

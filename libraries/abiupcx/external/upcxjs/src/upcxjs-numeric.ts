@@ -334,7 +334,7 @@ export const stringToPublicKey = (s: string): Key => {
   if (typeof s !== "string") {
     throw new Error("expected string containing public key");
   }
-  if (s.substr(0, 3) === "EOS") {
+  if (s.substr(0, 3) === "UPCX") {
     const whole = base58ToBinary(publicKeyDataSize + 4, s.substr(3));
     const key = { type: KeyType.k1, data: new Uint8Array(publicKeyDataSize) };
     for (let i = 0; i < publicKeyDataSize; ++i) {
@@ -364,7 +364,7 @@ export const stringToPublicKey = (s: string): Key => {
 /** Convert public `key` to legacy string (base-58) form */
 export const publicKeyToLegacyString = (key: Key): string => {
   if (key.type === KeyType.k1 && key.data.length === publicKeyDataSize) {
-    return keyToString(key, "", "EOS");
+    return keyToString(key, "", "UPCX");
   } else if (key.type === KeyType.r1 || key.type === KeyType.wa) {
     throw new Error("Key format not supported in legacy conversion");
   } else {
@@ -385,17 +385,17 @@ export const publicKeyToString = (key: Key): string => {
   }
 };
 
-/** If a key is in the legacy format (`EOS` prefix), then convert it to the new format (`PUB_K1_`).
+/** If a key is in the legacy format (`UPCX` prefix), then convert it to the new format (`PUB_K1_`).
  * Leaves other formats untouched
  */
 export const convertLegacyPublicKey = (s: string): string => {
-  if (s.substr(0, 3) === "EOS") {
+  if (s.substr(0, 3) === "UPCX") {
     return publicKeyToString(stringToPublicKey(s));
   }
   return s;
 };
 
-/** If a key is in the legacy format (`EOS` prefix), then convert it to the new format (`PUB_K1_`).
+/** If a key is in the legacy format (`UPCX` prefix), then convert it to the new format (`PUB_K1_`).
  * Leaves other formats untouched
  */
 export const convertLegacyPublicKeys = (keys: string[]): string[] => {

@@ -55,8 +55,8 @@ describe("Serialize", () => {
       });
     }
 
-    it('should be able to push asset with valid EOS symbol "10.000 EOS"', () => {
-      const asset = "10.000 EOS";
+    it('should be able to push asset with valid UPCX symbol "10.000 UPCX"', () => {
+      const asset = "10.000 UPCX";
 
       serialBuffer.pushAsset(asset);
 
@@ -81,8 +81,8 @@ describe("Serialize", () => {
       expectExceptionThrown(asset);
     });
 
-    it('should not be able to push two symbols "10.000 EOS blah"', () => {
-      const asset = "10.000 EOS blah";
+    it('should not be able to push two symbols "10.000 UPCX blah"', () => {
+      const asset = "10.000 UPCX blah";
 
       expectExceptionThrown(asset);
     });

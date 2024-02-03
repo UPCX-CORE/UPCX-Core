@@ -45,7 +45,7 @@
           {
             actions: [
               {
-                account: "eosio.token",
+                account: "upcx.token",
                 name: "transfer",
                 authorization: [
                   {
@@ -146,7 +146,7 @@
           ref_block_prefix: blockInfo.ref_block_prefix,
           actions: [
             {
-              account: "eosio.token",
+              account: "upcx.token",
               name: "transfer",
               authorization: [
                 {
@@ -369,12 +369,12 @@
       };
 
       const shorthandWithApiJson = async () => {
-        await api.getAbi("eosio.token");
+        await api.getAbi("upcx.token");
         return api.transact(
           {
             actions: [
               api
-                .with("eosio.token")
+                .with("upcx.token")
                 .as("bob")
                 .transfer(
                   "bob",
@@ -418,9 +418,9 @@
       };
 
       const shorthandWithTxJson = async () => {
-        await api.getAbi("eosio.token");
+        await api.getAbi("upcx.token");
         const tx = api.buildTransaction();
-        tx.with("eosio.token")
+        tx.with("upcx.token")
           .as("bob")
           .transfer(
             "bob",
@@ -611,7 +611,7 @@
             },
             actions: [
               {
-                account: "eosio.token",
+                account: "upcx.token",
                 name: "transfer",
                 authorization: [
                   {
@@ -736,7 +736,7 @@
           {
             actions: [
               {
-                account: "eosio",
+                account: "upcx",
                 name: "setpriv",
                 authorization: [
                   {
@@ -786,7 +786,7 @@
         await api.transact({
           actions: [
             {
-              account: "eosio.token",
+              account: "upcx.token",
               name: "transfer",
               authorization: [
                 {

@@ -12,7 +12,7 @@ import { constructElliptic } from "./upcxjs-key-conversions";
 export class PublicKey {
   constructor(private key: Key, private ec: EC) {}
 
-  /** Instantiate public key from an EOSIO-format public key */
+  /** Instantiate public key from an upcx-format public key */
   public static fromString(publicKeyStr: string, ec?: EC): PublicKey {
     const key = stringToPublicKey(publicKeyStr);
     if (!ec) {
@@ -41,12 +41,12 @@ export class PublicKey {
     );
   }
 
-  /** Export public key as EOSIO-format public key */
+  /** Export public key as upcx-format public key */
   public toString(): string {
     return publicKeyToString(this.key);
   }
 
-  /** Export public key as Legacy EOSIO-format public key */
+  /** Export public key as Legacy upcx-format public key */
   public toLegacyString(): string {
     return publicKeyToLegacyString(this.key);
   }

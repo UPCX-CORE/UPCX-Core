@@ -2,10 +2,10 @@ When a call to the chain_api is performed and fails, it will result in an RPCErr
 
 The RPCError object will contain a concise error message, for instance 'Invalid transaction'. However additional details can be found in the `details` field and the `json` field. The `json` field holds the complete json response from nodeos. The `details` field specifically holds the error object in the `json` field. The data content of the `json` and `details` vary depending on the endpoint is used to call nodeos. Use the `details` field to quickly find error information.
 
-In the `details` and `json` examples below, you can see that the error message may not contain enough information to discern what caused the action to fail. The error message contains `eosio_assert_message` assertion failure. Looking further at the details you can see an `overdrawn balance` message.
+In the `details` and `json` examples below, you can see that the error message may not contain enough information to discern what caused the action to fail. The error message contains `upcx_assert_message` assertion failure. Looking further at the details you can see an `overdrawn balance` message.
 
 ```javascript
-RpcError: eosio_assert_message assertion failure
+RpcError: upcx_assert_message assertion failure
     at new RpcError (upcxjs-rpcerror.ts:20:13)
     at JsonRpc.<anonymous> (upcxjs-jsonrpc.ts:90:23)
     at step (upcxjs-jsonrpc.js:37:23)
@@ -14,15 +14,15 @@ RpcError: eosio_assert_message assertion failure
     at processTicksAndRejections (node:internal/process/task_queues:94:5) {
     details: {
         code: 3050003,
-        name: 'eosio_assert_message_exception',
-        message: 'eosio_assert_message assertion failure',
+        name: 'upcx_assert_message_exception',
+        message: 'upcx_assert_message assertion failure',
         stack: [
             {
                 context: {
                     level: 'error',
                     file: 'cf_system.cpp',
                     line: 14,
-                    method: 'eosio_assert',
+                    method: 'upcx_assert',
                     hostname: '',
                     thread_name: 'nodeos',
                     timestamp: '2021-06-16T05:26:03.665'

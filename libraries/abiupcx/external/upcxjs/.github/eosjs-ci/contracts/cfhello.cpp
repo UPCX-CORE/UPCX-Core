@@ -1,14 +1,14 @@
 // Import necessary libraries
-#include <eosio/eosio.hpp>
-#include <eosio/transaction.hpp>
+#include <upcx/upcx.hpp>
+#include <upcx/transaction.hpp>
 
-using namespace eosio;
+using namespace upcx;
 
-class [[eosio::contract("cfhello")]] cfhello : public contract {
+class [[upcx::contract("cfhello")]] cfhello : public contract {
   public:
       using contract::contract;
 
-      [[eosio::action]]
+      [[upcx::action]]
       void contextfree() {
         int cfd_index = 0;
         while(true) {
@@ -28,7 +28,7 @@ class [[eosio::contract("cfhello")]] cfhello : public contract {
         }
       }
 
-      [[eosio::action]]
+      [[upcx::action]]
       void normal( name user ) {
         print( "Hi, ", user);
       }

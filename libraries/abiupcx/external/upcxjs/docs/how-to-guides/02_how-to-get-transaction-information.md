@@ -1,6 +1,6 @@
-**Note** that [`history_get_transaction`](https://github.com/EOSIO/upcxjs/blob/849c03992e6ce3cb4b6a11bf18ab17b62136e5c9/src/upcxjs-jsonrpc.ts#L205) below uses the deprecated `/v1/history/get_transaction` endpoint of a node.
+**Note** that [`history_get_transaction`](https://github.com/upcx/upcxjs/blob/849c03992e6ce3cb4b6a11bf18ab17b62136e5c9/src/upcxjs-jsonrpc.ts#L205) below uses the deprecated `/v1/history/get_transaction` endpoint of a node.
 
-To get a transaction's information, call [`history_get_transaction`](https://github.com/EOSIO/upcxjs/blob/849c03992e6ce3cb4b6a11bf18ab17b62136e5c9/src/upcxjs-jsonrpc.ts#L205) on the rpc object passing in the transaction's id and optionally, it's block number as arguments.
+To get a transaction's information, call [`history_get_transaction`](https://github.com/upcx/upcxjs/blob/849c03992e6ce3cb4b6a11bf18ab17b62136e5c9/src/upcxjs-jsonrpc.ts#L205) on the rpc object passing in the transaction's id and optionally, it's block number as arguments.
 
 ```javascript
 (async () => {

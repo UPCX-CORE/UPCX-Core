@@ -152,7 +152,7 @@ describe("Chain API Plugin Endpoints", () => {
   });
 
   it("validates return type of get_account", async () => {
-    const result: GetAccountResult = await rpc.get_account("eosio");
+    const result: GetAccountResult = await rpc.get_account("upcx");
     const getAccountResult: any = {
       account_name: "string",
       head_block_num: "number",
@@ -251,8 +251,8 @@ describe("Chain API Plugin Endpoints", () => {
           { actor: "cfhello", permission: "active" },
         ],
         [
-          "EOS7bxrQUTbQ4mqcoefhWPz1aFieN4fA9RQAiozRz7FrUChHZ7Rb8",
-          "EOS6nVrBASwwviMy3CntKsb1cD5Ai2gRZnyrxJDqypL3JLL7KCKrK",
+          "UPCX7bxrQUTbQ4mqcoefhWPz1aFieN4fA9RQAiozRz7FrUChHZ7Rb8",
+          "UPCX6nVrBASwwviMy3CntKsb1cD5Ai2gRZnyrxJDqypL3JLL7KCKrK",
         ]
       );
     const getAccountsByAuthorizersResult: any = {
@@ -559,7 +559,7 @@ describe("Chain API Plugin Endpoints", () => {
 
   it("validates return type of get_currency_balance", async () => {
     const result: string[] = await rpc.get_currency_balance(
-      "eosio.token",
+      "upcx.token",
       "bob",
       "SYS"
     );
@@ -570,7 +570,7 @@ describe("Chain API Plugin Endpoints", () => {
 
   it("validates return type of get_currency_stats", async () => {
     const result: GetCurrencyStatsResult = await rpc.get_currency_stats(
-      "eosio.token",
+      "upcx.token",
       "SYS"
     );
     const getCurrencyStatsResult: any = {
@@ -694,7 +694,7 @@ describe("Chain API Plugin Endpoints", () => {
 
   it("validates return type of get_raw_code_and_abi", async () => {
     const result: GetRawCodeAndAbiResult = await rpc.get_raw_code_and_abi(
-      "eosio"
+      "upcx"
     );
     const getRawCodeAndAbiResult: any = {
       account_name: "string",
@@ -705,7 +705,7 @@ describe("Chain API Plugin Endpoints", () => {
   });
 
   it("validates return type of get_raw_abi", async () => {
-    const result: GetRawAbiResult = await rpc.get_raw_abi("eosio");
+    const result: GetRawAbiResult = await rpc.get_raw_abi("upcx");
     const getRawAbiResult: any = {
       account_name: "string",
       code_hash: "string",
@@ -771,8 +771,8 @@ describe("Chain API Plugin Endpoints", () => {
 
   it("validates return type of get_table_rows", async () => {
     const result: GetTableRowsResult = await rpc.get_table_rows({
-      code: "eosio.token",
-      scope: "eosio.token",
+      code: "upcx.token",
+      scope: "upcx.token",
       table: "accounts",
     });
     const getTableRowsResult: any = {
@@ -802,7 +802,7 @@ describe("Chain API Plugin Endpoints", () => {
 
   it("validates return type of get_table_by_scope", async () => {
     const result: GetTableByScopeResult = await rpc.get_table_by_scope({
-      code: "eosio.token",
+      code: "upcx.token",
       table: "accounts",
     });
     const getTableByScopeResult: any = {
@@ -817,7 +817,7 @@ describe("Chain API Plugin Endpoints", () => {
     let transaction: Transaction = {
       actions: [
         {
-          account: "eosio.token",
+          account: "upcx.token",
           name: "transfer",
           authorization: [
             {
@@ -866,7 +866,7 @@ describe("Chain API Plugin Endpoints", () => {
       {
         actions: [
           {
-            account: "eosio.token",
+            account: "upcx.token",
             name: "transfer",
             authorization: [
               {
@@ -1074,7 +1074,7 @@ describe("Chain API Plugin Endpoints", () => {
       {
         actions: [
           {
-            account: "eosio.token",
+            account: "upcx.token",
             name: "transfer",
             authorization: [
               {
@@ -1102,7 +1102,7 @@ describe("Chain API Plugin Endpoints", () => {
       {
         actions: [
           {
-            account: "eosio.token",
+            account: "upcx.token",
             name: "transfer",
             authorization: [
               {
@@ -1210,7 +1210,7 @@ describe("Chain API Plugin Endpoints", () => {
       {
         actions: [
           {
-            account: "eosio.token",
+            account: "upcx.token",
             name: "transfer",
             authorization: [
               {

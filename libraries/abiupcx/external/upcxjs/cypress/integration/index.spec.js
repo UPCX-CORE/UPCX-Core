@@ -24,8 +24,8 @@ describe("upcxjs web test", () => {
   });
 
   it("test Transact Without Config", () => {
-    if (Cypress.env("NODEOS_VER"))
-      skipOn(Cypress.env("NODEOS_VER") === "release/2.0.x");
+    if (Cypress.env("NODUPCX_VER"))
+      skipOn(Cypress.env("NODUPCX_VER") === "release/2.0.x");
     cy.visit("./src/tests/web.html");
     cy.wait(500);
     cy.get("#testTransactWithoutConfig").click();
@@ -115,8 +115,8 @@ describe("upcxjs web test", () => {
   });
 
   it("test With Return Value Tx", () => {
-    if (Cypress.env("NODEOS_VER"))
-      skipOn(Cypress.env("NODEOS_VER") === "release/2.0.x");
+    if (Cypress.env("NODUPCX_VER"))
+      skipOn(Cypress.env("NODUPCX_VER") === "release/2.0.x");
     cy.visit("./src/tests/web.html");
     cy.wait(500);
     cy.get("#testWithReturnValueTx").click();
@@ -124,10 +124,10 @@ describe("upcxjs web test", () => {
   });
 
   it("test With Resource Payer Tx", () => {
-    if (Cypress.env("NODEOS_VER"))
+    if (Cypress.env("NODUPCX_VER"))
       skipOn(
-        Cypress.env("NODEOS_VER") === "release/2.0.x" ||
-          Cypress.env("NODEOS_VER") === "release/2.1.x"
+        Cypress.env("NODUPCX_VER") === "release/2.0.x" ||
+          Cypress.env("NODUPCX_VER") === "release/2.1.x"
       );
     cy.visit("./src/tests/web.html");
     cy.wait(500);
@@ -136,10 +136,10 @@ describe("upcxjs web test", () => {
   });
 
   it("test With Read Only Query", () => {
-    if (Cypress.env("NODEOS_VER"))
+    if (Cypress.env("NODUPCX_VER"))
       skipOn(
-        Cypress.env("NODEOS_VER") === "release/2.0.x" ||
-          Cypress.env("NODEOS_VER") === "release/2.1.x"
+        Cypress.env("NODUPCX_VER") === "release/2.0.x" ||
+          Cypress.env("NODUPCX_VER") === "release/2.1.x"
       );
     cy.visit("./src/tests/web.html");
     cy.wait(500);
@@ -148,10 +148,10 @@ describe("upcxjs web test", () => {
   });
 
   it("test With Read Only Failure Trace", () => {
-    if (Cypress.env("NODEOS_VER"))
+    if (Cypress.env("NODUPCX_VER"))
       skipOn(
-        Cypress.env("NODEOS_VER") === "release/2.0.x" ||
-          Cypress.env("NODEOS_VER") === "release/2.1.x"
+        Cypress.env("NODUPCX_VER") === "release/2.0.x" ||
+          Cypress.env("NODUPCX_VER") === "release/2.1.x"
       );
     cy.visit("./src/tests/web.html");
     cy.wait(500);

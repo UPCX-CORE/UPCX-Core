@@ -24,7 +24,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EOSIO/upcxjs.git"
+    "url": "https://github.com/upcx/upcxjs.git"
   },
   "dependencies": {
     "bn.js": "5.2.0",

@@ -1,12 +1,12 @@
 To submit a transaction, call `transact` on the api object, passing in two parameters.
 
-The first parameter specifies the actions in the transaction, and their corresponding authorizations, as well as any data necessary for the action to execute. An example for the [`buyrambytes` action](https://github.com/EOSIO/eosio.contracts/blob/52fbd4ac7e6c38c558302c48d00469a4bed35f7c/contracts/eosio.system/include/eosio.system/eosio.system.hpp#L1028) is shown below.
+The first parameter specifies the actions in the transaction, and their corresponding authorizations, as well as any data necessary for the action to execute. An example for the [`buyrambytes` action](https://github.com/upcx/upcx.contracts/blob/52fbd4ac7e6c38c558302c48d00469a4bed35f7c/contracts/upcx.system/include/upcx.system/upcx.system.hpp#L1028) is shown below.
 
 ```javascript
 {
   actions: [
     {
-      account: "eosio",
+      account: "upcx",
       name: "buyrambytes",
       authorization: [
         {
@@ -24,7 +24,7 @@ The first parameter specifies the actions in the transaction, and their correspo
 }
 ```
 
-The second parameter is an [optional configuration object parameter](https://github.com/EOSIO/upcxjs/blob/master/src/upcxjs-api.ts#L215). This optional parameter can override the default values of `broadcast: true` and `sign: true`, and can be used to fill [TAPOS](https://eosio.stackexchange.com/questions/2362/what-is-transaction-as-proof-of-stake-tapos-and-when-would-a-smart-contract) fields with the specified `expireSeconds` and either `blocksBehind` or `useLastIrreversible` if necessary. A combination of these fields are required if the first parameter specified above does not itself contain the TAPOS fields `expiration`, `ref_block_num`, and `ref_block_prefix`. In this case it does not, so the fields are necessary.
+The second parameter is an [optional configuration object parameter](https://github.com/upcx/upcxjs/blob/master/src/upcxjs-api.ts#L215). This optional parameter can override the default values of `broadcast: true` and `sign: true`, and can be used to fill [TAPOS](https://upcx.stackexchange.com/questions/2362/what-is-transaction-as-proof-of-stake-tapos-and-when-would-a-smart-contract) fields with the specified `expireSeconds` and either `blocksBehind` or `useLastIrreversible` if necessary. A combination of these fields are required if the first parameter specified above does not itself contain the TAPOS fields `expiration`, `ref_block_num`, and `ref_block_prefix`. In this case it does not, so the fields are necessary.
 
 ```javascript
 {
@@ -42,7 +42,7 @@ The transaction will reference the block 3 blocks behind the head block, and wil
     {
       actions: [
         {
-          account: "eosio",
+          account: "upcx",
           name: "buyrambytes",
           authorization: [
             {
@@ -76,7 +76,7 @@ Alternatively, the transaction could be submitted without the optional configura
     ref_block_prefix: "1022379673",
     actions: [
       {
-        account: "eosio",
+        account: "upcx",
         name: "buyrambytes",
         authorization: [
           {
@@ -105,7 +105,7 @@ To construct transactions and actions in a more concise way, you can also utiliz
     {
       actions: [
         api
-          .with("eosio")
+          .with("upcx")
           .as("useraaaaaaaa")
           .buyrambytes("useraaaaaaaa", "useraaaaaaaa", 8192),
       ],
@@ -124,7 +124,7 @@ Before using this structure, you need to cache the JSON Abi:
 
 ```javascript
 (async () => {
-  await api.getAbi('eosio');
+  await api.getAbi('upcx');
   ...
 })();
 ```
@@ -134,7 +134,7 @@ Additionally, utilizing this structure, a stateful transaction object can be cre
 ```javascript
 (async () => {
   const tx = api.buildTransaction();
-  tx.with("eosio")
+  tx.with("upcx")
     .as("useraaaaaaaa")
     .buyrambytes("useraaaaaaaa", "useraaaaaaaa", 8192);
   await tx.send({ blocksBehind: 3, expireSeconds: 30 });
@@ -142,7 +142,7 @@ Additionally, utilizing this structure, a stateful transaction object can be cre
   // ...or...
 
   api.buildTransaction(async (tx) => {
-    tx.with("eosio")
+    tx.with("upcx")
       .as("useraaaaaaaa")
       .buyrambytes("useraaaaaaaa", "useraaaaaaaa", 8192);
     await tx.send({ blocksBehind: 3, expireSeconds: 30 });

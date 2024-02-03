@@ -27,9 +27,9 @@ describe("JsSignatureProvider", () => {
     "PVT_R1_wCpPsaY9o8NU9ZsuwaYVQUDkCfj1aWJZGVcmMM6XyYHJVqvqp",
   ];
   const legacyPublicKeys = [
-    "EOS7tgwU6E7pAUQJgqEJt66Yi8cWvanTUW8ZfBjeXeJBQvhTU9ypi",
-    "EOS8VaY5CiTexYqgQZyPTJkc3qvWuZUi12QrZL9ssjqW2es6aQk2F",
-    "EOS7VGhqctkKprW1VUj19DZZiiZLX3YcJqUJCuEcahJmUCw3wJEMu",
+    "UPCX7tgwU6E7pAUQJgqEJt66Yi8cWvanTUW8ZfBjeXeJBQvhTU9ypi",
+    "UPCX8VaY5CiTexYqgQZyPTJkc3qvWuZUi12QrZL9ssjqW2es6aQk2F",
+    "UPCX7VGhqctkKprW1VUj19DZZiiZLX3YcJqUJCuEcahJmUCw3wJEMu",
   ];
   const k1FormatPublicKeys = [
     "PUB_K1_7tgwU6E7pAUQJgqEJt66Yi8cWvanTUW8ZfBjeXeJBQvhYTBFvY",
@@ -139,19 +139,19 @@ describe("JsSignatureProvider", () => {
     });
 
     it("ensure public key functions are actual inverses of each other", async () => {
-      const eosioPubKey = PublicKey.fromString(k1FormatPublicKeys[0]);
-      const ellipticPubKey = eosioPubKey.toElliptic();
-      const finalEosioKeyAsK1String = PublicKey.fromElliptic(
+      const upcxPubKey = PublicKey.fromString(k1FormatPublicKeys[0]);
+      const ellipticPubKey = upcxPubKey.toElliptic();
+      const finalupcxKeyAsK1String = PublicKey.fromElliptic(
         ellipticPubKey,
         KeyType.k1
       ).toString();
-      expect(finalEosioKeyAsK1String).toEqual(k1FormatPublicKeys[0]);
+      expect(finalupcxKeyAsK1String).toEqual(k1FormatPublicKeys[0]);
     });
 
     it("verify that PUB_K1_ and Legacy pub formats are consistent", () => {
-      const eosioLegacyPubKey = legacyPublicKeys[0];
+      const upcxLegacyPubKey = legacyPublicKeys[0];
       const ellipticPubKey =
-        PublicKey.fromString(eosioLegacyPubKey).toElliptic();
+        PublicKey.fromString(upcxLegacyPubKey).toElliptic();
       expect(
         PublicKey.fromElliptic(ellipticPubKey, KeyType.k1).toString()
       ).toEqual(k1FormatPublicKeys[0]);
@@ -173,13 +173,13 @@ describe("JsSignatureProvider", () => {
 
     it("ensure private key functions are actual inverses of each other", async () => {
       const priv = privateKeys[0];
-      const privEosioKey = PrivateKey.fromString(priv);
-      const privEllipticKey = privEosioKey.toElliptic();
-      const finalEosioKeyAsString = PrivateKey.fromElliptic(
+      const privupcxKey = PrivateKey.fromString(priv);
+      const privEllipticKey = privupcxKey.toElliptic();
+      const finalupcxKeyAsString = PrivateKey.fromElliptic(
         privEllipticKey,
         KeyType.k1
       ).toString();
-      expect(privEosioKey.toString()).toEqual(finalEosioKeyAsString);
+      expect(privupcxKey.toString()).toEqual(finalupcxKeyAsString);
     });
 
     it("verify that public key validate function correctly assesses public keys", () => {
@@ -329,24 +329,24 @@ describe("JsSignatureProvider", () => {
     });
 
     it("ensure public key functions using p256 format are actual inverses of each other", async () => {
-      const eosioPubKey = PublicKey.fromString(r1FormatPublicKeys[0]);
-      const ellipticPubKey = eosioPubKey.toElliptic();
-      const finalEosioKeyAsR1String = PublicKey.fromElliptic(
+      const upcxPubKey = PublicKey.fromString(r1FormatPublicKeys[0]);
+      const ellipticPubKey = upcxPubKey.toElliptic();
+      const finalupcxKeyAsR1String = PublicKey.fromElliptic(
         ellipticPubKey,
         KeyType.r1
       ).toString();
-      expect(finalEosioKeyAsR1String).toEqual(r1FormatPublicKeys[0]);
+      expect(finalupcxKeyAsR1String).toEqual(r1FormatPublicKeys[0]);
     });
 
     it("ensure private key functions using p256 format are actual inverses of each other", async () => {
       const priv = privateKeysR1[0];
-      const privEosioKey = PrivateKey.fromString(priv);
-      const privEllipticKey = privEosioKey.toElliptic();
-      const finalEosioKeyAsString = PrivateKey.fromElliptic(
+      const privupcxKey = PrivateKey.fromString(priv);
+      const privEllipticKey = privupcxKey.toElliptic();
+      const finalupcxKeyAsString = PrivateKey.fromElliptic(
         privEllipticKey,
         KeyType.r1
       ).toString();
-      expect(privEosioKey.toString()).toEqual(finalEosioKeyAsString);
+      expect(privupcxKey.toString()).toEqual(finalupcxKeyAsString);
     });
 
     it("verify that public key validate function correctly assesses public keys", () => {

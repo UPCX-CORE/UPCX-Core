@@ -1,10 +1,10 @@
 # upcxjs
 
-[![Build Status](https://github.com/eosio/upcxjs/workflows/CI/badge.svg?branch=master)](https://github.com/EOSIO/upcxjs/actions) [![npm version](https://badge.fury.io/js/upcxjs.svg)](https://badge.fury.io/js/upcxjs) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![npm](https://img.shields.io/npm/dw/upcxjs.svg)
+[![Build Status](https://github.com/upcx/upcxjs/workflows/CI/badge.svg?branch=master)](https://github.com/upcx/upcxjs/actions) [![npm version](https://badge.fury.io/js/upcxjs.svg)](https://badge.fury.io/js/upcxjs) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![npm](https://img.shields.io/npm/dw/upcxjs.svg)
 
-Javascript API for integration with EOSIO-based blockchains using [EOSIO RPC API](https://developers.eos.io/eosio-nodeos/reference).
+Javascript API for integration with upcx-based blockchains using [upcx RPC API](https://developers.eos.io/upcx-nodeos/reference).
 
-Documentation can be found [here](https://eosio.github.io/upcxjs)
+Documentation can be found [here](https://upcx.github.io/upcxjs)
 
 ## Installation
 
@@ -33,7 +33,7 @@ If you're using Node (not a browser) then you'll also need to make sure the `dom
 
 ### Browser Distribution
 
-Clone this repository locally then run `yarn build-web`. The browser distribution will be located in `dist-web` and can be directly copied into your project repository. The `dist-web` folder contains minified bundles ready for production, along with source mapped versions of the library for debugging. For full browser usage examples, [see the documentation](https://eosio.github.io/upcxjs/guides/1.-Browsers.html).
+Clone this repository locally then run `yarn build-web`. The browser distribution will be located in `dist-web` and can be directly copied into your project repository. The `dist-web` folder contains minified bundles ready for production, along with source mapped versions of the library for debugging. For full browser usage examples, [see the documentation](https://upcx.github.io/upcxjs/guides/1.-Browsers.html).
 
 ## Import
 
@@ -101,7 +101,7 @@ const api = new Api({
     {
       actions: [
         {
-          account: "eosio.token",
+          account: "upcx.token",
           name: "transfer",
           authorization: [
             {

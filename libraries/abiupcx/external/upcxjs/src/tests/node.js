@@ -33,7 +33,7 @@ const transactWithConfig = async (config, memo, from = "bob", to = "alice") => {
     {
       actions: [
         {
-          account: "eosio.token",
+          account: "upcx.token",
           name: "transfer",
           authorization: [
             {
@@ -73,7 +73,7 @@ const transactWithoutConfig = async () => {
     ref_block_prefix: blockInfo.ref_block_prefix,
     actions: [
       {
-        account: "eosio.token",
+        account: "upcx.token",
         name: "transfer",
         authorization: [
           {
@@ -162,12 +162,12 @@ const transactWithContextFreeData = async () => {
 };
 
 const transactWithShorthandApiJson = async () => {
-  await api.getAbi("eosio.token");
+  await api.getAbi("upcx.token");
   return await api.transact(
     {
       actions: [
         api
-          .with("eosio.token")
+          .with("upcx.token")
           .as("bob")
           .transfer(
             "bob",
@@ -185,9 +185,9 @@ const transactWithShorthandApiJson = async () => {
 };
 
 const transactWithShorthandTxJson = async () => {
-  await api.getAbi("eosio.token");
+  await api.getAbi("upcx.token");
   const tx = api.buildTransaction();
-  tx.with("eosio.token")
+  tx.with("upcx.token")
     .as("bob")
     .transfer("bob", "alice", "0.0001 SYS", "transactWithShorthandTxJson");
   return await tx.send({
@@ -244,7 +244,7 @@ const transactWithResourcePayer = async () => {
       },
       actions: [
         {
-          account: "eosio.token",
+          account: "upcx.token",
           name: "transfer",
           authorization: [
             {
@@ -303,7 +303,7 @@ const readOnlyFailureTrace = async () => {
     {
       actions: [
         {
-          account: "eosio",
+          account: "upcx",
           name: "setpriv",
           authorization: [
             {
@@ -334,7 +334,7 @@ const transactShouldFail = async () =>
   await api.transact({
     actions: [
       {
-        account: "eosio.token",
+        account: "upcx.token",
         name: "transfer",
         authorization: [
           {

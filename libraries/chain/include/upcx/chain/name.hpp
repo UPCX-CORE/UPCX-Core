@@ -16,10 +16,14 @@ namespace fc {
 
 namespace upcx::chain {
    constexpr uint64_t char_to_symbol( char c ) {
+      if( c >= 'A' && c <= 'Z' )
+         return (c - 'A') + 38;
       if( c >= 'a' && c <= 'z' )
-         return (c - 'a') + 6;
-      if( c >= '1' && c <= '5' )
-         return (c - '1') + 1;
+         return (c - 'a') + 12;
+      if( c >= '0' && c <= '9' )
+         return (c - '0') + 2;
+      else if( c == '@' )
+         return 1;
       else if( c == '.')
          return 0;
       else
@@ -33,18 +37,18 @@ namespace upcx::chain {
    bool is_string_valid_name(std::string_view str);
 
    constexpr uint64_t string_to_uint64_t( std::string_view str ) {
-      UPCX_ASSERT(str.size() <= 13, name_type_exception, "Name is longer than 13 characters (${name}) ", ("name", std::string(str)));
+      UPCX_ASSERT(str.size() <= 25, name_type_exception, "Name is longer than 25 characters (${name}) ", ("name", std::string(str)));
 
       uint64_t n = 0;
       int i = (int) str.size();
-      if (i >= 13) {
+      if (i >= 25) {
          // Only the first 12 characters can be full-range ([.1-5a-z]).
-         i = 12;
+         i = 24;
 
          // The 13th character must be in the range [.1-5a-j] because it needs to be encoded
          // using only four bits (64_bits - 5_bits_per_char * 12_chars).
-         n = char_to_symbol(str[12]);
-         UPCX_ASSERT(n <= 0x0Full, name_type_exception, "invalid 13th character: (${c})", ("c", std::string(1, str[12])));
+         n = char_to_symbol(str[24]);
+         UPCX_ASSERT(n <= 0x0Full, name_type_exception, "invalid 13th character: (${c})", ("c", std::string(1, str[24])));
       }
       // Encode full-range characters.
       while (--i >= 0) {

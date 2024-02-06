@@ -14,7 +14,7 @@ namespace upcx::chain {
 
       std::string str(25,'.');
 
-      uint64_t tmp = value;
+      uint128_t tmp = value;
       for( uint32_t i = 0; i <= 24; ++i ) {
          char c = charmap[tmp & (i == 0 ? 0x0f : 0x1f)];
          str[24-i] = c;

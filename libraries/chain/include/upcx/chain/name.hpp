@@ -15,7 +15,7 @@ namespace fc {
 } // fc
 
 namespace upcx::chain {
-   constexpr uint64_t char_to_symbol( char c ) {
+   constexpr uint128_t char_to_symbol( char c ) {
       if( c >= 'A' && c <= 'Z' )
          return (c - 'A') + 38;
       if( c >= 'a' && c <= 'z' )
@@ -36,10 +36,10 @@ namespace upcx::chain {
    // true if std::string can be converted to name
    bool is_string_valid_name(std::string_view str);
 
-   constexpr uint64_t string_to_uint64_t( std::string_view str ) {
+   constexpr uint128_t string_to_uint128_t( std::string_view str ) {
       UPCX_ASSERT(str.size() <= 25, name_type_exception, "Name is longer than 25 characters (${name}) ", ("name", std::string(str)));
 
-      uint64_t n = 0;
+      uint128_t n = 0;
       int i = (int) str.size();
       if (i >= 25) {
          // Only the first 12 characters can be full-range ([.1-5a-z]).
@@ -52,7 +52,7 @@ namespace upcx::chain {
       }
       // Encode full-range characters.
       while (--i >= 0) {
-         n |= char_to_symbol(str[i]) << (64 - 5 * (i + 1));
+         n |= char_to_symbol(str[i]) << (128 - 5 * (i + 1));
       }
       return n;
    }
@@ -60,7 +60,7 @@ namespace upcx::chain {
    /// Immutable except for fc::from_variant.
    struct name {
    private:
-      uint64_t value = 0;
+      uint128_t value = 0;
 
       friend struct fc::reflector<name>;
       friend void fc::from_variant(const fc::variant& v, upcx::chain::name& check);
@@ -72,11 +72,11 @@ namespace upcx::chain {
       constexpr bool good()const  { return !empty();   }
 
       explicit name( std::string_view str ) { set( str ); }
-      constexpr explicit name( uint64_t v ) : value(v) {}
+      constexpr explicit name( uint128_t v ) : value(v) {}
       constexpr name() = default;
 
       std::string to_string()const;
-      constexpr uint64_t to_uint64_t()const { return value; }
+      constexpr uint128_t to_uint64_t()const { return value; }
 
       friend std::ostream& operator << ( std::ostream& out, const name& n ) {
          return out << n.to_string();
@@ -89,8 +89,8 @@ namespace upcx::chain {
       friend constexpr bool operator == ( const name& a, const name& b ) { return a.value == b.value; }
       friend constexpr bool operator != ( const name& a, const name& b ) { return a.value != b.value; }
 
-      friend constexpr bool operator == ( const name& a, uint64_t b ) { return a.value == b; }
-      friend constexpr bool operator != ( const name& a, uint64_t b ) { return a.value != b; }
+      friend constexpr bool operator == ( const name& a, uint128_t b ) { return a.value == b; }
+      friend constexpr bool operator != ( const name& a, uint128_t b ) { return a.value != b; }
 
       constexpr explicit operator bool()const { return value != 0; }
    };
@@ -112,7 +112,7 @@ namespace upcx::chain {
       template <typename T, T... Str>
       inline constexpr name operator""_n() {
          constexpr const char buf[] = {Str...};
-         return name{std::integral_constant<uint64_t, string_to_uint64_t(std::string_view{buf, sizeof(buf)})>::value};
+         return name{std::integral_constant<uint128_t, string_to_uint64_t(std::string_view{buf, sizeof(buf)})>::value};
       }
 #if defined(__clang__)
 # pragma clang diagnostic pop
@@ -122,11 +122,11 @@ namespace upcx::chain {
 } // upcx::chain
 
 namespace std {
-   template<> struct hash<upcx::chain::name> : private hash<uint64_t> {
+   template<> struct hash<upcx::chain::name> : private hash<uint128_t> {
       typedef upcx::chain::name argument_type;
       size_t operator()(const argument_type& name) const noexcept
       {
-         return hash<uint64_t>::operator()(name.to_uint64_t());
+         return hash<uint128_t>::operator()(name.uint128_t());
       }
    };
 };

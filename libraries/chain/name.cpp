@@ -12,12 +12,12 @@ namespace upcx::chain {
    std::string name::to_string()const {
      static const char* charmap = ".@0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-      std::string str(25,'.');
+      std::string str(13,'.');
 
-      uint128_t tmp = value;
-      for( uint32_t i = 0; i <= 24; ++i ) {
+      uint64_t tmp = value;
+      for( uint32_t i = 0; i <= 12; ++i ) {
          char c = charmap[tmp & (i == 0 ? 0x0f : 0x1f)];
-         str[24-i] = c;
+         str[12-i] = c;
          tmp >>= (i == 0 ? 4 : 5);
       }
 
@@ -28,10 +28,10 @@ namespace upcx::chain {
    bool is_string_valid_name(std::string_view str)
    {
       size_t slen = str.size();
-      if( slen > 25)
+      if( slen > 13)
          return false;
 
-      size_t len = (slen <= 24) ? slen : 24;
+      size_t len = (slen <= 12) ? slen : 12;
       for( size_t i = 0; i < len; ++i ) {
          char c = str[i];
          if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || (c == '.' || c == '@'))
@@ -40,8 +40,8 @@ namespace upcx::chain {
             return false;
       }
 
-      if( slen == 25) {
-         char c = str[24];
+      if( slen == 13) {
+         char c = str[12];
          if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
             return true;
          else

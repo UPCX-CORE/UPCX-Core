@@ -10,12 +10,12 @@ namespace upcx::chain {
 
    // keep in sync with name::to_string() in contract definition for name
    std::string name::to_string()const {
-     static const char* charmap = ".12345abcdefghijklmnopqrstuvwxyz";
+     static const char* charmap = ".@0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-      std::string str(13,'.');
+      std::string str(25,'.');
 
       uint64_t tmp = value;
-      for( uint32_t i = 0; i <= 12; ++i ) {
+      for( uint32_t i = 0; i <= 24; ++i ) {
          char c = charmap[tmp & (i == 0 ? 0x0f : 0x1f)];
          str[12-i] = c;
          tmp >>= (i == 0 ? 4 : 5);
@@ -28,21 +28,21 @@ namespace upcx::chain {
    bool is_string_valid_name(std::string_view str)
    {
       size_t slen = str.size();
-      if( slen > 13)
+      if( slen > 25)
          return false;
 
-      size_t len = (slen <= 12) ? slen : 12;
+      size_t len = (slen <= 24) ? slen : 24;
       for( size_t i = 0; i < len; ++i ) {
          char c = str[i];
-         if ((c >= 'a' && c <= 'z') || (c >= '1' && c <= '5') || (c == '.'))
+         if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || (c == '.' || c == '@'))
             continue;
          else
             return false;
       }
 
-      if( slen == 13) {
-         char c = str[12];
-         if ((c >= 'a' && c <= 'j') || (c >= '1' && c <= '5') || (c == '.'))
+      if( slen == 25) {
+         char c = str[24];
+         if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
             return true;
          else
             return false;

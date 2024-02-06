@@ -73,7 +73,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
     services:
-      nodeos:
+      nodupcx:
         image: upcx/upcxjs-ci:release_2.2.x
 
         ports:

@@ -234,9 +234,9 @@ TEST(Document, ParseStream_EncodedInputStream) {
     // UTF16 -> UTF8 in memory
     StringBuffer bos;
     typedef EncodedOutputStream<UTF8<>, StringBuffer> OutputStream;
-    OutputStream eos(bos, false);   // Not writing BOM
+    OutputStream upcx(bos, false);   // Not writing BOM
     {
-        Writer<OutputStream, UTF16<>, UTF8<> > writer(eos);
+        Writer<OutputStream, UTF16<>, UTF8<> > writer(upcx);
         d.Accept(writer);
     }
 

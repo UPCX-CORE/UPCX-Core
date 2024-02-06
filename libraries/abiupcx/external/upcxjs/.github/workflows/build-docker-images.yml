@@ -28,7 +28,7 @@ jobs:
             core.setFailed('Failure: No DOCKERHUB_TOKEN present in repository secrets.');
 
   build-docker-2_0_x:
-    name: Build Docker - nodeos release/2.0.x
+    name: Build Docker - nodupcx release/2.0.x
     runs-on: ubuntu-18.04
     needs: check-tokens
     steps:
@@ -36,31 +36,31 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
         with:
           token: ${{ github.token }}
-      - name: Get nodeos sha
-        id: nodeos
+      - name: Get nodupcx sha
+        id: nodupcx
         uses: actions/github-script@v3
         with:
           script: |
-            const nodeosVersion = 'v2.0.';
-            const releaseList = await github.paginate('GET /repos/upcx/eos/releases');
+            const nodupcxVersion = 'v2.0.';
+            const releaseList = await github.paginate('GET /repos/upcx/upcx/releases');
             const releases = releaseList.map(release => {
               return {
                 tag: release.tag_name,
                 published_at: new Date(release.published_at),
               };
             })
-            .filter(release => release.tag.startsWith(nodeosVersion))
+            .filter(release => release.tag.startsWith(nodupcxVersion))
             .sort((a, b) => b.published_at - a.published_at);
-            const tagList = await github.paginate('GET /repos/upcx/eos/tags');
+            const tagList = await github.paginate('GET /repos/upcx/upcx/tags');
             const tag = tagList.filter(tag => tag.name === releases[0].tag);
             return tag[0].commit.sha;
-      - name: Nodeos sha
-        id: nodeos-sha
+      - name: Nodupcx sha
+        id: nodupcx-sha
         run: |
           SHA=$(echo "${NODUPCX_SHA_FROM_JS}" | tr -d '"')
           echo ::set-output name=NODUPCX_SHA::${SHA}
         env:
-          NODUPCX_SHA_FROM_JS: ${{ steps.nodeos.outputs.result }}
+          NODUPCX_SHA_FROM_JS: ${{ steps.nodupcx.outputs.result }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@27d0a4f181a40b142cce983c5393082c365d1480
       - name: Set up Docker Buildx
@@ -83,10 +83,10 @@ jobs:
             CDTBRANCH=release_1.7.x
           tags: |
             upcx/upcxjs-ci:release_2.0.x
-            upcx/upcxjs-ci:${{ steps.nodeos-sha.outputs.NODUPCX_SHA }}
+            upcx/upcxjs-ci:${{ steps.nodupcx-sha.outputs.NODUPCX_SHA }}
 
   build-docker-2_1_x:
-    name: Build Docker - nodeos release/2.1.x
+    name: Build Docker - nodupcx release/2.1.x
     runs-on: ubuntu-18.04
     needs: check-tokens
     steps:
@@ -94,31 +94,31 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
         with:
           token: ${{ github.token }}
-      - name: Get nodeos sha
-        id: nodeos
+      - name: Get nodupcx sha
+        id: nodupcx
         uses: actions/github-script@v3
         with:
           script: |
-            const nodeosVersion = 'v2.1.';
-            const releaseList = await github.paginate('GET /repos/upcx/eos/releases');
+            const nodupcxVersion = 'v2.1.';
+            const releaseList = await github.paginate('GET /repos/upcx/upcx/releases');
             const releases = releaseList.map(release => {
               return {
                 tag: release.tag_name,
                 published_at: new Date(release.published_at),
               };
             })
-            .filter(release => release.tag.startsWith(nodeosVersion))
+            .filter(release => release.tag.startsWith(nodupcxVersion))
             .sort((a, b) => b.published_at - a.published_at);
-            const tagList = await github.paginate('GET /repos/upcx/eos/tags');
+            const tagList = await github.paginate('GET /repos/upcx/upcx/tags');
             const tag = tagList.filter(tag => tag.name === releases[0].tag);
             return tag[0].commit.sha;
-      - name: Nodeos sha
-        id: nodeos-sha
+      - name: Nodupcx sha
+        id: nodupcx-sha
         run: |
           SHA=$(echo "${NODUPCX_SHA_FROM_JS}" | tr -d '"')
           echo ::set-output name=NODUPCX_SHA::${SHA}
         env:
-          NODUPCX_SHA_FROM_JS: ${{ steps.nodeos.outputs.result }}
+          NODUPCX_SHA_FROM_JS: ${{ steps.nodupcx.outputs.result }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@27d0a4f181a40b142cce983c5393082c365d1480
       - name: Set up Docker Buildx
@@ -141,10 +141,10 @@ jobs:
             CDTBRANCH=release_1.8.x
           tags: |
             upcx/upcxjs-ci:release_2.1.x
-            upcx/upcxjs-ci:${{ steps.nodeos-sha.outputs.NODUPCX_SHA }}
+            upcx/upcxjs-ci:${{ steps.nodupcx-sha.outputs.NODUPCX_SHA }}
 
   build-docker-2_2_x:
-    name: Build Docker - nodeos release/2.2.x
+    name: Build Docker - nodupcx release/2.2.x
     runs-on: ubuntu-18.04
     needs: check-tokens
     steps:
@@ -152,31 +152,31 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
         with:
           token: ${{ github.token }}
-      - name: Get nodeos sha
-        id: nodeos
+      - name: Get nodupcx sha
+        id: nodupcx
         uses: actions/github-script@v3
         with:
           script: |
-            const nodeosVersion = 'v2.2.';
-            const releaseList = await github.paginate('GET /repos/upcx/eos/releases');
+            const nodupcxVersion = 'v2.2.';
+            const releaseList = await github.paginate('GET /repos/upcx/upcx/releases');
             const releases = releaseList.map(release => {
               return {
                 tag: release.tag_name,
                 published_at: new Date(release.published_at),
               };
             })
-            .filter(release => release.tag.startsWith(nodeosVersion))
+            .filter(release => release.tag.startsWith(nodupcxVersion))
             .sort((a, b) => b.published_at - a.published_at);
-            const tagList = await github.paginate('GET /repos/upcx/eos/tags');
+            const tagList = await github.paginate('GET /repos/upcx/upcx/tags');
             const tag = tagList.filter(tag => tag.name === releases[0].tag);
             return tag[0].commit.sha;
-      - name: Nodeos sha
-        id: nodeos-sha
+      - name: Nodupcx sha
+        id: nodupcx-sha
         run: |
           SHA=$(echo "${NODUPCX_SHA_FROM_JS}" | tr -d '"')
           echo ::set-output name=NODUPCX_SHA::${SHA}
         env:
-          NODUPCX_SHA_FROM_JS: ${{ steps.nodeos.outputs.result }}
+          NODUPCX_SHA_FROM_JS: ${{ steps.nodupcx.outputs.result }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@c308fdd69d26ed66f4506ebd74b180abe5362145
       - name: Set up Docker Buildx
@@ -199,10 +199,10 @@ jobs:
             CDTBRANCH=release_1.8.x
           tags: |
             upcx/upcxjs-ci:release_2.2.x
-            upcx/upcxjs-ci:${{ steps.nodeos-sha.outputs.NODUPCX_SHA }}
+            upcx/upcxjs-ci:${{ steps.nodupcx-sha.outputs.NODUPCX_SHA }}
 
   build-docker-develop:
-    name: Build Docker - nodeos develop
+    name: Build Docker - nodupcx develop
     runs-on: ubuntu-18.04
     needs: check-tokens
     steps:
@@ -210,20 +210,20 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
         with:
           token: ${{ github.token }}
-      - name: Get nodeos sha
-        id: nodeos
+      - name: Get nodupcx sha
+        id: nodupcx
         uses: actions/github-script@v3
         with:
           script: |
-            const developRef = await github.request('GET /repos/upcx/eos/git/refs/heads/develop');
+            const developRef = await github.request('GET /repos/upcx/upcx/git/refs/heads/develop');
             return developRef.data.object.sha;
-      - name: Nodeos sha
-        id: nodeos-sha
+      - name: Nodupcx sha
+        id: nodupcx-sha
         run: |
           SHA=$(echo "${NODUPCX_SHA_FROM_JS}" | tr -d '"')
           echo ::set-output name=NODUPCX_SHA::${SHA}
         env:
-          NODUPCX_SHA_FROM_JS: ${{ steps.nodeos.outputs.result }}
+          NODUPCX_SHA_FROM_JS: ${{ steps.nodupcx.outputs.result }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@c308fdd69d26ed66f4506ebd74b180abe5362145
       - name: Set up Docker Buildx
@@ -246,4 +246,4 @@ jobs:
             CDTBRANCH=develop
           tags: |
             upcx/upcxjs-ci:develop
-            upcx/upcxjs-ci:${{ steps.nodeos-sha.outputs.NODUPCX_SHA }}
+            upcx/upcxjs-ci:${{ steps.nodupcx-sha.outputs.NODUPCX_SHA }}

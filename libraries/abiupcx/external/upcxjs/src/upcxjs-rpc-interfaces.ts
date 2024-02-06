@@ -233,7 +233,7 @@ export interface GetBlockInfoResult {
   ref_block_prefix: number;
 }
 
-/** Returned action from nodeos, data is optional */
+/** Returned action from nodupcx, data is optional */
 export interface ProcessedAction {
   account: string;
   name: string;

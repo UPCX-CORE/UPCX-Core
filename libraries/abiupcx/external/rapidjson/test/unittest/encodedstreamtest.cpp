@@ -167,13 +167,13 @@ protected:
             FILE* fp = TempFile(filename);
             char buffer[16];
             FileWriteStream os(fp, buffer, sizeof(buffer));
-            EncodedOutputStream<FileEncoding, FileWriteStream> eos(os, putBOM);
+            EncodedOutputStream<FileEncoding, FileWriteStream> upcx(os, putBOM);
             StringStream s(json_);
             while (s.Peek() != '\0') {
-                bool success = Transcoder<UTF8<>, MemoryEncoding>::Transcode(s, eos);
+                bool success = Transcoder<UTF8<>, MemoryEncoding>::Transcode(s, upcx);
                 EXPECT_TRUE(success);
             }
-            eos.Flush();
+            upcx.Flush();
             fclose(fp);
             EXPECT_TRUE(CompareFile(filename, expectedFilename));
             remove(filename);
@@ -182,13 +182,13 @@ protected:
         // Test MemoryBuffer
         {
             MemoryBuffer mb;
-            EncodedOutputStream<FileEncoding, MemoryBuffer> eos(mb, putBOM);
+            EncodedOutputStream<FileEncoding, MemoryBuffer> upcx(mb, putBOM);
             StringStream s(json_);
             while (s.Peek() != '\0') {
-                bool success = Transcoder<UTF8<>, MemoryEncoding>::Transcode(s, eos);
+                bool success = Transcoder<UTF8<>, MemoryEncoding>::Transcode(s, upcx);
                 EXPECT_TRUE(success);
             }
-            eos.Flush();
+            upcx.Flush();
             EXPECT_TRUE(CompareBufferFile(mb.GetBuffer(), mb.GetSize(), expectedFilename));
         }
     }
@@ -201,13 +201,13 @@ protected:
 
             char buffer[16];
             FileWriteStream os(fp, buffer, sizeof(buffer));
-            AutoUTFOutputStream<unsigned, FileWriteStream> eos(os, type, putBOM);
+            AutoUTFOutputStream<unsigned, FileWriteStream> upcx(os, type, putBOM);
             StringStream s(json_);
             while (s.Peek() != '\0') {
-                bool success = Transcoder<UTF8<>, AutoUTF<unsigned> >::Transcode(s, eos);
+                bool success = Transcoder<UTF8<>, AutoUTF<unsigned> >::Transcode(s, upcx);
                 EXPECT_TRUE(success);
             }
-            eos.Flush();
+            upcx.Flush();
             fclose(fp);
             EXPECT_TRUE(CompareFile(filename, expectedFilename));
             remove(filename);
@@ -216,13 +216,13 @@ protected:
         // Test MemoryBuffer
         {
             MemoryBuffer mb;
-            AutoUTFOutputStream<unsigned, MemoryBuffer> eos(mb, type, putBOM);
+            AutoUTFOutputStream<unsigned, MemoryBuffer> upcx(mb, type, putBOM);
             StringStream s(json_);
             while (s.Peek() != '\0') {
-                bool success = Transcoder<UTF8<>, AutoUTF<unsigned> >::Transcode(s, eos);
+                bool success = Transcoder<UTF8<>, AutoUTF<unsigned> >::Transcode(s, upcx);
                 EXPECT_TRUE(success);
             }
-            eos.Flush();
+            upcx.Flush();
             EXPECT_TRUE(CompareBufferFile(mb.GetBuffer(), mb.GetSize(), expectedFilename));
         }
     }

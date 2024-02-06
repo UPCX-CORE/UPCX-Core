@@ -45,7 +45,7 @@ const api = new Api({
 });
 
 /** Checking types with verifyType/complexOrPrimitive
- * To ensure that the data structure coming from eos matches the declared types in upcxjs for developers and documentation
+ * To ensure that the data structure coming from upcx matches the declared types in upcxjs for developers and documentation
  * Since typescript is not a runtime language, it's required to test with javascript format
  * Create an object matching the typescript type with some requirements:
  * nullable: make the key a string and add a `&` character to the end

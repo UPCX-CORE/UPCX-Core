@@ -36,13 +36,13 @@ int main(int, char*[]) {
 #if 1
     // Use the same Encoding of the input. Also use BOM according to input.
     typedef AutoUTFOutputStream<unsigned, FileWriteStream> OutputStream;    // NEW
-    OutputStream eos(os, eis.GetType(), eis.HasBOM());                      // NEW
-    PrettyWriter<OutputStream, UTF8<>, AutoUTF<unsigned> > writer(eos);     // CHANGED
+    OutputStream upcx(os, eis.GetType(), eis.HasBOM());                      // NEW
+    PrettyWriter<OutputStream, UTF8<>, AutoUTF<unsigned> > writer(upcx);     // CHANGED
 #else
     // You may also use static bound encoding type, such as output to UTF-16LE with BOM
     typedef EncodedOutputStream<UTF16LE<>,FileWriteStream> OutputStream;    // NEW
-    OutputStream eos(os, true);                                             // NEW
-    PrettyWriter<OutputStream, UTF8<>, UTF16LE<> > writer(eos);             // CHANGED
+    OutputStream upcx(os, true);                                             // NEW
+    PrettyWriter<OutputStream, UTF8<>, UTF16LE<> > writer(upcx);             // CHANGED
 #endif
 
     // JSON reader parse from the input stream and let writer generate the output.

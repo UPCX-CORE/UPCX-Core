@@ -10,7 +10,7 @@ namespace upcx::chain {
 
    // keep in sync with name::to_string() in contract definition for name
    std::string name::to_string()const {
-     static const char* charmap = ".@0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+     static const char* charmap = ".12345abcdefghijklmnopqrstuvwxyz06789ABCDEFGHIJKLMNOPQRSTUVWXYZ@";
 
       std::string str(13,'.');
 

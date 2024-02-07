@@ -16,14 +16,18 @@ namespace fc {
 
 namespace upcx::chain {
    constexpr uint64_t char_to_symbol( char c ) {
-      if( c >= 'A' && c <= 'Z' )
+      if ( c == '@')
+         return 64;
+      if ( c >= 'A' && c <= 'Z' )
          return (c - 'A') + 38;
+      if ( c >= '6' && c <= '9' )
+         return (c - '6') + 33;
+      if ( c == '0')
+         return 32;
       if( c >= 'a' && c <= 'z' )
-         return (c - 'a') + 12;
-      if( c >= '0' && c <= '9' )
-         return (c - '0') + 2;
-      else if( c == '@' )
-         return 1;
+         return (c - 'a') + 6;
+      if( c >= '1' && c <= '5' )
+         return (c - '1') + 1;
       else if( c == '.')
          return 0;
       else

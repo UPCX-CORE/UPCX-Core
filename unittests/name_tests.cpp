@@ -38,21 +38,21 @@ try {
    BOOST_TEST( name{"abc.123"}.to_uint64_t() == 3589369488740450304ULL );
    BOOST_TEST( name{"123.abc"}.to_uint64_t() == 614181822271586304ULL );
 
-   BOOST_TEST( name{"12345abcdefgj"}.to_uint64_t() == 614251623682315983ULL );
-   BOOST_TEST( name{"hijklmnopqrsj"}.to_uint64_t() == 7754926748989239183ULL );
-   BOOST_TEST( name{"tuvwxyz.1234j"}.to_uint64_t() == 14895601873741973071ULL );
+   BOOST_TEST( name{"12345abcdefgd"}.to_uint64_t() == 614251623682315983ULL );
+   BOOST_TEST( name{"hijklmnopqrsd"}.to_uint64_t() == 7754926748989239183ULL );
+   BOOST_TEST( name{"tuvwxyz.1234d"}.to_uint64_t() == 14895601873741973071ULL );
 
-   BOOST_TEST( name{"111111111111j"}.to_uint64_t() == 595056260442243615ULL );
-   BOOST_TEST( name{"555555555555j"}.to_uint64_t() == 2975281302211218015ULL );
-   BOOST_TEST( name{"aaaaaaaaaaaaj"}.to_uint64_t() == 3570337562653461615ULL );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"}.to_uint64_t() == u64max );
+   BOOST_TEST( name{"111111111111d"}.to_uint64_t() == 595056260442243615ULL );
+   BOOST_TEST( name{"555555555555d"}.to_uint64_t() == 2975281302211218015ULL );
+   BOOST_TEST( name{"aaaaaaaaaaaad"}.to_uint64_t() == 3570337562653461615ULL );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"}.to_uint64_t() == u64max );
 
    BOOST_CHECK_THROW( name{"-1"}, name_type_exception );
    BOOST_CHECK_THROW( name{"0"}, name_type_exception );
    BOOST_CHECK_THROW( name{"6"}, name_type_exception );
    BOOST_CHECK_THROW( name{"111111111111k"}, name_type_exception );
    BOOST_CHECK_THROW( name{"zzzzzzzzzzzzk"}, name_type_exception );
-   BOOST_CHECK_THROW( name{"12345abcdefghj"}, name_type_exception );
+   BOOST_CHECK_THROW( name{"12345abcdefghd"}, name_type_exception );
 
 } FC_LOG_AND_RETHROW() }
 
@@ -105,14 +105,14 @@ try {
    BOOST_TEST( name{"abc.123"}.to_string() == "abc.123" );
    BOOST_TEST( name{"123.abc"}.to_string() == "123.abc" );
 
-   BOOST_TEST( name{"12345abcdefgj"}.to_string() == "12345abcdefgj" );
-   BOOST_TEST( name{"hijklmnopqrsj"}.to_string() == "hijklmnopqrsj" );
-   BOOST_TEST( name{"tuvwxyz.1234j"}.to_string() == "tuvwxyz.1234j" );
+   BOOST_TEST( name{"12345abcdefgd"}.to_string() == "12345abcdefgd" );
+   BOOST_TEST( name{"hijklmnopqrsd"}.to_string() == "hijklmnopqrsd" );
+   BOOST_TEST( name{"tuvwxyz.1234d"}.to_string() == "tuvwxyz.1234d" );
 
-   BOOST_TEST( name{"111111111111j"}.to_string() == "111111111111j" );
-   BOOST_TEST( name{"555555555555j"}.to_string() == "555555555555j" );
-   BOOST_TEST( name{"aaaaaaaaaaaaj"}.to_string() == "aaaaaaaaaaaaj" );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"}.to_string() == "zzzzzzzzzzzzj" );
+   BOOST_TEST( name{"111111111111d"}.to_string() == "111111111111d" );
+   BOOST_TEST( name{"555555555555d"}.to_string() == "555555555555d" );
+   BOOST_TEST( name{"aaaaaaaaaaaad"}.to_string() == "aaaaaaaaaaaad" );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"}.to_string() == "zzzzzzzzzzzzd" );
    BOOST_TEST( name{""}.to_string() == "" );
    BOOST_TEST( name{"e"}.to_string() == "e" );
    BOOST_TEST( name{"eo"}.to_string() == "eo" );
@@ -126,7 +126,7 @@ try {
    BOOST_TEST( name{"upcxaccou"}.to_string() == "upcxaccou" );
    BOOST_TEST( name{"upcxaccoun"}.to_string() == "upcxaccoun" );
    BOOST_TEST( name{"upcxaccount"}.to_string() == "upcxaccount" );
-   BOOST_TEST( name{"upcxaccountj"}.to_string() == "upcxaccountj" );
+   BOOST_TEST( name{"upcxaccountd"}.to_string() == "upcxaccountd" );
 
 } FC_LOG_AND_RETHROW() }
 
@@ -172,14 +172,14 @@ try {
    BOOST_TEST( name{"abc.123"} == name{"abc.123"} );
    BOOST_TEST( name{"123.abc"} == name{"123.abc"} );
 
-   BOOST_TEST( name{"12345abcdefgj"} == name{"12345abcdefgj"} );
-   BOOST_TEST( name{"hijklmnopqrsj"} == name{"hijklmnopqrsj"} );
-   BOOST_TEST( name{"tuvwxyz.1234j"} == name{"tuvwxyz.1234j"} );
+   BOOST_TEST( name{"12345abcdefgd"} == name{"12345abcdefgd"} );
+   BOOST_TEST( name{"hijklmnopqrsd"} == name{"hijklmnopqrsd"} );
+   BOOST_TEST( name{"tuvwxyz.1234d"} == name{"tuvwxyz.1234d"} );
 
-   BOOST_TEST( name{"111111111111j"} == name{"111111111111j"} );
-   BOOST_TEST( name{"555555555555j"} == name{"555555555555j"} );
-   BOOST_TEST( name{"aaaaaaaaaaaaj"} == name{"aaaaaaaaaaaaj"} );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} == name{"zzzzzzzzzzzzj"} );
+   BOOST_TEST( name{"111111111111d"} == name{"111111111111d"} );
+   BOOST_TEST( name{"555555555555d"} == name{"555555555555d"} );
+   BOOST_TEST( name{"aaaaaaaaaaaad"} == name{"aaaaaaaaaaaad"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} == name{"zzzzzzzzzzzzd"} );
 
    // -----------------------------------------------------------
    // friend constexpr bool operator != ( const name& a, const name& b )
@@ -200,14 +200,14 @@ try {
    BOOST_TEST( name{"abc.123"} != name{} );
    BOOST_TEST( name{"123.abc"} != name{} );
 
-   BOOST_TEST( name{"12345abcdefgj"} != name{} );
-   BOOST_TEST( name{"hijklmnopqrsj"} != name{} );
-   BOOST_TEST( name{"tuvwxyz.1234j"} != name{} );
+   BOOST_TEST( name{"12345abcdefgd"} != name{} );
+   BOOST_TEST( name{"hijklmnopqrsd"} != name{} );
+   BOOST_TEST( name{"tuvwxyz.1234d"} != name{} );
 
-   BOOST_TEST( name{"111111111111j"} != name{} );
-   BOOST_TEST( name{"555555555555j"} != name{} );
-   BOOST_TEST( name{"aaaaaaaaaaaaj"} != name{} );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} != name{} );
+   BOOST_TEST( name{"111111111111d"} != name{} );
+   BOOST_TEST( name{"555555555555d"} != name{} );
+   BOOST_TEST( name{"aaaaaaaaaaaad"} != name{} );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} != name{} );
 
    // ---------------------------------------------------------
    // friend constexpr bool operator < ( const name& a, const name& b )
@@ -228,14 +228,14 @@ try {
    BOOST_TEST( name{"abb"} < name{"abc.123"} );
    BOOST_TEST( name{"123.aaa"} < name{"123.abc"} );
 
-   BOOST_TEST( name{"12345abcdefga"} < name{"12345abcdefgj"} );
-   BOOST_TEST( name{"hijklmnopqrsh"} < name{"hijklmnopqrsj"} );
-   BOOST_TEST( name{"tuvwxyz.1234d"} < name{"tuvwxyz.1234j"} );
+   BOOST_TEST( name{"12345abcdefga"} < name{"12345abcdefgd"} );
+   BOOST_TEST( name{"hijklmnopqrsh"} < name{"hijklmnopqrsd"} );
+   BOOST_TEST( name{"tuvwxyz.1234d"} < name{"tuvwxyz.1234d"} );
 
-   BOOST_TEST( name{"111111111111a"} < name{"111111111111j"} );
-   BOOST_TEST( name{"555555555555b"} < name{"555555555555j"} );
-   BOOST_TEST( name{"aaaaaaaaaaaai"} < name{"aaaaaaaaaaaaj"} );
-   BOOST_TEST( name{"zzzzzzzzzzzzi"} < name{"zzzzzzzzzzzzj"} );
+   BOOST_TEST( name{"111111111111a"} < name{"111111111111d"} );
+   BOOST_TEST( name{"555555555555b"} < name{"555555555555d"} );
+   BOOST_TEST( name{"aaaaaaaaaaaac"} < name{"aaaaaaaaaaaad"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzc"} < name{"zzzzzzzzzzzzd"} );
 
    // ---------------------------------------------------------
    // friend constexpr bool operator <= ( const name& a, const name& b )
@@ -256,14 +256,14 @@ try {
    BOOST_TEST( name{"abb"} <= name{"abc.123"} );
    BOOST_TEST( name{"123.aaa"} <= name{"123.abc"} );
 
-   BOOST_TEST( name{"12345abcdefga"} <= name{"12345abcdefgj"} );
-   BOOST_TEST( name{"hijklmnopqrsh"} <= name{"hijklmnopqrsj"} );
-   BOOST_TEST( name{"tuvwxyz.1234d"} <= name{"tuvwxyz.1234j"} );
+   BOOST_TEST( name{"12345abcdefga"} <= name{"12345abcdefgd"} );
+   BOOST_TEST( name{"hijklmnopqrsh"} <= name{"hijklmnopqrsd"} );
+   BOOST_TEST( name{"tuvwxyz.1234d"} <= name{"tuvwxyz.1234d"} );
 
-   BOOST_TEST( name{"111111111111a"} <= name{"111111111111j"} );
-   BOOST_TEST( name{"555555555555b"} <= name{"555555555555j"} );
-   BOOST_TEST( name{"aaaaaaaaaaaaj"} <= name{"aaaaaaaaaaaaj"} );
-   BOOST_TEST( name{"zzzzzzzzzzzzi"} <= name{"zzzzzzzzzzzzj"} );
+   BOOST_TEST( name{"111111111111a"} <= name{"111111111111d"} );
+   BOOST_TEST( name{"555555555555b"} <= name{"555555555555d"} );
+   BOOST_TEST( name{"aaaaaaaaaaaad"} <= name{"aaaaaaaaaaaad"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzi"} <= name{"zzzzzzzzzzzzd"} );
 
       // ---------------------------------------------------------
    // friend constexpr bool operator < ( const name& a, const name& b )
@@ -285,13 +285,13 @@ try {
    BOOST_TEST( name{"abz.123"} > name{"abc.123"} );
    BOOST_TEST( name{"124.abc"} > name{"123.abc"} );
 
-   BOOST_TEST( name{"13345abcdefgj"} > name{"12345abcdefgj"} );
-   BOOST_TEST( name{"zijklmnopqrsj"} > name{"hijklmnopqrsj"} );
-   BOOST_TEST( name{"tuvwxyz.1235j"} > name{"tuvwxyz.1234j"} );
+   BOOST_TEST( name{"13345abcdefgd"} > name{"12345abcdefgd"} );
+   BOOST_TEST( name{"zijklmnopqrsd"} > name{"hijklmnopqrsd"} );
+   BOOST_TEST( name{"tuvwxyz.1235d"} > name{"tuvwxyz.1234d"} );
 
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} > name{"111111111111j"} );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} > name{"555555555555j"} );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} > name{"aaaaaaaaaaaaj"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} > name{"111111111111d"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} > name{"555555555555d"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} > name{"aaaaaaaaaaaad"} );
 
          // ---------------------------------------------------------
    // friend constexpr bool operator < ( const name& a, const name& b )
@@ -313,13 +313,13 @@ try {
    BOOST_TEST( name{"abz.123"} >= name{"abc.123"} );
    BOOST_TEST( name{"124.abc"} >= name{"123.abc"} );
 
-   BOOST_TEST( name{"13345abcdefgj"} >= name{"12345abcdefgj"} );
-   BOOST_TEST( name{"zijklmnopqrsj"} >= name{"hijklmnopqrsj"} );
-   BOOST_TEST( name{"tuvwxyz.1235j"} >= name{"tuvwxyz.1234j"} );
+   BOOST_TEST( name{"13345abcdefgd"} >= name{"12345abcdefgd"} );
+   BOOST_TEST( name{"zijklmnopqrsd"} >= name{"hijklmnopqrsd"} );
+   BOOST_TEST( name{"tuvwxyz.1235d"} >= name{"tuvwxyz.1234d"} );
 
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} >= name{"111111111111j"} );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} >= name{"555555555555j"} );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} >= name{"zzzzzzzzzzzzj"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} >= name{"111111111111d"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} >= name{"555555555555d"} );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} >= name{"zzzzzzzzzzzzd"} );
 
    BOOST_TEST( name{"1"} == 576460752303423488ULL );
    BOOST_TEST( name{"5"} == 2882303761517117440ULL );
@@ -338,14 +338,14 @@ try {
    BOOST_TEST( name{"abc.123"} == 3589369488740450304ULL );
    BOOST_TEST( name{"123.abc"} == 614181822271586304ULL );
 
-   BOOST_TEST( name{"12345abcdefgj"} == 614251623682315983ULL );
-   BOOST_TEST( name{"hijklmnopqrsj"} == 7754926748989239183ULL );
-   BOOST_TEST( name{"tuvwxyz.1234j"} == 14895601873741973071ULL );
+   BOOST_TEST( name{"12345abcdefgd"} == 614251623682315983ULL );
+   BOOST_TEST( name{"hijklmnopqrsd"} == 7754926748989239183ULL );
+   BOOST_TEST( name{"tuvwxyz.1234d"} == 14895601873741973071ULL );
 
-   BOOST_TEST( name{"111111111111j"} == 595056260442243615ULL );
-   BOOST_TEST( name{"555555555555j"} == 2975281302211218015ULL );
-   BOOST_TEST( name{"aaaaaaaaaaaaj"} == 3570337562653461615ULL );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} == u64max );
+   BOOST_TEST( name{"111111111111d"} == 595056260442243615ULL );
+   BOOST_TEST( name{"555555555555d"} == 2975281302211218015ULL );
+   BOOST_TEST( name{"aaaaaaaaaaaad"} == 3570337562653461615ULL );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} == u64max );
 
 } FC_LOG_AND_RETHROW() }
 
@@ -373,14 +373,14 @@ try {
    BOOST_TEST( name{"abc.123"} == "abc.123"_n );
    BOOST_TEST( name{"123.abc"} == "123.abc"_n );
 
-   BOOST_TEST( name{"12345abcdefgj"} == "12345abcdefgj"_n );
-   BOOST_TEST( name{"hijklmnopqrsj"} == "hijklmnopqrsj"_n );
-   BOOST_TEST( name{"tuvwxyz.1234j"} == "tuvwxyz.1234j"_n );
+   BOOST_TEST( name{"12345abcdefgd"} == "12345abcdefgd"_n );
+   BOOST_TEST( name{"hijklmnopqrsd"} == "hijklmnopqrsd"_n );
+   BOOST_TEST( name{"tuvwxyz.1234d"} == "tuvwxyz.1234d"_n );
 
-   BOOST_TEST( name{"111111111111j"} == "111111111111j"_n );
-   BOOST_TEST( name{"555555555555j"} == "555555555555j"_n );
-   BOOST_TEST( name{"aaaaaaaaaaaaj"} == "aaaaaaaaaaaaj"_n );
-   BOOST_TEST( name{"zzzzzzzzzzzzj"} == "zzzzzzzzzzzzj"_n );
+   BOOST_TEST( name{"111111111111d"} == "111111111111d"_n );
+   BOOST_TEST( name{"555555555555d"} == "555555555555d"_n );
+   BOOST_TEST( name{"aaaaaaaaaaaad"} == "aaaaaaaaaaaad"_n );
+   BOOST_TEST( name{"zzzzzzzzzzzzd"} == "zzzzzzzzzzzzd"_n );
 } FC_LOG_AND_RETHROW() }
 
 
@@ -402,18 +402,18 @@ try {
    BOOST_TEST( is_string_valid_name("abc.123") );
    BOOST_TEST( is_string_valid_name("123.abc") );
 
-   BOOST_TEST( is_string_valid_name("12345abcdefgj") );
-   BOOST_TEST( is_string_valid_name("hijklmnopqrsj") );
-   BOOST_TEST( is_string_valid_name("tuvwxyz.1234j") );
-   BOOST_TEST( is_string_valid_name("111111111111j") );
-   BOOST_TEST( is_string_valid_name("555555555555j") );
-   BOOST_TEST( is_string_valid_name("aaaaaaaaaaaaj") );
-   BOOST_TEST( is_string_valid_name("zzzzzzzzzzzzj") );
+   BOOST_TEST( is_string_valid_name("12345abcdefgd") );
+   BOOST_TEST( is_string_valid_name("hijklmnopqrsd") );
+   BOOST_TEST( is_string_valid_name("tuvwxyz.1234d") );
+   BOOST_TEST( is_string_valid_name("111111111111d") );
+   BOOST_TEST( is_string_valid_name("555555555555d") );
+   BOOST_TEST( is_string_valid_name("aaaaaaaaaaaad") );
+   BOOST_TEST( is_string_valid_name("zzzzzzzzzzzzd") );
 
    BOOST_TEST( is_string_valid_name("-1") == false );
    BOOST_TEST( is_string_valid_name("0") == false );
    BOOST_TEST( is_string_valid_name("6") == false );
-   BOOST_TEST( is_string_valid_name("abcde12345abj") == true );
+   BOOST_TEST( is_string_valid_name("abcde12345abd") == true );
    BOOST_TEST( is_string_valid_name("abcde12345abk") == false );
    BOOST_TEST( is_string_valid_name("abcdeabcde1234") == false );
 } FC_LOG_AND_RETHROW() }

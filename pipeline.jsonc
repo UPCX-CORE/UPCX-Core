@@ -1,0 +1,38 @@
+{
+  "upcx-code-coverage": {
+    "exclude": [
+      // ignore coverage reports from source filenames matching these PCREs
+      "^/build/",
+      "^/coverage/",
+      "^/.git/",
+      "^/libraries/upcx-vm/",
+      "^/libraries/wasm-jit/",
+      "^/node_modules/",
+      "^/unittests/"
+    ],
+    "expect": [
+      // expect coverage reports from source filenames matching these PCREs
+      "[.]c(pp)?([.]in)?$",
+      "[.]h(pp)?([.]in)?$"
+    ]
+  },
+  "upcx-docker-builds": {
+    "environment": {
+      "BUILDER_TAG": "v2.0.0"
+    }
+  },
+  "upcx-multiversion-tests": {
+    "environment": {
+      "IMAGE_TAG": "_1-8-0-rc2"
+    },
+    "configuration": ["170=v1.7.0"]
+  },
+  // upcx-resume-from-state documentation: https://github.com/UPCX/auto-eks-sync-nodes/blob/master/pipelines/upcx-resume-from-state/README.md
+  "upcx-resume-from-state": {
+    "test": [
+      {
+        "commit": "16074742f8cfd481b029073e6f01bb920a1bad38"
+      }
+    ]
+  }
+}

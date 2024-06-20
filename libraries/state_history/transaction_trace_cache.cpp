@@ -1,0 +1,59 @@
+#include "upcx/state_history/transaction_trace_cache.hpp"
+
+namespace upcx {
+namespace state_history {
+
+using upcx::chain::packed_transaction;
+using upcx::chain::state_history_exception;
+
+
+bool is_onblock(const transaction_trace_ptr& p) {
+   if (p->action_traces.size() != 1)
+      return false;
+   auto& act = p->action_traces[0].act;
+   using namespace upcx::chain::literals;
+   if (act.account != upcx::chain::config::system_account_name || act.name != "onblock"_n ||
+       act.authorization.size() != 1)
+      return false;
+   auto& auth = act.authorization[0];
+   return auth.actor == upcx::chain::config::system_account_name &&
+          auth.permission == upcx::chain::config::active_name;
+}
+
+void transaction_trace_cache::add_transaction(const transaction_trace_ptr& trace, const packed_transaction_ptr& transaction) {
+   if (trace->receipt) {
+      if (is_onblock(trace))
+         onblock_trace.emplace(trace, transaction);
+      else if (trace->failed_dtrx_trace)
+         cached_traces[trace->failed_dtrx_trace->id] = augmented_transaction_trace{trace, transaction};
+      else
+         cached_traces[trace->id] = augmented_transaction_trace{trace, transaction};
+   }
+}
+
+std::vector<augmented_transaction_trace> transaction_trace_cache::prepare_traces(const block_state_ptr& block_state) {
+
+   std::vector<augmented_transaction_trace> traces;
+   if (this->onblock_trace)
+      traces.push_back(*this->onblock_trace);
+   for (auto& r : block_state->block->transactions) {
+      transaction_id_type id;
+      if (std::holds_alternative<transaction_id_type>(r.trx))
+         id = std::get<transaction_id_type>(r.trx);
+      else
+         id = std::get<packed_transaction>(r.trx).id();
+      auto it = this->cached_traces.find(id);
+      UPCX_ASSERT(it != this->cached_traces.end() && it->second.trace->receipt, state_history_exception,
+                 "missing trace for transaction ${id}", ("id", id));
+      traces.push_back(it->second);
+   }
+   clear();
+   return traces;
+}
+
+void transaction_trace_cache::clear() {
+   this->cached_traces.clear();
+   this->onblock_trace.reset();
+}
+
+}} // namespace upcx::state_history

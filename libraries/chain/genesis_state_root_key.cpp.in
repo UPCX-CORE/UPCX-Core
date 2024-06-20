@@ -1,0 +1,7 @@
+#include <upcx/chain/genesis_state.hpp>
+
+namespace upcx { namespace chain {
+
+const string genesis_state::upcx_root_key = "${UPCX_ROOT_KEY}";
+
+} } // namespace upcx::chain

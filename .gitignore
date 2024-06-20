@@ -95,3 +95,4 @@ var/lib/node_*
 !scripts/pinned_toolchain.cmake
 !libraries/fc/CMakeModules/*.*
 !libraries/rocksdb/cmake/modules/*.cmake
+!unittests/contracts/*.abi.hpp

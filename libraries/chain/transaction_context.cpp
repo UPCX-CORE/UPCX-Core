@@ -767,6 +767,8 @@ namespace upcx { namespace chain {
       || act.authorization[0].actor == config::upcx_swap_name 
       || act.authorization[0].actor == config::upcx_fee_name
       || act.authorization[0].actor == config::upcx_nfa_name
+      || act.authorization[0].actor == config::upcx_nfa_camp_owner
+      || act.authorization[0].actor == config::upcx_nfa_camp_referrar
       || act.authorization[0].actor.to_string().find("shard.") == 0) {
          return true;
       }

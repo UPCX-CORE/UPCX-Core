@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(block_with_invalid_tx_test)
    auto& act = signed_tx.actions.back();
    auto act_data = act.data_as<newaccount>();
    // Make the transaction invalid by having the new account name the same as the creator name
-   act_data.name = act_data.creator;
+   act_data.id = act_data.creator;
    act.data = fc::raw::pack(act_data);
    // Re-sign the transaction
    signed_tx.signatures.clear();

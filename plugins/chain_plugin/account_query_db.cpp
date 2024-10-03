@@ -329,8 +329,8 @@ namespace upcx::chain_apis {
                   updated.erase(*itr);
                } else if (at.act.name == chain::newaccount::get_name()) {
                   auto data = at.act.data_as<chain::newaccount>();
-                  updated.emplace(chain::permission_level{data.name, "owner"_n});
-                  updated.emplace(chain::permission_level{data.name, "active"_n});
+                  updated.emplace(chain::permission_level{data.id, "owner"_n});
+                  updated.emplace(chain::permission_level{data.id, "active"_n});
                }
             }
          };

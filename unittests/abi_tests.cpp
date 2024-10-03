@@ -1005,7 +1005,7 @@ BOOST_AUTO_TEST_CASE(newaccount_test)
 
    auto newacct = var.as<newaccount>();
    BOOST_TEST(name("newacct.crtr") == newacct.creator);
-   BOOST_TEST(name("newacct.name") == newacct.name);
+   BOOST_TEST(name("newacct.name") == newacct.id);
 
    BOOST_TEST(2147483145u == newacct.owner.threshold);
 

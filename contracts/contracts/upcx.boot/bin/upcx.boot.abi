@@ -108,8 +108,12 @@
                     "type": "name"
                 },
                 {
-                    "name": "name",
+                    "name": "id",
                     "type": "name"
+                },
+                {
+                    "name": "name",
+                    "type": "string"
                 },
                 {
                     "name": "owner",

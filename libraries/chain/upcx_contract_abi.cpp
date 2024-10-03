@@ -138,7 +138,8 @@ abi_def upcx_contract_abi(const abi_def& upcx_system_abi)
    upcx_abi.structs.emplace_back( struct_def {
       "newaccount", "", {
          {"creator", "account_name"},
-         {"name", "account_name"},
+         {"id", "account_name"},
+         {"name", "string"},
          {"owner", "authority"},
          {"active", "authority"},
       }

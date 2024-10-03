@@ -654,7 +654,8 @@ chain::action create_newaccount(const name& creator, const name& newaccount, aut
       get_account_permissions(tx_permission, {creator,config::active_name}),
       upcx::chain::newaccount{
          .creator      = creator,
-         .name         = newaccount,
+         .id           = newaccount,
+         .name         = newaccount.to_string(),
          .owner        = owner,
          .active       = active
       }

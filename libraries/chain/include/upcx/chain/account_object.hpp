@@ -4,6 +4,7 @@
 #include <upcx/chain/code_object.hpp>
 #include <upcx/chain/block_timestamp.hpp>
 #include <upcx/chain/abi_def.hpp>
+#include <string>
 
 #include "multi_index_includes.hpp"
 
@@ -14,6 +15,7 @@ namespace upcx { namespace chain {
 
       id_type              id;
       account_name         name; //< name should not be changed within a chainbase modifier lambda
+      std::string          real_name;
       block_timestamp_type creation_date;
       shared_blob          abi;
 

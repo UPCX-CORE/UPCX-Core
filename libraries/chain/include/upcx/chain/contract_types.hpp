@@ -3,6 +3,7 @@
 #include "upcx/chain/config.hpp"
 #include <upcx/chain/authority.hpp>
 #include <upcx/chain/types.hpp>
+#include <string>
 
 namespace upcx { namespace chain {
 
@@ -10,7 +11,8 @@ using action_name    = upcx::chain::action_name;
 
 struct newaccount {
    account_name                     creator;
-   account_name                     name;
+   account_name                     id;
+   std::string                      name;
    authority                        owner;
    authority                        active;
 

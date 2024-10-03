@@ -75,10 +75,11 @@ void apply_upcx_newaccount(apply_context& context) {
 
    auto& db = context.db;
 
-   auto name_str = name(create.name).to_string();
+   auto name_str = name(create.id).to_string();
 
+   UPCX_ASSERT( !create.id.empty(), action_validate_exception, "account id cannot be empty" );
    UPCX_ASSERT( !create.name.empty(), action_validate_exception, "account name cannot be empty" );
-   UPCX_ASSERT( name_str.size() <= 12, action_validate_exception, "account names can only be 12 chars long" );
+   UPCX_ASSERT( name_str.size() <= 12, action_validate_exception, "account id can only be 12 chars long" );
 
    // Check if the creator is privileged
    const auto &creator = db.get<account_metadata_object, by_name>(create.creator);
@@ -87,30 +88,31 @@ void apply_upcx_newaccount(apply_context& context) {
                   "only privileged accounts can have names that start with 'upcx.'" );
    }
 
-   auto existing_account = db.find<account_object, by_name>(create.name);
+   auto existing_account = db.find<account_object, by_name>(create.id);
    UPCX_ASSERT(existing_account == nullptr, account_name_exists_exception,
               "Cannot create account named ${name}, as that name is already taken",
-              ("name", create.name));
+              ("name", create.id));
 
    const auto& new_account = db.create<account_object>([&](auto& a) {
-      a.name = create.name;
+      a.name = create.id;
+      a.real_name = create.name;
       a.creation_date = context.control.pending_block_time();
    });
 
    db.create<account_metadata_object>([&](auto& a) {
-      a.name = create.name;
+      a.name = create.id;
    });
 
    for( const auto& auth : { create.owner, create.active } ){
       validate_authority_precondition( context, auth );
    }
 
-   const auto& owner_permission  = authorization.create_permission( create.name, config::owner_name, 0,
+   const auto& owner_permission  = authorization.create_permission( create.id, config::owner_name, 0,
                                                                     std::move(create.owner), context.get_action_id() );
-   const auto& active_permission = authorization.create_permission( create.name, config::active_name, owner_permission.id,
+   const auto& active_permission = authorization.create_permission( create.id, config::active_name, owner_permission.id,
                                                                     std::move(create.active), context.get_action_id() );
 
-   context.control.get_mutable_resource_limits_manager().initialize_account(create.name);
+   context.control.get_mutable_resource_limits_manager().initialize_account(create.id);
 
    int64_t ram_delta = config::overhead_per_account_ram_bytes;
    ram_delta += 2*config::billable_size_v<permission_object>;
@@ -119,10 +121,10 @@ void apply_upcx_newaccount(apply_context& context) {
 
    std::string event_id;
    if (context.control.get_deep_mind_logger() != nullptr) {
-      event_id = STORAGE_EVENT_ID("${name}", ("name", create.name));
+      event_id = STORAGE_EVENT_ID("${name}", ("name", create.id));
    }
 
-   context.add_ram_usage(create.name, ram_delta, storage_usage_trace(context.get_action_id(), std::move(event_id), "account", "add", "newaccount"));
+   context.add_ram_usage(create.id, ram_delta, storage_usage_trace(context.get_action_id(), std::move(event_id), "account", "add", "newaccount"));
 
 } FC_CAPTURE_AND_RETHROW( (create) ) }
 

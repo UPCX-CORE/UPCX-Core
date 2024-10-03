@@ -229,10 +229,10 @@ namespace upcx {
             if( at.act.name == "newaccount"_n )
             {
                const auto create = at.act.data_as<chain::newaccount>();
-               add(db, create.owner.keys, create.name, "owner"_n);
-               add(db, create.owner.accounts, create.name, "owner"_n);
-               add(db, create.active.keys, create.name, "active"_n);
-               add(db, create.active.accounts, create.name, "active"_n);
+               add(db, create.owner.keys, create.id, "owner"_n);
+               add(db, create.owner.accounts, create.id, "owner"_n);
+               add(db, create.active.keys, create.id, "active"_n);
+               add(db, create.active.accounts, create.id, "active"_n);
             }
             else if( at.act.name == "updateauth"_n )
             {

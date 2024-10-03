@@ -251,7 +251,8 @@ BOOST_FIXTURE_TEST_CASE( abort_block_transactions, validating_tester) { try {
       trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                 newaccount{
                                       .creator  = creator,
-                                      .name     = a,
+                                      .id       = a,
+                                      .name     = a.to_string(),
                                       .owner    = owner_auth,
                                       .active   = authority( get_public_key( a, "active" ) )
                                 });
@@ -298,7 +299,8 @@ BOOST_FIXTURE_TEST_CASE( abort_block_transactions_tester, validating_tester) { t
       trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                 newaccount{
                                       .creator  = creator,
-                                      .name     = a,
+                                      .id       = a,
+                                      .name     = a.to_string(),
                                       .owner    = owner_auth,
                                       .active   = authority( get_public_key( a, "active" ) )
                                 });

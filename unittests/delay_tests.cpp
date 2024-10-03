@@ -31,7 +31,8 @@ BOOST_FIXTURE_TEST_CASE( delay_create_account, validating_tester) { try {
    trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                              newaccount{
                                 .creator  = creator,
-                                .name     = a,
+                                .id       = a,
+                                .name     = a.to_string(),
                                 .owner    = owner_auth,
                                 .active   = authority( get_public_key( a, "active" ) )
                              });
@@ -58,7 +59,8 @@ BOOST_FIXTURE_TEST_CASE( delay_error_create_account, validating_tester) { try {
    trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                              newaccount{
                                 .creator  = "bad"_n, /// a does not exist, this should error when execute
-                                .name     = a,
+                                .id       = a,
+                                 .name     = a.to_string(),
                                 .owner    = owner_auth,
                                 .active   = authority( get_public_key( a, "active" ) )
                              });
@@ -2379,7 +2381,8 @@ BOOST_FIXTURE_TEST_CASE( delay_expired, validating_tester) { try {
    trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                              newaccount{
                                 .creator  = creator,
-                                .name     = a,
+                                .id       = a,
+                                 .name     = a.to_string(),
                                 .owner    = owner_auth,
                                 .active   = authority( get_public_key( a, "active" ) )
                              });

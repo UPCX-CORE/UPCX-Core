@@ -639,7 +639,8 @@ BOOST_AUTO_TEST_CASE( push_block_returns_forked_transactions ) try {
       trx.actions.emplace_back( vector<permission_level>{{config::system_account_name,config::active_name}},
                                 newaccount{
                                       .creator  = config::system_account_name,
-                                      .name     = "test1"_n,
+                                      .id     = "test1"_n,
+                                      .name   = "test1",
                                       .owner    = owner_auth,
                                       .active   = active_auth,
                                 });
@@ -656,7 +657,8 @@ BOOST_AUTO_TEST_CASE( push_block_returns_forked_transactions ) try {
       trx.actions.emplace_back( vector<permission_level>{{config::system_account_name,config::active_name}},
                                 newaccount{
                                       .creator  = config::system_account_name,
-                                      .name     = "test2"_n,
+                                      .id     = "test2"_n,
+                                      .name     = "test2",
                                       .owner    = owner_auth,
                                       .active   = active_auth,
                                 });
@@ -672,7 +674,8 @@ BOOST_AUTO_TEST_CASE( push_block_returns_forked_transactions ) try {
       trx.actions.emplace_back( vector<permission_level>{{config::system_account_name,config::active_name}},
                                 newaccount{
                                       .creator  = config::system_account_name,
-                                      .name     = "test3"_n,
+                                      .id     = "test3"_n,
+                                      .name     = "test3",
                                       .owner    = owner_auth,
                                       .active   = active_auth,
                                 });
@@ -688,7 +691,8 @@ BOOST_AUTO_TEST_CASE( push_block_returns_forked_transactions ) try {
       trx.actions.emplace_back( vector<permission_level>{{config::system_account_name,config::active_name}},
                                 newaccount{
                                       .creator  = config::system_account_name,
-                                      .name     = "test4"_n,
+                                      .id     = "test4"_n,
+                                      .name     = "test4",
                                       .owner    = owner_auth,
                                       .active   = active_auth,
                                 });

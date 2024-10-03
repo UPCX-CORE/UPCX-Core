@@ -552,7 +552,8 @@ namespace upcx { namespace testing {
       trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                 newaccount{
                                    .creator  = creator,
-                                   .name     = a,
+                                   .id       = a,
+                                 .name     = a.to_string(),
                                    .owner    = owner_auth,
                                    .active   = active_auth,
                                 });

@@ -1361,7 +1361,8 @@ BOOST_AUTO_TEST_CASE( webauthn_create_account ) { try {
    trx.actions.emplace_back(vector<permission_level>{{config::system_account_name,config::active_name}},
                               newaccount{
                                  .creator  = config::system_account_name,
-                                 .name     = "waaccount"_n,
+                                 .id     = "waaccount"_n,
+                                 .name     = "waaccount",
                                  .owner    = auth,
                                  .active   = auth,
                               });

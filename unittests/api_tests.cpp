@@ -753,7 +753,8 @@ BOOST_FIXTURE_TEST_CASE(cfa_stateful_api, TESTER)  try {
    trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                  newaccount{
                                  .creator  = creator,
-                                 .name     = a,
+                                 .id       = a,
+                                 .name     = a.to_string(),
                                  .owner    = authority( get_public_key( a, "owner" ) ),
                                  .active   = authority( get_public_key( a, "active" ) )
                                  });
@@ -784,7 +785,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(deferred_cfa_failed, TESTER_T, backing_store_ts) {
    trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                  newaccount{
                                  .creator  = creator,
-                                 .name     = a,
+                                 .id       = a,
+                                 .name     = a.to_string(),
                                  .owner    = authority( t.get_public_key( a, "owner" ) ),
                                  .active   = authority( t.get_public_key( a, "active" ) )
                                  });
@@ -821,7 +823,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(deferred_cfa_success, TESTER_T, backing_store_ts) 
    trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                  newaccount{
                                  .creator  = creator,
-                                 .name     = a,
+                                 .id       = a,
+                                 .name     = a.to_string(),
                                  .owner    = authority( t.get_public_key( a, "owner" ) ),
                                  .active   = authority( t.get_public_key( a, "active" ) )
                                  });

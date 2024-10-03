@@ -1326,7 +1326,8 @@ BOOST_AUTO_TEST_CASE(test_deltas_resources_history) {
       trx.actions.emplace_back( vector<permission_level>{{config::system_account_name,config::active_name}},
                                    newaccount{
                                        .creator  = config::system_account_name,
-                                       .name     =  "alice"_n,
+                                       .id       =  "alice"_n,
+                                       .name     =  "alice",
                                        .owner    = owner_auth,
                                        .active   = authority( chain.get_public_key( "alice"_n, "active" ) )});
 

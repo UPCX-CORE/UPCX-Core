@@ -1884,7 +1884,8 @@ BOOST_AUTO_TEST_CASE(packed_transaction)
          vector<permission_level>{{"testapi1"_n, config::active_name}},
          newaccount{
                .creator  = config::system_account_name,
-               .name     = a,
+               .id       = a,
+               .name     = a.to_string(),
                .owner    = authority( get_public_key( a, "owner" )),
                .active   = authority( get_public_key( a, "active" ) )
          });
@@ -3494,7 +3495,8 @@ namespace {
             vector<permission_level>{{"testapi1"_n, config::active_name}},
             newaccount{
                   .creator  = config::system_account_name,
-                  .name     = a,
+                  .id       = a,
+                  .name     = a.to_string(),
                   .owner    = authority( get_public_key( a, "owner" )),
                   .active   = authority( get_public_key( a, "active" ) )
             });

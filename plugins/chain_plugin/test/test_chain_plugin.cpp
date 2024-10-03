@@ -91,7 +91,8 @@ public:
         trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                   newaccount{
                                           .creator  = creator,
-                                          .name     = a,
+                                          .id       = a,
+                                          .name     = a.to_string(),
                                           .owner    = owner_auth,
                                           .active   = authority( get_public_key( a, "active" ) )
                                   });
@@ -154,7 +155,8 @@ public:
       trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                 newaccount{
                                    .creator  = creator,
-                                   .name     = a,
+                                   .id       = a,
+                                   .name     = a.to_string(),
                                    .owner    = owner_auth,
                                    .active   = authority( get_public_key( a, "active" ) )
                                 });
@@ -252,7 +254,8 @@ public:
             trx.actions.emplace_back( vector<permission_level>{{creator,config::active_name}},
                                       newaccount{
                                               .creator  = creator,
-                                              .name     = a,
+                                              .id       = a,
+                                              .name     = a.to_string(),
                                               .owner    = owner_auth,
                                               .active   = authority( get_public_key( a, "active" ) )
                                       });

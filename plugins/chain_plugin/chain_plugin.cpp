@@ -3293,30 +3293,30 @@ read_only::get_account_results read_only::get_account( const get_account_params&
    result.head_block_num  = db.head_block_num();
    result.head_block_time = db.head_block_time();
 
-   rm.get_account_limits( result.account_name, result.ram_quota, result.net_weight, result.cpu_weight );
+   rm.get_account_limits( result.account_id, result.ram_quota, result.net_weight, result.cpu_weight );
 
-   const auto& accnt_obj = db.get_account( result.account_name );
-   const auto& accnt_metadata_obj = db.db().get<account_metadata_object,by_name>( result.account_name );
+   const auto& accnt_obj = db.get_account( result.account_id );
+   const auto& accnt_metadata_obj = db.db().get<account_metadata_object,by_name>( result.account_id );
 
    result.privileged       = accnt_metadata_obj.is_privileged();
    result.last_code_update = accnt_metadata_obj.last_code_update;
    result.created          = accnt_obj.creation_date;
 
-   uint32_t greylist_limit = db.is_resource_greylisted(result.account_name) ? 1 : config::maximum_elastic_resource_multiplier;
+   uint32_t greylist_limit = db.is_resource_greylisted(result.account_id) ? 1 : config::maximum_elastic_resource_multiplier;
    const block_timestamp_type current_usage_time (db.head_block_time());
-   result.net_limit.set( rm.get_account_net_limit_ex( result.account_name, greylist_limit, current_usage_time).first );
+   result.net_limit.set( rm.get_account_net_limit_ex( result.account_id, greylist_limit, current_usage_time).first );
    if ( result.net_limit.last_usage_update_time && (result.net_limit.last_usage_update_time->slot == 0) ) {   // account has no action yet
       result.net_limit.last_usage_update_time = accnt_obj.creation_date;
    }
-   result.cpu_limit.set( rm.get_account_cpu_limit_ex( result.account_name, greylist_limit, current_usage_time).first );
+   result.cpu_limit.set( rm.get_account_cpu_limit_ex( result.account_id, greylist_limit, current_usage_time).first );
    if ( result.cpu_limit.last_usage_update_time && (result.cpu_limit.last_usage_update_time->slot == 0) ) {   // account has no action yet
       result.cpu_limit.last_usage_update_time = accnt_obj.creation_date;
    }
-   result.ram_usage = rm.get_account_ram_usage( result.account_name );
+   result.ram_usage = rm.get_account_ram_usage( result.account_id );
 
    const auto& permissions = d.get_index<permission_index,by_owner>();
-   auto perm = permissions.lower_bound( boost::make_tuple( params.account_name ) );
-   while( perm != permissions.end() && perm->owner == params.account_name ) {
+   auto perm = permissions.lower_bound( boost::make_tuple( params.account_id ) );
+   while( perm != permissions.end() && perm->owner == params.account_id ) {
       /// TODO: lookup perm->parent name
       name parent;
 
@@ -3346,26 +3346,26 @@ read_only::get_account_results read_only::get_account( const get_account_params&
       if (params.expected_core_symbol)
          core_symbol = *(params.expected_core_symbol);
 
-      get_primary_key<asset>(token_code, params.account_name, "accounts"_n, core_symbol.to_symbol_code(),
+      get_primary_key<asset>(token_code, params.account_id, "accounts"_n, core_symbol.to_symbol_code(),
 		      row_requirements::optional, row_requirements::optional, [&core_symbol,&result](const asset& bal) {
          if( bal.get_symbol().valid() && bal.get_symbol() == core_symbol ) {
             result.core_liquid_balance = bal;
          }
       });
 
-      result.total_resources = get_primary_key(config::system_account_name, params.account_name, "userres"_n, params.account_name.to_uint64_t(),
+      result.total_resources = get_primary_key(config::system_account_name, params.account_id, "userres"_n, params.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "user_resources", abis); 
 
-      result.self_delegated_bandwidth = get_primary_key(config::system_account_name, params.account_name, "delband"_n, params.account_name.to_uint64_t(),
+      result.self_delegated_bandwidth = get_primary_key(config::system_account_name, params.account_id, "delband"_n, params.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "delegated_bandwidth", abis); 
 
-      result.refund_request = get_primary_key(config::system_account_name, params.account_name, "refunds"_n, params.account_name.to_uint64_t(),
+      result.refund_request = get_primary_key(config::system_account_name, params.account_id, "refunds"_n, params.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "refund_request", abis); 
 
-      result.voter_info = get_primary_key(config::system_account_name, config::system_account_name, "voters"_n, params.account_name.to_uint64_t(),
+      result.voter_info = get_primary_key(config::system_account_name, config::system_account_name, "voters"_n, params.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "voter_info", abis); 
 
-      result.rex_info = get_primary_key(config::system_account_name, config::system_account_name, "rexbal"_n, params.account_name.to_uint64_t(),
+      result.rex_info = get_primary_key(config::system_account_name, config::system_account_name, "rexbal"_n, params.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "rex_balance", abis); 
    }
    return result;

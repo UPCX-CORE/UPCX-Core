@@ -1329,10 +1329,12 @@ void chain_plugin::plugin_startup()
    UPCX_ASSERT( my->chain_config->read_mode != db_read_mode::IRREVERSIBLE || !accept_transactions(), plugin_config_exception,
                "read-mode = irreversible. transactions should not be enabled by enable_accept_transactions" );
    try {
+      ilog("test 1");
       auto shutdown = [](){ return app().quit(); };
       auto check_shutdown = [](){ return app().is_quiting(); };
       auto bvc_plug = app().find_plugin<blockvault_client_plugin>();
       auto blockvault_instance = bvc_plug ? bvc_plug->get() : nullptr;
+      ilog("test 2");
       if (nullptr != blockvault_instance) {
           upcx::blockvault::blockvault_sync_strategy<chain_plugin_impl> bss(blockvault_instance, *my, shutdown, check_shutdown);
           bss.do_sync();
@@ -1362,9 +1364,9 @@ void chain_plugin::plugin_startup()
    else {
       ilog("Blockchain started; head block is #${num}", ("num", my->chain->head_block_num()));
    }
-
+   ilog("test 3");
    my->chain_config.reset();
-  
+   ilog("test 4");
    if (my->account_queries_enabled) {
       my->account_queries_enabled = false;
       try {

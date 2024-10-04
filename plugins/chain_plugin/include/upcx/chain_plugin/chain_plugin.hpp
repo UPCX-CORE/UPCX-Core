@@ -178,7 +178,7 @@ public:
    };
 
    struct get_account_results {
-      name                       account_name;
+      name                       account_id;
       uint32_t                   head_block_num = 0;
       fc::time_point             head_block_time;
 
@@ -206,7 +206,7 @@ public:
    };
 
    struct get_account_params {
-      name                  account_name;
+      name                  account_id;
       std::optional<symbol> expected_core_symbol;
    };
    get_account_results get_account( const get_account_params& params )const;

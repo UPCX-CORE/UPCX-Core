@@ -3285,7 +3285,7 @@ read_only::get_raw_abi_results read_only::get_raw_abi( const get_raw_abi_params&
 
 read_only::get_account_results read_only::get_account( const get_account_params& params )const {
    get_account_results result;
-   result.account_name = params.account_name;
+   result.account_id = params.account_id;
 
    const auto& d = db.db();
    const auto& rm = db.get_resource_limits_manager();

@@ -211,6 +211,11 @@ public:
    };
    get_account_results get_account( const get_account_params& params )const;
 
+   struct get_account_by_name_params {
+      string                  account_name;
+   };
+   get_account_results get_account_by_name( const get_account_by_name_params& params )const;
+
 
    struct get_code_results {
       name                   account_name;

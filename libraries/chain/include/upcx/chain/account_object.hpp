@@ -38,11 +38,13 @@ namespace upcx { namespace chain {
    using account_id_type = account_object::id_type;
 
    struct by_name;
+   struct by_real_name;
    using account_index = chainbase::shared_multi_index_container<
       account_object,
       indexed_by<
          ordered_unique<tag<by_id>, member<account_object, account_object::id_type, &account_object::id>>,
-         ordered_unique<tag<by_name>, member<account_object, account_name, &account_object::name>>
+         ordered_unique<tag<by_name>, member<account_object, account_name, &account_object::name>>,
+         ordered_unique<tag<by_real_name>, member<account_object, string, &account_object::real_name>>
       >
    >;
 

@@ -3371,6 +3371,94 @@ read_only::get_account_results read_only::get_account( const get_account_params&
    return result;
 }
 
+read_only::get_account_results read_only::get_account_by_name( const get_account_by_name_params& params )const {
+   get_account_results result;
+
+   const auto& accountObj = db.db().get<account_object, by_real_name>(params.account_name);
+   result.account_id = accountObj.name;
+
+   const auto& d = db.db();
+   const auto& rm = db.get_resource_limits_manager();
+
+   result.head_block_num  = db.head_block_num();
+   result.head_block_time = db.head_block_time();
+
+   rm.get_account_limits( result.account_id, result.ram_quota, result.net_weight, result.cpu_weight );
+
+   const auto& accnt_obj = db.get_account( result.account_id );
+   const auto& accnt_metadata_obj = db.db().get<account_metadata_object,by_name>( result.account_id );
+
+   result.privileged       = accnt_metadata_obj.is_privileged();
+   result.last_code_update = accnt_metadata_obj.last_code_update;
+   result.created          = accnt_obj.creation_date;
+
+   uint32_t greylist_limit = db.is_resource_greylisted(result.account_id) ? 1 : config::maximum_elastic_resource_multiplier;
+   const block_timestamp_type current_usage_time (db.head_block_time());
+   result.net_limit.set( rm.get_account_net_limit_ex( result.account_id, greylist_limit, current_usage_time).first );
+   if ( result.net_limit.last_usage_update_time && (result.net_limit.last_usage_update_time->slot == 0) ) {   // account has no action yet
+      result.net_limit.last_usage_update_time = accnt_obj.creation_date;
+   }
+   result.cpu_limit.set( rm.get_account_cpu_limit_ex( result.account_id, greylist_limit, current_usage_time).first );
+   if ( result.cpu_limit.last_usage_update_time && (result.cpu_limit.last_usage_update_time->slot == 0) ) {   // account has no action yet
+      result.cpu_limit.last_usage_update_time = accnt_obj.creation_date;
+   }
+   result.ram_usage = rm.get_account_ram_usage( result.account_id );
+
+   const auto& permissions = d.get_index<permission_index,by_owner>();
+   auto perm = permissions.lower_bound( boost::make_tuple( accountObj.name ) );
+   while( perm != permissions.end() && perm->owner == accountObj.name ) {
+      /// TODO: lookup perm->parent name
+      name parent;
+
+      // Don't lookup parent if null
+      if( perm->parent._id ) {
+         const auto* p = d.find<permission_object,by_id>( perm->parent );
+         if( p ) {
+            UPCX_ASSERT(perm->owner == p->owner, invalid_parent_permission, "Invalid parent permission");
+            parent = p->name;
+         }
+      }
+
+      result.permissions.push_back( permission{ perm->name, parent, perm->auth.to_authority() } );
+      ++perm;
+   }
+
+   const auto& code_account = db.db().get<account_object,by_name>( config::system_account_name );
+
+   abi_def abi;
+   if( abi_serializer::to_abi(code_account.abi, abi) ) {
+      abi_serializer abis( abi, abi_serializer::create_yield_function( abi_serializer_max_time ) );
+
+      const auto token_code = "upcx.token"_n;
+
+      auto core_symbol = extract_core_symbol();
+
+
+      get_primary_key<asset>(token_code, accountObj.name, "accounts"_n, core_symbol.to_symbol_code(),
+		      row_requirements::optional, row_requirements::optional, [&core_symbol,&result](const asset& bal) {
+         if( bal.get_symbol().valid() && bal.get_symbol() == core_symbol ) {
+            result.core_liquid_balance = bal;
+         }
+      });
+
+      result.total_resources = get_primary_key(config::system_account_name, accountObj.name, "userres"_n, accountObj.name.to_uint64_t(),
+		      row_requirements::optional, row_requirements::optional, "user_resources", abis); 
+
+      result.self_delegated_bandwidth = get_primary_key(config::system_account_name, accountObj.name, "delband"_n, accountObj.name.to_uint64_t(),
+		      row_requirements::optional, row_requirements::optional, "delegated_bandwidth", abis); 
+
+      result.refund_request = get_primary_key(config::system_account_name, accountObj.name, "refunds"_n, accountObj.name.to_uint64_t(),
+		      row_requirements::optional, row_requirements::optional, "refund_request", abis); 
+
+      result.voter_info = get_primary_key(config::system_account_name, config::system_account_name, "voters"_n, accountObj.name.to_uint64_t(),
+		      row_requirements::optional, row_requirements::optional, "voter_info", abis); 
+
+      result.rex_info = get_primary_key(config::system_account_name, config::system_account_name, "rexbal"_n, accountObj.name.to_uint64_t(),
+		      row_requirements::optional, row_requirements::optional, "rex_balance", abis); 
+   }
+   return result;
+}
+
 static fc::variant action_abi_to_variant( const abi_def& abi, type_name action_type ) {
    fc::variant v;
    auto it = std::find_if(abi.structs.begin(), abi.structs.end(), [&](auto& x){return x.name == action_type;});

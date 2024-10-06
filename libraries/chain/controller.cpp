@@ -413,6 +413,7 @@ struct controller_impl {
       head->activated_protocol_features = std::make_shared<protocol_feature_activation_set>();
       head->block = std::make_shared<signed_block>(genheader.header);
       kv_db.set_revision( head->block_num );
+      ilog("test1");
       initialize_database(genesis);
    }
 

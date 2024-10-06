@@ -1335,18 +1335,14 @@ void chain_plugin::plugin_startup()
       auto blockvault_instance = bvc_plug ? bvc_plug->get() : nullptr;
 
       if (nullptr != blockvault_instance) {
-
-      ilog("test 1");
           upcx::blockvault::blockvault_sync_strategy<chain_plugin_impl> bss(blockvault_instance, *my, shutdown, check_shutdown);
           bss.do_sync();
       } else if (my->snapshot_path) {
-               ilog("test 2");
          auto infile = std::ifstream(my->snapshot_path->generic_string(), (std::ios::in | std::ios::binary));
          auto reader = std::make_shared<istream_snapshot_reader>(infile);
          my->chain->startup(shutdown, check_shutdown, reader);
          infile.close();
       } else {
-               ilog("test 3");
          my->do_non_snapshot_startup(shutdown, check_shutdown);
       }
    } catch (const database_guard_exception& e) {

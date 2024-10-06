@@ -413,7 +413,6 @@ struct controller_impl {
       head->activated_protocol_features = std::make_shared<protocol_feature_activation_set>();
       head->block = std::make_shared<signed_block>(genheader.header);
       kv_db.set_revision( head->block_num );
-      ilog("test1");
       initialize_database(genesis);
    }
 
@@ -772,6 +771,7 @@ struct controller_impl {
 
    void create_native_account( const fc::time_point& initial_timestamp, account_name name, const authority& owner, const authority& active, bool is_privileged = false ) {
       db.create<account_object>([&](auto& a) {
+         a.real_name = name.to_string();
          a.name = name;
          a.creation_date = initial_timestamp;
 

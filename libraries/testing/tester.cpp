@@ -553,7 +553,7 @@ namespace upcx { namespace testing {
                                 newaccount{
                                    .creator  = creator,
                                    .id       = a,
-                                 .name     = a.to_string(),
+                                 // .name     = a.to_string(),
                                    .owner    = owner_auth,
                                    .active   = active_auth,
                                 });

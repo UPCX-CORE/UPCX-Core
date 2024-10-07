@@ -78,7 +78,7 @@ void apply_upcx_newaccount(apply_context& context) {
    auto name_str = name(create.id).to_string();
 
    UPCX_ASSERT( !create.id.empty(), action_validate_exception, "account id cannot be empty" );
-   UPCX_ASSERT( !create.name.empty(), action_validate_exception, "account name cannot be empty" );
+   // UPCX_ASSERT( !create.name.empty(), action_validate_exception, "account name cannot be empty" );
    UPCX_ASSERT( name_str.size() <= 12, action_validate_exception, "account id can only be 12 chars long" );
 
    // Check if the creator is privileged

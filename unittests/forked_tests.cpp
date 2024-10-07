@@ -640,7 +640,7 @@ BOOST_AUTO_TEST_CASE( push_block_returns_forked_transactions ) try {
                                 newaccount{
                                       .creator  = config::system_account_name,
                                       .id     = "test1"_n,
-                                      .name   = "test1",
+                                      // .name   = "test1",
                                       .owner    = owner_auth,
                                       .active   = active_auth,
                                 });
@@ -658,7 +658,7 @@ BOOST_AUTO_TEST_CASE( push_block_returns_forked_transactions ) try {
                                 newaccount{
                                       .creator  = config::system_account_name,
                                       .id     = "test2"_n,
-                                      .name     = "test2",
+                                      // .name     = "test2",
                                       .owner    = owner_auth,
                                       .active   = active_auth,
                                 });
@@ -675,7 +675,7 @@ BOOST_AUTO_TEST_CASE( push_block_returns_forked_transactions ) try {
                                 newaccount{
                                       .creator  = config::system_account_name,
                                       .id     = "test3"_n,
-                                      .name     = "test3",
+                                      // .name     = "test3",
                                       .owner    = owner_auth,
                                       .active   = active_auth,
                                 });
@@ -692,7 +692,7 @@ BOOST_AUTO_TEST_CASE( push_block_returns_forked_transactions ) try {
                                 newaccount{
                                       .creator  = config::system_account_name,
                                       .id     = "test4"_n,
-                                      .name     = "test4",
+                                      // .name     = "test4",
                                       .owner    = owner_auth,
                                       .active   = active_auth,
                                 });

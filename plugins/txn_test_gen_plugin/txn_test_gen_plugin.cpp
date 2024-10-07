@@ -162,21 +162,21 @@ struct txn_test_gen_plugin_impl {
             auto owner_auth   = upcx::chain::authority{1, {{txn_text_receiver_A_pub_key, 1}}, {}};
             auto active_auth  = upcx::chain::authority{1, {{txn_text_receiver_A_pub_key, 1}}, {}};
 
-            trx.actions.emplace_back(vector<chain::permission_level>{{creator,name("active")}}, newaccount{creator, newaccountA, newaccountA.to_string(), owner_auth, active_auth});
+            trx.actions.emplace_back(vector<chain::permission_level>{{creator,name("active")}}, newaccount{creator, newaccountA, owner_auth, active_auth});
             }
             //create "B" account
             {
             auto owner_auth   = upcx::chain::authority{1, {{txn_text_receiver_B_pub_key, 1}}, {}};
             auto active_auth  = upcx::chain::authority{1, {{txn_text_receiver_B_pub_key, 1}}, {}};
 
-            trx.actions.emplace_back(vector<chain::permission_level>{{creator,name("active")}}, newaccount{creator, newaccountB, newaccountA.to_string(), owner_auth, active_auth});
+            trx.actions.emplace_back(vector<chain::permission_level>{{creator,name("active")}}, newaccount{creator, newaccountB, owner_auth, active_auth});
             }
             //create "T" account
             {
             auto owner_auth   = upcx::chain::authority{1, {{txn_text_receiver_C_pub_key, 1}}, {}};
             auto active_auth  = upcx::chain::authority{1, {{txn_text_receiver_C_pub_key, 1}}, {}};
 
-            trx.actions.emplace_back(vector<chain::permission_level>{{creator,name("active")}}, newaccount{creator, newaccountT, newaccountA.to_string(), owner_auth, active_auth});
+            trx.actions.emplace_back(vector<chain::permission_level>{{creator,name("active")}}, newaccount{creator, newaccountT, owner_auth, active_auth});
             }
 
             trx.expiration = cc.head_block_time() + fc::seconds(180);

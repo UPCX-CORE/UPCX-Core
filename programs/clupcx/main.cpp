@@ -655,7 +655,7 @@ chain::action create_newaccount(const name& creator, const name& newaccount, aut
       upcx::chain::newaccount{
          .creator      = creator,
          .id           = newaccount,
-         .name         = newaccount.to_string(),
+         // .name         = newaccount.to_string(),
          .owner        = owner,
          .active       = active
       }

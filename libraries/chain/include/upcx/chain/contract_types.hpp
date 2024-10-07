@@ -12,7 +12,6 @@ using action_name    = upcx::chain::action_name;
 struct newaccount {
    account_name                     creator;
    account_name                     id;
-   std::string                      name;
    authority                        owner;
    authority                        active;
 

@@ -786,7 +786,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(deferred_cfa_failed, TESTER_T, backing_store_ts) {
                                  newaccount{
                                  .creator  = creator,
                                  .id       = a,
-                                 .name     = a.to_string(),
+                                 // .name     = a.to_string(),
                                  .owner    = authority( t.get_public_key( a, "owner" ) ),
                                  .active   = authority( t.get_public_key( a, "active" ) )
                                  });
@@ -824,7 +824,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(deferred_cfa_success, TESTER_T, backing_store_ts) 
                                  newaccount{
                                  .creator  = creator,
                                  .id       = a,
-                                 .name     = a.to_string(),
+                                 // .name     = a.to_string(),
                                  .owner    = authority( t.get_public_key( a, "owner" ) ),
                                  .active   = authority( t.get_public_key( a, "active" ) )
                                  });

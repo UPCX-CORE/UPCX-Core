@@ -1043,7 +1043,7 @@ BOOST_AUTO_TEST_CASE(newaccount_test)
    auto var2 = verify_byte_round_trip_conversion( abis, "newaccount", var );
    auto newaccount2 = var2.as<newaccount>();
    BOOST_TEST(newacct.creator == newaccount2.creator);
-   BOOST_TEST(newacct.name == newaccount2.name);
+   // BOOST_TEST(newacct.name == newaccount2.name);
 
    BOOST_TEST(newacct.owner.threshold == newaccount2.owner.threshold);
 
@@ -1885,7 +1885,7 @@ BOOST_AUTO_TEST_CASE(packed_transaction)
          newaccount{
                .creator  = config::system_account_name,
                .id       = a,
-               .name     = a.to_string(),
+               // .name     = a.to_string(),
                .owner    = authority( get_public_key( a, "owner" )),
                .active   = authority( get_public_key( a, "active" ) )
          });
@@ -3496,7 +3496,7 @@ namespace {
             newaccount{
                   .creator  = config::system_account_name,
                   .id       = a,
-                  .name     = a.to_string(),
+                  // .name     = a.to_string(),
                   .owner    = authority( get_public_key( a, "owner" )),
                   .active   = authority( get_public_key( a, "active" ) )
             });

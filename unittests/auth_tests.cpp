@@ -404,7 +404,7 @@ try {
                                 newaccount{
                                    .creator  = acc1,
                                    .id       = a,
-                                   .name     = a.to_string(),
+                                   // .name     = a.to_string(),
                                    .owner    = owner_auth,
                                    .active   = authority( chain.get_public_key( a, "active" ) )
                                 });
@@ -457,7 +457,7 @@ try {
                                 newaccount{
                                    .creator  = creator,
                                    .id       = a,
-                                   .name     = a.to_string(),
+                                   // .name     = a.to_string(),
                                    .owner    = authority( chain.get_public_key( a, "owner" ) ),
                                    .active   = invalid_auth//authority( chain.get_public_key( a, "active" ) ),
                                 });

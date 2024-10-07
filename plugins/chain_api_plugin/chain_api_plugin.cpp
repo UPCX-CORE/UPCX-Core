@@ -112,6 +112,7 @@ void chain_api_plugin::plugin_startup() {
       CHAIN_RO_CALL(get_block_info, 200, http_params_types::params_required),
       CHAIN_RO_CALL(get_block_header_state, 200, http_params_types::params_required),
       CHAIN_RO_CALL(get_account, 200, http_params_types::params_required),
+      CHAIN_RO_CALL(get_account_by_name, 200, http_params_types::params_required),
       CHAIN_RO_CALL(get_code, 200, http_params_types::params_required),
       CHAIN_RO_CALL(get_code_hash, 200, http_params_types::params_required),
       CHAIN_RO_CALL(get_abi, 200, http_params_types::params_required),

@@ -3040,6 +3040,11 @@ const account_object& controller::get_account( account_name name )const
    return my->db.get<account_object, by_name>(name);
 } FC_CAPTURE_AND_RETHROW( (name) ) }
 
+const account_object& controller::get_account_by_name( std::string name )const
+{ try {
+   return my->db.get<account_object, by_real_name>(name);
+} FC_CAPTURE_AND_RETHROW( (name) ) }
+
 bool controller::sender_avoids_whitelist_blacklist_enforcement( account_name sender )const {
    return my->sender_avoids_whitelist_blacklist_enforcement( sender );
 }

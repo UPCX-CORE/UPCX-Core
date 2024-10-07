@@ -1119,7 +1119,7 @@ BOOST_FIXTURE_TEST_CASE(upcx_abi, TESTER) try {
                              newaccount{
                                    .creator  = config::system_account_name,
                                    .id       = a,
-                                   .name     = a.to_string(),
+                                   // .name     = a.to_string(),
                                    .owner    = owner_auth,
                                    .active   = authority( get_public_key( a, "active" ) )
                              });

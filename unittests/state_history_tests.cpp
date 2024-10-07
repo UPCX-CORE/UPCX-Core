@@ -1327,7 +1327,7 @@ BOOST_AUTO_TEST_CASE(test_deltas_resources_history) {
                                    newaccount{
                                        .creator  = config::system_account_name,
                                        .id       =  "alice"_n,
-                                       .name     =  "alice",
+                                       // .name     =  "alice",
                                        .owner    = owner_auth,
                                        .active   = authority( chain.get_public_key( "alice"_n, "active" ) )});
 

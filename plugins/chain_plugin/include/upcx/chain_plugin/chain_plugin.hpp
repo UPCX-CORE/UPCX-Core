@@ -1129,6 +1129,7 @@ FC_REFLECT( upcx::chain_apis::read_only::get_code_results, (account_name)(code_h
 FC_REFLECT( upcx::chain_apis::read_only::get_code_hash_results, (account_name)(code_hash) )
 FC_REFLECT( upcx::chain_apis::read_only::get_abi_results, (account_name)(abi) )
 FC_REFLECT( upcx::chain_apis::read_only::get_account_params, (account_id)(expected_core_symbol) )
+FC_REFLECT( upcx::chain_apis::read_only::get_account_by_name_params, (account_name) )
 FC_REFLECT( upcx::chain_apis::read_only::get_code_params, (account_name)(code_as_wasm) )
 FC_REFLECT( upcx::chain_apis::read_only::get_code_hash_params, (account_name) )
 FC_REFLECT( upcx::chain_apis::read_only::get_abi_params, (account_name) )

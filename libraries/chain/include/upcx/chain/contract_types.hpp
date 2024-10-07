@@ -169,7 +169,7 @@ struct fee {
 
 } } /// namespace upcx::chain
 
-FC_REFLECT( upcx::chain::newaccount                       , (creator)(id)(name)(owner)(active) )
+FC_REFLECT( upcx::chain::newaccount                       , (creator)(id)(owner)(active) )
 FC_REFLECT( upcx::chain::setcode                          , (account)(vmtype)(vmversion)(code) )
 FC_REFLECT( upcx::chain::setabi                           , (account)(abi) )
 FC_REFLECT( upcx::chain::updateauth                       , (account)(permission)(parent)(auth) )

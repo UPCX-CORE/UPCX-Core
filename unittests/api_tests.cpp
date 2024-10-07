@@ -754,7 +754,7 @@ BOOST_FIXTURE_TEST_CASE(cfa_stateful_api, TESTER)  try {
                                  newaccount{
                                  .creator  = creator,
                                  .id       = a,
-                                 .name     = a.to_string(),
+                                 //.name     = a.to_string(),
                                  .owner    = authority( get_public_key( a, "owner" ) ),
                                  .active   = authority( get_public_key( a, "active" ) )
                                  });

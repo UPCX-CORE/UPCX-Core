@@ -92,7 +92,7 @@ public:
                                   newaccount{
                                           .creator  = creator,
                                           .id       = a,
-                                          .name     = a.to_string(),
+                                          // .name     = a.to_string(),
                                           .owner    = owner_auth,
                                           .active   = authority( get_public_key( a, "active" ) )
                                   });
@@ -156,7 +156,7 @@ public:
                                 newaccount{
                                    .creator  = creator,
                                    .id       = a,
-                                   .name     = a.to_string(),
+                                   // .name     = a.to_string(),
                                    .owner    = owner_auth,
                                    .active   = authority( get_public_key( a, "active" ) )
                                 });
@@ -255,7 +255,7 @@ public:
                                       newaccount{
                                               .creator  = creator,
                                               .id       = a,
-                                              .name     = a.to_string(),
+                                              // .name     = a.to_string(),
                                               .owner    = owner_auth,
                                               .active   = authority( get_public_key( a, "active" ) )
                                       });

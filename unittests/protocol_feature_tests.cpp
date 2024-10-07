@@ -1362,7 +1362,7 @@ BOOST_AUTO_TEST_CASE( webauthn_create_account ) { try {
                               newaccount{
                                  .creator  = config::system_account_name,
                                  .id     = "waaccount"_n,
-                                 .name     = "waaccount",
+                                 // .name     = "waaccount",
                                  .owner    = auth,
                                  .active   = auth,
                               });

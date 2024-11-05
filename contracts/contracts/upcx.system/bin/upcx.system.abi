@@ -1244,6 +1244,24 @@
             ]
         },
         {
+            "name": "swapname",
+            "base": "",
+            "fields": [
+                {
+                    "name": "client",
+                    "type": "name"
+                },
+                {
+                    "name": "host",
+                    "type": "name"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
             "name": "undelegatebw",
             "base": "",
             "fields": [
@@ -1798,6 +1816,11 @@
         {
             "name": "setrex",
             "type": "setrex",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "swapname",
+            "type": "swapname",
             "ricardian_contract": ""
         },
         {

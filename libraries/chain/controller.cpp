@@ -3091,12 +3091,12 @@ void controller::validate_expiration( const transaction& trx )const { try {
                "transaction has expired, "
                "expiration is ${trx.expiration} and pending block time is ${pending_block_time}",
                ("trx.expiration",trx.expiration)("pending_block_time",pending_block_time()));
-   UPCX_ASSERT( time_point(trx.expiration) <= pending_block_time() + fc::seconds(chain_configuration.max_transaction_lifetime),
+   UPCX_ASSERT( time_point(trx.expiration) <= pending_block_time() + fc::seconds(chain_configuration.max_transaction_lifetime * 30 * 24),
                tx_exp_too_far_exception,
                "Transaction expiration is too far in the future relative to the reference time of ${reference_time}, "
                "expiration is ${trx.expiration} and the maximum transaction lifetime is ${max_til_exp} seconds",
                ("trx.expiration",trx.expiration)("reference_time",pending_block_time())
-               ("max_til_exp",chain_configuration.max_transaction_lifetime) );
+               ("max_til_exp",chain_configuration.max_transaction_lifetime * 30 * 24) );
 } FC_CAPTURE_AND_RETHROW((trx)) }
 
 void controller::validate_tapos( const transaction& trx )const { try {

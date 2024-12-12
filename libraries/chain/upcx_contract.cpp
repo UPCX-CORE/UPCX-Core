@@ -335,7 +335,7 @@ void apply_upcx_deleteauth(apply_context& context) {
    auto remove = context.get_action().data_as<deleteauth>();
    context.require_authorization(remove.account); // only here to mark the single authority on this action as used
 
-   UPCX_ASSERT(remove.permission != config::active_name, action_validate_exception, "Cannot delete active authority");
+   // UPCX_ASSERT(remove.permission != config::active_name, action_validate_exception, "Cannot delete active authority");
    UPCX_ASSERT(remove.permission != config::owner_name, action_validate_exception, "Cannot delete owner authority");
 
    auto& authorization = context.control.get_mutable_authorization_manager();

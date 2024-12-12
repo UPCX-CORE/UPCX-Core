@@ -133,7 +133,11 @@ void apply_upcx_setcode(apply_context& context) {
 
    auto& db = context.db;
    auto  act = context.get_action().data_as<setcode>();
-   context.require_authorization(act.account,"owner"_n);
+   
+   if (context.has_authorization(act.account))
+      context.require_authorization(act.account);
+   else
+      context.require_authorization(act.account,"owner"_n);
 
    UPCX_ASSERT( act.vmtype == 0, invalid_contract_vm_type, "code should be 0" );
    UPCX_ASSERT( act.vmversion == 0, invalid_contract_vm_version, "version should be 0" );
@@ -219,7 +223,10 @@ void apply_upcx_setabi(apply_context& context) {
    auto& db  = context.db;
    auto  act = context.get_action().data_as<setabi>();
 
-   context.require_authorization(act.account,"owner"_n);
+   if (context.has_authorization(act.account))
+      context.require_authorization(act.account);
+   else
+      context.require_authorization(act.account,"owner"_n);
 
    const auto& account = db.get<account_object,by_name>(act.account);
 

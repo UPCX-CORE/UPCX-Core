@@ -73,7 +73,7 @@
                 },
                 {
                     "name": "newname",
-                    "type": "name"
+                    "type": "string"
                 },
                 {
                     "name": "bid",
@@ -91,7 +91,7 @@
                 },
                 {
                     "name": "newname",
-                    "type": "name"
+                    "type": "string"
                 }
             ]
         },
@@ -438,6 +438,20 @@
             ]
         },
         {
+            "name": "enterbid",
+            "base": "",
+            "fields": [
+                {
+                    "name": "bidder",
+                    "type": "name"
+                },
+                {
+                    "name": "minprice",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
             "name": "exchange_state",
             "base": "",
             "fields": [
@@ -574,7 +588,15 @@
             "base": "",
             "fields": [
                 {
+                    "name": "auction_id",
+                    "type": "uint64"
+                },
+                {
                     "name": "newname",
+                    "type": "string"
+                },
+                {
+                    "name": "owner",
                     "type": "name"
                 },
                 {
@@ -1671,6 +1693,11 @@
         {
             "name": "deposit",
             "type": "deposit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "enterbid",
+            "type": "enterbid",
             "ricardian_contract": ""
         },
         {

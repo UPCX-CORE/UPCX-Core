@@ -221,7 +221,6 @@ namespace upcx {
               aho.account = n;
               aho.action_sequence_num = act.receipt->global_sequence;
               aho.account_sequence_num = asn;
-              aho.trx_id = act.trx_id;
             });
          }
 

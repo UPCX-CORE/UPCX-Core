@@ -22,6 +22,8 @@ namespace upcx {
 
       id_type      id;
       account_name account; ///< the name of the account which has this action in its history
+      transaction_id_type  trx_id;
+
       uint64_t     action_sequence_num = 0; ///< the sequence number of the relevant action (global)
       int32_t      account_sequence_num = 0; ///< the sequence number for this account (per-account)
    };
@@ -68,6 +70,12 @@ namespace upcx {
             composite_key< account_history_object,
                member<account_history_object, account_name, &account_history_object::account >,
                member<account_history_object, int32_t, &account_history_object::account_sequence_num >
+            >
+         >,
+         ordered_unique<tag<by_trx_id_act_seq>,
+            composite_key< account_history_object,
+               member<account_history_object, transaction_id_type, &account_history_object::trx_id>,
+               member<account_history_object, uint64_t, &account_history_object::action_sequence_num >
             >
          >
       >
@@ -600,28 +608,33 @@ namespace upcx {
             input_id = transaction_id_type(params.id);
          } UPCX_RETHROW_EXCEPTIONS(transaction_id_type_exception, "Invalid transaction ID: ${transaction_id}", ("transaction_id", params.id))
 
-         const auto& idx = db.get_index<action_history_index, by_trx_id_act_seq>();
-         auto itr = idx.lower_bound(boost::make_tuple(input_id));
+         // Use the account history index (by_trx_id_act_seq) instead of the action history index.
+         const auto& acc_idx = db.get_index<account_history_index, by_trx_id_act_seq>();
+         auto acc_itr = acc_idx.lower_bound(boost::make_tuple(input_id));
 
          get_transaction_actions_result result;
          result.id = input_id;
          result.last_irreversible_block = chain.last_irreversible_block_num();
 
          bool found = false;
-         while (itr != idx.end() && itr->trx_id == input_id) {
-            fc::datastream<const char*> ds(itr->packed_action_trace.data(), itr->packed_action_trace.size());
+         while (acc_itr != acc_idx.end() && acc_itr->trx_id == input_id) {
+            // Retrieve the corresponding action history object using the global action sequence number.
+            uint64_t global_act_seq = acc_itr->action_sequence_num;
+            const auto& act_obj = db.get<action_history_object, by_action_sequence_num>(global_act_seq);
+
+            fc::datastream<const char*> ds(act_obj.packed_action_trace.data(), act_obj.packed_action_trace.size());
             action_trace t;
             fc::raw::unpack(ds, t);
 
             result.actions.emplace_back(ordered_action_result{
-               itr->action_sequence_num,
-               -1, 
-               itr->block_num, itr->block_time,
+               act_obj.action_sequence_num,
+               acc_itr->account_sequence_num,
+               act_obj.block_num, act_obj.block_time,
                chain.to_variant_with_abi(t, abi_serializer::create_yield_function(abi_serializer_max_time))
             });
 
             found = true;
-            ++itr;
+            ++acc_itr;
          }
 
          if (!found) {
@@ -630,6 +643,7 @@ namespace upcx {
 
          return result;
       }
+
 
    } /// history_apis
 

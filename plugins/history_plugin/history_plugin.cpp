@@ -22,7 +22,6 @@ namespace upcx {
 
       id_type      id;
       account_name account; ///< the name of the account which has this action in its history
-      transaction_id_type  trx_id;
 
       uint64_t     action_sequence_num = 0; ///< the sequence number of the relevant action (global)
       int32_t      account_sequence_num = 0; ///< the sequence number for this account (per-account)
@@ -69,12 +68,6 @@ namespace upcx {
          ordered_unique<tag<by_account_action_seq>,
             composite_key< account_history_object,
                member<account_history_object, account_name, &account_history_object::account >,
-               member<account_history_object, int32_t, &account_history_object::account_sequence_num >
-            >
-         >,
-         ordered_unique<tag<by_trx_id_act_seq>,
-            composite_key< account_history_object,
-               member<account_history_object, transaction_id_type, &account_history_object::trx_id>,
                member<account_history_object, int32_t, &account_history_object::account_sequence_num >
             >
          >
@@ -595,56 +588,6 @@ namespace upcx {
             accounts.insert(obj->controlled_account);
          return {vector<account_name>(accounts.begin(), accounts.end())};
       }
-
-      read_only::get_transaction_actions_result read_only::get_transaction_actions(const get_transaction_actions_params& params) const {
-         auto& chain = history->chain_plug->chain();
-         const auto& db = chain.db();
-         const auto abi_serializer_max_time = history->chain_plug->get_abi_serializer_max_time();
-
-         transaction_id_type input_id;
-         auto input_id_length = params.id.size();
-         try {
-            FC_ASSERT(input_id_length <= 64, "Hex string is too long to represent an actual transaction ID");
-            FC_ASSERT(input_id_length >= 8, "Hex string representing transaction ID should be at least 8 characters long to avoid excessive collisions");
-            input_id = transaction_id_type(params.id);
-         } UPCX_RETHROW_EXCEPTIONS(transaction_id_type_exception, "Invalid transaction ID: ${transaction_id}", ("transaction_id", params.id))
-
-         // Use the account history index (by_trx_id_act_seq) instead of the action history index.
-         const auto& acc_idx = db.get_index<account_history_index, by_trx_id_act_seq>();
-         auto acc_itr = acc_idx.lower_bound(boost::make_tuple(input_id));
-
-         get_transaction_actions_result result;
-         result.id = input_id;
-         result.last_irreversible_block = chain.last_irreversible_block_num();
-
-         bool found = false;
-         while (acc_itr != acc_idx.end() && acc_itr->trx_id == input_id) {
-            // Retrieve the corresponding action history object using the global action sequence number.
-            uint64_t global_act_seq = acc_itr->action_sequence_num;
-            const auto& act_obj = db.get<action_history_object, by_action_sequence_num>(global_act_seq);
-
-            fc::datastream<const char*> ds(act_obj.packed_action_trace.data(), act_obj.packed_action_trace.size());
-            action_trace t;
-            fc::raw::unpack(ds, t);
-
-            result.actions.emplace_back(ordered_action_result{
-               act_obj.action_sequence_num,
-               acc_itr->account_sequence_num,
-               act_obj.block_num, act_obj.block_time,
-               chain.to_variant_with_abi(t, abi_serializer::create_yield_function(abi_serializer_max_time))
-            });
-
-            found = true;
-            ++acc_itr;
-         }
-
-         if (!found) {
-            UPCX_THROW(tx_not_found, "Transaction ${id} not found in history", ("id", params.id));
-         }
-
-         return result;
-      }
-
 
    } /// history_apis
 

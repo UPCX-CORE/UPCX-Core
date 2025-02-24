@@ -40,8 +40,7 @@ void history_api_plugin::plugin_startup() {
       CHAIN_RO_CALL(get_actions, http_params_types::params_required),
       CHAIN_RO_CALL(get_transaction, http_params_types::params_required),
       CHAIN_RO_CALL(get_key_accounts, http_params_types::params_required),
-      CHAIN_RO_CALL(get_controlled_accounts, http_params_types::params_required),
-      CHAIN_RO_CALL(get_transaction_actions, http_params_types::params_required)
+      CHAIN_RO_CALL(get_controlled_accounts, http_params_types::params_required)
    });
 }
 

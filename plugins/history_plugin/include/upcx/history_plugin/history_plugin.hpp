@@ -66,17 +66,6 @@ class read_only {
       get_transaction_result get_transaction( const get_transaction_params& )const;
 
       // New API to get all subactions by transaction ID
-      struct get_transaction_actions_params {
-         string id;
-      };
-
-      struct get_transaction_actions_result {
-         transaction_id_type id;
-         uint32_t last_irreversible_block;
-         vector<ordered_action_result> actions;
-      };
-
-      get_transaction_actions_result get_transaction_actions(const get_transaction_actions_params&) const;
 
       struct get_key_accounts_params {
          chain::public_key_type     public_key;
@@ -137,9 +126,6 @@ FC_REFLECT( upcx::history_apis::read_only::ordered_action_result, (global_action
 
 FC_REFLECT( upcx::history_apis::read_only::get_transaction_params, (id)(block_num_hint) )
 FC_REFLECT( upcx::history_apis::read_only::get_transaction_result, (id)(trx)(block_time)(block_num)(last_irreversible_block)(traces) )
-
-FC_REFLECT( upcx::history_apis::read_only::get_transaction_actions_params, (id) )
-FC_REFLECT( upcx::history_apis::read_only::get_transaction_actions_result, (id)(last_irreversible_block)(actions) )
 
 FC_REFLECT(upcx::history_apis::read_only::get_key_accounts_params, (public_key) )
 FC_REFLECT(upcx::history_apis::read_only::get_key_accounts_results, (account_names) )

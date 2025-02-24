@@ -587,8 +587,50 @@ namespace upcx {
          return {vector<account_name>(accounts.begin(), accounts.end())};
       }
 
+      read_only::get_transaction_actions_result read_only::get_transaction_actions(const get_transaction_actions_params& params) const {
+         auto& chain = history->chain_plug->chain();
+         const auto& db = chain.db();
+         const auto abi_serializer_max_time = history->chain_plug->get_abi_serializer_max_time();
+
+         transaction_id_type input_id;
+         auto input_id_length = params.id.size();
+         try {
+            FC_ASSERT(input_id_length <= 64, "Hex string is too long to represent an actual transaction ID");
+            FC_ASSERT(input_id_length >= 8, "Hex string representing transaction ID should be at least 8 characters long to avoid excessive collisions");
+            input_id = transaction_id_type(params.id);
+         } UPCX_RETHROW_EXCEPTIONS(transaction_id_type_exception, "Invalid transaction ID: ${transaction_id}", ("transaction_id", params.id))
+
+         const auto& idx = db.get_index<action_history_index, by_trx_id_act_seq>();
+         auto itr = idx.lower_bound(boost::make_tuple(input_id));
+
+         get_transaction_actions_result result;
+         result.id = input_id;
+         result.last_irreversible_block = chain.last_irreversible_block_num();
+
+         bool found = false;
+         while (itr != idx.end() && itr->trx_id == input_id) {
+            fc::datastream<const char*> ds(itr->packed_action_trace.data(), itr->packed_action_trace.size());
+            action_trace t;
+            fc::raw::unpack(ds, t);
+
+            result.actions.emplace_back(ordered_action_result{
+               itr->action_sequence_num,
+               -1, 
+               itr->block_num, itr->block_time,
+               chain.to_variant_with_abi(t, abi_serializer::create_yield_function(abi_serializer_max_time))
+            });
+
+            found = true;
+            ++itr;
+         }
+
+         if (!found) {
+            UPCX_THROW(tx_not_found, "Transaction ${id} not found in history", ("id", params.id));
+         }
+
+         return result;
+      }
+
    } /// history_apis
-
-
 
 } /// namespace upcx

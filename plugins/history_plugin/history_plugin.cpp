@@ -75,7 +75,7 @@ namespace upcx {
          ordered_unique<tag<by_trx_id_act_seq>,
             composite_key< account_history_object,
                member<account_history_object, transaction_id_type, &account_history_object::trx_id>,
-               member<account_history_object, uint64_t, &account_history_object::action_sequence_num >
+               member<account_history_object, int32_t, &account_history_object::account_sequence_num >
             >
          >
       >

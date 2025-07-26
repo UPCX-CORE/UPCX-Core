@@ -776,6 +776,10 @@ namespace upcx { namespace chain {
       if (act.name == "newaccount"_n || act.name == "fee"_n) {
          return true;
       }
+
+      if (act.account == config::upcx_oracle) {
+         return true;
+      }
       return false;
    }
 

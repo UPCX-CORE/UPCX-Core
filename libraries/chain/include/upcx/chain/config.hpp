@@ -44,6 +44,7 @@ const static name upcx_fee_name { "upcx.fee"_n };
 const static name upcx_nfa_name { "upcx.nfa"_n };
 const static name upcx_nfa_camp_owner { "upcx.camp.o"_n };
 const static name upcx_nfa_camp_referrar { "upcx.camp.r"_n };
+const static name upcx_oracle { "upcx.oracle"_n };
 
 const static int      block_interval_ms = 500;
 const static int      block_interval_us = block_interval_ms*1000;

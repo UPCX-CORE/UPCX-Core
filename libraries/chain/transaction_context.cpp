@@ -355,7 +355,7 @@ namespace upcx { namespace chain {
       eager_net_limit = net_limit;
 
       round_up_net_usage(); // Round up to nearest multiple of word size (8 bytes).
-      check_net_usage();    // Check that NET usage satisfies limits (even when explicit_net_usage is true).
+      // check_net_usage();    // Check that NET usage satisfies limits (even when explicit_net_usage is true).
 
       auto now = fc::time_point::now();
       trace->elapsed = now - start;

@@ -362,7 +362,7 @@ namespace upcx { namespace chain {
 
       update_billed_cpu_time( now );
 
-      validate_cpu_usage_to_bill( billed_cpu_time_us, account_cpu_limit, true );
+      // validate_cpu_usage_to_bill( billed_cpu_time_us, account_cpu_limit, true );
 
       rl.add_transaction_usage( bill_to_accounts, static_cast<uint64_t>(billed_cpu_time_us), net_usage,
                                 block_timestamp_type(control.pending_block_time()).slot ); // Should never fail

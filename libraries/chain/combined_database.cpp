@@ -489,6 +489,30 @@ namespace upcx { namespace chain {
 
          }
 
+         // special case for account_object: recompute the derived `real_name`.
+         //
+         // `real_name` has a UNIQUE index (by_real_name) but is absent from its
+         // FC_REFLECT, so snapshots never carry it: every account restores with ""
+         // and the second one collides. Snapshots have therefore been unrestorable
+         // for any chain with 2+ accounts since the field was added — and because
+         // snapshot *creation* succeeds, the breakage is invisible until a restore.
+         // Recomputing is exact: both writers set it to name.to_string(). So no
+         // format change or version bump is needed and existing snapshots stay
+         // valid, unlike adding it to FC_REFLECT (invalidates them) or relaxing the
+         // index (leaves real_name empty, breaking lookups through it).
+         if (std::is_same<value_t, account_object>::value) {
+            snapshot->read_section<account_object>([this](auto& section) {
+               bool more = !section.empty();
+               while (more) {
+                  db.create<account_object>([this, &section, &more](auto& row) {
+                     more = section.read_row(row, db);
+                     row.real_name = row.name.to_string();
+                  });
+               }
+            });
+            return; // early out to avoid default processing
+         }
+
          snapshot->read_section<value_t>([this](auto& section) {
             bool more = !section.empty();
             while (more) {

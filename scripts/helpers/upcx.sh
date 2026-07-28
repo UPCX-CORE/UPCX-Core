@@ -365,6 +365,14 @@ function ensure-libpq-and-libpqxx() {
         elif [[ $NAME == "Ubuntu" ]]; then
             # install libpq
             if [ ! -d /usr/include/postgresql ]; then
+              # Prefer the DISTRO's own libpq-dev. This used to go straight to the
+              # PGDG apt repo, which stops publishing a suite once that Ubuntu
+              # release goes EOL: on focal it now 404s on the Release file, apt-get
+              # update exits non-zero and the whole build dies AFTER the ~15 min
+              # Boost build. Ubuntu focal ships libpq-dev 12.x, which satisfies
+              # libpqxx 7.2.1 (needs PostgreSQL 9.6+ client) — PGDG is only needed
+              # for a NEWER libpq than the distro carries.
+              $LIBPQ_SUDO apt-get -y install libpq-dev || \
               $LIBPQ_SUDO bash -c 'source /etc/os-release; echo "deb http://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
                     curl -sL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
                     apt-get update && apt-get -y install libpq-dev'

@@ -232,8 +232,18 @@ function ensure-boost() {
         elif $PIN_COMPILER; then
             local SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
         fi
+        # archives.boost.io is Boost's current official archive host. The old
+        # boostorg.jfrog.io endpoint was retired by JFrog and now 200s with an
+        # ~11KB HTML landing page, so `curl -LO` "succeeded" and tar then failed
+        # with the useless "(stdin) is not a bzip2 file" — the build has been
+        # unbuildable from scratch since, with no clear indication why.
+        # --fail makes curl exit non-zero on an HTTP error instead of writing the
+        # error page to disk, so the next such rot fails AT the download naming
+        # the URL, rather than three steps later. (--fail, not --fail-with-body:
+        # the latter needs curl 7.76+ and Ubuntu 20.04 — the build platform —
+        # ships 7.68.)
         execute bash -c "cd $SRC_DIR && \
-        curl -LO https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION_MAJOR.$BOOST_VERSION_MINOR.$BOOST_VERSION_PATCH/source/boost_$BOOST_VERSION.tar.bz2 \
+        curl -L --fail -O https://archives.boost.io/release/$BOOST_VERSION_MAJOR.$BOOST_VERSION_MINOR.$BOOST_VERSION_PATCH/source/boost_$BOOST_VERSION.tar.bz2 \
         && tar -xjf boost_$BOOST_VERSION.tar.bz2 \
         && cd $BOOST_ROOT \
         && SDKROOT="$SDKROOT" ./bootstrap.sh ${BOOTSTRAP_FLAGS} --prefix=$BOOST_ROOT \
@@ -355,6 +365,14 @@ function ensure-libpq-and-libpqxx() {
         elif [[ $NAME == "Ubuntu" ]]; then
             # install libpq
             if [ ! -d /usr/include/postgresql ]; then
+              # Prefer the DISTRO's own libpq-dev. This used to go straight to the
+              # PGDG apt repo, which stops publishing a suite once that Ubuntu
+              # release goes EOL: on focal it now 404s on the Release file, apt-get
+              # update exits non-zero and the whole build dies AFTER the ~15 min
+              # Boost build. Ubuntu focal ships libpq-dev 12.x, which satisfies
+              # libpqxx 7.2.1 (needs PostgreSQL 9.6+ client) — PGDG is only needed
+              # for a NEWER libpq than the distro carries.
+              $LIBPQ_SUDO apt-get -y install libpq-dev || \
               $LIBPQ_SUDO bash -c 'source /etc/os-release; echo "deb http://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
                     curl -sL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
                     apt-get update && apt-get -y install libpq-dev'

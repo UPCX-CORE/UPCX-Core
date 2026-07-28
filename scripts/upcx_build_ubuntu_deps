@@ -24,3 +24,4 @@ pkg-config,dpkg -s
 patch,dpkg -s
 lsb-release,dpkg -s
 gnupg,dpkg -s
+g++,dpkg -s

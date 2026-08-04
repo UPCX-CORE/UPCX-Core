@@ -179,6 +179,9 @@ public:
 
    struct get_account_results {
       name                       account_id;
+      // Mirror of account_id. Upstream nodeos calls this field account_name and clients
+      // still read that key; both are emitted so either spelling works.
+      name                       account_name;
       uint32_t                   head_block_num = 0;
       fc::time_point             head_block_time;
 
@@ -207,7 +210,13 @@ public:
 
    struct get_account_params {
       name                  account_id;
+      // Upstream nodeos and every existing client send account_name. fc's variant->struct
+      // conversion drops keys it does not know, so accepting only account_id turned those
+      // requests into a lookup of the empty name and an opaque 500.
+      name                  account_name;
       std::optional<symbol> expected_core_symbol;
+
+      name resolved_account() const { return account_id.empty() ? account_name : account_id; }
    };
    get_account_results get_account( const get_account_params& params )const;
 
@@ -1121,14 +1130,14 @@ FC_REFLECT( upcx::chain_apis::read_only::get_scheduled_transactions_result, (tra
 
 FC_REFLECT( upcx::chain_apis::read_only::account_resource_info, (used)(available)(max)(last_usage_update_time)(current_used) )
 FC_REFLECT( upcx::chain_apis::read_only::get_account_results,
-            (account_id)(head_block_num)(head_block_time)(privileged)(last_code_update)(created)
+            (account_id)(account_name)(head_block_num)(head_block_time)(privileged)(last_code_update)(created)
             (core_liquid_balance)(ram_quota)(net_weight)(cpu_weight)(net_limit)(cpu_limit)(ram_usage)(permissions)
             (total_resources)(self_delegated_bandwidth)(refund_request)(voter_info)(rex_info) )
 // @swap code_hash
 FC_REFLECT( upcx::chain_apis::read_only::get_code_results, (account_name)(code_hash)(wast)(wasm)(abi) )
 FC_REFLECT( upcx::chain_apis::read_only::get_code_hash_results, (account_name)(code_hash) )
 FC_REFLECT( upcx::chain_apis::read_only::get_abi_results, (account_name)(abi) )
-FC_REFLECT( upcx::chain_apis::read_only::get_account_params, (account_id)(expected_core_symbol) )
+FC_REFLECT( upcx::chain_apis::read_only::get_account_params, (account_id)(account_name)(expected_core_symbol) )
 FC_REFLECT( upcx::chain_apis::read_only::get_account_by_name_params, (account_name) )
 FC_REFLECT( upcx::chain_apis::read_only::get_code_params, (account_name)(code_as_wasm) )
 FC_REFLECT( upcx::chain_apis::read_only::get_code_hash_params, (account_name) )

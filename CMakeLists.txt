@@ -156,8 +156,12 @@ endif()
 
 message( STATUS "Using '${CORE_SYMBOL_NAME}' as CORE symbol name" )
 
+# The mainnet 'upcx' genesis key. It is baked into genesis_state::initial_key, so it
+# fixes the genesis block, the chain id and the genesis authority of the 'upcx' account.
+# Only consulted when a node initialises fresh state with no genesis-json, no blocks.log
+# and no snapshot — but a build carrying a different value cannot bootstrap this chain.
 if ("${UPCX_ROOT_KEY}" STREQUAL "")
-   set(UPCX_ROOT_KEY "UPCX6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
+   set(UPCX_ROOT_KEY "UPCX7Kv8GQWvr6A663ccRGQqF7DEC8GRa838rbfY7SAPGwp13Lb95c")
 endif()
 
 message( STATUS "Using '${UPCX_ROOT_KEY}' as public key for 'upcx' account" )

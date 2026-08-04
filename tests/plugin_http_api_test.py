@@ -191,7 +191,15 @@ class PluginHttpTest(unittest.TestCase):
         ret_json = Utils.runCmdReturnJson(invalid_cmd)
         self.assertEqual(ret_json["code"], 400)
         self.assertEqual(ret_json["error"]["code"], 3200006)
-        # get_account with valid parameter
+        # get_account with no account field at all
+        no_account_cmd = default_cmd + self.http_post_str + "'{\"expected_core_symbol\":\"4,SYS\"}'"
+        ret_json = Utils.runCmdReturnJson(no_account_cmd)
+        self.assertEqual(ret_json["code"], 400)
+        self.assertEqual(ret_json["error"]["code"], 3200006)
+        # get_account with valid parameter, either spelling of the account field
+        valid_cmd = default_cmd + self.http_post_str + "'{\"account_id\":\"default\"}'"
+        ret_json = Utils.runCmdReturnJson(valid_cmd)
+        self.assertEqual(ret_json["code"], 500)
         valid_cmd = default_cmd + self.http_post_str + "'{\"account_name\":\"default\"}'"
         ret_json = Utils.runCmdReturnJson(valid_cmd)
         self.assertEqual(ret_json["code"], 500)

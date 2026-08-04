@@ -28,15 +28,18 @@ paths:
       description: Returns an object containing various details about a specific account on the blockchain.
       operationId: get_account
       requestBody:
-        description: JSON Object with single member "account_name"
+        description: >-
+          JSON object naming the account. "account_name" and its UPCX alias
+          "account_id" are equivalent; supply exactly one.
         content:
           application/json:
             schema:
               type: object
-              required:
-                - account_name
+              minProperties: 1
               properties:
                 account_name:
+                  $ref: "https://upcx.github.io/schemata/v2.1/oas/Name.yaml"
+                account_id:
                   $ref: "https://upcx.github.io/schemata/v2.1/oas/Name.yaml"
       responses:
         "200":

@@ -3284,7 +3284,12 @@ read_only::get_raw_abi_results read_only::get_raw_abi( const get_raw_abi_params&
 
 read_only::get_account_results read_only::get_account( const get_account_params& params )const {
    get_account_results result;
-   result.account_id = params.account_id;
+   result.account_id = params.resolved_account();
+   // Without this the empty name reaches the resource-limit index lookup, which throws
+   // std::out_of_range and is reported as a 500 rather than a malformed request.
+   UPCX_ASSERT( !result.account_id.empty(), chain::invalid_http_request,
+                "Missing required field: account_name (or account_id)" );
+   result.account_name = result.account_id;
 
    const auto& d = db.db();
    const auto& rm = db.get_resource_limits_manager();
@@ -3314,8 +3319,8 @@ read_only::get_account_results read_only::get_account( const get_account_params&
    result.ram_usage = rm.get_account_ram_usage( result.account_id );
 
    const auto& permissions = d.get_index<permission_index,by_owner>();
-   auto perm = permissions.lower_bound( boost::make_tuple( params.account_id ) );
-   while( perm != permissions.end() && perm->owner == params.account_id ) {
+   auto perm = permissions.lower_bound( boost::make_tuple( result.account_id ) );
+   while( perm != permissions.end() && perm->owner == result.account_id ) {
       /// TODO: lookup perm->parent name
       name parent;
 
@@ -3345,26 +3350,26 @@ read_only::get_account_results read_only::get_account( const get_account_params&
       if (params.expected_core_symbol)
          core_symbol = *(params.expected_core_symbol);
 
-      get_primary_key<asset>(token_code, params.account_id, "accounts"_n, core_symbol.to_symbol_code(),
+      get_primary_key<asset>(token_code, result.account_id, "accounts"_n, core_symbol.to_symbol_code(),
 		      row_requirements::optional, row_requirements::optional, [&core_symbol,&result](const asset& bal) {
          if( bal.get_symbol().valid() && bal.get_symbol() == core_symbol ) {
             result.core_liquid_balance = bal;
          }
       });
 
-      result.total_resources = get_primary_key(config::system_account_name, params.account_id, "userres"_n, params.account_id.to_uint64_t(),
+      result.total_resources = get_primary_key(config::system_account_name, result.account_id, "userres"_n, result.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "user_resources", abis); 
 
-      result.self_delegated_bandwidth = get_primary_key(config::system_account_name, params.account_id, "delband"_n, params.account_id.to_uint64_t(),
+      result.self_delegated_bandwidth = get_primary_key(config::system_account_name, result.account_id, "delband"_n, result.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "delegated_bandwidth", abis); 
 
-      result.refund_request = get_primary_key(config::system_account_name, params.account_id, "refunds"_n, params.account_id.to_uint64_t(),
+      result.refund_request = get_primary_key(config::system_account_name, result.account_id, "refunds"_n, result.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "refund_request", abis); 
 
-      result.voter_info = get_primary_key(config::system_account_name, config::system_account_name, "voters"_n, params.account_id.to_uint64_t(),
+      result.voter_info = get_primary_key(config::system_account_name, config::system_account_name, "voters"_n, result.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "voter_info", abis); 
 
-      result.rex_info = get_primary_key(config::system_account_name, config::system_account_name, "rexbal"_n, params.account_id.to_uint64_t(),
+      result.rex_info = get_primary_key(config::system_account_name, config::system_account_name, "rexbal"_n, result.account_id.to_uint64_t(),
 		      row_requirements::optional, row_requirements::optional, "rex_balance", abis); 
    }
    return result;
@@ -3375,6 +3380,7 @@ read_only::get_account_results read_only::get_account_by_name( const get_account
 
    const auto& accountObj = db.db().get<account_object, by_real_name>(params.account_name);
    result.account_id = accountObj.name;
+   result.account_name = accountObj.name;
 
    const auto& d = db.db();
    const auto& rm = db.get_resource_limits_manager();

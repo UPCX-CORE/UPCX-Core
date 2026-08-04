@@ -1,0 +1,7 @@
+[Unit]
+Description=nodupcx RPC health watchdog (restarts a stalled node)
+After=nodupcx.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/nodupcx-watchdog.sh

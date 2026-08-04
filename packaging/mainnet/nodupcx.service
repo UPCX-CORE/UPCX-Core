@@ -1,0 +1,28 @@
+[Unit]
+Description=UPCX mainnet chain node (nodupcx)
+After=network-online.target
+Wants=network-online.target
+# A few restarts to ride out a dirty-DB replay or a transient failure, then stop and stay
+# stopped: a producer that keeps failing needs an operator, not a tighter loop.
+StartLimitIntervalSec=3600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+# The historical fleet runs nodupcx as root out of /home/ubuntu/UPCX-Core/build/bin, with
+# its data under /root/.local/share. Changing the user would orphan that state.
+User=root
+Environment=HOME=/root
+EnvironmentFile=-/etc/default/nodupcx
+ExecStart=/usr/local/bin/nodupcx-run.sh
+Restart=on-failure
+RestartSec=30
+# nodupcx flushes chainbase on stop; a SIGKILL mid-write is what leaves the DB dirty and
+# forces a replay, which on mainnet costs hours.
+TimeoutStopSec=900
+KillSignal=SIGTERM
+LimitNOFILE=65536
+OOMScoreAdjust=-500
+
+[Install]
+WantedBy=multi-user.target

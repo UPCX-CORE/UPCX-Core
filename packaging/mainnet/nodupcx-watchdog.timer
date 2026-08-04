@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodically run the nodupcx RPC health watchdog
+
+[Timer]
+OnBootSec=900
+OnUnitActiveSec=120
+AccuracySec=15
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,6 @@
+# .git must NOT be excluded: upcx_build.sh calls ensure-git-clone and refuses to run
+# without it.
+build/
+artifacts/
+*.deb
+*.tar.gz

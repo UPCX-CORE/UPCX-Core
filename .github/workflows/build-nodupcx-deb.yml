@@ -1,0 +1,105 @@
+# Builds nodupcx.deb and, on request, publishes it to the artifact bucket that
+# upcx-iac's build.sh and push-images.sh read.
+#
+# Deliberately not on push: the UPCX compile is long enough that running it per commit
+# would be wasteful. Dependency resolution is a separate cached layer keyed on scripts/,
+# so it is not what makes a run expensive.
+#
+# Repository configuration:
+#   secret AWS_ROLE_ARN   — modules/testnet output cicd_role_arn (keyless OIDC).
+#   var    ARTIFACT_BUCKET — defaults to upcx-artifacts.
+# Publishing needs s3:PutObject on <bucket>/nodupcx/*; without it, leave publish off and
+# take the .deb from the run's artifacts.
+
+name: build-nodupcx-deb
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Upload to s3://<bucket>/nodupcx/ as well as the run artifacts."
+        type: boolean
+        default: false
+      upcx_root_key:
+        description: "Override the baked genesis key. Empty uses the CMakeLists default (testnet). Set the mainnet key for a mainnet binary."
+        type: string
+        default: ""
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  id-token: write # mint the OIDC token for AWS
+  contents: read
+
+concurrency:
+  group: nodupcx-deb-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the build script reads the branch and version from git
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build the .deb
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/nodupcx-deb.Dockerfile
+          target: export
+          outputs: type=local,dest=./artifacts
+          build-args: |
+            UPCX_ROOT_KEY=${{ inputs.upcx_root_key }}
+          # The dependency stage is the expensive one and is keyed on scripts/ alone, so
+          # it survives across runs. If it outgrows the Actions cache limit, move this to
+          # type=registry against an ECR repo — the rest of the workflow is unaffected.
+          cache-from: type=gha,scope=nodupcx-deb
+          cache-to: type=gha,scope=nodupcx-deb,mode=max
+
+      - name: Identify the package
+        id: pkg
+        run: |
+          set -euo pipefail
+          ls -l artifacts/
+          DEB="$(ls artifacts/upcx_*.deb | head -1)"
+          echo "path=${DEB}" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "${DEB}")" >> "$GITHUB_OUTPUT"
+          dpkg-deb -f "${DEB}" Package Version Architecture Depends
+
+      - name: Upload to the run
+        uses: actions/upload-artifact@v4
+        with:
+          name: nodupcx-deb-${{ github.sha }}
+          path: artifacts/*.deb
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Configure AWS credentials (OIDC)
+        if: ${{ inputs.publish }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+
+      # nodupcx.deb is the path build.sh and push-images.sh already fetch. The
+      # commit-stamped copy alongside it is what makes a deployed binary traceable back
+      # to a revision — server_version alone only survives while the branch does.
+      - name: Publish to S3
+        if: ${{ inputs.publish }}
+        env:
+          BUCKET: ${{ vars.ARTIFACT_BUCKET || 'upcx-artifacts' }}
+          DEB: ${{ steps.pkg.outputs.path }}
+        run: |
+          set -euo pipefail
+          SHA="$(git rev-parse --short HEAD)"
+          aws s3 cp "${DEB}" "s3://${BUCKET}/nodupcx/nodupcx-${SHA}.deb"
+          aws s3 cp "${DEB}" "s3://${BUCKET}/nodupcx/nodupcx.deb"
+          echo "::notice::Published nodupcx-${SHA}.deb and nodupcx.deb to ${BUCKET}"

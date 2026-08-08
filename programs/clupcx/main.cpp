@@ -860,7 +860,7 @@ struct set_account_permission_subcommand {
          }
 
          if ( need_parent || need_auth ) {
-            fc::variant json = call(get_account_func, fc::mutable_variant_object("account_name", account));
+            fc::variant json = call(get_account_func, fc::mutable_variant_object("account_id", account));
             auto res = json.as<upcx::chain_apis::read_only::get_account_results>();
             auto itr = std::find_if(res.permissions.begin(), res.permissions.end(), [&](const auto& perm) {
                return perm.perm_name == name(permission);
@@ -2203,10 +2203,10 @@ struct closerex_subcommand {
 void get_account( const string& accountName, const string& coresym, bool json_format ) {
    fc::variant json;
    if (coresym.empty()) {
-      json = call(get_account_func, fc::mutable_variant_object("account_name", accountName));
+      json = call(get_account_func, fc::mutable_variant_object("account_id", accountName));
    }
    else {
-      json = call(get_account_func, fc::mutable_variant_object("account_name", accountName)("expected_core_symbol", symbol::from_string(coresym)));
+      json = call(get_account_func, fc::mutable_variant_object("account_id", accountName)("expected_core_symbol", symbol::from_string(coresym)));
    }
 
    auto res = json.as<upcx::chain_apis::read_only::get_account_results>();

@@ -29,10 +29,14 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # upcx_build.sh installs the rest itself from scripts/upcx_build_ubuntu_deps; these are
 # what it needs before it can run at all. `sudo` because ensure-sudo requires it on the
 # PATH even when the build already runs as root.
+#
+# The apt lists are kept deliberately. upcx_build.sh apt-installs cmake and the dependency
+# set without an `apt-get update` of its own, so clearing them here leaves it resolving
+# against an empty index and failing with "Package 'cmake' has no installation candidate".
+# Nothing ships from this stage — only the .deb leaves it — so keeping them costs nothing.
 RUN apt-get update -qq \
  && apt-get install -y -qq --no-install-recommends \
-      git sudo curl ca-certificates lsb-release gnupg build-essential \
- && rm -rf /var/lib/apt/lists/*
+      git sudo curl ca-certificates lsb-release gnupg build-essential
 
 WORKDIR /src
 COPY scripts/ ./scripts/

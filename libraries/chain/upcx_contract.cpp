@@ -95,7 +95,7 @@ void apply_upcx_newaccount(apply_context& context) {
 
    const auto& new_account = db.create<account_object>([&](auto& a) {
       a.name = create.id;
-      a.real_name = name_str;
+      a.real_name.assign(name_str.data(), name_str.size());
       a.creation_date = context.control.pending_block_time();
    });
 

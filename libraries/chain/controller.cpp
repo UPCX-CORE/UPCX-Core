@@ -771,7 +771,8 @@ struct controller_impl {
 
    void create_native_account( const fc::time_point& initial_timestamp, account_name name, const authority& owner, const authority& active, bool is_privileged = false ) {
       db.create<account_object>([&](auto& a) {
-         a.real_name = name.to_string();
+         const auto name_str = name.to_string();
+         a.real_name.assign(name_str.data(), name_str.size());
          a.name = name;
          a.creation_date = initial_timestamp;
 

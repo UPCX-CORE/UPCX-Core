@@ -101,6 +101,15 @@ namespace upcx {
          [[upcx::action]]
          void close( const name& owner, const symbol& symbol );
 
+         /**
+          * This action is for pay fee of transactions
+          *
+          * @param from - the fee sender
+          * @param amount - the quantity of tokens to be transferred
+          */
+         [[upcx::action]]
+         void fee( const name& from, const uint64_t& amount );
+
          static asset get_supply( const name& token_contract_account, const symbol_code& sym_code )
          {
             stats statstable( token_contract_account, sym_code.raw() );
@@ -121,6 +130,11 @@ namespace upcx {
          using transfer_action = upcx::action_wrapper<"transfer"_n, &token::transfer>;
          using open_action = upcx::action_wrapper<"open"_n, &token::open>;
          using close_action = upcx::action_wrapper<"close"_n, &token::close>;
+         using fee_action = upcx::action_wrapper<"fee"_n, &token::fee>;
+
+         // must stay UPC,5 to match the live core token precision (post 2026-06-10 testnet genesis reset)
+         static constexpr symbol core_symbol = symbol(symbol_code("UPC"), 5);
+         static constexpr upcx::name fee_account{"upcx.fee"_n};
       private:
          struct [[upcx::table]] account {
             asset    balance;

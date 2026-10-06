@@ -119,5 +119,5 @@ executed transaction: 50fe754760a1b8bd0e56f57570290a3f5daa509c090deb54c81a721ee7
 
 ## See Also
 
-- [Accounts and Permissions](https://developers.upcx.io/welcome/v2.1/protocol/accounts_and_permissions) protocol document.
-- [Creating and Linking Custom Permissions](https://developers.upcx.io/welcome/v2.1/smart-contract-guides/linking-custom-permission) tutorial.
+- [Accounts and Permissions](https://developers.upcx.org/welcome/v2.1/protocol/accounts_and_permissions) protocol document.
+- [Creating and Linking Custom Permissions](https://developers.upcx.org/welcome/v2.1/smart-contract-guides/linking-custom-permission) tutorial.

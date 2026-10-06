@@ -23,9 +23,9 @@ Some of the groundbreaking features of UPCX include:
 
 Block.one is neither launching nor operating any initial public blockchains based upon the UPCX software. This release refers only to version 1.0 of our open source software. We caution those who wish to use blockchains built on UPCX to carefully vet the companies and organizations launching blockchains based on UPCX before disclosing any private keys to their derivative software.
 
-## Official Testnet
+## Mainnet Explorer
 
-[testnet.upcx.io](https://testnet.upcx.io/)
+[explorer.mainnet.upcx.org](https://explorer.mainnet.upcx.org/)
 
 ## Supported Operating Systems
 
@@ -49,7 +49,7 @@ UPCX currently supports the following operating systems:
 
 ## Software Installation
 
-If you are new to UPCX, it is recommended that you install the [UPCX Prebuilt Binaries](#prebuilt-binaries), then proceed to the [Getting Started Guide](https://developers.upcx.io/welcome/latest/getting-started-guide). If you are an advanced developer, a block producer, or no binaries are available for your platform, you may need to [Build UPCX from source](https://developers.upcx.io/manuals/upcx/latest/install/build-from-source).
+If you are new to UPCX, it is recommended that you install the [UPCX Prebuilt Binaries](#prebuilt-binaries), then proceed to the [Getting Started Guide](https://developers.upcx.org/welcome/latest/getting-started-guide). If you are an advanced developer, a block producer, or no binaries are available for your platform, you may need to [Build UPCX from source](https://developers.upcx.org/manuals/upcx/latest/install/build-from-source).
 
 ---
 
@@ -150,19 +150,19 @@ To uninstall the UPCX built/installed binaries and dependencies, run:
 
 ## Documentation
 
-1. [Nodupcx](https://developers.upcx.io/manuals/upcx/latest/nodupcx)
-   - [Usage](https://developers.upcx.io/manuals/upcx/latest/nodupcx/usage)
-   - [Replays](https://developers.upcx.io/manuals/upcx/latest/nodupcx/replays)
-   - [Chain API Reference](https://developers.upcx.io/manuals/upcx/latest/nodupcx/plugins/chain_api_plugin/api-reference)
-   - [Troubleshooting](https://developers.upcx.io/manuals/upcx/latest/nodupcx/troubleshooting)
-1. [Clupcx](https://developers.upcx.io/manuals/upcx/latest/clupcx)
-1. [Kupcxd](https://developers.upcx.io/manuals/upcx/latest/kupcxd)
+1. [Nodupcx](https://developers.upcx.org/manuals/upcx/latest/nodupcx)
+   - [Usage](https://developers.upcx.org/manuals/upcx/latest/nodupcx/usage)
+   - [Replays](https://developers.upcx.org/manuals/upcx/latest/nodupcx/replays)
+   - [Chain API Reference](https://developers.upcx.org/manuals/upcx/latest/nodupcx/plugins/chain_api_plugin/api-reference)
+   - [Troubleshooting](https://developers.upcx.org/manuals/upcx/latest/nodupcx/troubleshooting)
+1. [Clupcx](https://developers.upcx.org/manuals/upcx/latest/clupcx)
+1. [Kupcxd](https://developers.upcx.org/manuals/upcx/latest/kupcxd)
 
 ## Resources
 
-1. [Website](https://upcx.io)
+1. [Website](https://upcx.org)
 1. [Blog](https://medium.com/upcx)
-1. [Developer Portal](https://developers.upcx.io)
+1. [Developer Portal](https://developers.upcx.org)
 1. [StackExchange for Q&A](https://upcx.stackexchange.com/)
 1. [Community Telegram Group](https://t.me/UPCXProject)
 1. [Developer Telegram Group](https://t.me/joinchat/EaEnSUPktgfoI-XPfMYtcQ)
@@ -171,7 +171,7 @@ To uninstall the UPCX built/installed binaries and dependencies, run:
 
 ## Getting Started
 
-Instructions detailing the process of getting the software, building it, running a simple test network that produces blocks, account creation and uploading a sample contract to the blockchain can be found in the [Getting Started Guide](https://developers.upcx.io/welcome/latest/getting-started-guide).
+Instructions detailing the process of getting the software, building it, running a simple test network that produces blocks, account creation and uploading a sample contract to the blockchain can be found in the [Getting Started Guide](https://developers.upcx.org/welcome/latest/getting-started-guide).
 
 ## Contributing
 

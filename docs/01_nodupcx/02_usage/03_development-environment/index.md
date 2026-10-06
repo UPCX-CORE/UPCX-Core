@@ -23,11 +23,11 @@ While this option can technically be used for smart contract development, it may
 - [Configure Nodupcx as a Local Two-Node Testnet](20_local-multi-node-testnet.md)
 - [Configure Nodupcx as a Local 21-Node Testnet](https://github.com/UPCX/upcx/blob/master/tutorials/bios-boot-tutorial/README.md)
 
-## Official Testnet
+## Mainnet
 
-The official testnet is available for testing UPCX dApps and smart contracts:
+The UPCX mainnet explorer, and the public RPC at `https://rpc.mainnet.upcx.org`:
 
-- [testnet.upcx.io](https://testnet.upcx.io/)
+- [explorer.mainnet.upcx.org](https://explorer.mainnet.upcx.org/)
 
 ## Third-Party Testnets
 

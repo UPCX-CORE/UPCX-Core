@@ -146,4 +146,4 @@ clupcx get account upcx --json
 
 ## See Also
 
-- [Accounts and Permissions](https://developers.upcx.io/welcome/v2.1/protocol/accounts_and_permissions) protocol document.
+- [Accounts and Permissions](https://developers.upcx.org/welcome/v2.1/protocol/accounts_and_permissions) protocol document.

@@ -27,7 +27,7 @@ RocksDB is an open source persistent key value store. Storing state in memory is
 
 ## UPCX Interfaces
 
-UPCX provides a set of [services](../../) and [interfaces](https://developers.upcx.io/manuals/upcx.cdt/latest/files) that enable contract developers to persist state across action, and consequently transaction, boundaries. Contracts may use these services and interfaces for various purposes. For example, `upcx.token` contract keeps balances for all users in the `chain database`. Each instance of `nodupcx` maintains the `chain database` in an efficient data store, so contracts can read and write data with ease.
+UPCX provides a set of [services](../../) and [interfaces](https://developers.upcx.org/manuals/upcx.cdt/latest/files) that enable contract developers to persist state across action, and consequently transaction, boundaries. Contracts may use these services and interfaces for various purposes. For example, `upcx.token` contract keeps balances for all users in the `chain database`. Each instance of `nodupcx` maintains the `chain database` in an efficient data store, so contracts can read and write data with ease.
 
 ### Nodupcx RPC API
 

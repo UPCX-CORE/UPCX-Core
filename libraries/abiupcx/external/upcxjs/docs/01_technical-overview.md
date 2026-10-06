@@ -1,4 +1,4 @@
-As stated in the [introduction](index.md), `upcxjs` integrates with upcx-based blockchains using the [upcx Nodupcx RPC API](https://developers.upcx.io/upcx-nodupcx/reference).
+As stated in the [introduction](index.md), `upcxjs` integrates with upcx-based blockchains using the [upcx Nodupcx RPC API](https://developers.upcx.org/manuals/upcx/latest/nodupcx/plugins/chain_api_plugin/api-reference).
 
 In general, there are two objects that are used to interact with a blockchain via `upcxjs`: the `JsonRpc` object, and the `Api` object.
 

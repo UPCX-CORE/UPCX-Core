@@ -6,19 +6,19 @@ This how-to guide provides instructions on how to stake resources, NET and/or CP
 
 - Install the currently supported version of `clupcx`.
 
-- Ensure the [reference system contracts](https://developers.upcx.io/manuals/upcx.contracts/v1.9/build-and-deploy) are deployed and used to manage system resources.
+- Ensure the [reference system contracts](https://developers.upcx.org/manuals/upcx.contracts/v1.9/build-and-deploy) are deployed and used to manage system resources.
 
 - Understand the following:
-  - What an [account](https://developers.upcx.io/welcome/v2.1/glossary/index/#account) is.
-  - What [NET bandwidth](https://developers.upcx.io/manuals/upcx.contracts/v1.9/key-concepts/net) is.
-  - What [CPU bandwidth](https://developers.upcx.io/manuals/upcx.contracts/v1.9/key-concepts/cpu) is.
-  - The [`delegatebw` clupcx sub-command](https://developers.upcx.io/manuals/upcx/v2.1/clupcx/command-reference/system/system-delegatebw).
+  - What an [account](https://developers.upcx.org/welcome/v2.1/glossary/index/#account) is.
+  - What [NET bandwidth](https://developers.upcx.org/manuals/upcx.contracts/v1.9/key-concepts/net) is.
+  - What [CPU bandwidth](https://developers.upcx.org/manuals/upcx.contracts/v1.9/key-concepts/cpu) is.
+  - The [`delegatebw` clupcx sub-command](https://developers.upcx.org/manuals/upcx/latest/clupcx/command-reference/system/system-delegatebw).
 
 ## Command Reference
 
 See the following reference guides for command line usage and related options for the `clupcx` command:
 
-- The [`delegatebw` clupcx sub-command](https://developers.upcx.io/manuals/upcx/v2.1/clupcx/command-reference/system/system-delegatebw).
+- The [`delegatebw` clupcx sub-command](https://developers.upcx.org/manuals/upcx/latest/clupcx/command-reference/system/system-delegatebw).
 
 ## Procedure
 

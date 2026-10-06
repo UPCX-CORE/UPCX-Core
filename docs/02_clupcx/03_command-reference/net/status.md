@@ -73,4 +73,4 @@ clupcx -u http://127.0.0.1:8002 net status localhost:9001
 }
 ```
 
-**Note:** The `last_handshake` field contains the chain state of the specified peer as of the last handshake message with the node. For more information read the [Handshake Message](https://developers.upcx.io/welcome/latest/protocol/network_peer_protocol#421-handshake-message) in the _Network Peer Protocol_ document.
+**Note:** The `last_handshake` field contains the chain state of the specified peer as of the last handshake message with the node. For more information read the [Handshake Message](https://developers.upcx.org/welcome/latest/protocol/network_peer_protocol#421-handshake-message) in the _Network Peer Protocol_ document.

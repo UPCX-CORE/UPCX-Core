@@ -13,9 +13,9 @@ Make sure you meet the following requirements:
 [[info | Note]]
 | `clupcx` is bundled with the UPCX software. [Installing UPCX](../../00_install/index.md) will also install `clupcx`.
 
-- Understand what an [account](https://developers.upcx.io/welcome/v2.1/glossary/index/#account) is and its role in the blockchain.
-- Understand [Accounts and Permissions](https://developers.upcx.io/welcome/v2.1/protocol-guides/accounts_and_permissions) in the protocol documents.
-- Understand what a [public](https://developers.upcx.io/welcome/v2.1/glossary/index/#public-key) and [private](https://developers.upcx.io/welcome/v2.1/glossary/index/#private-key) key pair is.
+- Understand what an [account](https://developers.upcx.org/welcome/v2.1/glossary/index/#account) is and its role in the blockchain.
+- Understand [Accounts and Permissions](https://developers.upcx.org/welcome/v2.1/protocol-guides/accounts_and_permissions) in the protocol documents.
+- Understand what a [public](https://developers.upcx.org/welcome/v2.1/glossary/index/#public-key) and [private](https://developers.upcx.org/welcome/v2.1/glossary/index/#private-key) key pair is.
 
 ## Steps
 

@@ -8,7 +8,7 @@ There are various ways to install and use the UPCX software:
 - [Build UPCX from Source](01_build-from-source/index.md)
 
 [[info]]
-| If you are new to UPCX, it is recommended that you install the [UPCX Prebuilt Binaries](00_install-prebuilt-binaries.md), then proceed to the [Getting Started](https://developers.upcx.io/upcx-home/docs/) section of the [UPCX Developer Portal](https://developers.upcx.io/). If you are an advanced developer, a block producer, or no binaries are available for your platform, you may need to [Build UPCX from source](01_build-from-source/index.md) instead.
+| If you are new to UPCX, it is recommended that you install the [UPCX Prebuilt Binaries](00_install-prebuilt-binaries.md), then proceed to the [Getting Started](https://developers.upcx.org/upcx-home/docs/) section of the [UPCX Developer Portal](https://developers.upcx.org/). If you are an advanced developer, a block producer, or no binaries are available for your platform, you may need to [Build UPCX from source](01_build-from-source/index.md) instead.
 
 ## Supported Operating Systems
 

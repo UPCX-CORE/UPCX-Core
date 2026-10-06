@@ -7,16 +7,16 @@ This how-to guide provides instructions on how to submit, or push, a transaction
 - Install the currently supported version of `clupcx`
 
 - Understand the following:
-  - What a [transaction](https://developers.upcx.io/welcome/latest/glossary/index/#transaction) is.
+  - What a [transaction](https://developers.upcx.org/welcome/latest/glossary/index/#transaction) is.
   - How to generate a valid transaction JSON.
-    - Consult [clupcx push transaction](https://developers.upcx.io/manuals/upcx/v2.1/clupcx/command-reference/push/push-transaction) reference, and pay attention to option `-d` and `-j`.
-    - Consult [push transaction](https://developers.upcx.io/manuals/upcx/v2.1/nodupcx/plugins/chain_api_plugin/api-reference/index#operation/push_transaction) endpoint for chain api plug-in, and pay attention to the payload definition.
+    - Consult [clupcx push transaction](https://developers.upcx.org/manuals/upcx/latest/clupcx/command-reference/push/push-transaction) reference, and pay attention to option `-d` and `-j`.
+    - Consult [push transaction](https://developers.upcx.org/manuals/upcx/latest/nodupcx/plugins/chain_api_plugin/api-reference/index#operation/push_transaction) endpoint for chain api plug-in, and pay attention to the payload definition.
 
 ## Command Reference
 
 See the following reference guides for command line usage and related options for the `clupcx` command:
 
-- The [clupcx push transaction](https://developers.upcx.io/manuals/upcx/v2.1/clupcx/command-reference/push/push-transaction) reference.
+- The [clupcx push transaction](https://developers.upcx.org/manuals/upcx/latest/clupcx/command-reference/push/push-transaction) reference.
 
 ## Procedure
 

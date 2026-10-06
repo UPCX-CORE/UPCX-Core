@@ -13,7 +13,7 @@ It provides four RPC API endpoints:
 - get_controlled_accounts
 
 [[info | More Info]]
-| See HISTORY section of [RPC API](https://developers.upcx.io/upcx-nodupcx/reference).
+| See HISTORY section of [RPC API](https://developers.upcx.org/upcx-nodupcx/reference).
 
 The four actions listed above are used by the following `clupcx` commands (matching order):
 

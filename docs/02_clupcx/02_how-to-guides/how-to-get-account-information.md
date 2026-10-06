@@ -9,7 +9,7 @@ Query infomation of an UPCX account
 [[info | Note]]
 | The clupcx tool is bundled with the UPCX software. [Installing UPCX](../../00_install/index.md) will also install the clupcx tool.
 
-- Acquire functional understanding of [UPCX Accounts and Permissions](https://developers.upcx.io/welcome/v2.1/protocol/accounts_and_permissions)
+- Acquire functional understanding of [UPCX Accounts and Permissions](https://developers.upcx.org/welcome/v2.1/protocol/accounts_and_permissions)
 
 ## Steps
 

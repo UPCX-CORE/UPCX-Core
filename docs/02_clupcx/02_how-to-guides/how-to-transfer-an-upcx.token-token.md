@@ -9,14 +9,14 @@ This how-to guide provides instructions on how to transfer tokens created by `up
 - `upcx.token` contract is deployed on the network you are connected to.
 
 - Understand the following:
-  - What a [transaction](https://developers.upcx.io/welcome/v2.1/glossary/index/#transaction) is.
+  - What a [transaction](https://developers.upcx.org/welcome/v2.1/glossary/index/#transaction) is.
   - Token transfers are irreversible.
 
 ## Command Reference
 
 See the following reference guides for command line usage and related options for the `clupcx` command:
 
-- The [clupcx transfer](https://developers.upcx.io/manuals/upcx/latest/clupcx/command-reference/transfer) reference.
+- The [clupcx transfer](https://developers.upcx.org/manuals/upcx/latest/clupcx/command-reference/transfer) reference.
 
 ## Procedure
 

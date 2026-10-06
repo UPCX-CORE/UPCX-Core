@@ -6,7 +6,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   contact:
-    url: https://upcx.io
+    url: https://upcx.org
 servers:
   - url: "{protocol}://{host}:{port}/v1/"
     variables:

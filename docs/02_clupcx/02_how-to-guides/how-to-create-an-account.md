@@ -11,7 +11,7 @@ Create a new UPCX blockchain account
 
 - Acquire functional understanding of the following:
 
-  - [UPCX Accounts and Permissions](https://developers.upcx.io/welcome/v2.1/protocol/accounts_and_permissions)
+  - [UPCX Accounts and Permissions](https://developers.upcx.org/welcome/v2.1/protocol/accounts_and_permissions)
   - Asymmetric cryptography (public and private keypair)
 
 - Created an Owner and an Active key pair

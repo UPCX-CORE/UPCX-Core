@@ -13,9 +13,9 @@ Make sure you meet the following requirements:
 | `clupcx` is bundled with the UPCX software. [Installing UPCX](../../00_install/index.md) will also install `clupcx`.
 
 - Ensure the reference system contracts from [`upcx.contracts`](https://github.com/UPCX/upcx.contracts) repository is deployed and used to manage system resources.
-- Understand what an [account](https://developers.upcx.io/welcome/v2.1/glossary/index/#account) is and its role in the blockchain.
-- Understand [CPU bandwidth](https://developers.upcx.io/welcome/v2.1/glossary/index/#cpu) in an UPCX blockchain.
-- Understand [NET bandwidth](https://developers.upcx.io/welcome/v2.1/glossary/index/#net) in an UPCX blockchain.
+- Understand what an [account](https://developers.upcx.org/welcome/v2.1/glossary/index/#account) is and its role in the blockchain.
+- Understand [CPU bandwidth](https://developers.upcx.org/welcome/v2.1/glossary/index/#cpu) in an UPCX blockchain.
+- Understand [NET bandwidth](https://developers.upcx.org/welcome/v2.1/glossary/index/#net) in an UPCX blockchain.
 
 ## Steps
 

@@ -6,12 +6,12 @@ This how-to guide provides instructions on how to vote for block producers.
 
 - Install the latest version of `clupcx`.
 
-- Ensure the [reference system contracts](https://developers.upcx.io/manuals/upcx.contracts/v1.9/build-and-deploy) are deployed and used to manage system resources.
+- Ensure the [reference system contracts](https://developers.upcx.org/manuals/upcx.contracts/v1.9/build-and-deploy) are deployed and used to manage system resources.
 
 - Understand the following:
 
-  - What a [block producer](https://developers.upcx.io/welcome/v2.1/protocol-guides/consensus_protocol/#11-block-producers) is.
-  - How [voting](https://developers.upcx.io/manuals/upcx.contracts/v1.9/key-concepts/vote) works.
+  - What a [block producer](https://developers.upcx.org/welcome/v2.1/protocol-guides/consensus_protocol/#11-block-producers) is.
+  - How [voting](https://developers.upcx.org/manuals/upcx.contracts/v1.9/key-concepts/vote) works.
 
 - Unlock your wallet.
 
@@ -19,7 +19,7 @@ This how-to guide provides instructions on how to vote for block producers.
 
 See the following reference guides for command line usage and related options for the `clupcx` command:
 
-- The [clupcx system voteproducer prods](https://developers.upcx.io/manuals/upcx/v2.1/clupcx/command-reference/system/system-voteproducer-prods) reference.
+- The [clupcx system voteproducer prods](https://developers.upcx.org/manuals/upcx/latest/clupcx/command-reference/system/system-voteproducer-prods) reference.
 
 ## Procedure
 

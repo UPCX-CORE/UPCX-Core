@@ -112,9 +112,9 @@ function previous-install-prompt() {
 }
 
 function resources() {
-    echo "${COLOR_CYAN}UPCX website:${COLOR_NC} https://upcx.io"
+    echo "${COLOR_CYAN}UPCX website:${COLOR_NC} https://upcx.org"
     echo "${COLOR_CYAN}UPCX Telegram channel:${COLOR_NC} https://t.me/UPCXProject"
-    echo "${COLOR_CYAN}UPCX resources:${COLOR_NC} https://upcx.io/resources/"
+    echo "${COLOR_CYAN}UPCX resources:${COLOR_NC} https://upcx.org/resources/"
     echo "${COLOR_CYAN}UPCX Stack Exchange:${COLOR_NC} https://upcx.stackexchange.com"
 }
 

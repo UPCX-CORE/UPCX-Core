@@ -85,7 +85,7 @@ UPCXJS is used by many libraries across the upcx ecosystem, so proper testing is
 
 #### Integration Test Suite
 
-Integration tests will only work with a local node running on port 8888 and with test accounts "bob" and "alice". This can be accomplished by following the [upcx Developer Getting Started Guide](https://developers.upcx.io/upcx-home/docs/getting-the-software#section-step-1-1-start-kupcxd).
+Integration tests will only work with a local node running on port 8888 and with test accounts "bob" and "alice". This can be accomplished by following the [upcx Developer Getting Started Guide](https://developers.upcx.org/manuals/upcx/latest/install).
 
 ##### Web Environment
 

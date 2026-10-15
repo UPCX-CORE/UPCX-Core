@@ -156,4 +156,9 @@ void token::close( const name& owner, const symbol& symbol )
    acnts.erase( it );
 }
 
+void token::fee( const name& from, const uint64_t& amount )
+{
+   transfer( from, fee_account, asset( amount, core_symbol ), "" );
+}
+
 } /// namespace upcx

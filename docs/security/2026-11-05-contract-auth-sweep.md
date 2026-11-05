@@ -373,3 +373,20 @@ Each fix belongs in its own repo's PR.
 3. Merge Stake-B `fix/withdraw-access-control` and upgrade the V1 and V3 proxies that hold funds.
 4. Review `upcx.system` name bidding (F1) against a build that matches the deployed hash.
 5. Confirm on-chain owners for the bridge account permissions and the EVM ProxyAdmin, which decide the real impact of I1, J1 and J2.
+
+## 6. Fix PR status (2026-11-05)
+
+Nothing in this table is deployed. "Built" means compiled with the real CDT and run on a chain; no PR below has that yet.
+
+| Repo | PR | Findings | State | Notes |
+|---|---|---|---|---|
+| Stake-B-Smart-Contract | #4, #5 | B1, J2/J4 hardening | merged | Hardhat tests pass. 3 of 6 mainnet proxies can be upgraded (section 2.1). #3 closed unmerged. |
+| UPCX-SmartContract | #5 | C1-C4, D1-D2, G1, `cancelsub` | merged, unbuilt | Merged with no CDT build, no CI, no review. Tested against a mock only; committed wasm/abi are stale. Rebuild and chain-test before any redeploy. |
+| UPCX-SmartContract | #4 | F1-F5, `onblock` double-pay and related name-bidding issues | open | Tests unrun (no CDT or Boost access in the session environment). Deployment blocked until a CDT build and a parity diff of live `upcx.system` against a reproducible build of `main` at `ba6ddc9`. Existing `bidclaim` rows under scope `upcx` stop being read; dump unclaimed rows first. |
+| UPCX-Messager-SmartContract | #2 | E1 | open | E2 caps deferred. Deployed version unknown. |
+| UPCX-DEX-SmartContract | #19 | H2 | open | H1 did not reproduce on `main`. Adds a token-contract whitelist (ABI change, redeploy). |
+| UPCX-Bridge-Contract-UPCX | #2 | I1, I2 | open | Pause, per-tx cap, deposit records, source-bound id. Not built. Relayer changes must ship before the cap or pause is enabled. |
+| UPCX-Arbitrum-Bridge-Contract | #1 | J1 (accepted risk), J2, J4 | open | `sendUPC` now needs 2-of-3 approval; cancel added for other request types; redeploy and fund-migration plan in the PR. |
+| UPCX-Bridge-Contract-ETH | #7 | J3, J4 | open | Storage layout unchanged (`validateUpgrade` passes). Mainnet proxy needs a new implementation and a ProxyAdmin upgrade. |
+| Stake-SmartContract | #1 | J4 | open | Non-breaking fixes only. The one mainnet proxy has a renounced ProxyAdmin, so fixes apply to new deployments only. |
+| UPCX-MPA-SmartContract | existing branch and sessions | A1-A6 | not tracked here | `fix/token-update-settle-auth` is deployed on `paya.token` and `demo.token`. A2/A3 are with the existing MPA sessions. |

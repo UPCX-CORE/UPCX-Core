@@ -46,6 +46,21 @@ Gaps in this comparison:
 - The account names for `upcx.mta`, `upcx.oracle`, `upcx.evm`, `upcx.lp`, `upcx.msg`, `upcx.bridge`, `voting` and `upcx.bios` were guessed and are not deployed under those names. Whether the contracts in section 4 are live, and under which accounts, is unknown.
 - `upcx.system`'s deployed bytes could not be diffed against source, so section 3 and 4 findings on it are source-level only.
 
+### 2.1 EVM proxies (Ethereum mainnet, read-only RPC, 2026-11-05)
+
+Admin and implementation come from the EIP-1967 slots; the ProxyAdmin owner from `owner()`. The Stake-B, Stake-SmartContract and ETH bridge addresses are the proxies listed in each repo's `.openzeppelin/mainnet.json` or deploy scripts.
+
+| Proxy | Contract | ProxyAdmin owner | Upgradable |
+|---|---|---|---|
+| `0xBbe5dF4f...28Be`, `0x3b46570e...842e`, `0x8f01Ce43...EBF8` | Stake-B | one shared EOA | yes, one signature |
+| `0x3BEF3105...48E9`, `0xd1e5D321...9246`, `0x14e46e1B...cf51` | Stake-B | zero address | **no** (renounced) |
+| `0x7b41eebC...422C` | Stake-SmartContract | zero address | **no** (renounced) |
+| `0xEbCB31A8...1D8A` | ETH bridge `UpcxBridge` | one EOA (different key) | yes, one signature |
+
+- All eight proxies run the implementation recorded in the manifests except Stake-B `0x14e46e1B...cf51`, which points at `0x1a43be55...a3da`. That implementation is not in `.openzeppelin/mainnet.json` and has not been reviewed.
+- Consequence for B1: the fix reaches only the first three Stake-B proxies. The other three (and the Stake-SmartContract proxy for J4) cannot be upgraded, so funds on them move only by migrating to new contracts.
+- Owners are plain EOAs, not multisigs, so an upgrade is one signature and a compromise of that key is an upgrade of the contract.
+
 ## 3. Findings
 
 Severity is the author's judgment on source alone. Where a contract's deployment is unconfirmed, that is stated.
@@ -58,7 +73,7 @@ Severity is the author's judgment on source alone. Where a contract's deployment
 | A4 | Medium | MPA `upcx.token` `removebalance` (`main`) | Issuer erases a balance without reducing supply. Auth is correct. | Reported. Fixed on the fix branch. |
 | A5 | Low | MPA `upcx.token` `whiteaccount` | Whitelist vector is unbounded; RAM stays with the contract. Issuer-gated. | Reported. |
 | A6 | Low | Fix branch `check_img` | Accepts any `https://` host, so a tracking pixel is still possible. Script and `data:` URIs are rejected. | Reported. |
-| B1 | High | `Stake-B-Smart-Contract` `StakingContractV1/V3/V4.withdraw(id)` | No check that the caller owns `records[id]`; the payout goes to `msg.sender`. Any caller can take a record's withdrawable principal and reward once the schedule opens. | Verified (V3). Fix on `origin/fix/withdraw-access-control` (6eb6e18), unmerged. Mainnet manifest lists V1 and V3 implementations, so an upgrade is needed. |
+| B1 | High | `Stake-B-Smart-Contract` `StakingContractV1/V3/V4.withdraw(id)` | No check that the caller owns `records[id]`; the payout goes to `msg.sender`. Any caller can take a record's withdrawable principal and reward once the schedule opens. | Verified (V3). Fix on `origin/fix/withdraw-access-control` (6eb6e18), unmerged. Mainnet manifest lists V1 and V3 implementations, so an upgrade is needed. Only 3 of the 6 mainnet proxies can be upgraded (section 2.1). |
 | C1 | Critical | `UPCX-SmartContract` `voting` `sendtip` | No `require_auth(sender)`; `sub_balance(sender, ...)` debits any depositor. | Verified (no auth call in the action). Deployment unknown. |
 | C2 | Critical | `voting` `newcontract` | `creator` is unauthenticated (the `require_auth(creator)` line is commented out) and `feerate` is unbounded, so `sendtip` can credit a creator more than the sender pays. | Reported. |
 | C3 | High | `voting` `subscribe`, `newcontract`, `add_balance`, `receivesub` | Unbounded rows paid by the contract; one bad subscription reverts the whole batch. | Reported. |

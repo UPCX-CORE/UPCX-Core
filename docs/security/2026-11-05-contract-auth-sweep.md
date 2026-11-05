@@ -381,14 +381,14 @@ Nothing in this table is deployed. "Built" means compiled with the real CDT and 
 | Repo | PR | Findings | State | Notes |
 |---|---|---|---|---|
 | Stake-B-Smart-Contract | #4, #5 | B1, J2/J4 hardening | merged | Hardhat tests pass. 3 of 6 mainnet proxies can be upgraded (section 2.1). #3 closed unmerged. |
-| Stake-B-Smart-Contract | #6 | J2 (`withdrawByAdmin` solvency floor) | open | Not part of the original owner decision (J2 was note-only); added at the owner's request. Stricter than today: the owner cannot withdraw principal owed to stakers. Reaches only upgradable proxies. |
+| Stake-B-Smart-Contract | #6 | J2 (`withdrawByAdmin` solvency floor) | merged | Not part of the original owner decision (J2 was note-only); added at the owner's request. Stricter than today: the owner cannot withdraw principal owed to stakers. Reaches only upgradable proxies. |
 | UPCX-Bridge-Backend | #13 | I1/I2 relayer side | merged | Relayer handles pause/cap errors as pending and uses `withdrawsrc` behind a flag (off by default). Helm flag and frontend address check still to do. |
 | UPCX-SmartContract | #5 | C1-C4, D1-D2, G1, `cancelsub` | merged, unbuilt | Merged with no CDT build, no CI, no review. Tested against a mock only; committed wasm/abi are stale. Rebuild and chain-test before any redeploy. |
-| UPCX-SmartContract | #4 | F1-F5, `onblock` double-pay and related name-bidding issues | open | Tests unrun (no CDT or Boost access in the session environment). Deployment blocked until a CDT build and a parity diff of live `upcx.system` against a reproducible build of `main` at `ba6ddc9`. Existing `bidclaim` rows under scope `upcx` stop being read; dump unclaimed rows first. |
-| UPCX-Messager-SmartContract | #2 | E1 | open | E2 caps deferred. Deployed version unknown. |
-| UPCX-DEX-SmartContract | #19 | H2 | open | H1 did not reproduce on `main`. Adds a token-contract whitelist (ABI change, redeploy). |
+| UPCX-SmartContract | #4 | F1-F5, `onblock` double-pay and related name-bidding issues | merged, unbuilt | Tests unrun (no CDT or Boost access in the session environment). Deployment blocked until a CDT build and a parity diff of live `upcx.system` against a reproducible build of `main` at `ba6ddc9`. Existing `bidclaim` rows under scope `upcx` stop being read; dump unclaimed rows first. Merged before any CDT build or test run. |
+| UPCX-Messager-SmartContract | #2 | E1 | merged, unbuilt | E2 caps deferred. Deployed version unknown. |
+| UPCX-DEX-SmartContract | #19 | H2 | merged, unbuilt | H1 did not reproduce on `main`. Adds a token-contract whitelist (ABI change, redeploy). |
 | UPCX-Bridge-Contract-UPCX | #2 | I1, I2 | open | Pause, per-tx cap, deposit records, source-bound id. Not built. Relayer changes must ship before the cap or pause is enabled. |
 | UPCX-Arbitrum-Bridge-Contract | #1 | J1 (accepted risk), J2, J4 | open | `sendUPC` now needs 2-of-3 approval; cancel added for other request types; redeploy and fund-migration plan in the PR. |
-| UPCX-Bridge-Contract-ETH | #7 | J3, J4 | open | Storage layout unchanged (`validateUpgrade` passes). Mainnet proxy needs a new implementation and a ProxyAdmin upgrade. |
-| Stake-SmartContract | #1 | J4 | open | Non-breaking fixes only. The one mainnet proxy has a renounced ProxyAdmin, so fixes apply to new deployments only. |
+| UPCX-Bridge-Contract-ETH | #7 | J3, J4 | merged | Storage layout unchanged (`validateUpgrade` passes). Mainnet proxy needs a new implementation and a ProxyAdmin upgrade. Mainnet proxy still needs a new implementation and ProxyAdmin upgrade. |
+| Stake-SmartContract | #1 | J4 | merged | Non-breaking fixes only. The one mainnet proxy has a renounced ProxyAdmin, so fixes apply to new deployments only. |
 | UPCX-MPA-SmartContract | existing branch and sessions | A1-A6 | not tracked here | `fix/token-update-settle-auth` is deployed on `paya.token` and `demo.token`. A2/A3 are with the existing MPA sessions. |

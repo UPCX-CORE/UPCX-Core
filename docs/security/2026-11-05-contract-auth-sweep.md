@@ -376,18 +376,18 @@ Each fix belongs in its own repo's PR.
 
 ## 6. Fix PR status (2026-11-05)
 
-Nothing in this table is deployed. "Built" means compiled with the real CDT and run on a chain; no PR below has that yet.
+Nothing in this table is deployed. "Built" means compiled with the real CDT image; "chain-tested" means run on a throwaway `nodupcx`. Rows marked unbuilt have not been through either.
 
 | Repo | PR | Findings | State | Notes |
 |---|---|---|---|---|
-| Stake-B-Smart-Contract | #4, #5 | B1, J2/J4 hardening | merged | Hardhat tests pass. 3 of 6 mainnet proxies can be upgraded (section 2.1). #3 closed unmerged. |
+| Stake-B-Smart-Contract | #4, #5 | B1, J2/J4 hardening | merged | Hardhat tests pass. 3 of 6 mainnet proxies can be upgraded (section 2.1). #3 closed unmerged. Old remote branches deleted. 6 tests in `StakingV1_v1.js` and `StakingV1_v2.js` fail on main and need updating. |
 | Stake-B-Smart-Contract | #6 | J2 (`withdrawByAdmin` solvency floor) | merged | Not part of the original owner decision (J2 was note-only); added at the owner's request. Stricter than today: the owner cannot withdraw principal owed to stakers. Reaches only upgradable proxies. |
 | UPCX-Bridge-Backend | #13, #14 | I1/I2 relayer side, Helm flag | merged | Relayer handles pause/cap errors as pending and uses `withdrawsrc` behind a flag (off by default). Helm flag and frontend address check still to do. |
-| UPCX-SmartContract | #5 | C1-C4, D1-D2, G1, `cancelsub` | merged, unbuilt | Merged with no CDT build, no CI, no review. Tested against a mock only; committed wasm/abi are stale. Rebuild and chain-test before any redeploy. |
-| UPCX-SmartContract | #4 | F1-F5, `onblock` double-pay and related name-bidding issues | merged, unbuilt | Tests unrun (no CDT or Boost access in the session environment). Deployment blocked until a CDT build and a parity diff of live `upcx.system` against a reproducible build of `main` at `ba6ddc9`. Existing `bidclaim` rows under scope `upcx` stop being read; dump unclaimed rows first. Merged before any CDT build or test run. |
+| UPCX-SmartContract | #5, #6 | C1-C4, D1-D2, G1, `cancelsub` | merged, built, chain-tested | #6 adds the CDT 1.8.1 / cmake 3.10 build fixes. On a throwaway `nodupcx`: voting 39/39 (12/39 before), `upcx.mta` 14/14 (3/14 before). `upcx.evm` built with TESTING off only; the TESTING=ON host tests were not run. Follow-up open: `voting::deposit` needs the depositor to grant `voting@upcx.code` (inline transfer is only authorised for self-sends on this chain). |
+| UPCX-SmartContract | #4, #7 | F1-F5, `onblock` double-pay and related name-bidding issues | merged, built, chain-tested | #7 adds the regression script: 35/35 on main, and the pre-fix build `ba6ddc9` reproduces F1 variants and the F4 id collision. Not testable locally: `onblock` auction close (14 days of chain time) and the `setabi` check. The `bidrefund` auth change is harmless (the baseline refund also works because `upcx` skips inline auth checks). Main builds to `3e3801bd…`, not the deployed `4daa36fa…`; see section 7. |
 | UPCX-Messager-SmartContract | #2 | E1 | merged, unbuilt | E2 caps deferred. Deployed version unknown. |
 | UPCX-DEX-SmartContract | #19 | H2 | merged, unbuilt | H1 did not reproduce on `main`. Adds a token-contract whitelist (ABI change, redeploy). |
-| UPCX-Bridge-Contract-UPCX | #2 | I1, I2 | open | Pause, per-tx cap, deposit records, source-bound id. Not built. Relayer changes must ship before the cap or pause is enabled. |
+| UPCX-Bridge-Contract-UPCX | #2 | I1, I2 | merged, built, chain-tested | Compile fix is the `upcx/crypto.hpp` include. 83/83 checks on a throwaway `nodupcx` (replay, cap, pause, `deposits` rows, in-place upgrade over main, relayer-shaped `withdrawsrc`); 16 checks fail on a deliberately broken build. Wasm is 63,325 bytes (main 42,639), so the deploy needs a size-based fee authorised by `upcx@active`. Relayer changes must ship before the cap or pause is enabled. RAM cost per row still an estimate. |
 | UPCX-Arbitrum-Bridge-Contract | #1 | J1 (accepted risk), J2, J4 | merged | `sendUPC` now needs 2-of-3 approval; cancel added for other request types; redeploy and fund-migration plan in the PR. |
 | UPCX-Bridge-Contract-ETH | #7 | J3, J4 | merged | Storage layout unchanged (`validateUpgrade` passes). Mainnet proxy needs a new implementation and a ProxyAdmin upgrade. Mainnet proxy still needs a new implementation and ProxyAdmin upgrade. |
 | Stake-SmartContract | #1 | J4 | merged | Non-breaking fixes only. The one mainnet proxy has a renounced ProxyAdmin, so fixes apply to new deployments only. |

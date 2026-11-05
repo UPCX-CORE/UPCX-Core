@@ -73,12 +73,12 @@ clupcx -u $RPC set contract <LP_ACCOUNT> ./lp-build upcx.lp.wasm upcx.lp.abi \
 # 2. whitelist the token contracts that pools may use
 clupcx -u $RPC push action <LP_ACCOUNT> addtokcont '["upcx.token"]' -p <LP_ACCOUNT>@active
 #   add every other token contract that existing pools use, then verify:
-clupcx -u $RPC get table <LP_ACCOUNT> <LP_ACCOUNT> tokcont
+clupcx -u $RPC get table <LP_ACCOUNT> <LP_ACCOUNT> tokencont
 
 # 3. add pool creators that should be allowed
 clupcx -u $RPC push action <LP_ACCOUNT> addcreator '["<CREATOR>"]' -p <LP_ACCOUNT>@active
 ```
-Before step 1: list the token contracts in use by existing pools (the `pools` table) so step 2 does not block live pools. The harness did not check how existing pools are affected, so read the table first.
+Before step 1: list the token contracts in use by existing pools (the `pool` table) so step 2 does not block live pools. The harness did not check how existing pools are affected, so read the table first.
 
 Each push action also needs the fee action; if `clupcx push action` is refused with "Transaction Fee is not enough", build the transaction with `clupcx push transaction`, as the system session did.
 

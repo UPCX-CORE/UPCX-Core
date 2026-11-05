@@ -382,13 +382,34 @@ Nothing in this table is deployed. "Built" means compiled with the real CDT and 
 |---|---|---|---|---|
 | Stake-B-Smart-Contract | #4, #5 | B1, J2/J4 hardening | merged | Hardhat tests pass. 3 of 6 mainnet proxies can be upgraded (section 2.1). #3 closed unmerged. |
 | Stake-B-Smart-Contract | #6 | J2 (`withdrawByAdmin` solvency floor) | merged | Not part of the original owner decision (J2 was note-only); added at the owner's request. Stricter than today: the owner cannot withdraw principal owed to stakers. Reaches only upgradable proxies. |
-| UPCX-Bridge-Backend | #13 | I1/I2 relayer side | merged | Relayer handles pause/cap errors as pending and uses `withdrawsrc` behind a flag (off by default). Helm flag and frontend address check still to do. |
+| UPCX-Bridge-Backend | #13, #14 | I1/I2 relayer side, Helm flag | merged | Relayer handles pause/cap errors as pending and uses `withdrawsrc` behind a flag (off by default). Helm flag and frontend address check still to do. |
 | UPCX-SmartContract | #5 | C1-C4, D1-D2, G1, `cancelsub` | merged, unbuilt | Merged with no CDT build, no CI, no review. Tested against a mock only; committed wasm/abi are stale. Rebuild and chain-test before any redeploy. |
 | UPCX-SmartContract | #4 | F1-F5, `onblock` double-pay and related name-bidding issues | merged, unbuilt | Tests unrun (no CDT or Boost access in the session environment). Deployment blocked until a CDT build and a parity diff of live `upcx.system` against a reproducible build of `main` at `ba6ddc9`. Existing `bidclaim` rows under scope `upcx` stop being read; dump unclaimed rows first. Merged before any CDT build or test run. |
 | UPCX-Messager-SmartContract | #2 | E1 | merged, unbuilt | E2 caps deferred. Deployed version unknown. |
 | UPCX-DEX-SmartContract | #19 | H2 | merged, unbuilt | H1 did not reproduce on `main`. Adds a token-contract whitelist (ABI change, redeploy). |
 | UPCX-Bridge-Contract-UPCX | #2 | I1, I2 | open | Pause, per-tx cap, deposit records, source-bound id. Not built. Relayer changes must ship before the cap or pause is enabled. |
-| UPCX-Arbitrum-Bridge-Contract | #1 | J1 (accepted risk), J2, J4 | open | `sendUPC` now needs 2-of-3 approval; cancel added for other request types; redeploy and fund-migration plan in the PR. |
+| UPCX-Arbitrum-Bridge-Contract | #1 | J1 (accepted risk), J2, J4 | merged | `sendUPC` now needs 2-of-3 approval; cancel added for other request types; redeploy and fund-migration plan in the PR. |
 | UPCX-Bridge-Contract-ETH | #7 | J3, J4 | merged | Storage layout unchanged (`validateUpgrade` passes). Mainnet proxy needs a new implementation and a ProxyAdmin upgrade. Mainnet proxy still needs a new implementation and ProxyAdmin upgrade. |
 | Stake-SmartContract | #1 | J4 | merged | Non-breaking fixes only. The one mainnet proxy has a renounced ProxyAdmin, so fixes apply to new deployments only. |
 | UPCX-MPA-SmartContract | existing branch and sessions | A1-A6 | not tracked here | `fix/token-update-settle-auth` is deployed on `paya.token` and `demo.token`. A2/A3 are with the existing MPA sessions. |
+
+## 7. Builds with the CDT image (2026-11-05)
+
+Toolchain: `upcx-testnet/upcx-cdt:latest` (upcx.cdt 1.8.1, CMake 3.10), built in a clean container from `git archive` of each ref. Hashes are sha256 of `<name>.wasm.wasm`.
+
+| Contract | Ref | Result | sha256 |
+|---|---|---|---|
+| `upcx.token` | UPCX-SmartContract `main` | built | `30b5740c7a46ffd696f4b7e5feebe329396ab2e9dc950f3ca9ada26a53873ed1` (equals the code deployed on mainnet `upcx.token`) |
+| `upcx.msg` | Messager `main` (`d308660`) | built | `fc6a64f9357441906b19e395d30682a25e2d24549643c2fedc3576c4e73d4cf5` |
+| `upcx.mta` | UPCX-SmartContract `main` (`beed171`) | built | `640225bc7398fc4127f77b32933a51f7f3f80891d46e6cf1f12d656b4b4d15ae` |
+| `upcx.system` | UPCX-SmartContract `main` (`beed171`) | built | `4aadbdf1a01a78e8169805b6b01e857ef1e5ebdb1954cab8b437358601ef8f7f` |
+| `upcx.system` | `8acf669` (last commit before the fixes; source as `ba6ddc9` plus the build-target shim) | built | `823254a3c1be420ee0db7cb021d59ee0f6d6d58fa2aad2c141d9ad9653618d72` |
+| `upcx.lp` (`liquidity`) | DEX `main` (`153f3c8`) | built | `2dc4e947e7aef465468765743efc4fbb602576f44a0e38bb985d04b8c698fbfd` |
+| `upcx.oracle` | DEX `main` (`153f3c8`) | built | `0b3eeec5f25ac2b266b8aef7168e2287bf89ea9c86ed95d270ba18f6e022f5f1` |
+| `voting` | UPCX-SmartContract `main` | **build fails** | CMake names the target `voting`, the toolchain names it `voting.wasm`; needs the same target-name shim the other contracts have |
+| `upcx.evm` | UPCX-SmartContract `main` | **build fails** | Uses `target_link_options`, which needs CMake 3.13; the image has 3.10 |
+| `upcx.bridge` | `UPCX-Bridge-Contract-UPCX` #2 branch (`67896e9`) | **compile error** | `upcx.bridge.cpp:191`: `use of undeclared identifier 'sha256'` |
+
+Parity with mainnet:
+- `upcx.token` is reproducible: the image builds the deployed bytes exactly.
+- `upcx.system` is not: the pre-fix source builds to `823254a3...`, deployed is `4daa36fa...`, and the packer artifact is `ef069252...`. The deployed system contract was built from different source, flags or toolchain, so a `setcode` of the fixed build cannot be reviewed as a diff against what is live. Resolve this before any system-contract deploy.

@@ -24,7 +24,7 @@ The exploited accounts were `paya.token` and `demo.token`, not `upcx.token`. Bot
 
 Remediation already on chain: at 2026-11-05 00:04 UTC `paya.token` and `demo.token` were redeployed with the fix-branch wasm (hash below) and `unsettle` was called on each. `paya.token` also had `update` called by `upcx@active` and `paya.token@active`.
 
-`nfa.test.a` and `nfa.test.b` still hold contract code (hash below, 63,056 bytes, identical on both). `nfa.test.b` exposes an NFA-style ABI (`create`, `mint`, `transfer`, `burn`, `batch*`, `setapprove`). The wasm imports include `set_proposed_producers`, `set_blockchain_parameters_packed` and `get_active_producers`, which are privileged intrinsics. Neither account is flagged `privileged`, so those imports cannot succeed today. The code was inspected statically only and never run. Both accounts are locked to `upcx@active`, and the public key that was used controls no accounts (`get_key_accounts` is empty).
+`nfa.test.a` and `nfa.test.b` held contract code (hash `cc952a6d…`, 63,056 bytes, identical on both) until it was cleared on 2026-11-05 (code and ABI set to empty; both now report the zero hash). The wasm and ABI are archived as evidence. `nfa.test.b` exposes an NFA-style ABI (`create`, `mint`, `transfer`, `burn`, `batch*`, `setapprove`). The wasm imports include `set_proposed_producers`, `set_blockchain_parameters_packed` and `get_active_producers`, which are privileged intrinsics. Neither account is flagged `privileged`, so those imports cannot succeed today. The code was inspected statically only and never run. Both accounts are locked to `upcx@active`, and the public key that was used controls no accounts (`get_key_accounts` is empty).
 
 ## 2. Deployed code versus source
 
@@ -35,15 +35,16 @@ Remediation already on chain: at 2026-11-05 00:04 UTC `paya.token` and `demo.tok
 | `upcx.msig` | `8874b87c263a760e73a926a35f3a5f33290d0142000dcd5b2e3ea4bd1cb43f93` | `upcx-iac/packer/artifacts/upcx.msig` |
 | `upcx.nfa` | `0d60357e71ba271ced6ac7759ec465a3962fb50bb958aa328f675229a312196b` | `upcx-iac/packer/artifacts/upcx.nfa` |
 | `paya.token`, `demo.token` | `542c73ef7891521fedb636f5ceae2855d812a37bd972ec8c6db2ca97c354a182` | `UPCX-MPA-SmartContract` main at #4 (c5234a6). Redeployed at 03:32 UTC (`paya.token` block 127,477,904, `demo.token` four seconds later), each authorised by its own `active` only. It is the #3 auth fix (`34f5b393…`, which was deployed at 00:04 UTC) plus two restrictions: `increase` also needs `upcx.token`, and `removebalance` only works on whitelisted tokens. The `fix/token-update-settle-auth` branch (b5e5787) never merged. |
+| `myjuczx34urx` (ETH bridge) | `01e2ec0e72533a48d40fbb556a6d767ef6536ed8d483cd75499a43a66d96726e` | `UPCX-Bridge-Contract-UPCX` @3258a98. Upgraded 2026-11-05 (tx `cf7e3b5da8a1b1ae66c8c9cf858eee25eb1940664e64f6dadb9cab19ddefbbdf`) from `17e69dc0…` (42,639 bytes, matches `main`). Tables and the 4,119.30144 UPC balance were identical before and after. |
 | `upcx.mpa` | zero hash (no code) | Nothing is deployed, although the MPA token source references it. |
 | `nfa.test` | zero hash (no code) | n/a |
-| `nfa.test.a`, `nfa.test.b` | `cc952a6d0e7742323e7e97c4134fabe0c397e15f4662a47468d0a4ecfaefcd55` | No source found in the workspace. |
+| `nfa.test.a`, `nfa.test.b` | zero hash (cleared 2026-11-05) | Held `cc952a6d0e7742323e7e97c4134fabe0c397e15f4662a47468d0a4ecfaefcd55` before; no source found in the workspace. |
 
 Reference: the vulnerable MPA `main` wasm hashes to `ea9ba64298f9697b...` (prefix only was recorded). Any account that still reports that hash is vulnerable.
 
 Gaps in this comparison:
 - RPC cannot list every account that holds contract code. Other accounts on the vulnerable `main` build of the MPA token may exist. Check by querying the indexer for accounts whose `code_hash` is `ea9ba642...`.
-- The account names for `upcx.mta`, `upcx.oracle`, `upcx.evm`, `upcx.lp`, `upcx.msg`, `upcx.bridge`, `voting` and `upcx.bios` were guessed and are not deployed under those names. Whether the contracts in section 4 are live, and under which accounts, is unknown.
+- A later sweep of the `upcx` `abihash` table, `get_code_hash` and the explorer's `setcode` feed found that the live ETH bridge is `myjuczx34urx`, and that `upcx.mta`, `upcx.oracle`, `upcx.evm`, `upcx.lp`/`liquidity`, `upcx.msg`, `voting`, `upcx.mpa` and `upcx.bridge` hold no code on mainnet. `abihash` omits accounts set at genesis, so this is a floor.
 - `upcx.system`'s deployed bytes could not be diffed against source, so section 3 and 4 findings on it are source-level only.
 
 ### 2.1 EVM proxies (Ethereum mainnet, read-only RPC, 2026-11-05)
@@ -91,8 +92,8 @@ Severity is the author's judgment on source alone. Where a contract's deployment
 | G2 | Info | `upcx.evm` | Signed transactions carry no chain-id binding (cross-chain replay). | Reported. |
 | H1 | High | `UPCX-DEX-SmartContract` `upcx.lp` `initpool` (branch `fix/oracle-bounded-rate-tables`, old code) | No auth, and caller-supplied token contracts flow into inline actions authorized by `upcx.lp@active`. `main` adds `require_auth(creator)` and a creator gate. | Reported. The checked-out branch is behind `main`. Confirm the old code is not deployed. |
 | H2 | Medium | DEX `upcx.lp` on `main` | Token contracts are validated only by "a stat row exists"; an approved creator can still supply a custom contract. | Reported. |
-| I1 | High | `UPCX-Bridge-Contract-UPCX` `upcx.bridge` `withdraw` | Single authority (`require_auth(get_self())`) releases any amount. Replay set keyed on a relayer-chosen `uint64`. No cap or pause. The bridge account's permission setup is not visible from source. | Reported. |
-| I2 | Medium | `upcx.bridge` `deposit` | Destination and memo are not recorded or validated on chain; plain token transfers to the bridge are silently accepted. | Reported. |
+| I1 | High | `UPCX-Bridge-Contract-UPCX` `upcx.bridge` `withdraw` | Single authority (`require_auth(get_self())`) releases any amount. Replay set keyed on a relayer-chosen `uint64`. No cap or pause. The bridge account's permission setup is not visible from source. | Fixed in source and deployed on `myjuczx34urx` 2026-11-05. The cap, pause and `require_src` switches exist but are not set. |
+| I2 | Medium | `upcx.bridge` `deposit` | Destination and memo are not recorded or validated on chain; plain token transfers to the bridge are silently accepted. | Fixed in source and deployed on `myjuczx34urx` 2026-11-05. |
 | J1 | Medium | `UPCX-Arbitrum-Bridge-Contract` approvals | The owner, a new approver and one existing approver reach the 2-of-3 threshold for an approver change. A pending request cannot be cancelled. | Reported. |
 | J2 | Medium (by design) | Arbitrum bridge `sendUPC`; ETH bridge `receiveFromUPCX`; staking `withdraw` / `withdrawByAdmin` / `setUPCAddress` | Single operator or owner key can move funds. No timelock or multisig in the contracts. | Reported. |
 | J3 | Medium | `UpcxBridgeV2` | Roles are split from the `Ownable` owner; any `DEFAULT_ADMIN_ROLE` holder can grant the receiver role. Not on mainnet per the manifest. | Reported. |
@@ -287,7 +288,7 @@ Legend: "self" = `require_auth(get_self())`. "chain" = the native handler enforc
 | send | accounts, messages, optional fee transfer | `auth_user` taken from the channel row by the `from` flag (:43-44) | OK; FINDING E2 |
 | update | messages.content (`same_payer`) | `sender` or `receiver` of `_channels.find(id)`, with `id` = **message** id (:117-120) | FINDING E1 |
 
-### 4.9 `upcx.bridge` (`UPCX-Bridge-Contract-UPCX` `main`, `43294da`)
+### 4.9 `upcx.bridge` (`UPCX-Bridge-Contract-UPCX` `main`, `43294da`; live as `myjuczx34urx`)
 
 | Action | State mutated | Auth | Verdict |
 |---|---|---|---|
@@ -368,15 +369,15 @@ Roles: Arbitrum bridge `owner` is the deployer and `approverA/B/C` are construct
 
 Each fix belongs in its own repo's PR.
 
-1. Merge `UPCX-MPA-SmartContract` `fix/token-update-settle-auth`, and find any other account running the vulnerable hash `ea9ba642...` through the indexer.
-2. Decide whether `voting`, `upcx.mta`, `upcx.msg`, `upcx.lp` (old branch) and `upcx.bridge` are deployed, and under which accounts. C1, D1 and E1 are one-line fixes and should land regardless.
+1. Find any other account running the vulnerable hash `ea9ba642...` through the indexer. The MPA token fix is merged (MPA #3, #4, #5) and deployed on `paya.token` and `demo.token`.
+2. Set the bridge limits on `myjuczx34urx` (`setcap`, then `setreqsrc` once the relayer sends source hashes). The other contracts (`voting`, `upcx.mta`, `upcx.msg`, `upcx.lp`) are not on mainnet; their fixes ship with a first launch.
 3. Merge Stake-B `fix/withdraw-access-control` and upgrade the V1 and V3 proxies that hold funds.
 4. Review `upcx.system` name bidding (F1) against a build that matches the deployed hash.
 5. Confirm on-chain owners for the bridge account permissions and the EVM ProxyAdmin, which decide the real impact of I1, J1 and J2.
 
 ## 6. Fix PR status (2026-11-05)
 
-Nothing in this table is deployed. "Built" means compiled with the real CDT image; "chain-tested" means run on a throwaway `nodupcx`. Rows marked unbuilt have not been through either.
+Only the bridge (`myjuczx34urx`) and the MPA token (`paya.token`, `demo.token`) are deployed; every other contract in this table is not on mainnet. "Built" means compiled with the real CDT image; "chain-tested" means run on a throwaway `nodupcx`. Rows marked unbuilt have not been through either.
 
 | Repo | PR | Findings | State | Notes |
 |---|---|---|---|---|
@@ -387,7 +388,7 @@ Nothing in this table is deployed. "Built" means compiled with the real CDT imag
 | UPCX-SmartContract | #4, #7 | F1-F5, `onblock` double-pay and related name-bidding issues | merged, built, chain-tested | #7 adds the regression script: 35/35 on main, and the pre-fix build `ba6ddc9` reproduces F1 variants and the F4 id collision. Not testable locally: `onblock` auction close (14 days of chain time) and the `setabi` check. The `bidrefund` auth change is harmless (the baseline refund also works because `upcx` skips inline auth checks). Main builds to `3e3801bd…`, not the deployed `4daa36fa…`; see section 7. |
 | UPCX-Messager-SmartContract | #2, #3 | E1 | merged, built, chain-tested | #3 drops the E2 caps and adds `tests/local-chain`. Deploy `upcx.msg.wasm` sha256 `3cb1d393…0a42` (ABI unchanged, `setcode` only). The capped build from #2 (`fc6a64f9…`) must not be deployed; anyone who did needs the same redeploy. |
 | UPCX-DEX-SmartContract | #19, #20 | H2 | merged, built, chain-tested | #20 adds the `upcx.lp` local-chain harness for `initpool` and the token whitelist (not run against the pre-fix wasm). H1 did not reproduce on `main`. Adds a token-contract whitelist (ABI change, redeploy); whitelist any non-`upcx.token` contracts that need pools. |
-| UPCX-Bridge-Contract-UPCX | #2 | I1, I2 | merged, built, chain-tested | Compile fix is the `upcx/crypto.hpp` include. 83/83 checks on a throwaway `nodupcx` (replay, cap, pause, `deposits` rows, in-place upgrade over main, relayer-shaped `withdrawsrc`); 16 checks fail on a deliberately broken build. Wasm is 63,325 bytes (main 42,639), so the deploy needs a size-based fee authorised by `upcx@active`. Relayer changes must ship before the cap or pause is enabled. RAM cost per row still an estimate. |
+| UPCX-Bridge-Contract-UPCX | #2 | I1, I2 | merged, built, chain-tested | Compile fix is the `upcx/crypto.hpp` include. 83/83 checks on a throwaway `nodupcx` (replay, cap, pause, `deposits` rows, in-place upgrade over main, relayer-shaped `withdrawsrc`); 16 checks fail on a deliberately broken build. Wasm is 63,325 bytes (main 42,639), so the deploy needs a size-based fee authorised by `upcx@active`. Relayer changes must ship before the cap or pause is enabled. RAM cost per row still an estimate. **Deployed 2026-11-05 on `myjuczx34urx`** (tx `cf7e3b5d…`); cap, pause and `require_src` not yet set; relayer not yet shipped. |
 | UPCX-Arbitrum-Bridge-Contract | #1 | J1 (accepted risk), J2, J4 | merged | `sendUPC` now needs 2-of-3 approval; cancel added for other request types; redeploy and fund-migration plan in the PR. |
 | UPCX-Bridge-Contract-ETH | #7 | J3, J4 | merged | Storage layout unchanged (`validateUpgrade` passes). Mainnet proxy needs a new implementation and a ProxyAdmin upgrade. Mainnet proxy still needs a new implementation and ProxyAdmin upgrade. |
 | Stake-SmartContract | #1 | J4 | merged | Non-breaking fixes only. The one mainnet proxy has a renounced ProxyAdmin, so fixes apply to new deployments only. |
@@ -433,7 +434,7 @@ Built in the `upcx-cdt` image from `git archive origin/main` of each repo, after
 | UPCX-SmartContract @4406d3c | `upcx.evm` | `ef8c035981536fc3274f29f316c891f8fcb0f417d6bde8318f2f17cf802d788b` | Built with TESTING off only. |
 | UPCX-DEX-SmartContract @cf7a323 | `upcx.lp` | `2dc4e947e7aef465468765743efc4fbb602576f44a0e38bb985d04b8c698fbfd` | ABI change (token whitelist); whitelist non-`upcx.token` contracts after deploy. |
 | UPCX-DEX-SmartContract @cf7a323 | `upcx.oracle` | `0b3eeec5f25ac2b266b8aef7168e2287bf89ea9c86ed95d270ba18f6e022f5f1` | |
-| UPCX-Bridge-Contract-UPCX @3258a98 | `upcx.bridge` | `01e2ec0e72533a48d40fbb556a6d767ef6536ed8d483cd75499a43a66d96726e` | 63,325 bytes; the deploy needs a `upcx@active` authorisation for the size fee. |
+| UPCX-Bridge-Contract-UPCX @3258a98 | `upcx.bridge` | `01e2ec0e72533a48d40fbb556a6d767ef6536ed8d483cd75499a43a66d96726e` | 63,325 bytes. **Live on `myjuczx34urx` since 2026-11-05**; the deploy needed `upcx@active` for the size fee. |
 | UPCX-Messager-SmartContract @aa8accf | `upcx.msg` | `3cb1d39300bed30642e4d9f32cb3c8afa43c1ec6c275e29fb0a83acbbbbb0a42` | `setcode` only. Do not deploy the capped `fc6a64f9…`. |
 | UPCX-MPA-SmartContract @b7a95c9 | `upcx.token` | `542c73ef7891521fedb636f5ceae2855d812a37bd972ec8c6db2ca97c354a182` | Reproduces the code live on `paya.token` and `demo.token`. |
 | UPCX-MPA-SmartContract @b7a95c9 | `upcx.mpa` | `90a27b920956f284fc68b3e35beb8ecf86d4e45e95571ed180554be02e473c4c` | Deployed hash not compared. |

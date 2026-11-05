@@ -1,6 +1,6 @@
 # Deploy runbook: upcx.bridge, upcx.msg, upcx.lp
 
-Draft for the person who holds the mainnet keys. Nothing here has been run against mainnet. Every `<PLACEHOLDER>` must be filled in from a source you trust, and each step should be checked on the testnet first.
+Draft for the person who holds the mainnet keys. Section 3 steps through "Deploy" were run on mainnet on 2026-11-05 against `myjuczx34urx`; the configuration and small-test steps have not been. Sections 1 and 2 have not been run, and their contracts are not on mainnet. Every `<PLACEHOLDER>` must be filled in from a source you trust, and each step should be checked on the testnet first.
 
 ## 0. Before you start
 
@@ -9,11 +9,11 @@ Draft for the person who holds the mainnet keys. Nothing here has been run again
 | RPC | `https://shard-a-node1.upcx.org:9000` (read) |
 | Chain CLI | `clupcx -u $RPC` |
 | Build image | `032959621317.dkr.ecr.ap-northeast-1.amazonaws.com/upcx-testnet/upcx-cdt:latest` |
-| Bridge account | `<BRIDGE_ACCOUNT>` (the `UPCX_BRIDGE_ACCOUNT_NAME` in the bridge backend) |
+| Bridge account | `myjuczx34urx` (substitute for `<BRIDGE_ACCOUNT>` below) |
 | Msg account | `<MSG_ACCOUNT>` |
 | LP account | `liquidity` is the name used by the DEX frontend (`LIQUIDITY_CONTRACT`); it returned "unspecified" on the public RPC when probed, so confirm the real name |
 
-The mainnet account names for these three were not found in any repository or by RPC probing. Confirm them first.
+The bridge account is `myjuczx34urx`. `upcx.msg` and `upcx.lp` have no mainnet account because neither contract is deployed there.
 
 ### Fees
 Every non-system transaction on this chain needs a native `upcx.token::fee` action. Contract deploys are charged by size. Put `upcx@active` as the first authorizer so the system exemption applies, as the bridge test showed (a deploy without it was refused with `Required:43037`).
@@ -103,7 +103,11 @@ clupcx -u $RPC set contract <BRIDGE_ACCOUNT> ./bridge-build upcx.bridge.wasm upc
 clupcx -u $RPC get abi <BRIDGE_ACCOUNT> | grep -E 'bridgecfg|deposits|bwsrc|bwtxns|setcap|setpaused|setreqsrc|withdrawsrc'
 ```
 
+Deployed 2026-11-05 as tx `cf7e3b5da8a1b1ae66c8c9cf858eee25eb1940664e64f6dadb9cab19ddefbbdf`, going from `17e69dc0…` to `01e2ec0e…`. Tables and balance were unchanged. The previous wasm and ABI are kept for rollback.
+
 ### Configure (all start permissive; tighten after the relayer is live)
+
+Not done yet: the bridge is unpaused with no cap and `require_src` off.
 ```bash
 # safe default first: pause until the relayer is confirmed working
 clupcx -u $RPC push action <BRIDGE_ACCOUNT> setpaused '[true]'  -p <BRIDGE_ACCOUNT>@active

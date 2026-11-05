@@ -6,7 +6,7 @@ For a parent session consolidating the work. Branch `audit/contract-auth-sweep` 
 | File | Purpose |
 |---|---|
 | `2026-11-05-contract-auth-sweep.md` | Main audit: exploit summary, deployed code vs source, findings A1-J4, per-action auth tables (section 4), work order, fix PR status (6), builds and hash parity (7, 7.1, 7.2) |
-| `2026-11-05-deploy-runbook-bridge-msg-lp.md` | Draft deploy commands for `upcx.msg`, `upcx.lp`, `upcx.bridge`. Placeholders for account names. Never run |
+| `2026-11-05-deploy-runbook-bridge-msg-lp.md` | Deploy commands for `upcx.msg`, `upcx.lp`, `upcx.bridge`. The bridge deploy (section 3) was run on `myjuczx34urx`; its configuration steps and the other two contracts were not |
 | `2026-11-05-evm-contracts-stakeholder-brief.md` | Plain-language brief on the Ethereum and Arbitrum contracts and decisions needed |
 | this file | Handoff |
 
@@ -17,8 +17,10 @@ Attacker `nfa.test` (with `nfa.test.a`, `.b`) abused missing `require_auth` on `
 - `paya.token` and `demo.token` both run wasm `542c73ef7891521fedb636f5ceae2855d812a37bd972ec8c6db2ca97c354a182` (redeployed 03:32 UTC). It is `UPCX-MPA-SmartContract` main at #4: the auth fix (`34f5b393…`, first deployed 00:04 UTC) plus `increase` needing `upcx.token` and `removebalance` limited to whitelisted tokens.
 - Their active and owner keys were rotated 01:30-01:34 UTC. The owner confirmed this was expected.
 - `upcx.token` was never affected; it runs `30b5740c…` and reproduces from source.
+- The ETH bridge `myjuczx34urx` was upgraded on 2026-11-05 (tx `cf7e3b5d…`) from `17e69dc0…` to `01e2ec0e…` (`upcx.bridge` @3258a98). State and the 4,119.30144 UPC balance were unchanged. It runs unpaused with no cap, and the relayer change (Bridge-Backend #13, #14) is not yet shipped.
+- `nfa.test.a` and `nfa.test.b` had their code and ABI cleared the same day (attacker wasm `cc952a6d…` archived).
 
-## Fixed in source, merged, NOT deployed
+## Fixed in source, merged, not on mainnet (bridge excepted)
 | Contract | Findings | Repo PRs | Final main hash (wasm sha256, CDT image) |
 |---|---|---|---|
 | `voting` | C1-C4, deposit redesign, 1 UPC minimum | UPCX-SmartContract #5, #6, #8, #9 | `4f8a8010d1710f986fc9ceb27c8f6d101d1614fc92b8469bd67a7bd1d76508af` |
@@ -27,7 +29,7 @@ Attacker `nfa.test` (with `nfa.test.a`, `.b`) abused missing `require_auth` on `
 | `upcx.evm` | G1 (TESTING off build only) | #5, #6 | `ef8c035981536fc3274f29f316c891f8fcb0f417d6bde8318f2f17cf802d788b` |
 | `upcx.msg` | E1 (E2 caps dropped by decision) | Messager #2, #3 | `3cb1d39300bed30642e4d9f32cb3c8afa43c1ec6c275e29fb0a83acbbbbb0a42` |
 | `upcx.lp` | H1, H2 | DEX #19, #20 | `2dc4e947e7aef465468765743efc4fbb602576f44a0e38bb985d04b8c698fbfd` |
-| `upcx.bridge` | I1, I2 | Bridge-Contract-UPCX #2 | `01e2ec0e72533a48d40fbb556a6d767ef6536ed8d483cd75499a43a66d96726e` |
+| `upcx.bridge` | I1, I2 | Bridge-Contract-UPCX #2 | `01e2ec0e72533a48d40fbb556a6d767ef6536ed8d483cd75499a43a66d96726e` (deployed on `myjuczx34urx`) |
 | MPA `upcx.token` / `upcx.mpa` | A1-A4 | MPA #3, #4, #5 | `542c73ef…` / `90a27b920956f284fc68b3e35beb8ecf86d4e45e95571ed180554be02e473c4c` |
 | EVM | B1, J1-J4 | Stake-B #4, #5, #6; Arbitrum #1; Bridge-Contract-ETH #7; Stake-SmartContract #1 | Hardhat, not wasm |
 | Backend, frontend | relayer handling, Helm flag | Bridge-Backend #13, #14; Bridge-Frontend #3 | Frontend #3 test never ran (no CodeArtifact token) |
@@ -42,12 +44,12 @@ Test evidence on throwaway `nodupcx` (chain-node image, deployed-hash `upcx.toke
 - EVM: 3 of 6 Stake-B proxies are upgradable by one EOA; the other 3 and the Stake-SmartContract proxy have renounced admins and cannot take any fix. ETH bridge proxy upgradable by a different EOA. Stake-B proxy `0x14e4…cf51` runs implementation `0x1a43…a3da`, which is unreviewed.
 
 ## Pending, in suggested order
-1. Mainnet account names for `upcx.bridge`, `upcx.msg`, `upcx.lp`, `upcx.mta`, `voting` (RPC probing of `bridge`, `upcx.bridge`, `liquidity`, `msg`, `messager`, `voting` etc. returned "unspecified"). Needed to finish the runbook.
-2. Deploys, all owner-run: `upcx.bridge` first (relayer must ship first, start paused, set cap), then `upcx.msg` (`setcode` only), then `upcx.lp` (then `addtokcont` for live pools' token contracts). Each should be rehearsed on testnet.
+1. Bridge configuration on `myjuczx34urx`: choose and set the withdrawal cap (past withdrawals: median about 10 UPC, max 2,785 UPC), ship the relayer, then `setreqsrc`, then run the runbook's small tests. Confirm the live bridge frontend sends valid `0x`+40-hex destinations, since the new contract rejects anything else.
+2. `upcx.msg`, `upcx.lp`, `upcx.mta`, `voting`, `upcx.evm` and `upcx.mpa` are not on mainnet, so there is nothing to deploy; their fixes ship at first launch. Deferred by the owner.
 3. Stakeholder decisions in the EVM brief: multisig/timelock for the owner EOAs (J2), migrate or accept the non-upgradable staking copies, authorize upgrades, approve the Arbitrum redeploy and fund-migration plan (payouts then need two approvers; backend rework required), review of `0x1a43…a3da`.
 4. `upcx.system`: decide whether to deploy main (review `git diff 35d2e90 origin/main -- contracts/upcx.system`) or keep a stopgap (keep `upcx.names` unfunded, no auctions). F1 deferred.
 5. Smaller: `upcx.evm` TESTING=ON host tests never run; `upcx.mpa` deployed hash not compared; vulnerable-token scan needs an indexer; Frontend #3 test; six stale Stake-B tests failing on main; MPA findings A3, A5, A6 open or accepted.
-6. Not verified: how much value sits in each EVM contract; whether any account uses `voting`, `upcx.mta`, `upcx.msg` on mainnet.
+6. Not verified: how much value sits in each EVM contract; the state of `zzjtestzz` (`get_account` errors).
 
 ## Sessions and housekeeping
 - Nine `aoe` sessions ("Auth fix: ...") did the fixes; all PRs they opened are merged and the sessions are archived (`aoe session archive`; unarchive with `aoe session unarchive <id>`). They also sit in an `Archive` group I created earlier. Two (ETH bridge, Stake-SmartContract) point at worktrees their agents deleted.

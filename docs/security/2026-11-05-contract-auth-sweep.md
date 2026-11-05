@@ -418,3 +418,24 @@ Toolchain: `upcx-testnet/upcx-cdt:latest` (upcx.cdt 1.8.1, CMake 3.10), built in
 Parity with mainnet:
 - `upcx.token` is reproducible: the image builds the deployed bytes exactly.
 - `upcx.system` is not: the pre-fix source builds to `823254a3...`, deployed is `4daa36fa...`, and the packer artifact is `ef069252...`. The deployed system contract was built from different source, flags or toolchain, so a `setcode` of the fixed build cannot be reviewed as a diff against what is live. Resolve this before any system-contract deploy.
+
+### 7.1 Final clean builds from `origin/main` (2026-11-05)
+
+Built in the `upcx-cdt` image from `git archive origin/main` of each repo, after #6, #8 and #9 merged. Every contract builds. These supersede the branch-based hashes above.
+
+| Repo @ main | Contract | wasm sha256 | Note |
+|---|---|---|---|
+| UPCX-SmartContract @4406d3c | `voting` | `4f8a8010d1710f986fc9ceb27c8f6d101d1614fc92b8469bd67a7bd1d76508af` | Includes the transfer-notification deposit and the 1 UPC minimum. Redeploy together with `voting@active` getting its own `upcx.code` permission. |
+| UPCX-SmartContract @4406d3c | `upcx.mta` | `640225bc7398fc4127f77b32933a51f7f3f80891d46e6cf1f12d656b4b4d15ae` | |
+| UPCX-SmartContract @4406d3c | `upcx.token` | `30b5740c7a46ffd696f4b7e5feebe329396ab2e9dc950f3ca9ada26a53873ed1` | Same as the code deployed on mainnet `upcx.token`; no redeploy needed. |
+| UPCX-SmartContract @4406d3c | `upcx.system` | `3e3801bde90427bb1cdca875c92527d1fc2a7f65ebd75ad24e58d7341dc5443c` | Deployed is `4daa36fa…`; parity unresolved. Also builds `rex.results` (`658b7387…`). |
+| UPCX-SmartContract @4406d3c | `upcx.evm` | `ef8c035981536fc3274f29f316c891f8fcb0f417d6bde8318f2f17cf802d788b` | Built with TESTING off only. |
+| UPCX-DEX-SmartContract @cf7a323 | `upcx.lp` | `2dc4e947e7aef465468765743efc4fbb602576f44a0e38bb985d04b8c698fbfd` | ABI change (token whitelist); whitelist non-`upcx.token` contracts after deploy. |
+| UPCX-DEX-SmartContract @cf7a323 | `upcx.oracle` | `0b3eeec5f25ac2b266b8aef7168e2287bf89ea9c86ed95d270ba18f6e022f5f1` | |
+| UPCX-Bridge-Contract-UPCX @3258a98 | `upcx.bridge` | `01e2ec0e72533a48d40fbb556a6d767ef6536ed8d483cd75499a43a66d96726e` | 63,325 bytes; the deploy needs a `upcx@active` authorisation for the size fee. |
+| UPCX-Messager-SmartContract @aa8accf | `upcx.msg` | `3cb1d39300bed30642e4d9f32cb3c8afa43c1ec6c275e29fb0a83acbbbbb0a42` | `setcode` only. Do not deploy the capped `fc6a64f9…`. |
+| UPCX-MPA-SmartContract @b7a95c9 | `upcx.token` | `542c73ef7891521fedb636f5ceae2855d812a37bd972ec8c6db2ca97c354a182` | Reproduces the code live on `paya.token` and `demo.token`. |
+| UPCX-MPA-SmartContract @b7a95c9 | `upcx.mpa` | `90a27b920956f284fc68b3e35beb8ecf86d4e45e95571ed180554be02e473c4c` | Deployed hash not compared. |
+
+The `paya.token` and `demo.token` key rotations (01:30-01:34 UTC) were confirmed as expected by the owner.
+

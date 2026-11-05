@@ -1,6 +1,6 @@
 # Deploy runbook: upcx.bridge, upcx.msg, upcx.lp
 
-Draft for the person who holds the mainnet keys. Section 3 steps through "Deploy" were run on mainnet on 2026-11-05 against `myjuczx34urx`; the configuration and small-test steps have not been. Sections 1 and 2 have not been run, and their contracts are not on mainnet. Every `<PLACEHOLDER>` must be filled in from a source you trust, and each step should be checked on the testnet first.
+Draft for the person who holds the mainnet keys. Section 3 steps through "Deploy" were run on mainnet on 2026-11-05 against `myjuczx34urx`; the cap and small tests were run (below); the relayer-side steps are partly done. Sections 1 and 2 have not been run, and their contracts are not on mainnet. Every `<PLACEHOLDER>` must be filled in from a source you trust, and each step should be checked on the testnet first.
 
 ## 0. Before you start
 
@@ -107,7 +107,9 @@ Deployed 2026-11-05 as tx `cf7e3b5da8a1b1ae66c8c9cf858eee25eb1940664e64f6dadb9ca
 
 ### Configure (all start permissive; tighten after the relayer is live)
 
-Not done yet: the bridge is unpaused with no cap and `require_src` off.
+Done: `setcap 3000.00000 UPC` (tx `de554e72…`). Not set: pause (off) and `require_src` (off, pending a relayer-driven `withdrawsrc`).
+
+Small tests run on mainnet 2026-11-05: a 3,000.00001 UPC withdraw was rejected with "Amount exceeds per-transaction withdraw cap"; `withdrawsrc` of 0.00001 UPC paid (tx `5c0f7cb3…`); the same source hash with a new `txns_id` was rejected ("Source deposit already withdrawn"); the same `txns_id` was rejected. A deposit of 1.5 UPC from a throwaway account to `0x…dEaD` wrote a `deposits` row (tx `26f9a2b3…`) and the live API released it on Ethereum (`0xc5b9f8be…66368ec`, fee 0.51601 UPC). Not tested: a malformed destination through the frontend, and Ethereum to UPCX through the relayer.
 ```bash
 # safe default first: pause until the relayer is confirmed working
 clupcx -u $RPC push action <BRIDGE_ACCOUNT> setpaused '[true]'  -p <BRIDGE_ACCOUNT>@active

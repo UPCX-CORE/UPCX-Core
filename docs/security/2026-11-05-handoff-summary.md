@@ -17,7 +17,7 @@ Attacker `nfa.test` (with `nfa.test.a`, `.b`) abused missing `require_auth` on `
 - `paya.token` and `demo.token` both run wasm `542c73ef7891521fedb636f5ceae2855d812a37bd972ec8c6db2ca97c354a182` (redeployed 03:32 UTC). It is `UPCX-MPA-SmartContract` main at #4: the auth fix (`34f5b393…`, first deployed 00:04 UTC) plus `increase` needing `upcx.token` and `removebalance` limited to whitelisted tokens.
 - Their active and owner keys were rotated 01:30-01:34 UTC. The owner confirmed this was expected.
 - `upcx.token` was never affected; it runs `30b5740c…` and reproduces from source.
-- The ETH bridge `myjuczx34urx` was upgraded on 2026-11-05 (tx `cf7e3b5d…`) from `17e69dc0…` to `01e2ec0e…` (`upcx.bridge` @3258a98). State and the 4,119.30144 UPC balance were unchanged. It runs unpaused with no cap, and the relayer change (Bridge-Backend #13, #14) is not yet shipped.
+- The ETH bridge `myjuczx34urx` was upgraded on 2026-11-05 (tx `cf7e3b5d…`) from `17e69dc0…` to `01e2ec0e…` (`upcx.bridge` @3258a98). State and the 4,119.30144 UPC balance were unchanged. Cap is 3,000 UPC (tx `de554e72…`); unpaused, `require_src` off. The relayer (`9c63fe3`) and frontend (`aade4e4`) were promoted in upcx-charts #334 and the `withdrawsrc` flag enabled in #335. The runbook's small tests and a live deposit to the dead address passed.
 - `nfa.test.a` and `nfa.test.b` had their code and ABI cleared the same day (attacker wasm `cc952a6d…` archived).
 
 ## Fixed in source, merged, not on mainnet (bridge excepted)
@@ -44,7 +44,7 @@ Test evidence on throwaway `nodupcx` (chain-node image, deployed-hash `upcx.toke
 - EVM: 3 of 6 Stake-B proxies are upgradable by one EOA; the other 3 and the Stake-SmartContract proxy have renounced admins and cannot take any fix. ETH bridge proxy upgradable by a different EOA. Stake-B proxy `0x14e4…cf51` runs implementation `0x1a43…a3da`, which is unreviewed.
 
 ## Pending, in suggested order
-1. Bridge configuration on `myjuczx34urx`: choose and set the withdrawal cap (past withdrawals: median about 10 UPC, max 2,785 UPC), ship the relayer, then `setreqsrc`, then run the runbook's small tests. Confirm the live bridge frontend sends valid `0x`+40-hex destinations, since the new contract rejects anything else.
+1. `setreqsrc true` on `myjuczx34urx`, once the relayer's own `withdrawsrc` call has been seen on a real Ethereum-to-UPCX deposit. Until then the old `withdraw` still works as a fallback. Consider splitting the bridge account's `owner` and `active` keys, which are one key today.
 2. `upcx.msg`, `upcx.lp`, `upcx.mta`, `voting`, `upcx.evm` and `upcx.mpa` are not on mainnet, so there is nothing to deploy; their fixes ship at first launch. Deferred by the owner.
 3. Stakeholder decisions in the EVM brief: multisig/timelock for the owner EOAs (J2), migrate or accept the non-upgradable staking copies, authorize upgrades, approve the Arbitrum redeploy and fund-migration plan (payouts then need two approvers; backend rework required), review of `0x1a43…a3da`.
 4. `upcx.system`: decide whether to deploy main (review `git diff 35d2e90 origin/main -- contracts/upcx.system`) or keep a stopgap (keep `upcx.names` unfunded, no auctions). F1 deferred.

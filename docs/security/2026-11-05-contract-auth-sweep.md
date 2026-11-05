@@ -73,7 +73,7 @@ Severity is the author's judgment on source alone. Where a contract's deployment
 | A4 | Medium | MPA `upcx.token` `removebalance` (`main`) | Issuer erases a balance without reducing supply. Auth is correct. | Reported. Fixed on the fix branch. |
 | A5 | Low | MPA `upcx.token` `whiteaccount` | Whitelist vector is unbounded; RAM stays with the contract. Issuer-gated. | Reported. |
 | A6 | Low | Fix branch `check_img` | Accepts any `https://` host, so a tracking pixel is still possible. Script and `data:` URIs are rejected. | Reported. |
-| B1 | High | `Stake-B-Smart-Contract` `StakingContractV1/V3/V4.withdraw(id)` | No check that the caller owns `records[id]`; the payout goes to `msg.sender`. Any caller can take a record's withdrawable principal and reward once the schedule opens. | Verified (V3). Fix on `origin/fix/withdraw-access-control` (6eb6e18), unmerged. Mainnet manifest lists V1 and V3 implementations, so an upgrade is needed. Only 3 of the 6 mainnet proxies can be upgraded (section 2.1). |
+| B1 | High | `Stake-B-Smart-Contract` `StakingContractV1/V3/V4.withdraw(id)` | No check that the caller owns `records[id]`; the payout goes to `msg.sender`. Any caller can take a record's withdrawable principal and reward once the schedule opens. | Verified (V3). Fixed on `main` in Stake-B-Smart-Contract #4 and #5 (merged 2026-11-05); deployed proxies are unchanged until an upgrade is signed. Mainnet manifest lists V1 and V3 implementations, so an upgrade is needed. Only 3 of the 6 mainnet proxies can be upgraded (section 2.1). |
 | C1 | Critical | `UPCX-SmartContract` `voting` `sendtip` | No `require_auth(sender)`; `sub_balance(sender, ...)` debits any depositor. | Verified (no auth call in the action). Deployment unknown. |
 | C2 | Critical | `voting` `newcontract` | `creator` is unauthenticated (the `require_auth(creator)` line is commented out) and `feerate` is unbounded, so `sendtip` can credit a creator more than the sender pays. | Reported. |
 | C3 | High | `voting` `subscribe`, `newcontract`, `add_balance`, `receivesub` | Unbounded rows paid by the contract; one bad subscription reverts the whole batch. | Reported. |
@@ -359,7 +359,7 @@ Roles: Arbitrum bridge `owner` is the deployer and `approverA/B/C` are construct
 | V1/V3/V4::initialvalue | owner, APY, token | `initializer` | FINDING J4 |
 | V1/V3/V4::setAdminDate | `listDate`, `startDate` | `onlyAdminContract` | OK |
 | V1/V3/V4::stake | pulls caller's UPC | `nonReentrant` | OK |
-| V1/V3/V4::withdraw(id) | pays `msg.sender` | **none** on `main`; V4 on `main` also has no check | FINDING B1 |
+| V1/V3/V4::withdraw(id) | pays `msg.sender` | **none** before 2026-11-05; now `records[id].staker == msg.sender` on `main` (#4); deployed proxies still run the old code | FINDING B1 |
 | V1/V3/V4::setUPCAddress | swaps token | `onlyOwner` | FINDING J2 |
 | V1/V3/V4::setAdminContractAddress | admin contract | `onlyOwner` | OK |
 | V1/V3/V4::withdrawByAdmin | any amount to owner | `onlyOwner`, no solvency check | FINDING J2 |

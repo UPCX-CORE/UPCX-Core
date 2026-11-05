@@ -409,6 +409,7 @@ Toolchain: `upcx-testnet/upcx-cdt:latest` (upcx.cdt 1.8.1, CMake 3.10), built in
 | `upcx.mta` | UPCX-SmartContract `main` (`beed171`) | built | `640225bc7398fc4127f77b32933a51f7f3f80891d46e6cf1f12d656b4b4d15ae` |
 | `upcx.system` | UPCX-SmartContract `main` (`beed171`) | built | `4aadbdf1a01a78e8169805b6b01e857ef1e5ebdb1954cab8b437358601ef8f7f` |
 | `upcx.system` | `8acf669` (last commit before the fixes; source as `ba6ddc9` plus the build-target shim) | built | `823254a3c1be420ee0db7cb021d59ee0f6d6d58fa2aad2c141d9ad9653618d72` |
+| `upcx.system` | `35d2e90` + build-file shim | built | `4daa36fa1f6c4a6afed05c1b1a21e5abf2286fb89b1cc0ffb5a4326a93ea6cb8` (**matches live**) |
 | `upcx.lp` (`liquidity`) | DEX `main` (`153f3c8`) | built | `2dc4e947e7aef465468765743efc4fbb602576f44a0e38bb985d04b8c698fbfd` |
 | `upcx.oracle` | DEX `main` (`153f3c8`) | built | `0b3eeec5f25ac2b266b8aef7168e2287bf89ea9c86ed95d270ba18f6e022f5f1` |
 | `voting` | UPCX-SmartContract `main` | **build fails** | CMake names the target `voting`, the toolchain names it `voting.wasm`; needs the same target-name shim the other contracts have |
@@ -417,7 +418,7 @@ Toolchain: `upcx-testnet/upcx-cdt:latest` (upcx.cdt 1.8.1, CMake 3.10), built in
 
 Parity with mainnet:
 - `upcx.token` is reproducible: the image builds the deployed bytes exactly.
-- `upcx.system` is not: the pre-fix source builds to `823254a3...`, deployed is `4daa36fa...`, and the packer artifact is `ef069252...`. The deployed system contract was built from different source, flags or toolchain, so a `setcode` of the fixed build cannot be reviewed as a diff against what is live. Resolve this before any system-contract deploy.
+- `upcx.system` reproduces from `UPCX-SmartContract` commit `35d2e90` (2025-02-18, "fix: invalid character check error fixed") with only the `60318fd` build-file shim: it builds to `4daa36fa1f6c4a6afed05c1b1a21e5abf2286fb89b1cc0ffb5a4326a93ea6cb8`, the live hash. Sibling `rex.results` is `658b7387…`. Neighbouring commits give different hashes (`3d7f2c9`/`2dfeb0f`/`b157e97` `d1a354c7…`, `cbbbd45` `09bd42b9…`, `677cc9e` `99a70656…`, `4102b5a` `ffc86b9d…`; `7b059d5`, `0905bf1` and `87919b3` did not build). The earlier "does not match" result came from building `ba6ddc9`, which is later than what is deployed.
 
 ### 7.1 Final clean builds from `origin/main` (2026-11-05)
 
@@ -428,7 +429,7 @@ Built in the `upcx-cdt` image from `git archive origin/main` of each repo, after
 | UPCX-SmartContract @4406d3c | `voting` | `4f8a8010d1710f986fc9ceb27c8f6d101d1614fc92b8469bd67a7bd1d76508af` | Includes the transfer-notification deposit and the 1 UPC minimum. Redeploy together with `voting@active` getting its own `upcx.code` permission. |
 | UPCX-SmartContract @4406d3c | `upcx.mta` | `640225bc7398fc4127f77b32933a51f7f3f80891d46e6cf1f12d656b4b4d15ae` | |
 | UPCX-SmartContract @4406d3c | `upcx.token` | `30b5740c7a46ffd696f4b7e5feebe329396ab2e9dc950f3ca9ada26a53873ed1` | Same as the code deployed on mainnet `upcx.token`; no redeploy needed. |
-| UPCX-SmartContract @4406d3c | `upcx.system` | `3e3801bde90427bb1cdca875c92527d1fc2a7f65ebd75ad24e58d7341dc5443c` | Deployed is `4daa36fa…`; parity unresolved. Also builds `rex.results` (`658b7387…`). |
+| UPCX-SmartContract @4406d3c | `upcx.system` | `3e3801bde90427bb1cdca875c92527d1fc2a7f65ebd75ad24e58d7341dc5443c` | Live is `4daa36fa…` = source `35d2e90`. Main carries all name-bidding changes since then (about Apr to Jun 2025, including `bidclaim`, late claimers and social-recovery preparation) that were never deployed, plus the F1-F5 fixes. See section 7.2. |
 | UPCX-SmartContract @4406d3c | `upcx.evm` | `ef8c035981536fc3274f29f316c891f8fcb0f417d6bde8318f2f17cf802d788b` | Built with TESTING off only. |
 | UPCX-DEX-SmartContract @cf7a323 | `upcx.lp` | `2dc4e947e7aef465468765743efc4fbb602576f44a0e38bb985d04b8c698fbfd` | ABI change (token whitelist); whitelist non-`upcx.token` contracts after deploy. |
 | UPCX-DEX-SmartContract @cf7a323 | `upcx.oracle` | `0b3eeec5f25ac2b266b8aef7168e2287bf89ea9c86ed95d270ba18f6e022f5f1` | |
@@ -438,4 +439,10 @@ Built in the `upcx-cdt` image from `git archive origin/main` of each repo, after
 | UPCX-MPA-SmartContract @b7a95c9 | `upcx.mpa` | `90a27b920956f284fc68b3e35beb8ecf86d4e45e95571ed180554be02e473c4c` | Deployed hash not compared. |
 
 The `paya.token` and `demo.token` key rotations (01:30-01:34 UTC) were confirmed as expected by the owner.
+
+### 7.2 What deploying `upcx.system` from main would change
+
+- Live `upcx` runs `35d2e90`. Main is the live code plus about nine months of undeployed history and the F1-F5 fixes, so a main deploy is not a patch-sized diff: `git diff 35d2e90 origin/main -- contracts/upcx.system` is the review set.
+- The live ABI has no `bidclaim` table (21 tables, 61 actions), so there is nothing stranded to dump on mainnet, and a `bidclaim` migration is only relevant for a deployment that crosses commit `3036c41`.
+- F1 (`claimbid` pays without a real bid) was found in `ba6ddc9`. Whether the same flaw exists in the live `35d2e90` code has not been re-evaluated yet; `claimbid` exists there (`name_bidding.cpp:140`) and is the place to look.
 

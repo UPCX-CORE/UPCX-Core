@@ -11,11 +11,11 @@
 namespace upcx { namespace chain {
 
    class account_object : public chainbase::object<account_object_type, account_object> {
-      OBJECT_CTOR(account_object,(abi))
+      OBJECT_CTOR(account_object,(abi)(real_name))
 
       id_type              id;
       account_name         name; //< name should not be changed within a chainbase modifier lambda
-      std::string          real_name;
+      shared_string        real_name;
       block_timestamp_type creation_date;
       shared_blob          abi;
 
@@ -39,12 +39,33 @@ namespace upcx { namespace chain {
 
    struct by_name;
    struct by_real_name;
+
+   // shared_string has no operator<, and std::string can't convert to it (its
+   // constructors are explicit and need a segment allocator) -- this lets the
+   // by_real_name index order shared_string keys while still allowing lookups
+   // with a plain std::string at the call sites (e.g. get_account_by_name).
+   struct real_name_key_compare {
+      using is_transparent = void;
+      static int cmp(const shared_string& a, const char* bd, std::size_t bs) {
+         return a.compare(0, a.size(), bd, bs);
+      }
+      bool operator()(const shared_string& a, const shared_string& b) const {
+         return cmp(a, b.data(), b.size()) < 0;
+      }
+      bool operator()(const shared_string& a, const std::string& b) const {
+         return cmp(a, b.data(), b.size()) < 0;
+      }
+      bool operator()(const std::string& a, const shared_string& b) const {
+         return cmp(b, a.data(), a.size()) > 0;
+      }
+   };
+
    using account_index = chainbase::shared_multi_index_container<
       account_object,
       indexed_by<
          ordered_unique<tag<by_id>, member<account_object, account_object::id_type, &account_object::id>>,
          ordered_unique<tag<by_name>, member<account_object, account_name, &account_object::name>>,
-         ordered_unique<tag<by_real_name>, member<account_object, string, &account_object::real_name>>
+         ordered_unique<tag<by_real_name>, member<account_object, shared_string, &account_object::real_name>, real_name_key_compare>
       >
    >;
 

@@ -506,7 +506,8 @@ namespace upcx { namespace chain {
                while (more) {
                   db.create<account_object>([this, &section, &more](auto& row) {
                      more = section.read_row(row, db);
-                     row.real_name = row.name.to_string();
+                     const auto name_str = row.name.to_string();
+                     row.real_name.assign(name_str.data(), name_str.size());
                   });
                }
             });
